@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>微博全文搜索</title>
+<style>
+body { font-family: "Hiragino Sans GB", sans-serif; font-size:0.9em; margin-left: 100px;}
+p { line-height:150%;}
+#query { width: 400px; }
+table { border-collapse: collapse; border-spacing: 0; padding: 0px; width: 800px;}
+</style>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript">
+function timeConverter(UNIX_timestamp){
+	var a = new Date(UNIX_timestamp*1000);
+	var year = a.getFullYear();
+	var month = a.getMonth() + 1;
+	var date = a.getDate();
+	var hour = a.getHours();
+	var min = a.getMinutes();
+	var sec = a.getSeconds();
+	var time = year+'/'+month+'/'+date+' '+hour+':'+min+':'+sec ;
+	return time;
+}
+search = function() {
+	var query = $('input#query').val();
+	$.ajax({
+		url: "/json",
+		type: "GET",
+		data: { query: query },
+		dataType: "json",
+		success: function (result) {
+			var out = "<table border=0>"
+			var weibos = new Array();
+			for (var i = 0; i < result.docs.length; i++) {
+				weibos.push(result.docs[i]);
+			}
+			for (var i = 0; i < weibos.length; i++){
+			out += "<tr>"
+			out += "<td width=150px>";
+			out += weibos[i].user_name;
+			out += "<br>"
+			out += timeConverter(weibos[i].timestamp);
+			out += "<br>"
+			out += weibos[i].reposts_count+"转发";
+			out += "</td>";
+			out += "<td>";
+			out += "<p>" +weibos[i].text+ "</p>";
+			out += "</td>";
+			out += "</tr>";
+			}
+			out += "</table>"
+			$('div#output').html(out);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+		alert(xhr.status);
+		alert(thrownError);
+		}
+	});
+};
+</script>
+</head>
+<body onload="search(0)">
+<h2>微博全文搜索</h2>
+<p><input type="text" id="query" oninput="search()"></p>
+<div id="output"></div>
+</body>
+</html>
