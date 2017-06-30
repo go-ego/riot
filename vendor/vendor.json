@@ -110,12 +110,10 @@
             "revisionTime": "2017-04-09T01:48:31Z"
         },
         {
+            "checksumSHA1": "TVEkpH3gq84iQ39I4R+mlDwjuVI=",
             "path": "golang.org/x/sys/unix",
-            "revision": ""
-        },
-        {
-            "path": "https://github.com/go-ego/murmur",
-            "revision": ""
+            "revision": "99f16d856c9836c42d24e7ab64ea72916925fa97",
+            "revisionTime": "2017-03-08T15:04:45Z"
         }
     ],
     "rootPath": "github.com/go-ego/gwk"
