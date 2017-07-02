@@ -5,8 +5,9 @@ import (
 	"os"
 )
 
-// const DEFAULT_STORAGE_ENGINE = "bolt"
-const DEFAULT_STORAGE_ENGINE = "ldb"
+const DEFAULT_STORAGE_ENGINE = "bolt"
+
+// const DEFAULT_STORAGE_ENGINE = "ldb"
 
 var supportedStorage = map[string]func(path string) (Storage, error){
 	// "kv":   openKVStorage,
