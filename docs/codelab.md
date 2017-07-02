@@ -85,7 +85,7 @@ searcher.Init(types.EngineInitOptions{
 初始化好了以后就可以添加索引了，下面的例子将一条微博加入引擎
 
 ```go
-searcher.IndexDocument(docId, types.DocumentIndexData{
+searcher.IndexDocument(docId, types.DocIndexData{
 	Content: weibo.Text, // Weibo结构体见上文的定义。必须是UTF-8格式。
 	Fields: WeiboScoringFields{
 		Timestamp:    weibo.Timestamp,

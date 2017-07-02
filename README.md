@@ -14,7 +14,7 @@
 
 ## Installation:
 ```
-go get -u -v github.com/go-ego/gwk
+go get -u github.com/go-ego/gwk
 ```
 
 base on [wukong](https://github.com/huichen/wukong)

@@ -128,7 +128,7 @@ func main() {
 	docIdx := 0
 	for i := 0; i < *num_repeat_text; i++ {
 		for _, line := range lines {
-			searcher.IndexDocument(uint64(docIds[docIdx]+1), types.DocumentIndexData{
+			searcher.IndexDocument(uint64(docIds[docIdx]+1), types.DocIndexData{
 				Content: line}, false)
 			docIdx++
 			if docIdx-docIdx/1000000*1000000 == 0 {

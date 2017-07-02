@@ -31,7 +31,7 @@ type EngineInitOptions struct {
 	// 是否使用分词器
 	// 默认使用，否则在启动阶段跳过SegmenterDictionaries和StopTokenFile设置
 	// 如果你不需要在引擎内分词，可以将这个选项设为true
-	// 注意，如果你不用分词器，那么在调用IndexDocument时DocumentIndexData中的Content会被忽略
+	// 注意，如果你不用分词器，那么在调用IndexDocument时DocIndexData中的Content会被忽略
 	NotUsingSegmenter bool
 
 	// 半角逗号分隔的字典文件，具体用法见

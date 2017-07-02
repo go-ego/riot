@@ -143,7 +143,7 @@ func main() {
 	log.Print("建立索引")
 	for i, text := range lines {
 		searcher.IndexDocument(uint64(i),
-			types.DocumentIndexData{Content: text, Fields: fieldsSlice[i]})
+			types.DocIndexData{Content: text, Fields: fieldsSlice[i]})
 	}
 	searcher.FlushIndex()
 	log.Print("索引建立完毕")
