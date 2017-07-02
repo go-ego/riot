@@ -1,8 +1,21 @@
-悟空全文搜索引擎
-======
+# gwk 全文搜索引擎
+
+<!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
+<!--[![Build Status](https://travis-ci.org/go-ego/ego.svg)](https://travis-ci.org/go-ego/ego)
+[![codecov](https://codecov.io/gh/go-ego/ego/branch/master/graph/badge.svg)](https://codecov.io/gh/go-ego/ego)-->
+<!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
+<!--[![CircleCI Status](https://circleci.com/gh/go-ego/gwk.svg?style=shield)](https://circleci.com/gh/go-ego/gwk)-->
+[![Build Status](https://travis-ci.org/go-ego/gwk.svg)](https://travis-ci.org/go-ego/gwk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-ego/gwk)](https://goreportcard.com/report/github.com/go-ego/gwk)
+[![GoDoc](https://godoc.org/github.com/go-ego/gwk?status.svg)](https://godoc.org/github.com/go-ego/gwk)
+[![Release](https://github-release-version.herokuapp.com/github/go-ego/gwk/release.svg?style=flat)](https://github.com/go-ego/gwk/releases/latest)
+[![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
 * [高效索引和搜索](/docs/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
 * 支持中文分词（使用[sego分词包](https://github.com/huichen/sego)并发分词，速度27MB/秒）
+* 支持逻辑搜索
+* 支持中文转拼音搜索
 * 支持计算关键词在文本中的[紧邻距离](/docs/token_proximity.md)（token proximity）
 * 支持计算[BM25相关度](/docs/bm25.md)
 * 支持[自定义评分字段和评分规则](/docs/custom_scoring_criteria.md)
@@ -11,7 +24,6 @@
 * 可实现[分布式索引和搜索](/docs/distributed_indexing_and_search.md)
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
 
-[微博搜索demo](http://vhaa7.fmt.tifan.net:8080/)
 
 # 安装/更新
 
@@ -19,18 +31,19 @@
 go get -u github.com/go-ego/gwk
 ```
 
-需要Go版本至少1.1.1
+需要 Go 版本至少 1.2
 
 # 使用
 
-先看一个例子（来自[examples/simplest_example.go](/examples/simplest_example.go)）
+先看一个例子（来自[examples/wk/simplest_example.go](/examples/simplest_example.go)）
 ```go
 package main
 
 import (
+	"log"
+
 	"github.com/go-ego/gwk/engine"
 	"github.com/go-ego/gwk/types"
-	"log"
 )
 
 var (
