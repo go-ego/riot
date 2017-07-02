@@ -24,7 +24,7 @@ const (
 var (
 	weibo_data = flag.String(
 		"weibo_data",
-		"../testdata/weibo_data.txt",
+		"../../testdata/weibo_data.txt",
 		"微博数据")
 	queries = flag.String(
 		"queries",
@@ -33,11 +33,11 @@ var (
 		"待搜索的关键词")
 	dictionaries = flag.String(
 		"dictionaries",
-		"../data/dictionary.txt",
+		"../../data/dictionary.txt",
 		"分词字典文件")
 	stop_token_file = flag.String(
 		"stop_token_file",
-		"../data/stop_tokens.txt",
+		"../../data/stop_tokens.txt",
 		"停用词文件")
 	cpuprofile                = flag.String("cpuprofile", "", "处理器profile文件")
 	memprofile                = flag.String("memprofile", "", "内存profile文件")
