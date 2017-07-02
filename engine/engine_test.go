@@ -106,8 +106,8 @@ func TestEngineIndexDocument(t *testing.T) {
 	utils.Expect(t, "3", len(outputs.Docs))
 
 	utils.Expect(t, "5", outputs.Docs[0].DocId)
-	utils.Expect(t, "100", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
+	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocations)
 
 	utils.Expect(t, "2", outputs.Docs[1].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
@@ -197,7 +197,7 @@ func TestSearchWithCriteria(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	utils.Expect(t, "1", outputs.Docs[0].DocId)
-	utils.Expect(t, "18000", int(outputs.Docs[0].Scores[0]*1000))
+	utils.Expect(t, "17000", int(outputs.Docs[0].Scores[0]*1000))
 
 	utils.Expect(t, "5", outputs.Docs[1].DocId)
 	utils.Expect(t, "9000", int(outputs.Docs[1].Scores[0]*1000))
@@ -256,7 +256,7 @@ func TestFrequenciesIndex(t *testing.T) {
 	utils.Expect(t, "3447", int(outputs.Docs[0].Scores[0]*1000))
 
 	utils.Expect(t, "5", outputs.Docs[1].DocId)
-	utils.Expect(t, "3346", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "3446", int(outputs.Docs[1].Scores[0]*1000))
 }
 
 func TestRemoveDocument(t *testing.T) {
@@ -422,8 +422,8 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocations)
 
 	utils.Expect(t, "1", outputs.Docs[1].DocId)
-	utils.Expect(t, "76", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "83", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "[1 18]", outputs.Docs[1].TokenSnippetLocations)
 
 	engine1.Close()
 	os.RemoveAll("wukong.persistent")
@@ -488,6 +488,6 @@ func TestSearchWithin(t *testing.T) {
 	utils.Expect(t, "[1 18]", outputs.Docs[0].TokenSnippetLocations)
 
 	utils.Expect(t, "5", outputs.Docs[1].DocId)
-	utils.Expect(t, "100", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
 	utils.Expect(t, "[0 6]", outputs.Docs[1].TokenSnippetLocations)
 }
