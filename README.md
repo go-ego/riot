@@ -23,15 +23,34 @@
 * Support [persistent storage](/docs/persistent_storage.md)
 * Can be achieved [distributed index and search](/docs/distributed_indexing_and_search.md)
 
-# Installation/Update
+## Requirements
+Go version >= 1.3
+
+## Installation/Update
 
 ```
 go get -u github.com/go-ego/gwk
 ```
 
-Go >= 1.2
+## [Build-tools](https://github.com/go-ego/re)
+```
+go get -u github.com/go-ego/re 
+```
+### re gwk
+To create a new Ego web application
 
-# 使用
+```
+$ re gwk my-webapp
+```
+
+### re run
+
+To run the application we just created, you can navigate to the application folder and execute:
+```
+$ cd my-webapp && re run
+```
+
+## Usage:
 
 Look at an example（[examples/wk/simplest_example.go](/examples/simplest_example.go)）
 ```go
@@ -70,5 +89,6 @@ func main() {
 
 It is very simple!
 
+## License
 
 Gwk is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong)

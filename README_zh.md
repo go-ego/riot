@@ -25,15 +25,35 @@
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
 
 
-# 安装/更新
+## 安装/更新
 
 ```
 go get -u github.com/go-ego/gwk
 ```
 
-需要 Go 版本至少 1.2
+## Requirements
 
-# 使用
+需要 Go 版本至少 1.3
+
+## [Build-tools](https://github.com/go-ego/re)
+```
+go get -u github.com/go-ego/re 
+```
+### re gwk
+To create a new Ego web application
+
+```
+$ re gwk my-webapp
+```
+
+### re run
+
+To run the application we just created, you can navigate to the application folder and execute:
+```
+$ cd my-webapp && re run
+```
+
+## 使用
 
 先看一个例子（来自[examples/wk/simplest_example.go](/examples/simplest_example.go)）
 ```go
@@ -74,7 +94,7 @@ func main() {
 
 然后看看一个[入门教程](/docs/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
 
-# 其它
+## 其它
 
 * [为什么要有悟空引擎](/docs/why_wukong.md)
 * [联系方式](/docs/feedback.md)
