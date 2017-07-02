@@ -31,12 +31,19 @@ func (criteria DummyScoringCriteria) Score(
 	return []float32{}
 }
 
+type Attri struct {
+	Title  string `json:"title"`
+	Author string `json:"author"`
+}
+
 func TestRankDocument(t *testing.T) {
 	var ranker Ranker
+	attri := Attri{Title: "title", Author: "who"}
+
 	ranker.Init()
-	ranker.AddDoc(1, DummyScoringFields{})
-	ranker.AddDoc(3, DummyScoringFields{})
-	ranker.AddDoc(4, DummyScoringFields{})
+	ranker.AddDoc(1, DummyScoringFields{}, "content", attri)
+	ranker.AddDoc(3, DummyScoringFields{}, "content", attri)
+	ranker.AddDoc(4, DummyScoringFields{}, "content", attri)
 
 	scoredDocs, _ := ranker.Rank([]types.IndexedDocument{
 		types.IndexedDocument{DocId: 1, BM25: 6},
@@ -57,27 +64,29 @@ func TestRankDocument(t *testing.T) {
 
 func TestRankWithCriteria(t *testing.T) {
 	var ranker Ranker
+	attri := Attri{Title: "title", Author: "who"}
+
 	ranker.Init()
 	ranker.AddDoc(1, DummyScoringFields{
 		label:   "label3",
 		counter: 3,
 		amount:  22.3,
-	})
+	}, "content", attri)
 	ranker.AddDoc(2, DummyScoringFields{
 		label:   "label4",
 		counter: 1,
 		amount:  2,
-	})
+	}, "content", attri)
 	ranker.AddDoc(3, DummyScoringFields{
 		label:   "label1",
 		counter: 7,
 		amount:  10.3,
-	})
+	}, "content", attri)
 	ranker.AddDoc(4, DummyScoringFields{
 		label:   "label1",
 		counter: -1,
 		amount:  2.3,
-	})
+	}, "content", attri)
 
 	criteria := DummyScoringCriteria{}
 	scoredDocs, _ := ranker.Rank([]types.IndexedDocument{
@@ -100,22 +109,24 @@ func TestRankWithCriteria(t *testing.T) {
 
 func TestRemoveDoc(t *testing.T) {
 	var ranker Ranker
+	attri := Attri{Title: "title", Author: "who"}
+
 	ranker.Init()
 	ranker.AddDoc(1, DummyScoringFields{
 		label:   "label3",
 		counter: 3,
 		amount:  22.3,
-	})
+	}, "content", attri)
 	ranker.AddDoc(2, DummyScoringFields{
 		label:   "label4",
 		counter: 1,
 		amount:  2,
-	})
+	}, "content", attri)
 	ranker.AddDoc(3, DummyScoringFields{
 		label:   "label1",
 		counter: 7,
 		amount:  10.3,
-	})
+	}, "content", attri)
 	ranker.RemoveDoc(3)
 
 	criteria := DummyScoringCriteria{}
