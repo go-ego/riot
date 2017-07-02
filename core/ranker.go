@@ -15,6 +15,9 @@ type Ranker struct {
 		sync.RWMutex
 		fields map[uint64]interface{}
 		docs   map[uint64]bool
+		// new
+		content map[uint64]string
+		attri   map[uint64]interface{}
 	}
 	initialized bool
 }
@@ -27,10 +30,13 @@ func (ranker *Ranker) Init() {
 
 	ranker.lock.fields = make(map[uint64]interface{})
 	ranker.lock.docs = make(map[uint64]bool)
+	// new
+	ranker.lock.content = make(map[uint64]string)
+	ranker.lock.attri = make(map[uint64]interface{})
 }
 
 // 给某个文档添加评分字段
-func (ranker *Ranker) AddDoc(docId uint64, fields interface{}) {
+func (ranker *Ranker) AddDoc(docId uint64, fields interface{}, content string, attri interface{}) {
 	if ranker.initialized == false {
 		log.Fatal("排序器尚未初始化")
 	}
@@ -38,6 +44,9 @@ func (ranker *Ranker) AddDoc(docId uint64, fields interface{}) {
 	ranker.lock.Lock()
 	ranker.lock.fields[docId] = fields
 	ranker.lock.docs[docId] = true
+	// new
+	ranker.lock.content[docId] = content
+	ranker.lock.attri[docId] = attri
 	ranker.lock.Unlock()
 }
 
@@ -50,6 +59,9 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	ranker.lock.Lock()
 	delete(ranker.lock.fields, docId)
 	delete(ranker.lock.docs, docId)
+	// new
+	delete(ranker.lock.content, docId)
+	delete(ranker.lock.attri, docId)
 	ranker.lock.Unlock()
 }
 
@@ -68,14 +80,20 @@ func (ranker *Ranker) Rank(
 		// 判断doc是否存在
 		if _, ok := ranker.lock.docs[d.DocId]; ok {
 			fs := ranker.lock.fields[d.DocId]
+			content := ranker.lock.content[d.DocId]
+			attri := ranker.lock.attri[d.DocId]
 			ranker.lock.RUnlock()
 			// 计算评分并剔除没有分值的文档
 			scores := options.ScoringCriteria.Score(d, fs)
 			if len(scores) > 0 {
 				if !countDocsOnly {
 					outputDocs = append(outputDocs, types.ScoredDocument{
-						DocId:                 d.DocId,
-						Fields:                fs,
+						DocId: d.DocId,
+						// new
+						Fields:  fs,
+						Content: content,
+						Attri:   attri,
+						//
 						Scores:                scores,
 						TokenSnippetLocations: d.TokenSnippetLocations,
 						TokenLocations:        d.TokenLocations})

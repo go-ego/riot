@@ -7,6 +7,10 @@ import (
 type rankerAddDocRequest struct {
 	docId  uint64
 	fields interface{}
+	// new
+	content string
+	// new 属性
+	attri interface{}
 }
 
 type rankerRankRequest struct {
@@ -28,7 +32,8 @@ type rankerRemoveDocRequest struct {
 func (engine *Engine) rankerAddDocWorker(shard int) {
 	for {
 		request := <-engine.rankerAddDocChannels[shard]
-		engine.rankers[shard].AddDoc(request.docId, request.fields)
+		// engine.rankers[shard].AddDoc(request.docId, request.fields)
+		engine.rankers[shard].AddDoc(request.docId, request.fields, request.content, request.attri)
 	}
 }
 

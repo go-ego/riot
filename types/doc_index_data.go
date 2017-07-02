@@ -5,6 +5,12 @@ type DocIndexData struct {
 	// 文档全文（必须是UTF-8格式），用于生成待索引的关键词
 	Content string
 
+	// new 类别
+	Class string
+
+	// new 属性
+	Attri interface{}
+
 	// 文档的关键词
 	// 当Content不为空的时候，优先从Content中分词得到关键词。
 	// Tokens存在的意义在于绕过悟空内置的分词器，在引擎外部

@@ -12,6 +12,12 @@ type SearchRequest struct {
 	// 文档标签（必须是UTF-8格式），标签不存在文档文本中，但也属于搜索键的一种
 	Labels []string
 
+	// 类别
+	Class string
+
+	// 逻辑检索表达式
+	Logic Logic
+
 	// 当不为nil时，仅从这些DocIds包含的键中搜索（忽略值）
 	DocIds map[uint64]bool
 
@@ -42,4 +48,30 @@ type RankOptions struct {
 
 	// 最大输出的搜索结果数，为0时无限制
 	MaxOutputs int
+}
+
+type Logic struct {
+
+	// 与查询, 必须都存在
+	MustLabels bool
+
+	// 或查询, 有一个存在即可
+	ShouldLabels bool
+
+	// 非查询, 不包含
+	NotInLabels bool
+
+	LogicExpression LogicExpression
+}
+
+type LogicExpression struct {
+
+	// 与查询, 必须都存在
+	MustLabels []string
+
+	// 或查询, 有一个存在即可
+	ShouldLabels []string
+
+	// 非查询, 不包含
+	NotInLabels []string
 }

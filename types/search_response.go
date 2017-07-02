@@ -8,6 +8,9 @@ type SearchResponse struct {
 	// 搜索用到的关键词
 	Tokens []string
 
+	// 类别
+	Class string
+
 	// 搜索到的文档，已排序
 	Docs []ScoredDocument
 
@@ -21,7 +24,13 @@ type SearchResponse struct {
 type ScoredDocument struct {
 	DocId uint64
 
-	// 新增返回评分字段
+	// new Content
+	Content string
+
+	// new 属性 Attri
+	Attri interface{}
+
+	// new 返回评分字段
 	Fields interface{}
 
 	// 文档的打分值

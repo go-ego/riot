@@ -137,13 +137,15 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 	}
 
 	// Todo test
-	log.Println("Check virtualMemory...")
-	vmem, _ := mem.VirtualMemory()
-	useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
-	if useMem == "99.99" {
-		engine.initOptions.UsePersistentStorage = true
-		engine.initOptions.PersistentStorageFolder = "./index"
-		os.MkdirAll("./index", 0777)
+	if !engine.initOptions.UsePersistentStorage {
+		log.Println("Check virtualMemory...")
+		vmem, _ := mem.VirtualMemory()
+		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
+		if useMem == "99.99" {
+			engine.initOptions.UsePersistentStorage = true
+			engine.initOptions.PersistentStorageFolder = "./index"
+			os.MkdirAll("./index", 0777)
+		}
 	}
 
 	// 初始化持久化存储通道
@@ -360,6 +362,11 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 		// tokens = engine.Tokens([]byte(request.Text))
 		tokens = engine.Segment(request.Text)
 
+		// 叠加 tokens
+		for _, t := range request.Tokens {
+			tokens = append(tokens, t)
+		}
+
 	} else {
 		for _, t := range request.Tokens {
 			tokens = append(tokens, t)
@@ -379,6 +386,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 		options:             rankOptions,
 		rankerReturnChannel: rankerReturnChannel,
 		orderless:           request.Orderless,
+		logic:               request.Logic,
 	}
 
 	// 向索引器发送查找请求

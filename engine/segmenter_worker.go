@@ -44,12 +44,23 @@ func (engine *Engine) segmenterWorker() {
 			// split data
 			var sqlitStr string
 			splitData := strings.Split(request.data.Content, "")
+
 			for i := 0; i < len(splitData); i++ {
 				if splitData[i] != "" {
 					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], i)
 					sqlitStr += splitData[i]
+
+					// more combination
+					var sqlitsStr string
+					for s := i + 1; s < len(splitData); s++ {
+						sqlitsStr += splitData[s]
+
+						tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], s)
+					}
+
+					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
 				}
-				tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
+				// tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
 			}
 
 			// 叠加 Tokens 内容. todo
@@ -115,7 +126,8 @@ func (engine *Engine) segmenterWorker() {
 			}
 		}
 		rankerRequest := rankerAddDocRequest{
-			docId: request.docId, fields: request.data.Fields}
+			// docId: request.docId, fields: request.data.Fields}
+			docId: request.docId, fields: request.data.Fields, content: request.data.Content, attri: request.data.Attri}
 		engine.rankerAddDocChannels[shard] <- rankerRequest
 	}
 }
