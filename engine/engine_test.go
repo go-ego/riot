@@ -387,7 +387,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 			IndexType: types.LocationsIndex,
 		},
 		UsePersistentStorage:    true,
-		PersistentStorageFolder: "wukong.persistent",
+		PersistentStorageFolder: "gwk.persistent",
 		PersistentStorageShards: 2,
 	})
 	AddDocs(&engine)
@@ -406,7 +406,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 			IndexType: types.LocationsIndex,
 		},
 		UsePersistentStorage:    true,
-		PersistentStorageFolder: "wukong.persistent",
+		PersistentStorageFolder: "gwk.persistent",
 		PersistentStorageShards: 2,
 	})
 	engine1.FlushIndex()
@@ -426,7 +426,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 	utils.Expect(t, "[1 18]", outputs.Docs[1].TokenSnippetLocations)
 
 	engine1.Close()
-	os.RemoveAll("wukong.persistent")
+	os.RemoveAll("gwk.persistent")
 }
 
 func TestCountDocsOnly(t *testing.T) {

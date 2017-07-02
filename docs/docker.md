@@ -13,7 +13,7 @@ docker支持
 
 4、运行docker container
 
-	docker run -d -p 8080:8080 unmerged/wukong-codelab
+	docker run -d -p 8080:8080 unmerged/gwk-codelab
 
 在浏览器中打开 localhost:8080 即可打开搜索页面
 
@@ -21,6 +21,6 @@ docker支持
 
 我已经建好了一个repo并上传到了docker hub，用下面的命令pull镜像
 
-	docker pull unmerged/wukong-codelab
+	docker pull unmerged/gwk-codelab
 
 下载后运行镜像的方法和上面的相同。

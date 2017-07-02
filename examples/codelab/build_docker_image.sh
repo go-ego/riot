@@ -11,4 +11,4 @@ cp ../../data/dictionary.txt docker/
 cp ../../data/stop_tokens.txt docker/
 cp ../../testdata/weibo_data.txt docker/
 
-docker build -t unmerged/wukong-codelab -f docker/Dockerfile docker/
+docker build -t unmerged/gwk-codelab -f docker/Dockerfile docker/

@@ -25,7 +25,7 @@ import (
 
 const (
 	NumNanosecondsInAMillisecond = 1000000
-	PersistentStorageFilePrefix  = "wukong"
+	PersistentStorageFilePrefix  = "gwk"
 )
 
 type Engine struct {

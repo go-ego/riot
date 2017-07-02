@@ -30,7 +30,7 @@ type Storage interface {
 }
 
 func OpenStorage(path string) (Storage, error) {
-	wse := os.Getenv("WUKONG_STORAGE_ENGINE")
+	wse := os.Getenv("GWK_STORAGE_ENGINE")
 	if wse == "" {
 		wse = DEFAULT_STORAGE_ENGINE
 	}
