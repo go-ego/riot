@@ -13,7 +13,7 @@
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
 * [高效索引和搜索](/docs/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
-* 支持中文分词（使用[sego分词包](https://github.com/huichen/sego)并发分词，速度27MB/秒）
+* 支持中文分词（使用[gse分词包](https://github.com/go-ego/gse)并发分词，速度27MB/秒）
 * 支持逻辑搜索
 * 支持中文转拼音搜索
 * 支持计算关键词在文本中的[紧邻距离](/docs/token_proximity.md)（token proximity）
@@ -48,7 +48,7 @@ $ re gwk my-gwkapp
 
 ### re run
 
-运行我们创建的 gwk 项目, you can navigate to the application folder and execute:
+运行我们创建的 gwk 项目, 你可以导航到应用程序文件夹并执行:
 ```
 $ cd my-gwkapp && re run
 ```
