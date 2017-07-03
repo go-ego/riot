@@ -24,9 +24,16 @@ import (
 )
 
 const (
+	version string = "v0.10.0.21, Mount Qomolangma!"
+
 	NumNanosecondsInAMillisecond = 1000000
 	PersistentStorageFilePrefix  = "gwk"
 )
+
+// GetVersion get version
+func GetVersion() string {
+	return version
+}
 
 type Engine struct {
 	// 计数器，用来统计有多少文档被索引等信息
