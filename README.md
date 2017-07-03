@@ -37,17 +37,17 @@ go get -u github.com/go-ego/gwk
 go get -u github.com/go-ego/re 
 ```
 ### re gwk
-To create a new Ego web application
+To create a new Gwk application
 
 ```
-$ re gwk my-webapp
+$ re gwk my-gwkapp
 ```
 
 ### re run
 
 To run the application we just created, you can navigate to the application folder and execute:
 ```
-$ cd my-webapp && re run
+$ cd my-gwkapp && re run
 ```
 
 ## Usage:
@@ -59,7 +59,7 @@ package main
 import (
 	"log"
 
-    "github.com/go-ego/gwk/engine"
+	"github.com/go-ego/gwk/engine"
 	"github.com/go-ego/gwk/types"
 )
 
@@ -71,7 +71,7 @@ var (
 func main() {
 	// Init
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "github.com/go-ego/gwk/data/dictionary.txt"})
+		NotUsingSegmenter: true})
 	defer searcher.Close()
 
 	// Add the document to the index, docId starts at 1

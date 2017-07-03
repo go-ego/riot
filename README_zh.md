@@ -40,17 +40,17 @@ go get -u github.com/go-ego/gwk
 go get -u github.com/go-ego/re 
 ```
 ### re gwk
-To create a new Ego web application
+创建 Gwk 项目
 
 ```
-$ re gwk my-webapp
+$ re gwk my-gwkapp
 ```
 
 ### re run
 
-To run the application we just created, you can navigate to the application folder and execute:
+运行我们创建的 gwk 项目, you can navigate to the application folder and execute:
 ```
-$ cd my-webapp && re run
+$ cd my-gwkapp && re run
 ```
 
 ## 使用
