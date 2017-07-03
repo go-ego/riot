@@ -34,6 +34,9 @@ type EngineInitOptions struct {
 	// 注意，如果你不用分词器，那么在调用IndexDocument时DocIndexData中的Content会被忽略
 	NotUsingSegmenter bool
 
+	// new
+	Using int
+
 	// 半角逗号分隔的字典文件，具体用法见
 	// sego.Segmenter.LoadDictionary函数的注释
 	SegmenterDictionaries string

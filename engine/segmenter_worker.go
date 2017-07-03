@@ -15,6 +15,110 @@ type segmenterRequest struct {
 	forceUpdate bool
 }
 
+type Map map[string][]int
+
+func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
+	tokensMap := make(map[string][]int)
+	// split data
+	var (
+		sqlitStr string
+		num      int
+	)
+
+	if request.data.Content != "" {
+		splitData := strings.Split(request.data.Content, "")
+		num = len(splitData)
+		for i := 0; i < num; i++ {
+			if splitData[i] != "" {
+				if !engine.stopTokens.IsStopToken(splitData[i]) {
+					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], i)
+				}
+				sqlitStr += splitData[i]
+
+				if !engine.stopTokens.IsStopToken(sqlitStr) {
+					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
+				}
+
+				// more combination
+				var sqlitsStr string
+				for s := i + 1; s < len(splitData); s++ {
+					sqlitsStr += splitData[s]
+					if !engine.stopTokens.IsStopToken(sqlitsStr) {
+						tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], s)
+					}
+				}
+			}
+		}
+	}
+
+	for _, t := range request.data.Tokens {
+		if !engine.stopTokens.IsStopToken(t.Text) {
+			tokensMap[t.Text] = t.Locations
+		}
+	}
+
+	num += len(request.data.Tokens)
+
+	// fmt.Println("fmt.Println(tokensMap)------------", tokensMap)
+	return tokensMap, num
+}
+
+func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
+	tokensMap := make(map[string][]int)
+	numTokens := 0
+
+	if engine.initOptions.Using == 1 && request.data.Content != "" {
+		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
+		segments := engine.segmenter.Segment([]byte(request.data.Content))
+		for _, segment := range segments {
+			token := segment.Token().Text()
+			if !engine.stopTokens.IsStopToken(token) {
+				tokensMap[token] = append(tokensMap[token], segment.Start())
+			}
+		}
+		numTokens = len(segments)
+
+		return tokensMap, numTokens
+	}
+
+	if engine.initOptions.Using == 2 || ((engine.initOptions.Using == 1 || engine.initOptions.Using == 3) && request.data.Content == "") {
+		for _, t := range request.data.Tokens {
+			if !engine.stopTokens.IsStopToken(t.Text) {
+				tokensMap[t.Text] = t.Locations
+			}
+		}
+
+		numTokens = len(request.data.Tokens)
+
+		return tokensMap, numTokens
+	}
+
+	if engine.initOptions.Using == 3 && request.data.Content != "" {
+		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
+		segments := engine.segmenter.Segment([]byte(request.data.Content))
+		for _, segment := range segments {
+			token := segment.Token().Text()
+			if !engine.stopTokens.IsStopToken(token) {
+				tokensMap[token] = append(tokensMap[token], segment.Start())
+			}
+		}
+
+		for _, t := range request.data.Tokens {
+			if !engine.stopTokens.IsStopToken(t.Text) {
+				tokensMap[t.Text] = t.Locations
+			}
+		}
+
+		numTokens = len(segments) + len(request.data.Tokens)
+
+		return tokensMap, numTokens
+	}
+
+	tokenMap, lenSplitData := engine.splitData(request)
+
+	return tokenMap, lenSplitData
+}
+
 func (engine *Engine) segmenterWorker() {
 	for {
 		request := <-engine.segmenterChannel
@@ -28,58 +132,7 @@ func (engine *Engine) segmenterWorker() {
 		}
 
 		shard := engine.getShard(request.hash)
-		tokensMap := make(map[string][]int)
-		numTokens := 0
-		if !engine.initOptions.NotUsingSegmenter && request.data.Content != "" {
-			// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
-			segments := engine.segmenter.Segment([]byte(request.data.Content))
-			for _, segment := range segments {
-				token := segment.Token().Text()
-				if !engine.stopTokens.IsStopToken(token) {
-					tokensMap[token] = append(tokensMap[token], segment.Start())
-				}
-			}
-			// numTokens = len(segments)
-
-			// split data
-			var sqlitStr string
-			splitData := strings.Split(request.data.Content, "")
-
-			for i := 0; i < len(splitData); i++ {
-				if splitData[i] != "" {
-					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], i)
-					sqlitStr += splitData[i]
-
-					// more combination
-					var sqlitsStr string
-					for s := i + 1; s < len(splitData); s++ {
-						sqlitsStr += splitData[s]
-
-						tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], s)
-					}
-
-					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
-				}
-				// tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
-			}
-
-			// 叠加 Tokens 内容. todo
-			for _, t := range request.data.Tokens {
-				if !engine.stopTokens.IsStopToken(t.Text) {
-					tokensMap[t.Text] = t.Locations
-				}
-			}
-
-			numTokens = len(segments) + len(splitData) + len(request.data.Tokens)
-		} else {
-			// 否则载入用户输入的关键词
-			for _, t := range request.data.Tokens {
-				if !engine.stopTokens.IsStopToken(t.Text) {
-					tokensMap[t.Text] = t.Locations
-				}
-			}
-			numTokens = len(request.data.Tokens)
-		}
+		tokensMap, numTokens := engine.segmenterData(request)
 
 		// 加入非分词的文档标签
 		for _, label := range request.data.Labels {

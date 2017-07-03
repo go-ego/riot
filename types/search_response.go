@@ -9,7 +9,7 @@ type SearchResponse struct {
 	Tokens []string
 
 	// 类别
-	Class string
+	// Class string
 
 	// 搜索到的文档，已排序
 	Docs []ScoredDocument

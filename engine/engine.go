@@ -65,40 +65,7 @@ type Engine struct {
 	persistentStorageInitChannel           chan bool
 }
 
-func (engine *Engine) Init(options types.EngineInitOptions) {
-	// 将线程数设置为CPU数
-	// runtime.GOMAXPROCS(runtime.NumCPU())
-
-	// 初始化初始参数
-	if engine.initialized {
-		log.Fatal("请勿重复初始化引擎")
-	}
-	options.Init()
-	engine.initOptions = options
-	engine.initialized = true
-
-	if !options.NotUsingSegmenter {
-		// 载入分词器词典
-		engine.segmenter.LoadDictionary(options.SegmenterDictionaries)
-
-		// 初始化停用词
-		engine.stopTokens.Init(options.StopTokenFile)
-	}
-
-	// 初始化索引器和排序器
-	for shard := 0; shard < options.NumShards; shard++ {
-		engine.indexers = append(engine.indexers, core.Indexer{})
-		engine.indexers[shard].Init(*options.IndexerInitOptions)
-
-		engine.rankers = append(engine.rankers, core.Ranker{})
-		engine.rankers[shard].Init()
-	}
-
-	// 初始化分词器通道
-	engine.segmenterChannel = make(
-		chan segmenterRequest, options.NumSegmenterThreads)
-
-	// 初始化索引器通道
+func (engine *Engine) Indexer(options types.EngineInitOptions) {
 	engine.indexerAddDocChannels = make(
 		[]chan indexerAddDocumentRequest, options.NumShards)
 	engine.indexerRemoveDocChannels = make(
@@ -116,8 +83,9 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 			chan indexerLookupRequest,
 			options.IndexerBufferLength)
 	}
+}
 
-	// 初始化排序器通道
+func (engine *Engine) Ranker(options types.EngineInitOptions) {
 	engine.rankerAddDocChannels = make(
 		[]chan rankerAddDocRequest, options.NumShards)
 	engine.rankerRankChannels = make(
@@ -135,7 +103,24 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 			chan rankerRemoveDocRequest,
 			options.RankerBufferLength)
 	}
+}
 
+func (engine *Engine) InitStorage() {
+	if engine.initOptions.UsePersistentStorage {
+		engine.persistentStorageIndexDocumentChannels =
+			make([]chan persistentStorageIndexDocumentRequest,
+				engine.initOptions.PersistentStorageShards)
+		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+			engine.persistentStorageIndexDocumentChannels[shard] = make(
+				chan persistentStorageIndexDocumentRequest)
+		}
+		engine.persistentStorageInitChannel = make(
+			chan bool, engine.initOptions.PersistentStorageShards)
+	}
+}
+
+// CheckMem
+func (engine *Engine) CheckMem() {
 	// Todo test
 	if !engine.initOptions.UsePersistentStorage {
 		log.Println("Check virtualMemory...")
@@ -148,41 +133,9 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 			os.MkdirAll("./index", 0777)
 		}
 	}
+}
 
-	// 初始化持久化存储通道
-	if engine.initOptions.UsePersistentStorage {
-		engine.persistentStorageIndexDocumentChannels =
-			make([]chan persistentStorageIndexDocumentRequest,
-				engine.initOptions.PersistentStorageShards)
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
-			engine.persistentStorageIndexDocumentChannels[shard] = make(
-				chan persistentStorageIndexDocumentRequest)
-		}
-		engine.persistentStorageInitChannel = make(
-			chan bool, engine.initOptions.PersistentStorageShards)
-	}
-
-	// 启动分词器
-	for iThread := 0; iThread < options.NumSegmenterThreads; iThread++ {
-		go engine.segmenterWorker()
-	}
-
-	// 启动索引器和排序器
-	for shard := 0; shard < options.NumShards; shard++ {
-		go engine.indexerAddDocumentWorker(shard)
-		go engine.indexerRemoveDocWorker(shard)
-		go engine.rankerAddDocWorker(shard)
-		go engine.rankerRemoveDocWorker(shard)
-
-		for i := 0; i < options.NumIndexerThreadsPerShard; i++ {
-			go engine.indexerLookupWorker(shard)
-		}
-		for i := 0; i < options.NumRankerThreadsPerShard; i++ {
-			go engine.rankerRankWorker(shard)
-		}
-	}
-
-	// 启动持久化存储工作协程
+func (engine *Engine) Storage() {
 	if engine.initOptions.UsePersistentStorage {
 		err := os.MkdirAll(engine.initOptions.PersistentStorageFolder, 0700)
 		if err != nil {
@@ -231,6 +184,75 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 			go engine.persistentStorageIndexDocumentWorker(shard)
 		}
 	}
+}
+
+func (engine *Engine) Init(options types.EngineInitOptions) {
+	// 将线程数设置为CPU数
+	// runtime.GOMAXPROCS(runtime.NumCPU())
+
+	// 初始化初始参数
+	if engine.initialized {
+		log.Fatal("请勿重复初始化引擎")
+	}
+	options.Init()
+	engine.initOptions = options
+	engine.initialized = true
+
+	if !options.NotUsingSegmenter {
+		// 载入分词器词典
+		engine.segmenter.LoadDictionary(options.SegmenterDictionaries)
+
+		// 初始化停用词
+		engine.stopTokens.Init(options.StopTokenFile)
+	}
+
+	// 初始化索引器和排序器
+	for shard := 0; shard < options.NumShards; shard++ {
+		engine.indexers = append(engine.indexers, core.Indexer{})
+		engine.indexers[shard].Init(*options.IndexerInitOptions)
+
+		engine.rankers = append(engine.rankers, core.Ranker{})
+		engine.rankers[shard].Init()
+	}
+
+	// 初始化分词器通道
+	engine.segmenterChannel = make(
+		chan segmenterRequest, options.NumSegmenterThreads)
+
+	// 初始化索引器通道
+	engine.Indexer(options)
+
+	// 初始化排序器通道
+	engine.Ranker(options)
+
+	// engine.CheckMem(engine.initOptions.UsePersistentStorage)
+	engine.CheckMem()
+
+	// 初始化持久化存储通道
+	engine.InitStorage()
+
+	// 启动分词器
+	for iThread := 0; iThread < options.NumSegmenterThreads; iThread++ {
+		go engine.segmenterWorker()
+	}
+
+	// 启动索引器和排序器
+	for shard := 0; shard < options.NumShards; shard++ {
+		go engine.indexerAddDocumentWorker(shard)
+		go engine.indexerRemoveDocWorker(shard)
+		go engine.rankerAddDocWorker(shard)
+		go engine.rankerRemoveDocWorker(shard)
+
+		for i := 0; i < options.NumIndexerThreadsPerShard; i++ {
+			go engine.indexerLookupWorker(shard)
+		}
+		for i := 0; i < options.NumRankerThreadsPerShard; i++ {
+			go engine.rankerRankWorker(shard)
+		}
+	}
+
+	// 启动持久化存储工作协程
+	engine.Storage()
 
 	atomic.AddUint64(&engine.numDocumentsStored, engine.numIndexingRequests)
 }
@@ -352,16 +374,20 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 	// 收集关键词
 	tokens := []string{}
 	if request.Text != "" {
-		// querySegments := engine.segmenter.Segment([]byte(request.Text))
-		// for _, s := range querySegments {
-		// 	token := s.Token().Text()
-		// 	if !engine.stopTokens.IsStopToken(token) {
-		// 		tokens = append(tokens, s.Token().Text())
-		// 	}
-		// }
+		if engine.initOptions.NotUsingSegmenter {
+			tokens = strings.Split(request.Text, " ")
+		} else {
+			// querySegments := engine.segmenter.Segment([]byte(request.Text))
+			// for _, s := range querySegments {
+			// 	token := s.Token().Text()
+			// 	if !engine.stopTokens.IsStopToken(token) {
+			// 		tokens = append(tokens, s.Token().Text())
+			// 	}
+			// }
 
-		// tokens = engine.Tokens([]byte(request.Text))
-		tokens = engine.Segment(request.Text)
+			// tokens = engine.Tokens([]byte(request.Text))
+			tokens = engine.Segment(request.Text)
+		}
 
 		// 叠加 tokens
 		for _, t := range request.Tokens {
@@ -536,9 +562,11 @@ func (engine *Engine) PinYin(hans string) []string {
 	}
 
 	// 分词
-	sehans := engine.Segment(hans)
-	for h := 0; h < len(sehans); h++ {
-		strArr = append(strArr, sehans[h])
+	if engine.initOptions.NotUsingSegmenter {
+		sehans := engine.Segment(hans)
+		for h := 0; h < len(sehans); h++ {
+			strArr = append(strArr, sehans[h])
+		}
 	}
 	//
 	// py := pinyin.LazyConvert(sehans[h], nil)

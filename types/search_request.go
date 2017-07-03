@@ -13,7 +13,7 @@ type SearchRequest struct {
 	Labels []string
 
 	// 类别
-	Class string
+	// Class string
 
 	// 逻辑检索表达式
 	Logic Logic

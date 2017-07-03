@@ -6,7 +6,7 @@ type DocIndexData struct {
 	Content string
 
 	// new 类别
-	Class string
+	// Class string
 
 	// new 属性
 	Attri interface{}
