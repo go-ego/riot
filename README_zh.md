@@ -33,7 +33,7 @@ go get -u github.com/go-ego/gwk
 
 ## Requirements
 
-需要 Go 版本至少 1.3
+需要 Go 版本至少 1.8
 
 ## [Build-tools](https://github.com/go-ego/re)
 ```

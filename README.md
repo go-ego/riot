@@ -26,7 +26,7 @@
 * Can be achieved [distributed index and search](/docs/distributed_indexing_and_search.md)
 
 ## Requirements
-Go version >= 1.3
+Go version >= 1.8
 
 ## Installation/Update
 
