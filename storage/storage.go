@@ -5,16 +5,18 @@ import (
 	"os"
 )
 
-const DEFAULT_STORAGE_ENGINE = "bolt"
+const DEFAULT_STORAGE_ENGINE = "ldb"
 
-// const DEFAULT_STORAGE_ENGINE = "ldb"
+// const DEFAULT_STORAGE_ENGINE = "bad"
+
+// const DEFAULT_STORAGE_ENGINE = "bolt"
 
 var supportedStorage = map[string]func(path string) (Storage, error){
+	"ldb":  openLeveldbStorage,
+	"bad":  openBadgerStorage,
+	"bolt": openBoltStorage,
 	// "kv":   openKVStorage,
 	// "ledisdb"
-	// "bad":  openBadgerStorage,
-	"ldb":  openLeveldbStorage,
-	"bolt": openBoltStorage,
 }
 
 func RegisterStorageEngine(name string, fn func(path string) (Storage, error)) {

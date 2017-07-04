@@ -8,9 +8,9 @@ type leveldbStorage struct {
 	db *leveldb.DB
 }
 
-func openLeveldbStorage(path string) (Storage, error) {
+func openLeveldbStorage(dbpath string) (Storage, error) {
 
-	if db, err := leveldb.OpenFile(path, nil); err != nil {
+	if db, err := leveldb.OpenFile(dbpath, nil); err != nil {
 		return nil, err
 	} else {
 		return &leveldbStorage{db}, nil
@@ -40,8 +40,8 @@ func (s *leveldbStorage) ForEach(fn func(k, v []byte) error) error {
 		// Remember that the contents of the returned slice should not be modified, and
 		// only valid until the next call to Next.
 		key := iter.Key()
-		value := iter.Value()
-		if err := fn(key, value); err != nil {
+		val := iter.Value()
+		if err := fn(key, val); err != nil {
 			return err
 		}
 	}

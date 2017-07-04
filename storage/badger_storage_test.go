@@ -7,12 +7,12 @@ import (
 	"github.com/go-ego/gwk/utils"
 )
 
-func TestOpenOrCreateLdb(t *testing.T) {
-	db, err := openLeveldbStorage("ldb_test")
+func TestOpenOrCreateBad(t *testing.T) {
+	db, err := openBadgerStorage("bad_test")
 	utils.Expect(t, "<nil>", err)
 	db.Close()
 
-	db, err = openLeveldbStorage("ldb_test")
+	db, err = openBadgerStorage("bad_test")
 	utils.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
 	utils.Expect(t, "<nil>", err)
@@ -25,5 +25,6 @@ func TestOpenOrCreateLdb(t *testing.T) {
 	walFile := db.WALName()
 	db.Close()
 	os.Remove(walFile)
-	os.RemoveAll("ldb_test")
+	// os.Remove("bad_test")
+	os.RemoveAll("bad_test")
 }
