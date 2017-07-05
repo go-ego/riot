@@ -98,3 +98,7 @@ func main() {
 
 * [为什么要有悟空引擎](/docs/why_wukong.md)
 * [联系方式](/docs/feedback.md)
+
+## License
+
+Gwk is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong).

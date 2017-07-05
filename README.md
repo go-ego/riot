@@ -93,4 +93,4 @@ It is very simple!
 
 ## License
 
-Gwk is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong)
+Gwk is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong).
