@@ -381,6 +381,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 	// 收集关键词
 	tokens := []string{}
 	if request.Text != "" {
+		request.Text = strings.ToLower(request.Text)
 		if engine.initOptions.NotUsingSegmenter {
 			tokens = strings.Split(request.Text, " ")
 		} else {

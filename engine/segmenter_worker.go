@@ -21,32 +21,52 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 	tokensMap := make(map[string][]int)
 	// split data
 	var (
-		sqlitStr string
-		num      int
+		sqlitStr  string
+		num       int
+		numTokens int
 	)
 
 	if request.data.Content != "" {
+		request.data.Content = strings.ToLower(request.data.Content)
+		if engine.initOptions.Using == 4 {
+			// use segmenter
+			segments := engine.segmenter.Segment([]byte(request.data.Content))
+			for _, segment := range segments {
+				token := segment.Token().Text()
+				if !engine.stopTokens.IsStopToken(token) {
+					tokensMap[token] = append(tokensMap[token], segment.Start())
+				}
+			}
+			numTokens += len(segments)
+		}
+
 		splitData := strings.Split(request.data.Content, "")
 		num = len(splitData)
 		for i := 0; i < num; i++ {
 			if splitData[i] != "" {
 				if !engine.stopTokens.IsStopToken(splitData[i]) {
-					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], i)
+					numTokens++
+					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], numTokens)
 				}
 				sqlitStr += splitData[i]
 
 				if !engine.stopTokens.IsStopToken(sqlitStr) {
-					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], i)
+					numTokens++
+					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], numTokens)
 				}
 
-				// more combination
-				var sqlitsStr string
-				for s := i + 1; s < len(splitData); s++ {
-					sqlitsStr += splitData[s]
-					if !engine.stopTokens.IsStopToken(sqlitsStr) {
-						tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], s)
+				if engine.initOptions.Using == 0 {
+					// more combination
+					var sqlitsStr string
+					for s := i + 1; s < len(splitData); s++ {
+						sqlitsStr += splitData[s]
+						if !engine.stopTokens.IsStopToken(sqlitsStr) {
+							numTokens++
+							tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], numTokens)
+						}
 					}
 				}
+
 			}
 		}
 	}
@@ -57,10 +77,10 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 		}
 	}
 
-	num += len(request.data.Tokens)
+	numTokens += len(request.data.Tokens)
 
 	// fmt.Println("fmt.Println(tokensMap)------------", tokensMap)
-	return tokensMap, num
+	return tokensMap, numTokens
 }
 
 func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {

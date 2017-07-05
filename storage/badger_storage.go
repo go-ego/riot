@@ -42,7 +42,7 @@ func openBadgerStorage(dbpath string) (Storage, error) {
 	opt.SyncWrites = true
 	kv, err := badger.NewKV(&opt)
 	if err != nil {
-		log.Fatal("newKv: ", err)
+		log.Fatal("NewKV: ", err)
 	}
 
 	return &Badger{kv}, err
