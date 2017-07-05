@@ -35,6 +35,7 @@ func GetVersion() string {
 	return version
 }
 
+// Engine initialize the engine
 type Engine struct {
 	// 计数器，用来统计有多少文档被索引等信息
 	numDocumentsIndexed      uint64
@@ -72,6 +73,7 @@ type Engine struct {
 	persistentStorageInitChannel           chan bool
 }
 
+// Indexer initialize the indexer channel
 func (engine *Engine) Indexer(options types.EngineInitOptions) {
 	engine.indexerAddDocChannels = make(
 		[]chan indexerAddDocumentRequest, options.NumShards)
@@ -92,6 +94,7 @@ func (engine *Engine) Indexer(options types.EngineInitOptions) {
 	}
 }
 
+// Ranker initialize the ranker channel
 func (engine *Engine) Ranker(options types.EngineInitOptions) {
 	engine.rankerAddDocChannels = make(
 		[]chan rankerAddDocRequest, options.NumShards)
@@ -112,6 +115,7 @@ func (engine *Engine) Ranker(options types.EngineInitOptions) {
 	}
 }
 
+// InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
 	if engine.initOptions.UsePersistentStorage {
 		engine.persistentStorageIndexDocumentChannels =
@@ -126,7 +130,7 @@ func (engine *Engine) InitStorage() {
 	}
 }
 
-// CheckMem
+// CheckMem check the memory when the memory is larger than 99.99% using the storage
 func (engine *Engine) CheckMem() {
 	// Todo test
 	if !engine.initOptions.UsePersistentStorage {
@@ -142,6 +146,7 @@ func (engine *Engine) CheckMem() {
 	}
 }
 
+// Storage start the persistent storage work connection
 func (engine *Engine) Storage() {
 	if engine.initOptions.UsePersistentStorage {
 		err := os.MkdirAll(engine.initOptions.PersistentStorageFolder, 0700)
@@ -193,6 +198,7 @@ func (engine *Engine) Storage() {
 	}
 }
 
+// Init initialize the engine
 func (engine *Engine) Init(options types.EngineInitOptions) {
 	// 将线程数设置为CPU数
 	// runtime.GOMAXPROCS(runtime.NumCPU())
@@ -264,6 +270,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 	atomic.AddUint64(&engine.numDocumentsStored, engine.numIndexingRequests)
 }
 
+// IndexDocument add the document to the index
 // 将文档加入索引
 //
 // 输入参数：
@@ -302,6 +309,7 @@ func (engine *Engine) internalIndexDocument(
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }
 
+// RemoveDocument remove the document from the index
 // 将文档从索引中删除
 //
 // 输入参数：
@@ -350,6 +358,7 @@ func (engine *Engine) RemoveDocument(docId uint64, forceUpdate bool) {
 // 	return tokens
 // }
 
+// Segment get the word segmentation result of the text
 // 获取文本的分词结果, 只分词与过滤弃用词
 func (engine *Engine) Segment(content string) (keywords []string) {
 	segments := engine.segmenter.Segment([]byte(content))
@@ -362,6 +371,8 @@ func (engine *Engine) Segment(content string) (keywords []string) {
 	return
 }
 
+// Search find the document that satisfies the search criteria.
+// This function is thread safe
 // 查找满足搜索条件的文档，此函数线程安全
 func (engine *Engine) Search(request types.SearchRequest) (output types.SearchResponse) {
 	if !engine.initialized {
@@ -501,6 +512,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 	return
 }
 
+// FlushIndex block wait until all indexes are added
 // 阻塞等待直到所有索引添加完毕
 func (engine *Engine) FlushIndex() {
 	for {
@@ -522,6 +534,7 @@ func (engine *Engine) FlushIndex() {
 	}
 }
 
+// Close close the engine
 // 关闭引擎
 func (engine *Engine) Close() {
 	engine.FlushIndex()
@@ -537,7 +550,8 @@ func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*uint32(engine.initOptions.NumShards))
 }
 
-// 从数据库遍历所有的 DocId,并返回
+// GetAllDocIds get all the DocId from the storage database and return
+// 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
 	docsId := make([]uint64, 0)
 	for i, _ := range engine.dbs {
@@ -550,6 +564,7 @@ func (engine *Engine) GetAllDocIds() []uint64 {
 	return docsId
 }
 
+// PinYin get the Chinese alphabet and abbreviation
 func (engine *Engine) PinYin(hans string) []string {
 	var (
 		str      string
@@ -569,7 +584,7 @@ func (engine *Engine) PinYin(hans string) []string {
 		strArr = append(strArr, sqlitStr)
 	}
 
-	// 分词
+	// Segment 分词
 	if engine.initOptions.NotUsingSegmenter {
 		sehans := engine.Segment(hans)
 		for h := 0; h < len(sehans); h++ {
