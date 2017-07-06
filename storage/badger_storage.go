@@ -27,18 +27,18 @@ type Badger struct {
 }
 
 // openBadgerStorage open Badger storage
-func openBadgerStorage(dbpath string) (Storage, error) {
+func openBadgerStorage(dbPath string) (Storage, error) {
 
-	err := os.MkdirAll(dbpath, 0777)
+	err := os.MkdirAll(dbPath, 0777)
 	if err != nil {
 		log.Fatal("MkdirAll: ", err)
 		os.Exit(1)
 	}
-	// os.MkdirAll(path.Dir(dbpath), os.ModePerm)
+	// os.MkdirAll(path.Dir(dbPath), os.ModePerm)
 
 	opt := badger.DefaultOptions
-	opt.Dir = dbpath
-	opt.ValueDir = dbpath
+	opt.Dir = dbPath
+	opt.ValueDir = dbPath
 	opt.SyncWrites = true
 	kv, err := badger.NewKV(&opt)
 	if err != nil {
