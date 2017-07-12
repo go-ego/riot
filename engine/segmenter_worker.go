@@ -4,6 +4,7 @@ import (
 	// "fmt"
 	"strings"
 
+	"github.com/go-ego/gpy"
 	"github.com/go-ego/gwk/types"
 )
 
@@ -203,4 +204,46 @@ func (engine *Engine) segmenterWorker() {
 			docId: request.docId, fields: request.data.Fields, content: request.data.Content, attri: request.data.Attri}
 		engine.rankerAddDocChannels[shard] <- rankerRequest
 	}
+}
+
+// PinYin get the Chinese alphabet and abbreviation
+func (engine *Engine) PinYin(hans string) []string {
+	var (
+		str      string
+		pystr    string
+		strArr   []string
+		sqlitStr string
+		// sqlitArr []string
+	)
+
+	//
+	splitHans := strings.Split(hans, "")
+	for i := 0; i < len(splitHans); i++ {
+		if splitHans[i] != "" {
+			strArr = append(strArr, splitHans[i])
+			sqlitStr += splitHans[i]
+		}
+		strArr = append(strArr, sqlitStr)
+	}
+
+	// Segment 分词
+	if engine.initOptions.NotUsingSegmenter {
+		sehans := engine.Segment(hans)
+		for h := 0; h < len(sehans); h++ {
+			strArr = append(strArr, sehans[h])
+		}
+	}
+	//
+	// py := pinyin.LazyConvert(sehans[h], nil)
+	py := gpy.LazyConvert(hans, nil)
+
+	for i := 0; i < len(py); i++ {
+		str += py[i][0:1]
+		pystr += py[i]
+		strArr = append(strArr, pystr)
+		strArr = append(strArr, str)
+	}
+	// }
+
+	return strArr
 }
