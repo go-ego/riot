@@ -300,10 +300,13 @@ func (indexer *Indexer) RemoveDocuments(documents *types.DocumentsId) {
 	}
 }
 
+// Lookup lookup
 // 查找包含全部搜索键(AND操作)的文档
 // 当docIds不为nil时仅从docIds指定的文档中查找
 func (indexer *Indexer) Lookup(
-	tokens []string, labels []string, docIds map[uint64]bool, countDocsOnly bool, logic ...types.Logic) (docs []types.IndexedDocument, numDocs int) {
+	tokens []string, labels []string, docIds map[uint64]bool, countDocsOnly bool,
+	logic ...types.Logic) (docs []types.IndexedDocument, numDocs int) {
+
 	if indexer.initialized == false {
 		log.Fatal("索引器尚未初始化")
 	}
@@ -593,7 +596,11 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 	return
 }
 
-func (indexer *Indexer) LogicLookup(docIds map[uint64]bool, countDocsOnly bool, LogicExpression []string, logic types.Logic) (docs []types.IndexedDocument, numDocs int) {
+// LogicLookup logic Lookup
+func (indexer *Indexer) LogicLookup(
+	docIds map[uint64]bool, countDocsOnly bool, LogicExpression []string,
+	logic types.Logic) (docs []types.IndexedDocument, numDocs int) {
+
 	indexer.tableLock.RLock()
 	defer indexer.tableLock.RUnlock()
 

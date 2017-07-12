@@ -35,8 +35,10 @@ func (ranker *Ranker) Init() {
 	ranker.lock.attri = make(map[uint64]interface{})
 }
 
+// AddDoc add doc
 // 给某个文档添加评分字段
-func (ranker *Ranker) AddDoc(docId uint64, fields interface{}, content string, attri interface{}) {
+func (ranker *Ranker) AddDoc(
+	docId uint64, fields interface{}, content string, attri interface{}) {
 	if ranker.initialized == false {
 		log.Fatal("排序器尚未初始化")
 	}
@@ -65,9 +67,12 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	ranker.lock.Unlock()
 }
 
+// Rank rank
 // 给文档评分并排序
 func (ranker *Ranker) Rank(
-	docs []types.IndexedDocument, options types.RankOptions, countDocsOnly bool) (types.ScoredDocuments, int) {
+	docs []types.IndexedDocument, options types.RankOptions,
+	countDocsOnly bool) (types.ScoredDocuments, int) {
+
 	if ranker.initialized == false {
 		log.Fatal("排序器尚未初始化")
 	}
