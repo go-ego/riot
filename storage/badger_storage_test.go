@@ -22,11 +22,11 @@ import (
 )
 
 func TestOpenOrCreateBad(t *testing.T) {
-	db, err := openBadgerStorage("bad_test")
+	db, err := OpenBadgerStorage("bad_test")
 	utils.Expect(t, "<nil>", err)
 	db.Close()
 
-	db, err = openBadgerStorage("bad_test")
+	db, err = OpenBadgerStorage("bad_test")
 	utils.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
 	utils.Expect(t, "<nil>", err)

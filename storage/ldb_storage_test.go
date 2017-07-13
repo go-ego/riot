@@ -22,11 +22,11 @@ import (
 )
 
 func TestOpenOrCreateLdb(t *testing.T) {
-	db, err := openLeveldbStorage("ldb_test")
+	db, err := OpenLeveldbStorage("ldb_test")
 	utils.Expect(t, "<nil>", err)
 	db.Close()
 
-	db, err = openLeveldbStorage("ldb_test")
+	db, err = OpenLeveldbStorage("ldb_test")
 	utils.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
 	utils.Expect(t, "<nil>", err)

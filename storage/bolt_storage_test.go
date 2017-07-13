@@ -22,11 +22,11 @@ import (
 )
 
 func TestOpenOrCreateBolt(t *testing.T) {
-	db, err := openBoltStorage("bolt_test")
+	db, err := OpenBoltStorage("bolt_test")
 	utils.Expect(t, "<nil>", err)
 	db.Close()
 
-	db, err = openBoltStorage("bolt_test")
+	db, err = OpenBoltStorage("bolt_test")
 	utils.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
 	utils.Expect(t, "<nil>", err)
