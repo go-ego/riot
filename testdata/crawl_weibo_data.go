@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/huichen/gobo"
-	"github.com/huichen/gobo/contrib"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/huichen/gobo"
+	"github.com/huichen/gobo/contrib"
 )
 
 var (

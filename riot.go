@@ -14,10 +14,10 @@
 
 /*
 
-Package	gwk full text search engine
+Package	riot full text search engine
 */
 
-package gwk
+package riot
 
 import (
 	// _ "github.com/cznic/kv"
