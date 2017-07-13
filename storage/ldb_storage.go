@@ -22,11 +22,11 @@ type leveldbStorage struct {
 	db *leveldb.DB
 }
 
-// Open opens or creates a DB for the given storage. The DB
+// OpenLeveldbStorage opens or creates a DB for the given storage. The DB
 // will be created if not exist, unless ErrorIfMissing is true.
 // Also, if ErrorIfExist is true and the DB exist Open will
 // returns os.ErrExist error.
-func openLeveldbStorage(dbPath string) (Storage, error) {
+func OpenLeveldbStorage(dbPath string) (Storage, error) {
 
 	if db, err := leveldb.OpenFile(dbPath, nil); err != nil {
 		return nil, err
