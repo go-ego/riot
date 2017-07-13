@@ -3,7 +3,7 @@ package engine
 import (
 	"sync/atomic"
 
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/types"
 )
 
 type indexerAddDocumentRequest struct {

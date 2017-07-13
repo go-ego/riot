@@ -6,7 +6,7 @@ import (
 	"encoding/gob"
 	"sync/atomic"
 
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/types"
 )
 
 type persistentStorageIndexDocumentRequest struct {

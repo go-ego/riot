@@ -1,14 +1,14 @@
-# gwk 全文搜索引擎
+# riot 全文搜索引擎
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--[![Build Status](https://travis-ci.org/go-ego/ego.svg)](https://travis-ci.org/go-ego/ego)
 [![codecov](https://codecov.io/gh/go-ego/ego/branch/master/graph/badge.svg)](https://codecov.io/gh/go-ego/ego)-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
-<!--[![CircleCI Status](https://circleci.com/gh/go-ego/gwk.svg?style=shield)](https://circleci.com/gh/go-ego/gwk)-->
-[![Build Status](https://travis-ci.org/go-ego/gwk.svg)](https://travis-ci.org/go-ego/gwk)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-ego/gwk)](https://goreportcard.com/report/github.com/go-ego/gwk)
-[![GoDoc](https://godoc.org/github.com/go-ego/gwk?status.svg)](https://godoc.org/github.com/go-ego/gwk)
-[![Release](https://github-release-version.herokuapp.com/github/go-ego/gwk/release.svg?style=flat)](https://github.com/go-ego/gwk/releases/latest)
+<!--[![CircleCI Status](https://circleci.com/gh/go-ego/riot.svg?style=shield)](https://circleci.com/gh/go-ego/riot)-->
+[![Build Status](https://travis-ci.org/go-ego/riot.svg)](https://travis-ci.org/go-ego/riot)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-ego/riot)](https://goreportcard.com/report/github.com/go-ego/riot)
+[![GoDoc](https://godoc.org/github.com/go-ego/riot?status.svg)](https://godoc.org/github.com/go-ego/riot)
+[![Release](https://github-release-version.herokuapp.com/github/go-ego/riot/release.svg?style=flat)](https://github.com/go-ego/riot/releases/latest)
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
@@ -28,7 +28,7 @@
 ## 安装/更新
 
 ```
-go get -u github.com/go-ego/gwk
+go get -u github.com/go-ego/riot
 ```
 
 ## Requirements
@@ -39,18 +39,18 @@ go get -u github.com/go-ego/gwk
 ```
 go get -u github.com/go-ego/re 
 ```
-### re gwk
-创建 Gwk 项目
+### re riot
+创建 riot 项目
 
 ```
-$ re gwk my-gwkapp
+$ re riot my-riotapp
 ```
 
 ### re run
 
-运行我们创建的 gwk 项目, 你可以导航到应用程序文件夹并执行:
+运行我们创建的 riot 项目, 你可以导航到应用程序文件夹并执行:
 ```
-$ cd my-gwkapp && re run
+$ cd my-riotapp && re run
 ```
 
 ## 使用
@@ -62,8 +62,8 @@ package main
 import (
 	"log"
 
-	"github.com/go-ego/gwk/engine"
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot/types"
 )
 
 var (
@@ -74,7 +74,7 @@ var (
 func main() {
 	// 初始化
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "github.com/go-ego/gwk/data/dictionary.txt"})
+		SegmenterDictionaries: "github.com/go-ego/riot/data/dictionary.txt"})
 	defer searcher.Close()
 
 	// 将文档加入索引，docId 从1开始
@@ -101,4 +101,4 @@ func main() {
 
 ## License
 
-Gwk is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong).
+Riot is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong).

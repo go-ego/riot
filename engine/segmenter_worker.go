@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-ego/gpy"
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/types"
 )
 
 type segmenterRequest struct {

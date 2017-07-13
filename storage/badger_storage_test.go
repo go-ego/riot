@@ -18,7 +18,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-ego/gwk/utils"
+	"github.com/go-ego/riot/utils"
 )
 
 func TestOpenOrCreateBad(t *testing.T) {

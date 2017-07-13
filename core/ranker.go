@@ -6,8 +6,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/go-ego/gwk/types"
-	"github.com/go-ego/gwk/utils"
+	"github.com/go-ego/riot/types"
+	"github.com/go-ego/riot/utils"
 )
 
 type Ranker struct {

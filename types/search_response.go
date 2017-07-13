@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/go-ego/gwk/utils"
+	"github.com/go-ego/riot/utils"
 )
 
 type SearchResponse struct {

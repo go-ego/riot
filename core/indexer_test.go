@@ -3,8 +3,8 @@ package core
 import (
 	"testing"
 
-	"github.com/go-ego/gwk/types"
-	"github.com/go-ego/gwk/utils"
+	"github.com/go-ego/riot/types"
+	"github.com/go-ego/riot/utils"
 )
 
 func TestAddKeywords(t *testing.T) {

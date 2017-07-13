@@ -12,10 +12,10 @@ import (
 	"time"
 	// "reflect"
 
-	"github.com/go-ego/gwk/core"
-	"github.com/go-ego/gwk/storage"
-	"github.com/go-ego/gwk/types"
-	"github.com/go-ego/gwk/utils"
+	"github.com/go-ego/riot/core"
+	"github.com/go-ego/riot/storage"
+	"github.com/go-ego/riot/types"
+	"github.com/go-ego/riot/utils"
 
 	"github.com/go-ego/gse"
 	"github.com/go-ego/murmur"

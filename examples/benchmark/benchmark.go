@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-ego/gwk/engine"
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot/types"
 )
 
 const (

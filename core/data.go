@@ -3,7 +3,7 @@ package core
 import (
 	"sync"
 
-	"github.com/go-ego/gwk/types"
+	"github.com/go-ego/riot/types"
 )
 
 // 文档信息[shard][id]info
