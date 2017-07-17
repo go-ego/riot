@@ -68,8 +68,8 @@ type Engine struct {
 	rankerRemoveDocChannels []chan rankerRemoveDocRequest
 
 	// 建立持久存储使用的通信通道
-	persistentStorageIndexDocumentChannels []chan persistentStorageIndexDocumentRequest
-	persistentStorageInitChannel           chan bool
+	storageIndexDocChannels      []chan storageIndexDocRequest
+	persistentStorageInitChannel chan bool
 }
 
 // Indexer initialize the indexer channel
@@ -117,12 +117,12 @@ func (engine *Engine) Ranker(options types.EngineInitOptions) {
 // InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
 	if engine.initOptions.UsePersistentStorage {
-		engine.persistentStorageIndexDocumentChannels =
-			make([]chan persistentStorageIndexDocumentRequest,
+		engine.storageIndexDocChannels =
+			make([]chan storageIndexDocRequest,
 				engine.initOptions.PersistentStorageShards)
 		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
-			engine.persistentStorageIndexDocumentChannels[shard] = make(
-				chan persistentStorageIndexDocumentRequest)
+			engine.storageIndexDocChannels[shard] = make(
+				chan storageIndexDocRequest)
 		}
 		engine.persistentStorageInitChannel = make(
 			chan bool, engine.initOptions.PersistentStorageShards)
@@ -166,7 +166,7 @@ func (engine *Engine) Storage() {
 
 		// 从数据库中恢复
 		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
-			go engine.persistentStorageInitWorker(shard)
+			go engine.storageInitWorker(shard)
 		}
 
 		// 等待恢复完成
@@ -192,7 +192,7 @@ func (engine *Engine) Storage() {
 		}
 
 		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
-			go engine.persistentStorageIndexDocumentWorker(shard)
+			go engine.storageIndexDocWorker(shard)
 		}
 	}
 }
@@ -287,7 +287,7 @@ func (engine *Engine) IndexDocument(docId uint64, data types.DocIndexData, force
 
 	hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.PersistentStorageShards)
 	if engine.initOptions.UsePersistentStorage && docId != 0 {
-		engine.persistentStorageIndexDocumentChannels[hash] <- persistentStorageIndexDocumentRequest{docId: docId, data: data}
+		engine.storageIndexDocChannels[hash] <- storageIndexDocRequest{docId: docId, data: data}
 	}
 }
 
@@ -341,7 +341,7 @@ func (engine *Engine) RemoveDocument(docId uint64, forceUpdate bool) {
 	if engine.initOptions.UsePersistentStorage && docId != 0 {
 		// 从数据库中删除
 		hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.PersistentStorageShards)
-		go engine.persistentStorageRemoveDocumentWorker(docId, hash)
+		go engine.storageRemoveDocWorker(docId, hash)
 	}
 }
 

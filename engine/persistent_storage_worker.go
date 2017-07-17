@@ -9,15 +9,15 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type persistentStorageIndexDocumentRequest struct {
+type storageIndexDocRequest struct {
 	docId uint64
 	data  types.DocIndexData
 	// data        types.DocumentIndexData
 }
 
-func (engine *Engine) persistentStorageIndexDocumentWorker(shard int) {
+func (engine *Engine) storageIndexDocWorker(shard int) {
 	for {
-		request := <-engine.persistentStorageIndexDocumentChannels[shard]
+		request := <-engine.storageIndexDocChannels[shard]
 
 		// 得到key
 		b := make([]byte, 10)
@@ -38,7 +38,7 @@ func (engine *Engine) persistentStorageIndexDocumentWorker(shard int) {
 	}
 }
 
-func (engine *Engine) persistentStorageRemoveDocumentWorker(docId uint64, shard uint32) {
+func (engine *Engine) storageRemoveDocWorker(docId uint64, shard uint32) {
 	// 得到key
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
@@ -47,7 +47,8 @@ func (engine *Engine) persistentStorageRemoveDocumentWorker(docId uint64, shard 
 	engine.dbs[shard].Delete(b[0:length])
 }
 
-func (engine *Engine) persistentStorageInitWorker(shard int) {
+// storageInitWorker persistent Storage init worker
+func (engine *Engine) storageInitWorker(shard int) {
 	engine.dbs[shard].ForEach(func(k, v []byte) error {
 		key, value := k, v
 		// 得到docID

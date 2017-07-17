@@ -7,8 +7,9 @@ import (
 
 var (
 	// EngineInitOptions的默认值
-	defaultNumSegmenterThreads       = runtime.NumCPU()
-	defaultNumShards                 = 2
+	defaultNumSegmenterThreads = runtime.NumCPU()
+	// defaultNumShards                 = 2
+	defaultNumShards                 = 8
 	defaultIndexerBufferLength       = runtime.NumCPU()
 	defaultNumIndexerThreadsPerShard = runtime.NumCPU()
 	defaultRankerBufferLength        = runtime.NumCPU()
