@@ -27,13 +27,12 @@ type leveldbStorage struct {
 // Also, if ErrorIfExist is true and the DB exist Open will
 // returns os.ErrExist error.
 func OpenLeveldbStorage(dbPath string) (Storage, error) {
-
-	if db, err := leveldb.OpenFile(dbPath, nil); err != nil {
+	db, err := leveldb.OpenFile(dbPath, nil)
+	if err != nil {
 		return nil, err
-	} else {
-		return &leveldbStorage{db}, nil
 	}
 
+	return &leveldbStorage{db}, nil
 }
 
 // WALName is useless for this kv database
