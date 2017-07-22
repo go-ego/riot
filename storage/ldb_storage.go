@@ -67,6 +67,22 @@ func (s *leveldbStorage) Delete(k []byte) error {
 	return s.db.Delete(k, nil)
 }
 
+// Has returns true if the DB does contains the given key.
+// It is safe to modify the contents of the argument after Has returns.
+func (s *leveldbStorage) Has(k []byte) (bool, error) {
+	return s.db.Has(k, nil)
+}
+
+// Length calculates approximate sizes of the given key ranges.
+// The length of the returned sizes are equal with the length of
+// the given ranges. The returned sizes measure storage space usage,
+// so if the user data compresses by a factor of ten, the returned
+// sizes will be one-tenth the size of the corresponding user data size.
+// The results may not include the sizes of recently written data.
+func (s *leveldbStorage) Length() (leveldb.Sizes, error) {
+	return s.db.SizeOf(nil)
+}
+
 // ForEach get all key and value
 func (s *leveldbStorage) ForEach(fn func(k, v []byte) error) error {
 	iter := s.db.NewIterator(nil, nil)

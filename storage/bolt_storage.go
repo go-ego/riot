@@ -78,6 +78,23 @@ func (s *boltStorage) Delete(k []byte) error {
 	})
 }
 
+// Has returns true if the DB does contains the given key.
+func (s *boltStorage) Has(k []byte) (bool, error) {
+	// return s.db.Exists(k)
+	var b []byte
+	err := s.db.View(func(tx *bolt.Tx) error {
+		b = tx.Bucket(gwkDocuments).Get(k)
+		return nil
+	})
+
+	// b == nil
+	if err != nil || string(b) == "" {
+		return false, err
+	}
+
+	return true, nil
+}
+
 // ForEach get all key and value
 func (s *boltStorage) ForEach(fn func(k, v []byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {

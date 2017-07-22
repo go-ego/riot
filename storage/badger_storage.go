@@ -75,6 +75,11 @@ func (s *Badger) Delete(k []byte) error {
 	return s.db.Delete(k)
 }
 
+// Has returns true if the DB does contains the given key.
+func (s *Badger) Has(k []byte) (bool, error) {
+	return s.db.Exists(k)
+}
+
 // ForEach get all key and value
 func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 	itrOpt := badger.IteratorOptions{
