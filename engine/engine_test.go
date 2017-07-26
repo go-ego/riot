@@ -387,9 +387,9 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 // 		IndexerInitOptions: &types.IndexerInitOptions{
 // 			IndexType: types.LocationsIndex,
 // 		},
-// 		UsePersistentStorage:    true,
+// 		UseStorage:    true,
 // 		PersistentStorageFolder: "gwk.persistent",
-// 		PersistentStorageShards: 2,
+// 		StorageShards: 2,
 // 	})
 // 	AddDocs(&engine)
 // 	engine.RemoveDocument(5, true)
@@ -406,9 +406,9 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 // 		IndexerInitOptions: &types.IndexerInitOptions{
 // 			IndexType: types.LocationsIndex,
 // 		},
-// 		UsePersistentStorage:    true,
+// 		UseStorage:    true,
 // 		PersistentStorageFolder: "gwk.persistent",
-// 		PersistentStorageShards: 2,
+// 		StorageShards: 2,
 // 	})
 // 	engine1.FlushIndex()
 

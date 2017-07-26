@@ -25,7 +25,7 @@ var (
 		K1: 2.0,
 		B:  0.75,
 	}
-	defaultPersistentStorageShards = 8
+	defaultStorageShards = 8
 )
 
 type EngineInitOptions struct {
@@ -71,9 +71,9 @@ type EngineInitOptions struct {
 	DefaultRankOptions *RankOptions
 
 	// 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
-	UsePersistentStorage    bool
+	UseStorage    bool
 	PersistentStorageFolder string
-	PersistentStorageShards int
+	StorageShards int
 }
 
 // 初始化EngineInitOptions，当用户未设定某个选项的值时用默认值取代
@@ -124,7 +124,7 @@ func (options *EngineInitOptions) Init() {
 		options.DefaultRankOptions.ScoringCriteria = defaultDefaultRankOptions.ScoringCriteria
 	}
 
-	if options.PersistentStorageShards == 0 {
-		options.PersistentStorageShards = defaultPersistentStorageShards
+	if options.StorageShards == 0 {
+		options.StorageShards = defaultStorageShards
 	}
 }

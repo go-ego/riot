@@ -163,7 +163,7 @@ func main() {
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用boltdb持久化，如果你希望修改数据库类型
 		// 请修改 GWK_STORAGE_ENGINE 环境变量
-		// UsePersistentStorage: true,
+		// UseStorage: true,
 		// PersistentStorageFolder: "weibo_search",
 	})
 	log.Print("引擎初始化完毕")

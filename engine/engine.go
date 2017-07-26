@@ -116,29 +116,29 @@ func (engine *Engine) Ranker(options types.EngineInitOptions) {
 
 // InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
-	if engine.initOptions.UsePersistentStorage {
+	if engine.initOptions.UseStorage {
 		engine.storageIndexDocChannels =
 			make([]chan storageIndexDocRequest,
-				engine.initOptions.PersistentStorageShards)
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+				engine.initOptions.StorageShards)
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.storageIndexDocChannels[shard] = make(
 				chan storageIndexDocRequest)
 		}
 		engine.persistentStorageInitChannel = make(
-			chan bool, engine.initOptions.PersistentStorageShards)
+			chan bool, engine.initOptions.StorageShards)
 	}
 }
 
 // CheckMem check the memory when the memory is larger than 99.99% using the storage
 func (engine *Engine) CheckMem() {
 	// Todo test
-	if !engine.initOptions.UsePersistentStorage {
+	if !engine.initOptions.UseStorage {
 		log.Println("Check virtualMemory...")
 		vmem, _ := mem.VirtualMemory()
 		fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", vmem.Total, vmem.Free, vmem.UsedPercent)
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
-			engine.initOptions.UsePersistentStorage = true
+			engine.initOptions.UseStorage = true
 			engine.initOptions.PersistentStorageFolder = "./index"
 			os.MkdirAll("./index", 0777)
 		}
@@ -147,15 +147,15 @@ func (engine *Engine) CheckMem() {
 
 // Storage start the persistent storage work connection
 func (engine *Engine) Storage() {
-	if engine.initOptions.UsePersistentStorage {
+	if engine.initOptions.UseStorage {
 		err := os.MkdirAll(engine.initOptions.PersistentStorageFolder, 0700)
 		if err != nil {
 			log.Fatal("无法创建目录", engine.initOptions.PersistentStorageFolder)
 		}
 
 		// 打开或者创建数据库
-		engine.dbs = make([]storage.Storage, engine.initOptions.PersistentStorageShards)
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			dbPath := engine.initOptions.PersistentStorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath)
 			if db == nil || err != nil {
@@ -165,12 +165,12 @@ func (engine *Engine) Storage() {
 		}
 
 		// 从数据库中恢复
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			go engine.storageInitWorker(shard)
 		}
 
 		// 等待恢复完成
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			<-engine.persistentStorageInitChannel
 		}
 		for {
@@ -181,7 +181,7 @@ func (engine *Engine) Storage() {
 		}
 
 		// 关闭并重新打开数据库
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.dbs[shard].Close()
 			dbPath := engine.initOptions.PersistentStorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath)
@@ -191,7 +191,7 @@ func (engine *Engine) Storage() {
 			engine.dbs[shard] = db
 		}
 
-		for shard := 0; shard < engine.initOptions.PersistentStorageShards; shard++ {
+		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			go engine.storageIndexDocWorker(shard)
 		}
 	}
@@ -237,7 +237,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 	// 初始化排序器通道
 	engine.Ranker(options)
 
-	// engine.CheckMem(engine.initOptions.UsePersistentStorage)
+	// engine.CheckMem(engine.initOptions.UseStorage)
 	engine.CheckMem()
 
 	// 初始化持久化存储通道
@@ -285,8 +285,8 @@ func (engine *Engine) IndexDocument(docId uint64, data types.DocIndexData, force
 	// data.Tokens
 	engine.internalIndexDocument(docId, data, forceUpdate)
 
-	hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.PersistentStorageShards)
-	if engine.initOptions.UsePersistentStorage && docId != 0 {
+	hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.StorageShards)
+	if engine.initOptions.UseStorage && docId != 0 {
 		engine.storageIndexDocChannels[hash] <- storageIndexDocRequest{docId: docId, data: data}
 	}
 }
@@ -338,9 +338,9 @@ func (engine *Engine) RemoveDocument(docId uint64, forceUpdate bool) {
 		engine.rankerRemoveDocChannels[shard] <- rankerRemoveDocRequest{docId: docId}
 	}
 
-	if engine.initOptions.UsePersistentStorage && docId != 0 {
+	if engine.initOptions.UseStorage && docId != 0 {
 		// 从数据库中删除
-		hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.PersistentStorageShards)
+		hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.StorageShards)
 		go engine.storageRemoveDocWorker(docId, hash)
 	}
 }
@@ -518,7 +518,7 @@ func (engine *Engine) FlushIndex() {
 		runtime.Gosched()
 		if engine.numIndexingRequests == engine.numDocumentsIndexed &&
 			engine.numRemovingRequests*uint64(engine.initOptions.NumShards) == engine.numDocumentsRemoved &&
-			(!engine.initOptions.UsePersistentStorage || engine.numIndexingRequests == engine.numDocumentsStored) {
+			(!engine.initOptions.UseStorage || engine.numIndexingRequests == engine.numDocumentsStored) {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
 			break
 		}
@@ -537,7 +537,7 @@ func (engine *Engine) FlushIndex() {
 // 关闭引擎
 func (engine *Engine) Close() {
 	engine.FlushIndex()
-	if engine.initOptions.UsePersistentStorage {
+	if engine.initOptions.UseStorage {
 		for _, db := range engine.dbs {
 			db.Close()
 		}

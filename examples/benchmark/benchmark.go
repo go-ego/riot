@@ -75,9 +75,9 @@ func main() {
 		},
 		NumShards:               NumShards,
 		DefaultRankOptions:      &options,
-		UsePersistentStorage:    *use_persistent,
+		UseStorage:    *use_persistent,
 		PersistentStorageFolder: *persistent_storage_folder,
-		PersistentStorageShards: *persistent_storage_shards,
+		StorageShards: *persistent_storage_shards,
 	})
 	tEndInit := time.Now()
 	defer searcher.Close()
@@ -208,9 +208,9 @@ func main() {
 			},
 			NumShards:               NumShards,
 			DefaultRankOptions:      &options,
-			UsePersistentStorage:    *use_persistent,
+			UseStorage:    *use_persistent,
 			PersistentStorageFolder: *persistent_storage_folder,
-			PersistentStorageShards: *persistent_storage_shards,
+			StorageShards: *persistent_storage_shards,
 		})
 		defer searcher1.Close()
 		t7 := time.Now()
