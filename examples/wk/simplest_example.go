@@ -21,7 +21,7 @@ var (
 func main() {
 	// 初始化
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../../data/dictionary.txt"})
+		SegmenterDict: "../../data/dictionary.txt"})
 	defer searcher.Close()
 
 	// 将文档加入索引，docId 从1开始

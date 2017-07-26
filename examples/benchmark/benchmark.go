@@ -68,7 +68,7 @@ func main() {
 	// 初始化
 	tBeginInit := time.Now()
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: *dictionaries,
+		SegmenterDict: *dictionaries,
 		StopTokenFile:         *stop_token_file,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: *index_type,
@@ -76,7 +76,7 @@ func main() {
 		NumShards:               NumShards,
 		DefaultRankOptions:      &options,
 		UseStorage:    *use_persistent,
-		PersistentStorageFolder: *persistent_storage_folder,
+		StorageFolder: *persistent_storage_folder,
 		StorageShards: *persistent_storage_shards,
 	})
 	tEndInit := time.Now()
@@ -201,7 +201,7 @@ func main() {
 		t6 := time.Now()
 		searcher1 := engine.Engine{}
 		searcher1.Init(types.EngineInitOptions{
-			SegmenterDictionaries: *dictionaries,
+			SegmenterDict: *dictionaries,
 			StopTokenFile:         *stop_token_file,
 			IndexerInitOptions: &types.IndexerInitOptions{
 				IndexType: *index_type,
@@ -209,7 +209,7 @@ func main() {
 			NumShards:               NumShards,
 			DefaultRankOptions:      &options,
 			UseStorage:    *use_persistent,
-			PersistentStorageFolder: *persistent_storage_folder,
+			StorageFolder: *persistent_storage_folder,
 			StorageShards: *persistent_storage_shards,
 		})
 		defer searcher1.Close()

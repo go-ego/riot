@@ -155,7 +155,7 @@ func main() {
 	gob.Register(WeiboScoringFields{})
 	log.Print("引擎开始初始化")
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: *dictFile,
+		SegmenterDict: *dictFile,
 		StopTokenFile:         *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
@@ -164,7 +164,7 @@ func main() {
 		// 默认使用boltdb持久化，如果你希望修改数据库类型
 		// 请修改 GWK_STORAGE_ENGINE 环境变量
 		// UseStorage: true,
-		// PersistentStorageFolder: "weibo_search",
+		// StorageFolder: "weibo_search",
 	})
 	log.Print("引擎初始化完毕")
 	wbs = make(map[uint64]Weibo)

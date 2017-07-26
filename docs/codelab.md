@@ -65,7 +65,7 @@ import (
 ```go
 var searcher engine.Engine
 searcher.Init(types.EngineInitOptions{
-	SegmenterDictionaries: "../../data/dictionary.txt",
+	SegmenterDict: "../../data/dictionary.txt",
 	StopTokenFile:         "../../data/stop_tokens.txt",
 	IndexerInitOptions: &types.IndexerInitOptions{
 		IndexType: types.LocationsIndex,

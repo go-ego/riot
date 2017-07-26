@@ -74,7 +74,7 @@ var (
 func main() {
 	// 初始化
 	searcher.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "github.com/go-ego/riot/data/dictionary.txt"})
+		SegmenterDict: "github.com/go-ego/riot/data/dictionary.txt"})
 	defer searcher.Close()
 
 	// 将文档加入索引，docId 从1开始

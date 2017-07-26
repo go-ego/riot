@@ -30,7 +30,7 @@ var (
 
 type EngineInitOptions struct {
 	// 是否使用分词器
-	// 默认使用，否则在启动阶段跳过SegmenterDictionaries和StopTokenFile设置
+	// 默认使用，否则在启动阶段跳过SegmenterDict和StopTokenFile设置
 	// 如果你不需要在引擎内分词，可以将这个选项设为true
 	// 注意，如果你不用分词器，那么在调用IndexDocument时DocIndexData中的Content会被忽略
 	NotUsingSegmenter bool
@@ -40,7 +40,7 @@ type EngineInitOptions struct {
 
 	// 半角逗号分隔的字典文件，具体用法见
 	// sego.Segmenter.LoadDictionary函数的注释
-	SegmenterDictionaries string
+	SegmenterDict string
 
 	// 停用词文件
 	StopTokenFile string
@@ -72,14 +72,14 @@ type EngineInitOptions struct {
 
 	// 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
 	UseStorage    bool
-	PersistentStorageFolder string
+	StorageFolder string
 	StorageShards int
 }
 
 // 初始化EngineInitOptions，当用户未设定某个选项的值时用默认值取代
 func (options *EngineInitOptions) Init() {
 	if !options.NotUsingSegmenter {
-		if options.SegmenterDictionaries == "" {
+		if options.SegmenterDict == "" {
 			log.Fatal("字典文件不能为空")
 		}
 	}

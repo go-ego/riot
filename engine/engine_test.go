@@ -84,7 +84,7 @@ func (rule RankByTokenProximity) Score(
 // func TestEngineIndexDocument(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			OutputOffset:    0,
 // 			MaxOutputs:      10,
@@ -120,7 +120,7 @@ func (rule RankByTokenProximity) Score(
 // func TestReverseOrder(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			ReverseOrder:    true,
 // 			OutputOffset:    0,
@@ -145,7 +145,7 @@ func (rule RankByTokenProximity) Score(
 // func TestOffsetAndMaxOutputs(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			ReverseOrder:    true,
 // 			OutputOffset:    1,
@@ -181,7 +181,7 @@ func (criteria TestScoringCriteria) Score(
 // func TestSearchWithCriteria(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			ScoringCriteria: TestScoringCriteria{},
 // 		},
@@ -206,7 +206,7 @@ func (criteria TestScoringCriteria) Score(
 func TestCompactIndex(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../testdata/test_dict.txt",
+		SegmenterDict: "../testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ScoringCriteria: TestScoringCriteria{},
 		},
@@ -238,7 +238,7 @@ func (criteria BM25ScoringCriteria) Score(
 // func TestFrequenciesIndex(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			ScoringCriteria: BM25ScoringCriteria{},
 // 		},
@@ -262,7 +262,7 @@ func (criteria BM25ScoringCriteria) Score(
 func TestRemoveDocument(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../testdata/test_dict.txt",
+		SegmenterDict: "../testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ScoringCriteria: TestScoringCriteria{},
 		},
@@ -290,7 +290,7 @@ func TestRemoveDocument(t *testing.T) {
 // func TestEngineIndexDocumentWithTokens(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			OutputOffset:    0,
 // 			MaxOutputs:      10,
@@ -349,13 +349,13 @@ func TestRemoveDocument(t *testing.T) {
 func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 	var engine1, engine2 Engine
 	engine1.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../data/dictionary.txt",
+		SegmenterDict: "../data/dictionary.txt",
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
 		},
 	})
 	engine2.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../data/dictionary.txt",
+		SegmenterDict: "../data/dictionary.txt",
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.DocIdsIndex,
 		},
@@ -378,7 +378,7 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 // 	gob.Register(ScoringFields{})
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			OutputOffset:    0,
 // 			MaxOutputs:      10,
@@ -388,7 +388,7 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 // 			IndexType: types.LocationsIndex,
 // 		},
 // 		UseStorage:    true,
-// 		PersistentStorageFolder: "gwk.persistent",
+// 		StorageFolder: "gwk.persistent",
 // 		StorageShards: 2,
 // 	})
 // 	AddDocs(&engine)
@@ -397,7 +397,7 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 
 // 	var engine1 Engine
 // 	engine1.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			OutputOffset:    0,
 // 			MaxOutputs:      10,
@@ -407,7 +407,7 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 // 			IndexType: types.LocationsIndex,
 // 		},
 // 		UseStorage:    true,
-// 		PersistentStorageFolder: "gwk.persistent",
+// 		StorageFolder: "gwk.persistent",
 // 		StorageShards: 2,
 // 	})
 // 	engine1.FlushIndex()
@@ -433,7 +433,7 @@ func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineInitOptions{
-		SegmenterDictionaries: "../testdata/test_dict.txt",
+		SegmenterDict: "../testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -458,7 +458,7 @@ func TestCountDocsOnly(t *testing.T) {
 // func TestSearchWithin(t *testing.T) {
 // 	var engine Engine
 // 	engine.Init(types.EngineInitOptions{
-// 		SegmenterDictionaries: "../testdata/test_dict.txt",
+// 		SegmenterDict: "../testdata/test_dict.txt",
 // 		DefaultRankOptions: &types.RankOptions{
 // 			ReverseOrder:    true,
 // 			OutputOffset:    0,

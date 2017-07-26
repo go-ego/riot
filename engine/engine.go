@@ -139,7 +139,7 @@ func (engine *Engine) CheckMem() {
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
-			engine.initOptions.PersistentStorageFolder = "./index"
+			engine.initOptions.StorageFolder = "./index"
 			os.MkdirAll("./index", 0777)
 		}
 	}
@@ -148,15 +148,15 @@ func (engine *Engine) CheckMem() {
 // Storage start the persistent storage work connection
 func (engine *Engine) Storage() {
 	if engine.initOptions.UseStorage {
-		err := os.MkdirAll(engine.initOptions.PersistentStorageFolder, 0700)
+		err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
 		if err != nil {
-			log.Fatal("无法创建目录", engine.initOptions.PersistentStorageFolder)
+			log.Fatal("无法创建目录", engine.initOptions.StorageFolder)
 		}
 
 		// 打开或者创建数据库
 		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			dbPath := engine.initOptions.PersistentStorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath)
 			if db == nil || err != nil {
 				log.Fatal("无法打开数据库", dbPath, ": ", err)
@@ -183,7 +183,7 @@ func (engine *Engine) Storage() {
 		// 关闭并重新打开数据库
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.dbs[shard].Close()
-			dbPath := engine.initOptions.PersistentStorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath)
 			if db == nil || err != nil {
 				log.Fatal("无法打开数据库", dbPath, ": ", err)
@@ -212,7 +212,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 
 	if !options.NotUsingSegmenter {
 		// 载入分词器词典
-		engine.segmenter.LoadDictionary(options.SegmenterDictionaries)
+		engine.segmenter.LoadDictionary(options.SegmenterDict)
 
 		// 初始化停用词
 		engine.stopTokens.Init(options.StopTokenFile)
