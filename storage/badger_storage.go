@@ -57,7 +57,7 @@ func (s *Badger) WALName() string {
 // If key is not present, it is created. If it is present,
 // the existing value is overwritten with the one provided.
 func (s *Badger) Set(k, v []byte) error {
-	return s.db.Set(k, v)
+	return s.db.Set(k, v, 0x00)
 }
 
 // Get looks for key and returns a value.
