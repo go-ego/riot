@@ -69,15 +69,15 @@ func main() {
 	tBeginInit := time.Now()
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictionaries,
-		StopTokenFile:         *stop_token_file,
+		StopTokenFile: *stop_token_file,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: *index_type,
 		},
-		NumShards:               NumShards,
-		DefaultRankOptions:      &options,
-		UseStorage:    *use_persistent,
-		StorageFolder: *persistent_storage_folder,
-		StorageShards: *persistent_storage_shards,
+		NumShards:          NumShards,
+		DefaultRankOptions: &options,
+		UseStorage:         *use_persistent,
+		StorageFolder:      *persistent_storage_folder,
+		StorageShards:      *persistent_storage_shards,
 	})
 	tEndInit := time.Now()
 	defer searcher.Close()
@@ -202,15 +202,15 @@ func main() {
 		searcher1 := engine.Engine{}
 		searcher1.Init(types.EngineInitOptions{
 			SegmenterDict: *dictionaries,
-			StopTokenFile:         *stop_token_file,
+			StopTokenFile: *stop_token_file,
 			IndexerInitOptions: &types.IndexerInitOptions{
 				IndexType: *index_type,
 			},
-			NumShards:               NumShards,
-			DefaultRankOptions:      &options,
-			UseStorage:    *use_persistent,
-			StorageFolder: *persistent_storage_folder,
-			StorageShards: *persistent_storage_shards,
+			NumShards:          NumShards,
+			DefaultRankOptions: &options,
+			UseStorage:         *use_persistent,
+			StorageFolder:      *persistent_storage_folder,
+			StorageShards:      *persistent_storage_shards,
 		})
 		defer searcher1.Close()
 		t7 := time.Now()

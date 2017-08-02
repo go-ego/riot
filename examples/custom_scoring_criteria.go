@@ -101,7 +101,7 @@ func main() {
 	gob.Register(WeiboScoringFields{})
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictionaries,
-		StopTokenFile:         *stop_token_file,
+		StopTokenFile: *stop_token_file,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
 		},

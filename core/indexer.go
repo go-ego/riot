@@ -541,7 +541,7 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 	for i := 1; i < len(tokens); i++ {
 		nextLocations = table[i].locations[indexPointers[i]]
 		nextMinValues = make([]int, len(nextLocations))
-		for j, _ := range nextMinValues {
+		for j := range nextMinValues {
 			nextMinValues[j] = -1
 		}
 

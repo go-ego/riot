@@ -156,7 +156,7 @@ func main() {
 	log.Print("引擎开始初始化")
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictFile,
-		StopTokenFile:         *stopTokenFile,
+		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
 		},
@@ -178,7 +178,7 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
-		for _ = range c {
+		for range c {
 			log.Print("捕获Ctrl-c，退出服务器")
 			searcher.Close()
 			os.Exit(0)
