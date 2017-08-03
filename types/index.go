@@ -15,7 +15,7 @@
 
 /*
 
-Package	types is riot types
+Package types is riot types
 */
 package types
 

@@ -15,7 +15,7 @@
 
 /*
 
-Package	riot full text search engine
+Package riot full text search engine
 */
 
 package riot

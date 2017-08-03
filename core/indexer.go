@@ -15,7 +15,7 @@
 
 /*
 
-Package	core is riot core
+Package core is riot core
 */
 package core
 

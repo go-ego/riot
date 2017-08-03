@@ -14,6 +14,6 @@
 
 /*
 
-Package	net is riot net
+Package net is riot net
 */
 package net
