@@ -20,11 +20,12 @@ import (
 	"os"
 )
 
+// StopTokens stop tokens map
 type StopTokens struct {
 	stopTokens map[string]bool
 }
 
-// Init 从stopTokenFile中读入停用词，一个词一行
+// Init 从 stopTokenFile 中读入停用词，一个词一行
 // 文档索引建立时会跳过这些停用词
 func (st *StopTokens) Init(stopTokenFile string) {
 	st.stopTokens = make(map[string]bool)
@@ -48,6 +49,7 @@ func (st *StopTokens) Init(stopTokenFile string) {
 
 }
 
+// IsStopToken to determine whether to stop token
 func (st *StopTokens) IsStopToken(token string) bool {
 	_, found := st.stopTokens[token]
 	return found

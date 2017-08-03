@@ -30,6 +30,7 @@ type segmenterRequest struct {
 	forceUpdate bool
 }
 
+// Map defines the type map[string][]int
 type Map map[string][]int
 
 func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
