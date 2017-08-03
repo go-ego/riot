@@ -50,6 +50,7 @@ type SearchRequest struct {
 	Orderless bool
 }
 
+// RankOptions rank options
 type RankOptions struct {
 	// 文档的评分规则，值为nil时使用Engine初始化时设定的规则
 	ScoringCriteria ScoringCriteria
@@ -64,6 +65,7 @@ type RankOptions struct {
 	MaxOutputs int
 }
 
+// Logic logic options
 type Logic struct {
 
 	// 与查询, 必须都存在
@@ -78,6 +80,7 @@ type Logic struct {
 	LogicExpression LogicExpression
 }
 
+// LogicExpression logic expression options
 type LogicExpression struct {
 
 	// 与查询, 必须都存在

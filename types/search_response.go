@@ -18,6 +18,7 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
+// SearchResponse search response options
 type SearchResponse struct {
 	// 搜索用到的关键词
 	Tokens []string
@@ -35,6 +36,7 @@ type SearchResponse struct {
 	NumDocs int
 }
 
+// ScoredDocument scored document
 type ScoredDocument struct {
 	DocId uint64
 
@@ -60,7 +62,7 @@ type ScoredDocument struct {
 	TokenLocations [][]int
 }
 
-// 为了方便排序
+// ScoredDocuments 为了方便排序
 
 type ScoredDocuments []ScoredDocument
 

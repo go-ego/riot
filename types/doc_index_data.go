@@ -14,7 +14,7 @@
 // under the License.
 package types
 
-// type DocumentIndexData struct {
+// DocIndexData type DocumentIndexData struct {
 type DocIndexData struct {
 	// 文档全文（必须是UTF-8格式），用于生成待索引的关键词
 	Content string
@@ -38,7 +38,7 @@ type DocIndexData struct {
 	Fields interface{}
 }
 
-// 文档的一个关键词
+// TokenData 文档的一个关键词
 type TokenData struct {
 	// 关键词的字符串
 	Text string

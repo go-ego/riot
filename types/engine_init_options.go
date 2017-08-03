@@ -42,6 +42,7 @@ var (
 	defaultStorageShards = 8
 )
 
+// EngineInitOptions init engine options
 type EngineInitOptions struct {
 	// 是否使用分词器
 	// 默认使用，否则在启动阶段跳过SegmenterDict和StopTokenFile设置
@@ -90,7 +91,7 @@ type EngineInitOptions struct {
 	StorageShards int
 }
 
-// 初始化EngineInitOptions，当用户未设定某个选项的值时用默认值取代
+// Init 初始化 EngineInitOptions，当用户未设定某个选项的值时用默认值取代
 func (options *EngineInitOptions) Init() {
 	if !options.NotUsingSegmenter {
 		if options.SegmenterDict == "" {
