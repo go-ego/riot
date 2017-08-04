@@ -1,0 +1,37 @@
+# circle.yml #
+# machine:
+#   go:
+#     version: 1.8.1
+
+machine:
+  environment:
+    GODIST: "go1.8.3.linux-amd64.tar.gz"
+  post:
+    - mkdir -p download
+    - test -e download/$GODIST || curl -o download/$GODIST https://storage.googleapis.com/golang/$GODIST
+    - sudo rm -rf /usr/local/go
+    - sudo tar -C /usr/local -xzf download/$GODIST
+
+# customize dependencies
+# dependencies:
+#   pre:
+#     - sudo apt-get update
+#     - sudo apt-get install libx11-dev
+dependencies:
+  override:
+    # './...' is a relative pattern which means all subdirectories
+    - go get -u github.com/go-ego/gse  
+    - go get -u github.com/go-ego/gpy 
+    - go get -u github.com/go-ego/murmur 
+    - go get -u golang.org/x/sys/unix
+    - go get -u github.com/shirou/gopsutil
+    - go get -t -d -v ./...
+
+# script:
+#   - ./go.test.sh
+
+test:
+  post:
+    - go test -v -covermode=count -coverprofile=coverage.out
+    - bash <(curl -s https://codecov.io/bash) 
+   
