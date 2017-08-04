@@ -8,12 +8,6 @@
             "revisionTime": "2017-07-02T08:40:17Z"
         },
         {
-            "checksumSHA1": "Iyr8d/LgFGaPuIjKjkAoGmLwb7o=",
-            "path": "github.com/adamzy/cedar-go",
-            "revision": "d348c21f72432c2b6d5f05f68759fde94f64b227",
-            "revisionTime": "2015-11-03T15:22:50Z"
-        },
-        {
             "checksumSHA1": "fgxkKPz4jLzKDSg0Gmx1G0rPOWY=",
             "path": "github.com/bkaradzic/go-lz4",
             "revision": "7224d8d8f27ef618c0a95f1ae69dbb0488abc33a",
@@ -26,16 +20,16 @@
             "revisionTime": "2017-07-17T17:11:48Z"
         },
         {
-            "checksumSHA1": "L7lSGHGMnmSdkhCaAALvImvzW6A=",
+            "checksumSHA1": "Ki4EYGJcnkCq9RhGF/JB19V1bVM=",
             "path": "github.com/dgraph-io/badger",
-            "revision": "37f293e32c8a3ba762734a2cea9623c459129d92",
-            "revisionTime": "2017-08-02T08:49:26Z"
+            "revision": "270fbc75ac97044dfa64fa7d3c22310aebedc443",
+            "revisionTime": "2017-08-04T05:15:21Z"
         },
         {
             "checksumSHA1": "JAELj4K08kz25czSWp1FHOAneUQ=",
             "path": "github.com/dgraph-io/badger/skl",
-            "revision": "37f293e32c8a3ba762734a2cea9623c459129d92",
-            "revisionTime": "2017-08-02T08:49:26Z"
+            "revision": "270fbc75ac97044dfa64fa7d3c22310aebedc443",
+            "revisionTime": "2017-08-04T05:15:21Z"
         },
         {
             "checksumSHA1": "WM7gyvEFF0ZQWR5ciNH0Q+fcofs=",
@@ -44,10 +38,16 @@
             "revisionTime": "2017-08-02T08:49:26Z"
         },
         {
-            "checksumSHA1": "e3uHd4Og6NQutP3vf/PztANSI2c=",
+            "checksumSHA1": "mPyyPduZ3tsI4OepncfiLz1D4gg=",
             "path": "github.com/dgraph-io/badger/y",
-            "revision": "37f293e32c8a3ba762734a2cea9623c459129d92",
-            "revisionTime": "2017-08-02T08:49:26Z"
+            "revision": "270fbc75ac97044dfa64fa7d3c22310aebedc443",
+            "revisionTime": "2017-08-04T05:15:21Z"
+        },
+        {
+            "checksumSHA1": "8ynPKpskZlLLx7SlxYGoZ2G/Gz8=",
+            "path": "github.com/go-ego/cedar-go",
+            "revision": "8ec3098aa38876bbc0d75a1056a52602c487a5a5",
+            "revisionTime": "2017-08-04T13:12:22Z"
         },
         {
             "checksumSHA1": "TWAk8yX3GOw9uqgGwgc2Spw5crw=",
@@ -56,10 +56,10 @@
             "revisionTime": "2017-08-02T12:03:00Z"
         },
         {
-            "checksumSHA1": "msw1lVxXHwRbJqHYawt4X72S6FY=",
+            "checksumSHA1": "sBUQzw0Fz/m5JL6a2hpDryHSLjU=",
             "path": "github.com/go-ego/gse",
-            "revision": "1118008c3d2ae413394c8e3813c4e393ce206bde",
-            "revisionTime": "2017-08-02T12:13:47Z"
+            "revision": "c57c4ac693f3fbf290144560e8e199bfd0e0ffb8",
+            "revisionTime": "2017-08-04T13:21:04Z"
         },
         {
             "checksumSHA1": "WHaHGer23rilcJn9cr2k1HZWp18=",
