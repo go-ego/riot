@@ -12,6 +12,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations
 // under the License.
+
 package types
 
 // 这些常数定义了反向索引表存储的数据类型
