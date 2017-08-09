@@ -12,7 +12,7 @@ install:
   - go get -u github.com/go-ego/murmur 
   - go get -u golang.org/x/sys/unix
   - go get -u github.com/shirou/gopsutil
-  - go get -v -t
+  - go get -v -t ./...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
