@@ -231,7 +231,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 
 	if !options.NotUsingSegmenter {
 		// 载入分词器词典
-		engine.segmenter.LoadDictionary(options.SegmenterDict)
+		engine.segmenter.LoadDict(options.SegmenterDict)
 
 		// 初始化停用词
 		engine.stopTokens.Init(options.StopTokenFile)

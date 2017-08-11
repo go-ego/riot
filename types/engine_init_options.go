@@ -55,7 +55,7 @@ type EngineInitOptions struct {
 	Using int
 
 	// 半角逗号分隔的字典文件，具体用法见
-	// sego.Segmenter.LoadDictionary函数的注释
+	// sego.Segmenter.LoadDict函数的注释
 	SegmenterDict string
 
 	// 停用词文件

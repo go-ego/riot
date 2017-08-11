@@ -44,10 +44,10 @@
             "revisionTime": "2017-08-04T05:15:21Z"
         },
         {
-            "checksumSHA1": "8ynPKpskZlLLx7SlxYGoZ2G/Gz8=",
-            "path": "github.com/go-ego/cedar-go",
-            "revision": "8ec3098aa38876bbc0d75a1056a52602c487a5a5",
-            "revisionTime": "2017-08-04T13:12:22Z"
+            "checksumSHA1": "LrYCnBuEwaNfrFLQ+z6WgjHor80=",
+            "path": "github.com/go-ego/cedar",
+            "revision": "2d15617d5b40b081beeb57b73f8f0eddee7ee64f",
+            "revisionTime": "2017-08-09T14:47:27Z"
         },
         {
             "checksumSHA1": "TWAk8yX3GOw9uqgGwgc2Spw5crw=",
@@ -56,10 +56,10 @@
             "revisionTime": "2017-08-02T12:03:00Z"
         },
         {
-            "checksumSHA1": "sBUQzw0Fz/m5JL6a2hpDryHSLjU=",
+            "checksumSHA1": "kQRN290kl5RS3D59E0w7mEVjrH4=",
             "path": "github.com/go-ego/gse",
-            "revision": "c57c4ac693f3fbf290144560e8e199bfd0e0ffb8",
-            "revisionTime": "2017-08-04T13:21:04Z"
+            "revision": "441a06b86475a48a41392fc6ed59c34df9ce4c18",
+            "revisionTime": "2017-08-11T13:49:21Z"
         },
         {
             "checksumSHA1": "WHaHGer23rilcJn9cr2k1HZWp18=",
