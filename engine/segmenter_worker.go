@@ -34,11 +34,48 @@ type segmenterRequest struct {
 // Map defines the type map[string][]int
 type Map map[string][]int
 
+// Segspl split seg
+func (engine *Engine) Segspl(splitData []string, num int) (Map, int) {
+	var (
+		numTokens int
+		sqlitStr  string
+	)
+	tokensMap := make(map[string][]int)
+	for i := 0; i < num; i++ {
+		if splitData[i] != "" {
+			if !engine.stopTokens.IsStopToken(splitData[i]) {
+				numTokens++
+				tokensMap[splitData[i]] = append(tokensMap[splitData[i]], numTokens)
+			}
+
+			sqlitStr += splitData[i]
+			if !engine.stopTokens.IsStopToken(sqlitStr) {
+				numTokens++
+				tokensMap[sqlitStr] = append(tokensMap[sqlitStr], numTokens)
+			}
+
+			if engine.initOptions.Using == 6 {
+				// more combination
+				var sqlitsStr string
+				for s := i + 1; s < len(splitData); s++ {
+					sqlitsStr += splitData[s]
+
+					if !engine.stopTokens.IsStopToken(sqlitsStr) {
+						numTokens++
+						tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], numTokens)
+					}
+				}
+			}
+
+		}
+	}
+
+	return tokensMap, numTokens
+}
+
 func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 	tokensMap := make(map[string][]int)
-	// split data
 	var (
-		sqlitStr  string
 		num       int
 		numTokens int
 	)
@@ -57,33 +94,24 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 			numTokens += len(segments)
 		}
 
-		splitData := strings.Split(request.data.Content, "")
-		num = len(splitData)
-		for i := 0; i < num; i++ {
-			if splitData[i] != "" {
-				if !engine.stopTokens.IsStopToken(splitData[i]) {
-					numTokens++
-					tokensMap[splitData[i]] = append(tokensMap[splitData[i]], numTokens)
-				}
-				sqlitStr += splitData[i]
+		if engine.initOptions.Using == 5 {
+			// use segmenter
+			splitSpaData := strings.Split(request.data.Content, " ")
+			num := len(splitSpaData)
+			tokenMap, numToken := engine.Segspl(splitSpaData, num)
+			numTokens += numToken
+			for key, val := range tokenMap {
+				tokensMap[key] = val
+			}
+		}
 
-				if !engine.stopTokens.IsStopToken(sqlitStr) {
-					numTokens++
-					tokensMap[sqlitStr] = append(tokensMap[sqlitStr], numTokens)
-				}
-
-				if engine.initOptions.Using == 0 {
-					// more combination
-					var sqlitsStr string
-					for s := i + 1; s < len(splitData); s++ {
-						sqlitsStr += splitData[s]
-						if !engine.stopTokens.IsStopToken(sqlitsStr) {
-							numTokens++
-							tokensMap[sqlitsStr] = append(tokensMap[sqlitsStr], numTokens)
-						}
-					}
-				}
-
+		if engine.initOptions.Using != 5 {
+			splitData := strings.Split(request.data.Content, "")
+			num = len(splitData)
+			tokenMap, numToken := engine.Segspl(splitData, num)
+			numTokens += numToken
+			for key, val := range tokenMap {
+				tokensMap[key] = val
 			}
 		}
 	}
@@ -96,7 +124,6 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 
 	numTokens += len(request.data.Tokens)
 
-	// fmt.Println("fmt.Println(tokensMap)------------", tokensMap)
 	return tokensMap, numTokens
 }
 
