@@ -17,6 +17,7 @@ package engine
 
 import (
 	// "fmt"
+
 	"strings"
 
 	"github.com/go-ego/gpy"
@@ -255,25 +256,31 @@ func (engine *Engine) PinYin(hans string) []string {
 		str      string
 		pystr    string
 		strArr   []string
-		sqlitStr string
-		// sqlitArr []string
+		splitStr string
+		// splitArr []string
 	)
 
 	//
 	splitHans := strings.Split(hans, "")
 	for i := 0; i < len(splitHans); i++ {
 		if splitHans[i] != "" {
-			strArr = append(strArr, splitHans[i])
-			sqlitStr += splitHans[i]
+			if !engine.stopTokens.IsStopToken(splitHans[i]) {
+				strArr = append(strArr, splitHans[i])
+			}
+			splitStr += splitHans[i]
 		}
-		strArr = append(strArr, sqlitStr)
+		if !engine.stopTokens.IsStopToken(splitStr) {
+			strArr = append(strArr, splitStr)
+		}
 	}
 
 	// Segment 分词
-	if engine.initOptions.NotUsingSegmenter {
+	if !engine.initOptions.NotUsingSegmenter {
 		sehans := engine.Segment(hans)
 		for h := 0; h < len(sehans); h++ {
-			strArr = append(strArr, sehans[h])
+			if !engine.stopTokens.IsStopToken(sehans[h]) {
+				strArr = append(strArr, sehans[h])
+			}
 		}
 	}
 	//
@@ -283,10 +290,13 @@ func (engine *Engine) PinYin(hans string) []string {
 	for i := 0; i < len(py); i++ {
 		str += py[i][0:1]
 		pystr += py[i]
-		strArr = append(strArr, pystr)
-		strArr = append(strArr, str)
+		if !engine.stopTokens.IsStopToken(pystr) {
+			strArr = append(strArr, pystr)
+		}
+		if !engine.stopTokens.IsStopToken(str) {
+			strArr = append(strArr, str)
+		}
 	}
-	// }
 
 	return strArr
 }
