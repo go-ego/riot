@@ -36,20 +36,20 @@ type segmenterRequest struct {
 type Map map[string][]int
 
 // Segspl split seg
-func (engine *Engine) Segspl(splitData []string, num int) (Map, int) {
+func (engine *Engine) Segspl(splData []string, num int) (Map, int) {
 	var (
 		numTokens int
 		sqlitStr  string
 	)
 	tokensMap := make(map[string][]int)
 	for i := 0; i < num; i++ {
-		if splitData[i] != "" {
-			if !engine.stopTokens.IsStopToken(splitData[i]) {
+		if splData[i] != "" {
+			if !engine.stopTokens.IsStopToken(splData[i]) {
 				numTokens++
-				tokensMap[splitData[i]] = append(tokensMap[splitData[i]], numTokens)
+				tokensMap[splData[i]] = append(tokensMap[splData[i]], numTokens)
 			}
 
-			sqlitStr += splitData[i]
+			sqlitStr += splData[i]
 			if !engine.stopTokens.IsStopToken(sqlitStr) {
 				numTokens++
 				tokensMap[sqlitStr] = append(tokensMap[sqlitStr], numTokens)
@@ -58,8 +58,8 @@ func (engine *Engine) Segspl(splitData []string, num int) (Map, int) {
 			if engine.initOptions.Using == 6 {
 				// more combination
 				var sqlitsStr string
-				for s := i + 1; s < len(splitData); s++ {
-					sqlitsStr += splitData[s]
+				for s := i + 1; s < len(splData); s++ {
+					sqlitsStr += splData[s]
 
 					if !engine.stopTokens.IsStopToken(sqlitsStr) {
 						numTokens++
@@ -97,9 +97,9 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 
 		if engine.initOptions.Using == 5 {
 			// use segmenter
-			splitSpaData := strings.Split(request.data.Content, " ")
-			num := len(splitSpaData)
-			tokenMap, numToken := engine.Segspl(splitSpaData, num)
+			splSpaData := strings.Split(request.data.Content, " ")
+			num := len(splSpaData)
+			tokenMap, numToken := engine.Segspl(splSpaData, num)
 			numTokens += numToken
 			for key, val := range tokenMap {
 				tokensMap[key] = val
@@ -107,9 +107,9 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 		}
 
 		if engine.initOptions.Using != 5 {
-			splitData := strings.Split(request.data.Content, "")
-			num = len(splitData)
-			tokenMap, numToken := engine.Segspl(splitData, num)
+			splData := strings.Split(request.data.Content, "")
+			num = len(splData)
+			tokenMap, numToken := engine.Segspl(splData, num)
 			numTokens += numToken
 			for key, val := range tokenMap {
 				tokensMap[key] = val
