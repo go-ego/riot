@@ -33,7 +33,7 @@ var (
 		"待搜索的关键词")
 	dictionaries = flag.String(
 		"dictionaries",
-		"../../data/dictionary.txt",
+		"../../data/dict/dictionary.txt",
 		"分词字典文件")
 	stop_token_file = flag.String(
 		"stop_token_file",

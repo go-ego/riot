@@ -28,7 +28,7 @@ var (
 	searcher      = engine.Engine{}
 	wbs           = map[uint64]Weibo{}
 	weiboData     = flag.String("weibo_data", "../../testdata/weibo_data.txt", "微博数据文件")
-	dictFile      = flag.String("dict_file", "../../data/dictionary.txt", "词典文件")
+	dictFile      = flag.String("dict_file", "../../data/dict/dictionary.txt", "词典文件")
 	stopTokenFile = flag.String("stop_token_file", "../../data/stop_tokens.txt", "停用词文件")
 	staticFolder  = flag.String("static_folder", "static", "静态文件目录")
 )

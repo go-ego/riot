@@ -349,13 +349,13 @@ func TestRemoveDocument(t *testing.T) {
 func TestEngineIndexDocumentWithContentAndLabels(t *testing.T) {
 	var engine1, engine2 Engine
 	engine1.Init(types.EngineInitOptions{
-		SegmenterDict: "../data/dictionary.txt",
+		SegmenterDict: "../data/dict/dictionary.txt",
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
 		},
 	})
 	engine2.Init(types.EngineInitOptions{
-		SegmenterDict: "../data/dictionary.txt",
+		SegmenterDict: "../data/dict/dictionary.txt",
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.DocIdsIndex,
 		},
