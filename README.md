@@ -17,7 +17,7 @@
 
 * [Efficient indexing and search] (/docs/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for logical search
-* Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse)concurrent word, speed 27MB / s）
+* Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse) concurrent word, speed 27MB / s）
 * Support the calculation of the keyword in the text [close to the distance](/docs/token_proximity.md)（token proximity）
 * Support calculation [BM25 correlation](/docs/bm25.md)
 * Support [custom scoring field and scoring rules](/docs/custom_scoring_criteria.md)
@@ -54,7 +54,7 @@ $ cd my-riotapp && re run
 
 ## Usage:
 
-Look at an example（[examples/wk/simplest_example.go](/examples/simplest_example.go)）
+Look at an example（[examples/wk/simplest_example.go](/examples/wk/simplest_example.go)）
 ```go
 package main
 
