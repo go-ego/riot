@@ -93,9 +93,9 @@ func (s *Badger) Has(k []byte) (bool, error) {
 // ForEach get all key and value
 func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 	itrOpt := badger.IteratorOptions{
-		PrefetchSize: 1000,
-		FetchValues:  true,
-		Reverse:      false,
+		PrefetchSize:   1000,
+		PreFetchValues: true,
+		Reverse:        false,
 	}
 	itr := s.db.NewIterator(itrOpt)
 
@@ -103,7 +103,15 @@ func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 		item := itr.Item()
 
 		key := item.Key()
-		val := item.Value()
+		// val := item.Value()
+		var val []byte
+		err := item.Value(func(v []byte) {
+			val = make([]byte, len(v))
+			copy(val, v)
+		})
+		if err != nil {
+			return err
+		}
 
 		if err := fn(key, val); err != nil {
 			return err
