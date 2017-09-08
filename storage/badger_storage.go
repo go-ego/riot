@@ -94,7 +94,7 @@ func (s *Badger) Has(k []byte) (bool, error) {
 func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 	itrOpt := badger.IteratorOptions{
 		PrefetchSize:   1000,
-		PreFetchValues: true,
+		PrefetchValues: true,
 		Reverse:        false,
 	}
 	itr := s.db.NewIterator(itrOpt)
