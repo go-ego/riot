@@ -20,34 +20,40 @@
             "revisionTime": "2017-07-17T17:11:48Z"
         },
         {
-            "checksumSHA1": "26QW14vFsOSW3e/t6Uq7UIcFFaw=",
+            "checksumSHA1": "xGgRHIMHq37pxSXa3dJHw8LZfDE=",
             "path": "github.com/dgraph-io/badger",
-            "revision": "4addd2e42134557c01c601d6ed001c8d50ee62ee",
-            "revisionTime": "2017-08-30T01:27:05Z"
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
+        },
+        {
+            "checksumSHA1": "Aan9vLMJhDV6wYgTcLBBug6dwxY=",
+            "path": "github.com/dgraph-io/badger/options",
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
         },
         {
             "checksumSHA1": "FB7rDZgiLfpIGi9RqWbgxjZ0Vjg=",
             "path": "github.com/dgraph-io/badger/protos",
-            "revision": "4addd2e42134557c01c601d6ed001c8d50ee62ee",
-            "revisionTime": "2017-08-30T01:27:05Z"
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
         },
         {
-            "checksumSHA1": "JAELj4K08kz25czSWp1FHOAneUQ=",
+            "checksumSHA1": "DqFosafuhUYdRhCpNRAe57ph4ms=",
             "path": "github.com/dgraph-io/badger/skl",
-            "revision": "270fbc75ac97044dfa64fa7d3c22310aebedc443",
-            "revisionTime": "2017-08-04T05:15:21Z"
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
         },
         {
-            "checksumSHA1": "WM7gyvEFF0ZQWR5ciNH0Q+fcofs=",
+            "checksumSHA1": "+u59jw9Fla55kwgYa2HSHhCIeBI=",
             "path": "github.com/dgraph-io/badger/table",
-            "revision": "37f293e32c8a3ba762734a2cea9623c459129d92",
-            "revisionTime": "2017-08-02T08:49:26Z"
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
         },
         {
-            "checksumSHA1": "mPyyPduZ3tsI4OepncfiLz1D4gg=",
+            "checksumSHA1": "tBA/+atA7hSaGpc/46S6miHfnyg=",
             "path": "github.com/dgraph-io/badger/y",
-            "revision": "270fbc75ac97044dfa64fa7d3c22310aebedc443",
-            "revisionTime": "2017-08-04T05:15:21Z"
+            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
+            "revisionTime": "2017-09-07T08:30:54Z"
         },
         {
             "checksumSHA1": "LrYCnBuEwaNfrFLQ+z6WgjHor80=",
@@ -74,8 +80,10 @@
             "revisionTime": "2017-08-02T12:46:13Z"
         },
         {
+            "checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
             "path": "github.com/golang/protobuf/proto",
-            "revision": ""
+            "revision": "17ce1425424ab154092bbb43af630bd647f3bb0d",
+            "revisionTime": "2017-09-02T00:04:52Z"
         },
         {
             "checksumSHA1": "p/8vSviYF91gFflhrt5vkyksroo=",
@@ -170,26 +178,26 @@
         {
             "checksumSHA1": "dr5+PfIRzXeN+l1VG+s0lea9qz8=",
             "path": "golang.org/x/net/context",
-            "revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
-            "revisionTime": "2017-07-19T21:11:51Z"
+            "revision": "66aacef3dd8a676686c7ae3716979581e8b03c47",
+            "revisionTime": "2016-09-14T00:11:54Z"
         },
         {
             "checksumSHA1": "UxahDzW2v4mf/+aFxruuupaoIwo=",
             "path": "golang.org/x/net/internal/timeseries",
-            "revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
-            "revisionTime": "2017-07-19T21:11:51Z"
+            "revision": "66aacef3dd8a676686c7ae3716979581e8b03c47",
+            "revisionTime": "2016-09-14T00:11:54Z"
         },
         {
             "checksumSHA1": "u/r66lwYfgg682u5hZG7/E7+VCY=",
             "path": "golang.org/x/net/trace",
-            "revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
-            "revisionTime": "2017-07-19T21:11:51Z"
+            "revision": "66aacef3dd8a676686c7ae3716979581e8b03c47",
+            "revisionTime": "2016-09-14T00:11:54Z"
         },
         {
-            "checksumSHA1": "K3C9lD5XgLfXd25MtZe3Uw5BRoA=",
+            "checksumSHA1": "tzXCvvkDbR7eB4TgAvSpsCm8rVE=",
             "path": "golang.org/x/sys/unix",
-            "revision": "35ef4487ce0a1ea5d4b616ffe71e34febe723695",
-            "revisionTime": "2017-07-27T13:28:57Z"
+            "revision": "a45f55524b7ec57890cfa6c6bc06b47f877be0d1",
+            "revisionTime": "2017-09-06T22:16:59Z"
         }
     ],
     "rootPath": "github.com/go-ego/riot"

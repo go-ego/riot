@@ -19,6 +19,7 @@ import (
 	"os"
 
 	"github.com/dgraph-io/badger"
+	"github.com/pkg/errors"
 )
 
 // Badger is badger.KV
@@ -65,7 +66,16 @@ func (s *Badger) Set(k, v []byte) error {
 func (s *Badger) Get(k []byte) ([]byte, error) {
 	var item badger.KVItem
 	err := s.db.Get(k, &item)
-	return item.Value(), err
+	if err != nil {
+		return nil, errors.Wrap(err, "Retrieving head")
+	}
+
+	var val []byte
+	err = item.Value(func(v []byte) {
+		val = make([]byte, len(v))
+		copy(val, v)
+	})
+	return val, err
 }
 
 // Delete deletes a key. Exposing this so that user does not
