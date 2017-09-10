@@ -20,10 +20,10 @@
             "revisionTime": "2017-07-17T17:11:48Z"
         },
         {
-            "checksumSHA1": "xGgRHIMHq37pxSXa3dJHw8LZfDE=",
+            "checksumSHA1": "WzHOGFxjLAqhHu2Cc9VDuSAtL98=",
             "path": "github.com/dgraph-io/badger",
-            "revision": "de9a90f058064a76f04153a91a8b0f7125116085",
-            "revisionTime": "2017-09-07T08:30:54Z"
+            "revision": "e846b94e1ee8eca37b493f172943ac5973c73eb3",
+            "revisionTime": "2017-09-08T19:53:04Z"
         },
         {
             "checksumSHA1": "Aan9vLMJhDV6wYgTcLBBug6dwxY=",
