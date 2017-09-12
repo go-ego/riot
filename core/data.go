@@ -1,3 +1,17 @@
+// Copyright 2016 ego authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"): you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+
 package core
 
 import (
@@ -6,7 +20,7 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-// 文档信息[shard][id]info
+// DocInfoGroup 文档信息[shard][id]info
 var DocInfoGroup = make(map[int]*types.DocInfosShard)
 var docInfosGroupRWMutex sync.RWMutex
 
@@ -44,7 +58,7 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 // 	return false
 // }
 
-// 反向索引表([shard][关键词]反向索引表)
+// InvertedIndexGroup 反向索引表([shard][关键词]反向索引表)
 var InvertedIndexGroup = make(map[int]*types.InvertedIndexShard)
 var invertedIndexGroupRWMutex sync.RWMutex
 
