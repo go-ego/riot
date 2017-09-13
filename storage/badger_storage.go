@@ -71,9 +71,11 @@ func (s *Badger) Get(k []byte) ([]byte, error) {
 	}
 
 	var val []byte
-	err = item.Value(func(v []byte) {
+	err = item.Value(func(v []byte) error {
 		val = make([]byte, len(v))
 		copy(val, v)
+
+		return nil
 	})
 	return val, err
 }
@@ -105,9 +107,11 @@ func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 		key := item.Key()
 		// val := item.Value()
 		var val []byte
-		err := item.Value(func(v []byte) {
+		err := item.Value(func(v []byte) error {
 			val = make([]byte, len(v))
 			copy(val, v)
+
+			return nil
 		})
 		if err != nil {
 			return err
