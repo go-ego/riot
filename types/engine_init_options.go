@@ -90,6 +90,7 @@ type EngineInitOptions struct {
 	UseStorage    bool
 	StorageFolder string
 	StorageShards int
+	StorageEngine string
 }
 
 // Init 初始化 EngineInitOptions，当用户未设定某个选项的值时用默认值取代

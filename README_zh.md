@@ -96,7 +96,7 @@ func main() {
 
 ## 其它
 
-* [为什么要有悟空引擎](/docs/why_wukong.md)
+* [为什么要有 riot 引擎](/docs/why_wukong.md)
 * [联系方式](/docs/feedback.md)
 
 ## License

@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.21, Mount Qomolangma!"
+	version string = "v0.10.0.82, Mount Qomolangma!"
 
 	NumNanosecondsInAMillisecond = 1000000
 	PersistentStorageFilePrefix  = "gwk"
@@ -176,7 +176,7 @@ func (engine *Engine) Storage() {
 		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
-			db, err := storage.OpenStorage(dbPath)
+			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("无法打开数据库", dbPath, ": ", err)
 			}
@@ -203,7 +203,7 @@ func (engine *Engine) Storage() {
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.dbs[shard].Close()
 			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
-			db, err := storage.OpenStorage(dbPath)
+			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("无法打开数据库", dbPath, ": ", err)
 			}

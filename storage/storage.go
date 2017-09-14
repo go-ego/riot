@@ -20,11 +20,12 @@ import (
 )
 
 const (
-	DEFAULT_STORAGE_ENGINE = "ldb"
+	// DefaultStorageEngine default storage engine
+	DefaultStorageEngine = "ldb"
 
-	// DEFAULT_STORAGE_ENGINE = "bad"
+	// DefaultStorageEngine = "bad"
 
-	// DEFAULT_STORAGE_ENGINE = "bolt"
+	// DefaultStorageEngine = "bolt"
 )
 
 var supportedStorage = map[string]func(path string) (Storage, error){
@@ -52,11 +53,20 @@ type Storage interface {
 }
 
 // OpenStorage open Storage engine
-func OpenStorage(path string) (Storage, error) {
-	wse := os.Getenv("GWK_STORAGE_ENGINE")
-	if wse == "" {
-		wse = DEFAULT_STORAGE_ENGINE
+func OpenStorage(path string, args ...string) (Storage, error) {
+	wse := DefaultStorageEngine
+
+	if len(args) > 0 {
+		if args[0] != "" {
+			wse = args[0]
+		}
+	} else {
+		wseEnv := os.Getenv("GWK_STORAGE_ENGINE")
+		if wseEnv != "" {
+			wse = wseEnv
+		}
 	}
+
 	if fn, has := supportedStorage[wse]; has {
 		return fn(path)
 	}
