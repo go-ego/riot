@@ -54,7 +54,7 @@ $ cd my-riotapp && re run
 
 ## Usage:
 
-Look at an example（[simplest_example.go](/examples/wk/simplest_example.go)）
+Look at an example（[simplest_example.go](/examples/simple/simplest_example.go)）
 ```go
 package main
 
