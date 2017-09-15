@@ -304,7 +304,7 @@ func (engine *Engine) IndexDocument(docId uint64, data types.DocIndexData, force
 	// data.Tokens
 	engine.internalIndexDocument(docId, data, forceUpdate)
 
-	hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.StorageShards)
+	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
 	if engine.initOptions.UseStorage && docId != 0 {
 		engine.storageIndexDocChannels[hash] <- storageIndexDocRequest{docId: docId, data: data}
 	}
@@ -322,7 +322,7 @@ func (engine *Engine) internalIndexDocument(
 	if forceUpdate {
 		atomic.AddUint64(&engine.numForceUpdatingRequests, 1)
 	}
-	hash := murmur.Murmur3([]byte(fmt.Sprint("%d%s", docId, data.Content)))
+	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d%s", docId, data.Content)))
 	engine.segmenterChannel <- segmenterRequest{
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }
@@ -359,7 +359,7 @@ func (engine *Engine) RemoveDocument(docId uint64, forceUpdate bool) {
 
 	if engine.initOptions.UseStorage && docId != 0 {
 		// 从数据库中删除
-		hash := murmur.Murmur3([]byte(fmt.Sprint("%d", docId))) % uint32(engine.initOptions.StorageShards)
+		hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
 		go engine.storageRemoveDocWorker(docId, hash)
 	}
 }
