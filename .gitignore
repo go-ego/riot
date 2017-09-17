@@ -6,6 +6,7 @@ data/riot/riot
 data/riot/index
 data/riot1/index
 data/riot1/riot1
+data/client/client
 
 # Debug files
 *.dSYM/

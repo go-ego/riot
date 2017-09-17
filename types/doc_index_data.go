@@ -48,3 +48,11 @@ type TokenData struct {
 	// 关键词的首字节在文档中出现的位置
 	Locations []int
 }
+
+// Attri doc attribute
+type Attri struct {
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Time   string `json:"time"`
+	Ts     int64  `json:"ts"`
+}
