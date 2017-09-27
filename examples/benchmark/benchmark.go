@@ -1,4 +1,4 @@
-// 悟空性能测试
+// riot 性能测试
 package main
 
 import (

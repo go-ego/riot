@@ -7,6 +7,7 @@ data/riot/index
 data/riot1/index
 data/riot1/riot1
 data/client/client
+examples/pinyin/index
 
 # Debug files
 *.dSYM/
