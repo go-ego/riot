@@ -222,6 +222,7 @@ func (engine *Engine) Storage() {
 func (engine *Engine) Init(options types.EngineInitOptions) {
 	// 将线程数设置为CPU数
 	// runtime.GOMAXPROCS(runtime.NumCPU())
+	// runtime.GOMAXPROCS(128)
 
 	// 初始化初始参数
 	if engine.initialized {

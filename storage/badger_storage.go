@@ -19,12 +19,11 @@ import (
 	"os"
 
 	"github.com/dgraph-io/badger"
-	"github.com/pkg/errors"
 )
 
 // Badger is badger.KV
 type Badger struct {
-	db *badger.KV
+	db *badger.DB
 }
 
 // OpenBadgerStorage open Badger storage
@@ -41,7 +40,7 @@ func OpenBadgerStorage(dbPath string) (Storage, error) {
 	opt.Dir = dbPath
 	opt.ValueDir = dbPath
 	opt.SyncWrites = true
-	kv, err := badger.NewKV(&opt)
+	kv, err := badger.Open(opt)
 	if err != nil {
 		log.Fatal("NewKV: ", err)
 	}
@@ -58,70 +57,74 @@ func (s *Badger) WALName() string {
 // If key is not present, it is created. If it is present,
 // the existing value is overwritten with the one provided.
 func (s *Badger) Set(k, v []byte) error {
-	return s.db.Set(k, v, 0x00)
+	err := s.db.Update(func(txn *badger.Txn) error {
+		return txn.Set(k, v, 0x00)
+	})
+
+	return err
 }
 
 // Get looks for key and returns a value.
 // If key is not found, value is nil.
 func (s *Badger) Get(k []byte) ([]byte, error) {
-	var item badger.KVItem
-	err := s.db.Get(k, &item)
-	if err != nil {
-		return nil, errors.Wrap(err, "Retrieving head")
-	}
+	var ival []byte
+	err := s.db.View(func(txn *badger.Txn) error {
+		item, err := txn.Get(k)
+		if err != nil {
+			return err
+		}
 
-	var val []byte
-	err = item.Value(func(v []byte) error {
-		val = make([]byte, len(v))
-		copy(val, v)
-
-		return nil
+		ival, err = item.Value()
+		return err
 	})
-	return val, err
+
+	return ival, err
 }
 
 // Delete deletes a key. Exposing this so that user does not
 // have to specify the Entry directly. For example, BitDelete
 // seems internal to badger.
 func (s *Badger) Delete(k []byte) error {
-	return s.db.Delete(k)
+	err := s.db.Update(func(txn *badger.Txn) error {
+		return txn.Delete(k)
+	})
+
+	return err
 }
 
 // Has returns true if the DB does contains the given key.
 func (s *Badger) Has(k []byte) (bool, error) {
-	return s.db.Exists(k)
+	// return s.db.Exists(k)
+	val, err := s.Get(k)
+	if string(val) == "" && err != nil {
+		return false, err
+	}
+
+	return true, err
 }
 
 // ForEach get all key and value
 func (s *Badger) ForEach(fn func(k, v []byte) error) error {
-	itrOpt := badger.IteratorOptions{
-		PrefetchSize:   1000,
-		PrefetchValues: true,
-		Reverse:        false,
-	}
-	itr := s.db.NewIterator(itrOpt)
+	err := s.db.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchSize = 1000
+		it := txn.NewIterator(opts)
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			key := item.Key()
+			val, err := item.Value()
+			if err != nil {
+				return err
+			}
 
-	for itr.Rewind(); itr.Valid(); itr.Next() {
-		item := itr.Item()
-
-		key := item.Key()
-		// val := item.Value()
-		var val []byte
-		err := item.Value(func(v []byte) error {
-			val = make([]byte, len(v))
-			copy(val, v)
-
-			return nil
-		})
-		if err != nil {
-			return err
+			if err := fn(key, val); err != nil {
+				return err
+			}
 		}
+		return nil
+	})
 
-		if err := fn(key, val); err != nil {
-			return err
-		}
-	}
-	return nil
+	return err
 }
 
 // Close closes a KV. It's crucial to call it to ensure

@@ -18,9 +18,10 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
+	// "github.com/coreos/bbolt"
 )
 
-var gwkDocuments = []byte("gwkDocuments")
+var gdocs = []byte("gdocs")
 
 type boltStorage struct {
 	db *bolt.DB
@@ -34,7 +35,7 @@ func OpenBoltStorage(dbPath string) (Storage, error) {
 		return nil, err
 	}
 	err = db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists(gwkDocuments)
+		_, err := tx.CreateBucketIfNotExists(gdocs)
 		return err
 	})
 	if err != nil {
@@ -56,7 +57,7 @@ func (s *boltStorage) WALName() string {
 // from the Update() method.
 func (s *boltStorage) Set(k []byte, v []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		return tx.Bucket(gwkDocuments).Put(k, v)
+		return tx.Bucket(gdocs).Put(k, v)
 	})
 }
 
@@ -64,7 +65,7 @@ func (s *boltStorage) Set(k []byte, v []byte) error {
 // Any error that is returned from the function is returned from the View() method.
 func (s *boltStorage) Get(k []byte) (b []byte, err error) {
 	err = s.db.View(func(tx *bolt.Tx) error {
-		b = tx.Bucket(gwkDocuments).Get(k)
+		b = tx.Bucket(gdocs).Get(k)
 		return nil
 	})
 	return
@@ -74,7 +75,7 @@ func (s *boltStorage) Get(k []byte) (b []byte, err error) {
 // have to specify the Entry directly.
 func (s *boltStorage) Delete(k []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		return tx.Bucket(gwkDocuments).Delete(k)
+		return tx.Bucket(gdocs).Delete(k)
 	})
 }
 
@@ -83,7 +84,7 @@ func (s *boltStorage) Has(k []byte) (bool, error) {
 	// return s.db.Exists(k)
 	var b []byte
 	err := s.db.View(func(tx *bolt.Tx) error {
-		b = tx.Bucket(gwkDocuments).Get(k)
+		b = tx.Bucket(gdocs).Get(k)
 		return nil
 	})
 
@@ -98,7 +99,7 @@ func (s *boltStorage) Has(k []byte) (bool, error) {
 // ForEach get all key and value
 func (s *boltStorage) ForEach(fn func(k, v []byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(gwkDocuments)
+		b := tx.Bucket(gdocs)
 		c := b.Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
 			if err := fn(k, v); err != nil {
