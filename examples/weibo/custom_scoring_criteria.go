@@ -35,7 +35,7 @@ const (
 var (
 	weibo_data = flag.String(
 		"weibo_data",
-		"../testdata/weibo_data.txt",
+		"../../testdata/weibo_data.txt",
 		"索引的微博帖子，每行当作一个文档")
 	query = flag.String(
 		"query",
@@ -43,11 +43,11 @@ var (
 		"待搜索的短语")
 	dictionaries = flag.String(
 		"dictionaries",
-		"../data/dict/dictionary.txt",
+		"../../data/dict/dictionary.txt",
 		"分词字典文件")
 	stop_token_file = flag.String(
 		"stop_token_file",
-		"../data/stop_tokens.txt",
+		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
 
 	searcher = engine.Engine{}
