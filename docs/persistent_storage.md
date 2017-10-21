@@ -11,6 +11,7 @@ type EngineInitOptions struct {
   UseStorage bool
   StorageFolder string
   StorageShards int
+  StorageEngine string
 }
 ```
 
@@ -69,6 +70,6 @@ go run benchmark.go --num_repeat_text 1 --use_persistent
 
 可以看出，和不使用持久存储相比：
 
-1. 持久存储不影响搜索响应时间和吞吐量
-2. 写入持久存储将索引时间延长了四倍
-3. 从持久存储中导入数据将索引时间延长了一倍
+- [持久存储](#%E6%8C%81%E4%B9%85%E5%AD%98%E5%82%A8)
+        - [必须注意事项](#%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9)
+        - [性能测试](#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95)
