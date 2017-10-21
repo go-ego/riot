@@ -106,6 +106,7 @@ func main() {
 			lines = append(lines, text)
 		}
 	}
+	log.Println("size ...", size)
 	log.Print("文件行数", len(lines))
 
 	// 记录时间
