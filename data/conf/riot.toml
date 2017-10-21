@@ -1,0 +1,30 @@
+# []
+url = ["http://localhost:8080", "http://localhost:8081"]
+# port = ""
+
+# [db]
+# storage_folder= "./index"
+# relation = "./relations"
+
+[engine]
+mode = "dev"
+using = 4
+storage_shards = 10
+num_shards = 10
+# segmenter_dict = "./data/dict/dictionary.txt"
+# stop_token_file = "./data/dict/stop_tokens.txt"
+
+# [search]
+output_offset = 0
+max_outputs = 100
+
+# [grpc]
+[rpc]
+grpc_port = [":50041", ":50042"]
+# grpc_port = [50003, 50004]
+dist_port = [":50701", ":50702"]
+
+[etcd]
+addr = "http://127.0.0.1:2379"
+sver_name = "riot_service"
+port = [50001, 50002]

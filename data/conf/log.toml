@@ -1,0 +1,5 @@
+# [log]
+# mode = "dev"
+path = "./log"
+name = "log"
+# max_days = 1
