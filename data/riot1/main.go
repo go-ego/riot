@@ -52,7 +52,7 @@ func init() {
 func main() {
 	if config.Engine.Mode == "dev" {
 		go func() {
-			log.Println(http.ListenAndServe("localhost:6060", nil))
+			log.Println(http.ListenAndServe("localhost:6061", nil))
 		}()
 	}
 
