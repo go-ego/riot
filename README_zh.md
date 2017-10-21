@@ -96,6 +96,14 @@ func main() {
 
 然后看看一个[入门教程](/docs/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
 
+## Donate
+
+支持 riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
+
+#### Paypal
+
+Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@gmail.com](vzvway@gmail.com)
+
 ## 其它
 
 * [为什么要有 riot 引擎](/docs/why_wukong.md)

@@ -92,6 +92,14 @@ func main() {
 
 It is very simple!
 
+## Donate
+
+Supporting riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
+
+#### Paypal
+
+Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@gmail.com](vzvway@gmail.com)
+
 ## License
 
 Riot is primarily distributed under the terms of the Apache License (Version 2.0), base on [wukong](https://github.com/huichen/wukong).
