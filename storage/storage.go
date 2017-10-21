@@ -61,7 +61,7 @@ func OpenStorage(path string, args ...string) (Storage, error) {
 			wse = args[0]
 		}
 	} else {
-		wseEnv := os.Getenv("GWK_STORAGE_ENGINE")
+		wseEnv := os.Getenv("RIOT_STORAGE_ENGINE")
 		if wseEnv != "" {
 			wse = wseEnv
 		}

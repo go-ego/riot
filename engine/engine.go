@@ -42,12 +42,12 @@ import (
 )
 
 const (
-	version string = "v0.10.0.94, Mount Qomolangma!"
+	version string = "v0.10.0.103, Mount Qomolangma!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
 	// PersistentStorageFilePrefix persistent storage file prefix
-	PersistentStorageFilePrefix = "gwk"
+	PersistentStorageFilePrefix = "riot"
 )
 
 // GetVersion get version

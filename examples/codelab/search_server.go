@@ -162,7 +162,7 @@ func main() {
 		},
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用boltdb持久化，如果你希望修改数据库类型
-		// 请修改 GWK_STORAGE_ENGINE 环境变量
+		// 请修改 RIOT_STORAGE_ENGINE 环境变量
 		// UseStorage: true,
 		// StorageFolder: "weibo_search",
 	})

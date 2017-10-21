@@ -400,7 +400,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 			IndexType: types.LocationsIndex,
 		},
 		UseStorage:    true,
-		StorageFolder: "gwk.persistent",
+		StorageFolder: "riot.persistent",
 		StorageShards: 2,
 	})
 	AddDocs(&engine)
@@ -420,7 +420,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 			IndexType: types.LocationsIndex,
 		},
 		UseStorage:    true,
-		StorageFolder: "gwk.persistent",
+		StorageFolder: "riot.persistent",
 		StorageShards: 2,
 	})
 	engine1.FlushIndex()
@@ -440,7 +440,7 @@ func TestEngineIndexDocumentWithPersistentStorage(t *testing.T) {
 	utils.Expect(t, "[0 18]", outputs.Docs[1].TokenSnippetLocations)
 
 	engine1.Close()
-	os.RemoveAll("gwk.persistent")
+	os.RemoveAll("riot.persistent")
 }
 
 func TestCountDocsOnly(t *testing.T) {
