@@ -1,0 +1,111 @@
+// Copyright 2017 ego authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"): you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+
+syntax = "proto3";
+
+option objc_class_prefix = "HLW";
+
+package doc;
+
+// The greeting service definition.
+service Greeter {
+    // Sends a greeting
+    rpc HeartBeat(HeartReq) returns (Reply) {}
+    rpc DocInx(DocReq) returns (Reply) {}
+    rpc Delete(DeleteReq) returns (Reply) {}
+    rpc Search(SearchReq) returns (SearchReply) {}
+}
+
+message HeartReq {
+	int32 msg = 1;
+}
+
+// The request message containing the user's name.
+message DocReq {
+    uint64 doc_id = 1;
+    string content = 2;
+    bytes attri = 3;
+    repeated TokenData tokens = 4; // list
+    repeated string labels = 5; //
+    bytes fields = 6; //
+    bool forceUpdate = 7;
+}
+
+message TokenData {
+    string text = 1;
+    repeated int32 locations = 2;
+}
+
+message DeleteReq {
+    uint64 doc_id = 1;
+}
+
+// 0 succeed, 1 fail
+message Reply {
+    int32 result = 1;
+}
+
+message SearchReq {
+	string id = 1; // userid
+	string query = 2;
+	int32 outputOffset = 3;
+	int32 maxOutputs = 4;
+    string time = 5;
+    map<uint64, bool> docIds = 6; // string
+    Logic logic = 7;
+}
+
+message SearchReply {
+	int32 code = 1;
+	int32 len = 2;
+	int64 timestamp =3;
+	repeated Text docs = 4;
+}
+
+
+message Text {
+    // string id = 1;
+    uint64 id = 1;
+	string content = 2;
+    Attri attri = 3;
+    // bytes attri = 3;
+}
+
+message Attri {
+	string title = 1;
+	string author = 2;
+	string time = 3;
+	int64 ts = 4;  
+}
+
+message Logic {
+    // 与查询, 必须都存在
+    bool mustLabels = 1;
+    // 或查询, 有一个存在即可
+    bool shouldLabels = 2;
+    // 非查询, 不包含
+    bool notInLabels = 3;
+    
+    LogicExpression logicExpression = 4;
+}
+    
+// LogicExpression logic expression options
+message LogicExpression {
+    // mustLabels, with the query that must exist
+    repeated string  mustLabels = 1;
+    // shouldLabels, there is one can exist
+    repeated string shouldLabels = 2;
+    // notInLabels, not included
+    repeated string notInLabels = 3;
+}
