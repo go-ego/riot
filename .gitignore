@@ -2,6 +2,7 @@
 .DS_Store
 .vscode
 .idea
+data/data
 data/riot/riot
 data/riot/index
 data/riot1/index

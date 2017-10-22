@@ -1,4 +1,4 @@
-# riot 全文搜索引擎
+# [riot 全文搜索引擎](https://github.com/go-ego/riot)
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--[![Build Status](https://travis-ci.org/go-ego/ego.svg)](https://travis-ci.org/go-ego/ego)
