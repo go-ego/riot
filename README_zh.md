@@ -21,6 +21,7 @@
 * 支持[自定义评分字段和评分规则](/docs/custom_scoring_criteria.md)
 * 支持[在线添加、删除索引](/docs/realtime_indexing.md)
 * 支持多种[持久存储](/docs/persistent_storage.md)
+* 支持 heartbeat
 * 支持分布式索引和搜索
 * 可实现[分布式索引和搜索](/docs/distributed_indexing_and_search.md)
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
@@ -102,7 +103,8 @@ func main() {
 - 增加拼音搜索 
 - 增加分布式 
 - 分词等改进 
-- 增加更多api
+- 增加更多 api
+- 支持 heartbeat
 - 修复 bug
 - 删除依赖 cgo 的存储引擎, 增加 badger和 leveldb 持久化引擎
 

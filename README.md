@@ -22,6 +22,7 @@
 * Support calculation [BM25 correlation](/docs/bm25.md)
 * Support [custom scoring field and scoring rules](/docs/custom_scoring_criteria.md)
 * Support [add online, delete index](/docs/realtime_indexing.md)
+* Support heartbeat
 * Support multiple [persistent storage](/docs/persistent_storage.md)
 * Support distributed index and search
 * Can be achieved [distributed index and search](/docs/distributed_indexing_and_search.md)
