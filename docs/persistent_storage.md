@@ -1,7 +1,7 @@
 持久存储
 ====
 
-悟空引擎支持将搜索数据存入硬盘，并在当机重启动时从硬盘恢复数据。使用持久存储只需设置EngineInitOptions中的三个选项：
+riot 引擎支持将搜索数据存入硬盘，并在当机重启动时从硬盘恢复数据。使用持久存储只需设置EngineInitOptions中的三个选项：
 
 ```go
 type EngineInitOptions struct {
