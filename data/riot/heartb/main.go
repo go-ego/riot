@@ -27,12 +27,12 @@ func main() {
 		http.HandleFunc("/health", hb.Health)
 		http.HandleFunc("/kill", hb.KillSer)
 		http.HandleFunc("/restart", hb.RestartSer)
-		log.Println("listen and serve on 0.0.0.0:3001...")
-		log.Fatal(http.ListenAndServe(":3001", nil))
+		log.Println("listen and serve on 0.0.0.0:3000...")
+		log.Fatal(http.ListenAndServe(":3000", nil))
 	}()
 
-	addr := "localhost:50042"
+	addr := "localhost:50041"
 	dir := "../"
-	bra := "nohup ./riot1"
+	bra := "nohup ./riot"
 	hb.Grpcc(addr, dir, bra)
 }
