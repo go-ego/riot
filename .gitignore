@@ -12,6 +12,7 @@ data/riot1/heartb/heartb
 data/client/client
 examples/pinyin/pinyin
 examples/pinyin/index
+examples/simple/simple
 
 # Debug files
 *.dSYM/

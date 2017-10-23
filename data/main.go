@@ -29,6 +29,7 @@ var (
 func main() {
 	// Init searcher
 	searcher.Init(types.EngineInitOptions{
+		Using:         4,
 		SegmenterDict: "./dict/dictionary.txt"})
 	defer searcher.Close()
 
