@@ -118,7 +118,7 @@ Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@g
 
 ## 其它
 
-* [为什么要有 riot 引擎](/docs/zh/why_wukong.md)
+* [为什么要有 riot 引擎](/docs/zh/why_riot.md)
 * [联系方式](/docs/zh/feedback.md)
 
 ## License
