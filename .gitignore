@@ -8,6 +8,7 @@ data/riot/index
 data/riot1/index
 data/riot1/riot1
 data/client/client
+examples/pinyin/pinyin
 examples/pinyin/index
 
 # Debug files
