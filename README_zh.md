@@ -96,6 +96,16 @@ func main() {
 
 然后看看一个[入门教程](/docs/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
 
+## 主要改进:
+
+- 增加逻辑搜索 
+- 增加拼音搜索 
+- 增加分布式 
+- 分词等改进 
+- 增加更多api
+- 修复 bug
+- 删除依赖 cgo 的存储引擎, 增加 badger和 leveldb 持久化引擎
+
 ## Donate
 
 支持 riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
