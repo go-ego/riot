@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document explains how to contribute changes to the Ego project. It assumes you have followed the README.md and [API Document](https://github.com/go-ego/re/blob/master/docs/doc.md). <!--Sensitive security-related issues should be reported to [security@Ego.io](mailto:security@Ego.io.)-->
+This document explains how to contribute changes to the Ego project. It assumes you have followed the README.md and [API Document](https://github.com/go-ego/re/blob/master/docs/zh/doc.md). <!--Sensitive security-related issues should be reported to [security@Ego.io](mailto:security@Ego.io.)-->
 
 ## Bug reports
 

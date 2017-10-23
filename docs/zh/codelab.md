@@ -14,7 +14,7 @@ riot 引擎入门
 	3. 索引器（indexer）协程，负责建立和查找索引表
 	4. 排序器（ranker）协程，负责对文档评分排序
     
-![](https://raw.github.com/go-ego/riot/master/docs/gwk.png)
+![](https://raw.github.com/go-ego/riot/master/docs/zh/gwk.png)
 
 **索引流程**
 
@@ -78,7 +78,7 @@ searcher.Init(types.EngineInitOptions{
 
 1. DocIdsIndex，提供了最基本的索引，仅仅记录搜索键出现的文档docid。
 2. FrequenciesIndex，除了记录docid外，还保存了搜索键在每个文档中出现的频率，如果你需要BM25那么FrequenciesIndex是你需要的。
-3. LocationsIndex，这个不仅包括上两种索引的内容，还额外存储了关键词在文档中的具体位置，这用来[计算紧邻距离](/docs/token_proximity.md)。
+3. LocationsIndex，这个不仅包括上两种索引的内容，还额外存储了关键词在文档中的具体位置，这用来[计算紧邻距离](/docs/zh/token_proximity.md)。
 
 这三种索引由上到下在提供更多计算能力的同时也消耗了更多的内存，特别是LocationsIndex，当文档很长时会占用大量内存。请根据需要平衡选择。
 

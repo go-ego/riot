@@ -15,17 +15,17 @@
 [简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
 
 
-* [Efficient indexing and search](/docs/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
+* [Efficient indexing and search](/docs/zh/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for logical search
 * Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse) concurrent word, speed 27MB / s）
-* Support the calculation of the keyword in the text [close to the distance](/docs/token_proximity.md)（token proximity）
-* Support calculation [BM25 correlation](/docs/bm25.md)
-* Support [custom scoring field and scoring rules](/docs/custom_scoring_criteria.md)
-* Support [add online, delete index](/docs/realtime_indexing.md)
+* Support the calculation of the keyword in the text [close to the distance](/docs/zh/token_proximity.md)（token proximity）
+* Support calculation [BM25 correlation](/docs/zh/bm25.md)
+* Support [custom scoring field and scoring rules](/docs/zh/custom_scoring_criteria.md)
+* Support [add online, delete index](/docs/zh/realtime_indexing.md)
 * Support heartbeat
-* Support multiple [persistent storage](/docs/persistent_storage.md)
+* Support multiple [persistent storage](/docs/zh/persistent_storage.md)
 * Support distributed index and search
-* Can be achieved [distributed index and search](/docs/distributed_indexing_and_search.md)
+* Can be achieved [distributed index and search](/docs/zh/distributed_indexing_and_search.md)
 
 ## Requirements
 Go version >= 1.8

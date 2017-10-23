@@ -29,7 +29,7 @@ type EngineInitOptions struct {
 
 ### 必须注意事项
 
-一、如果排序器使用[自定义评分字段](/docs/custom_scoring_criteria.md)，那么该类型必须在gob中注册，比如在左边的例子中需要在调用engine.Init前加入：
+一、如果排序器使用[自定义评分字段](/docs/zh/custom_scoring_criteria.md)，那么该类型必须在gob中注册，比如在左边的例子中需要在调用engine.Init前加入：
 ```
 gob.Register(MyScoringFields{})
 ```

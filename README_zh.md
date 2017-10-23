@@ -12,18 +12,18 @@
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
-* [高效索引和搜索](/docs/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
+* [高效索引和搜索](/docs/zh/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
 * 支持中文分词（使用[gse分词包](https://github.com/go-ego/gse)并发分词，速度27MB/秒）
 * 支持逻辑搜索
 * 支持中文转拼音搜索
-* 支持计算关键词在文本中的[紧邻距离](/docs/token_proximity.md)（token proximity）
-* 支持计算[BM25相关度](/docs/bm25.md)
-* 支持[自定义评分字段和评分规则](/docs/custom_scoring_criteria.md)
-* 支持[在线添加、删除索引](/docs/realtime_indexing.md)
-* 支持多种[持久存储](/docs/persistent_storage.md)
+* 支持计算关键词在文本中的[紧邻距离](/docs/zh/token_proximity.md)（token proximity）
+* 支持计算[BM25相关度](/docs/zh/bm25.md)
+* 支持[自定义评分字段和评分规则](/docs/zh/custom_scoring_criteria.md)
+* 支持[在线添加、删除索引](/docs/zh/realtime_indexing.md)
+* 支持多种[持久存储](/docs/zh/persistent_storage.md)
 * 支持 heartbeat
 * 支持分布式索引和搜索
-* 可实现[分布式索引和搜索](/docs/distributed_indexing_and_search.md)
+* 可实现[分布式索引和搜索](/docs/zh/distributed_indexing_and_search.md)
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
 
 QQ 群: 120563750
@@ -95,7 +95,7 @@ func main() {
 
 是不是很简单！
 
-然后看看一个[入门教程](/docs/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
+然后看看一个[入门教程](/docs/zh/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
 
 ## 主要改进:
 
@@ -118,8 +118,8 @@ Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@g
 
 ## 其它
 
-* [为什么要有 riot 引擎](/docs/why_wukong.md)
-* [联系方式](/docs/feedback.md)
+* [为什么要有 riot 引擎](/docs/zh/why_wukong.md)
+* [联系方式](/docs/zh/feedback.md)
 
 ## License
 
