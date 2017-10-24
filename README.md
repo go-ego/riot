@@ -94,6 +94,13 @@ func main() {
 
 It is very simple!
 
+## [Examples:](https://github.com/go-ego/riot/tree/master/examples)
+#### [Logic search](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
+
+#### [Pinyin search](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
+
+#### [benchmark](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
+
 ## Donate
 
 Supporting riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).

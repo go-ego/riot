@@ -98,6 +98,13 @@ func main() {
 
 然后看看一个[入门教程](/docs/zh/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
 
+## [Examples:](https://github.com/go-ego/riot/tree/master/examples)
+#### [Logic search](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
+
+#### [Pinyin search](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
+
+#### [benchmark](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
+
 ## 主要改进:
 
 - 增加逻辑搜索 

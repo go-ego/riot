@@ -1,7 +1,7 @@
 性能测试
 ====
 
-测试程序见 [examples/benchmark.go](/examples/benchmark.go)
+测试程序见 [examples/benchmark/benchmark.go](/examples/benchmark/benchmark.go)
 
 测试数据为从52个微博账号里抓取的十万条微博（请从[这里](https://raw.githubusercontent.com/huichen/wukong/43f20b4c0921cc704cf41fe8653e66a3fcbb7e31/testdata/weibo_data.txt)下载，然后copy到testdata目录），通过benchmark.go中的-num_repeat_text参数（设为10）重复索引为一百万条，500M文本。测试环境Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz 32核，128G内存。
 
