@@ -44,14 +44,14 @@ go get -u github.com/go-ego/re
 To create a new riot application
 
 ```
-$ re riot my-riotapp
+re riot my-riotapp
 ```
 
 ### re run
 
 To run the application we just created, you can navigate to the application folder and execute:
 ```
-$ cd my-riotapp && re run
+cd my-riotapp && re run
 ```
 
 ## Usage:
