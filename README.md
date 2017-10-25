@@ -56,7 +56,8 @@ $ cd my-riotapp && re run
 
 ## Usage:
 
-Look at an example（[simplest_example.go](/examples/simple/simplest_example.go)）
+#### [Look at an example](/examples/simple/simplest_example.go)
+
 ```go
 package main
 
@@ -94,14 +95,14 @@ func main() {
 
 It is very simple!
 
-## [Examples:](https://github.com/go-ego/riot/tree/master/examples)
+#### [Look at more Examples](https://github.com/go-ego/riot/tree/master/examples)
 
-#### [Store](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
-#### [Logic search](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
+#### [Look at Store example](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
+#### [Look at Logic search example](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
 
-#### [Pinyin search](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
+#### [Look at Pinyin search example](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
 
-#### [benchmark](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
+#### [Look at benchmark example](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
 
 ## Donate
 
