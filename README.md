@@ -95,6 +95,8 @@ func main() {
 It is very simple!
 
 ## [Examples:](https://github.com/go-ego/riot/tree/master/examples)
+
+#### [Store](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
 #### [Logic search](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
 
 #### [Pinyin search](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
