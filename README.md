@@ -56,7 +56,7 @@ $ cd my-riotapp && re run
 
 ## Usage:
 
-#### [Look at an example](/examples/simple/simplest_example.go)
+#### [Look at an example](/examples/simple/main.go)
 
 ```go
 package main
