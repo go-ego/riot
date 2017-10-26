@@ -1,5 +1,7 @@
 language: go
 
+go_import_path: github.com/go-ego/riot
+
 go:
   # - 1.7.x
   # - 1.8.x
@@ -15,8 +17,8 @@ install:
   - go get -u github.com/shirou/gopsutil
   - go get -v -t ./...
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
   
 # notifications:
 #   email:
