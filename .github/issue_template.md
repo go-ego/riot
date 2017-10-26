@@ -9,7 +9,7 @@
 - Go version:
 - Gcc version:
 - Operating system and bit:
-- Can you reproduce the bug at [Examples](https://github.com/go-ego/ego/tree/master/examples):
+- Can you reproduce the bug at [Examples](https://github.com/go-ego/riot/tree/master/examples):
   - [ ] Yes (provide example code)
   - [ ] No
   - [ ] Not relevant
