@@ -57,7 +57,7 @@ $ cd my-riotapp && re run
 
 ## 使用
 
-先看一个例子（来自[simplest_example.go](/examples/simple/main.go)）
+先看一个例子（来自[simplest_example.go](/examples/simple/zh/main.go)）
 ```go
 package main
 

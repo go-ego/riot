@@ -1,8 +1,16 @@
-/*
-
-没有比这个更简单的例子了。
-
-*/
+// Copyright 2017 ego authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"): you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
 
 package main
 
@@ -14,25 +22,25 @@ import (
 )
 
 var (
-	// searcher是线程安全的
+	// searcher is coroutine safe
 	searcher = engine.Engine{}
 )
 
 func main() {
-	// 初始化
+	// Init searcher
 	searcher.Init(types.EngineInitOptions{
 		Using:         4,
-		SegmenterDict: "../../data/dict/dictionary.txt"})
+		SegmenterDict: "./dict/dictionary.txt"})
 	defer searcher.Close()
 
-	// 将文档加入索引，docId 从1开始
-	searcher.IndexDocument(1, types.DocIndexData{Content: "此次百度收购将成中国互联网最大并购"}, false)
-	searcher.IndexDocument(2, types.DocIndexData{Content: "百度宣布拟全资收购91无线业务"}, false)
-	searcher.IndexDocument(3, types.DocIndexData{Content: "百度是中国最大的搜索引擎"}, false)
+	// Add the document to the index, docId starts at 1
+	searcher.IndexDocument(1, types.DocIndexData{Content: "Google Is Experimenting With Virtual Reality Advertising"}, false)
+	searcher.IndexDocument(2, types.DocIndexData{Content: "Google accidentally pushed Bluetooth update for Home speaker early"}, false)
+	searcher.IndexDocument(3, types.DocIndexData{Content: "Google is testing another Search results layout with rounded cards, new colors, and the 4 mysterious colored dots again"}, false)
 
-	// 等待索引刷新完毕
+	// Wait for the index to refresh
 	searcher.FlushIndex()
 
-	// 搜索输出格式见types.SearchResponse结构体
-	log.Print(searcher.Search(types.SearchRequest{Text: "百度中国"}))
+	// The search output format is found in the types.SearchResponse structure
+	log.Print(searcher.Search(types.SearchRequest{Text: "google testing"}))
 }
