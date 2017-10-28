@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	// searcher是线程安全的
+	// searcher 是线程安全的
 	searcher = engine.Engine{}
 )
 

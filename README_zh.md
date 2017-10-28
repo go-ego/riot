@@ -12,7 +12,7 @@
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
 * [高效索引和搜索](/docs/zh/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
-* 支持中文分词（使用[gse分词包](https://github.com/go-ego/gse)并发分词，速度27MB/秒）
+* 支持中文分词（使用[gse 分词包](https://github.com/go-ego/gse)并发分词，速度27MB/秒）
 * 支持逻辑搜索
 * 支持中文转拼音搜索
 * 支持计算关键词在文本中的[紧邻距离](/docs/zh/token_proximity.md)（token proximity）
@@ -57,7 +57,7 @@ $ cd my-riotapp && re run
 
 ## 使用
 
-先看一个例子（来自[simplest_example.go](/examples/simple/zh/main.go)）
+先看一个例子（来自 [simplest_example.go](/examples/simple/zh/main.go)）
 ```go
 package main
 
@@ -69,7 +69,7 @@ import (
 )
 
 var (
-	// searcher是协程安全的
+	// searcher 是协程安全的
 	searcher = engine.Engine{}
 )
 
@@ -95,11 +95,11 @@ func main() {
 
 是不是很简单！
 
-然后看看一个[入门教程](/docs/zh/codelab.md)，教你用不到200行Go代码实现一个微博搜索网站。
+然后看看一个[入门教程](/docs/zh/codelab.md)，教你用不到200行 Go 代码实现一个微博搜索网站。
 
 #### [查看更多例子](https://github.com/go-ego/riot/tree/master/examples)
 
-#### [Store 的例子](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
+#### [持久化的例子](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
 #### [逻辑搜索的例子](https://github.com/go-ego/riot/blob/master/examples/logic/main.go)
 
 #### [拼音搜索的例子](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
