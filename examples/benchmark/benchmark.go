@@ -46,6 +46,7 @@ var (
 	index_type                = flag.Int("index_type", types.DocIdsIndex, "索引类型")
 	use_persistent            = flag.Bool("use_persistent", false, "是否使用持久存储")
 	persistent_storage_folder = flag.String("persistent_storage_folder", "benchmark.persistent", "持久存储数据库保存的目录")
+	storageEngine             = flag.String("storageEngine", "lbd", "use StorageEngine")
 	persistent_storage_shards = flag.Int("persistent_storage_shards", 0, "持久数据库存储裂分数目")
 
 	searcher = engine.Engine{}
@@ -211,6 +212,7 @@ func main() {
 			DefaultRankOptions: &options,
 			UseStorage:         *use_persistent,
 			StorageFolder:      *persistent_storage_folder,
+			StorageEngine:      *storageEngine,
 			StorageShards:      *persistent_storage_shards,
 		})
 		defer searcher1.Close()

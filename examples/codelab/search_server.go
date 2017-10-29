@@ -165,6 +165,7 @@ func main() {
 		// 请修改 RIOT_STORAGE_ENGINE 环境变量
 		// UseStorage: true,
 		// StorageFolder: "weibo_search",
+		// StorageEngine: "bad",
 	})
 	log.Print("引擎初始化完毕")
 	wbs = make(map[uint64]Weibo)

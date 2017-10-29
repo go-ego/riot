@@ -10,12 +10,15 @@ data/riot1/index
 data/riot1/riot1
 data/riot1/heartb/heartb
 data/client/client
+examples/benchmark/benchmark
+examples/codelab/codelab
 examples/logic/logic
 examples/pinyin/pinyin
 examples/pinyin/index
 examples/store/store
 examples/store/index
 examples/simple/simple
+examples/weibo/weibo
 
 # Debug files
 *.dSYM/
