@@ -103,6 +103,8 @@ It is very simple!
 
 #### [Look at benchmark example](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
 
+#### [Riot search engine templates, client and dictionaries](https://github.com/go-ego/riot/tree/master/data)
+
 ## Donate
 
 Supporting riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).

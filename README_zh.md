@@ -106,6 +106,8 @@ func main() {
 
 #### [benchmark](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
 
+#### [Riot 搜索模板, 客户端和字典](https://github.com/go-ego/riot/tree/master/data)
+
 ## 主要改进:
 
 - 增加逻辑搜索 
