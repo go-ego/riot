@@ -38,7 +38,7 @@ func initEngine() {
 		},
 		UseStorage:    true,
 		StorageFolder: path,
-		StorageEngine: "bad", // bad: badger, lbd: leveldb, bolt: bolt
+		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		SegmenterDict: "../../data/dict/dictionary.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
@@ -66,7 +66,7 @@ func restoreIndex() {
 		},
 		UseStorage:    true,
 		StorageFolder: path,
-		StorageEngine: "bad", // bad: badger, lbd: leveldb, bolt: bolt
+		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		SegmenterDict: "../../data/dict/dictionary.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})

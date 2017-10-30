@@ -30,7 +30,7 @@ const (
 
 var supportedStorage = map[string]func(path string) (Storage, error){
 	"ldb":  OpenLeveldbStorage,
-	"bad":  OpenBadgerStorage,
+	"bg":   OpenBadgerStorage, // bad to bg
 	"bolt": OpenBoltStorage,
 	// "kv":   OpenKVStorage,
 	// "ledisdb"
