@@ -171,7 +171,7 @@ func (engine *Engine) Storage() {
 	if engine.initOptions.UseStorage {
 		err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
 		if err != nil {
-			log.Fatal("无法创建目录", engine.initOptions.StorageFolder)
+			log.Fatal("Can not create directory", engine.initOptions.StorageFolder)
 		}
 
 		// 打开或者创建数据库
@@ -180,7 +180,7 @@ func (engine *Engine) Storage() {
 			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
-				log.Fatal("无法打开数据库", dbPath, ": ", err)
+				log.Fatal("Unable to open database", dbPath, ": ", err)
 			}
 			engine.dbs[shard] = db
 		}
@@ -207,7 +207,7 @@ func (engine *Engine) Storage() {
 			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
-				log.Fatal("无法打开数据库", dbPath, ": ", err)
+				log.Fatal("Unable to open database", dbPath, ": ", err)
 			}
 			engine.dbs[shard] = db
 		}
@@ -226,7 +226,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 
 	// 初始化初始参数
 	if engine.initialized {
-		log.Fatal("请勿重复初始化引擎")
+		log.Fatal("Do not re-initialize the engine")
 	}
 	options.Init()
 	engine.initOptions = options
@@ -316,7 +316,7 @@ func (engine *Engine) IndexDocument(docId uint64, data types.DocIndexData, force
 func (engine *Engine) internalIndexDocument(
 	docId uint64, data types.DocIndexData, forceUpdate bool) {
 	if !engine.initialized {
-		log.Fatal("必须先初始化引擎")
+		log.Fatal("The engine must be initialized first")
 	}
 
 	if docId != 0 {
@@ -343,7 +343,7 @@ func (engine *Engine) internalIndexDocument(
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
 func (engine *Engine) RemoveDocument(docId uint64, forceUpdate bool) {
 	if !engine.initialized {
-		log.Fatal("必须先初始化引擎")
+		log.Fatal("The engine must be initialized first")
 	}
 
 	if docId != 0 {
@@ -397,7 +397,7 @@ func (engine *Engine) Segment(content string) (keywords []string) {
 // 查找满足搜索条件的文档，此函数线程安全
 func (engine *Engine) Search(request types.SearchRequest) (output types.SearchResponse) {
 	if !engine.initialized {
-		log.Fatal("必须先初始化引擎")
+		log.Fatal("The engine must be initialized first")
 	}
 
 	var rankOptions types.RankOptions
