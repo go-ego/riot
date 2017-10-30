@@ -22,7 +22,7 @@ const (
 )
 
 var (
-	weibo_data = flag.String(
+	weiboData = flag.String(
 		"weibo_data",
 		"../../testdata/weibo_data.txt",
 		"微博数据")
@@ -35,19 +35,19 @@ var (
 		"dictionaries",
 		"../../data/dict/dictionary.txt",
 		"分词字典文件")
-	stop_token_file = flag.String(
+	stopTokenFile = flag.String(
 		"stop_token_file",
 		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
-	cpuprofile                = flag.String("cpuprofile", "", "处理器profile文件")
-	memprofile                = flag.String("memprofile", "", "内存profile文件")
-	num_repeat_text           = flag.Int("num_repeat_text", 10, "文本重复加入多少次")
-	num_delete_docs           = flag.Int("num_delete_docs", 1000, "测试删除文档的个数")
-	index_type                = flag.Int("index_type", types.DocIdsIndex, "索引类型")
-	use_persistent            = flag.Bool("use_persistent", false, "是否使用持久存储")
-	persistent_storage_folder = flag.String("persistent_storage_folder", "benchmark.persistent", "持久存储数据库保存的目录")
-	storageEngine             = flag.String("storageEngine", "lbd", "use StorageEngine")
-	persistent_storage_shards = flag.Int("persistent_storage_shards", 0, "持久数据库存储裂分数目")
+	cpuprofile              = flag.String("cpuprofile", "", "处理器profile文件")
+	memprofile              = flag.String("memprofile", "", "内存profile文件")
+	numRepeatText           = flag.Int("numRepeatText", 10, "文本重复加入多少次")
+	numDeleteDocs           = flag.Int("numDeleteDocs", 1000, "测试删除文档的个数")
+	indexType               = flag.Int("indexType", types.DocIdsIndex, "索引类型")
+	usePersistent           = flag.Bool("usePersistent", false, "是否使用持久存储")
+	persistentStorageFolder = flag.String("persistentStorageFolder", "benchmark.persistent", "持久存储数据库保存的目录")
+	storageEngine           = flag.String("storageEngine", "lbd", "use StorageEngine")
+	persistentStorageShards = flag.Int("persistentStorageShards", 0, "持久数据库存储裂分数目")
 
 	searcher = engine.Engine{}
 	options  = types.RankOptions{
@@ -70,28 +70,28 @@ func main() {
 	tBeginInit := time.Now()
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictionaries,
-		StopTokenFile: *stop_token_file,
+		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
-			IndexType: *index_type,
+			IndexType: *indexType,
 		},
 		NumShards:          NumShards,
 		DefaultRankOptions: &options,
-		UseStorage:         *use_persistent,
-		StorageFolder:      *persistent_storage_folder,
-		StorageShards:      *persistent_storage_shards,
+		UseStorage:         *usePersistent,
+		StorageFolder:      *persistentStorageFolder,
+		StorageShards:      *persistentStorageShards,
 	})
 	tEndInit := time.Now()
 	defer searcher.Close()
 
 	// 打开将要搜索的文件
-	file, err := os.Open(*weibo_data)
+	file, err := os.Open(*weiboData)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
 	// 逐行读入
-	log.Printf("读入文本 %s", *weibo_data)
+	log.Printf("读入文本 %s", *weiboData)
 	scanner := bufio.NewScanner(file)
 	lines := []string{}
 	size := 0
@@ -103,7 +103,7 @@ func main() {
 		}
 		text = data[9]
 		if text != "" {
-			size += len(text) * (*num_repeat_text)
+			size += len(text) * (*numRepeatText)
 			lines = append(lines, text)
 		}
 	}
@@ -126,9 +126,9 @@ func main() {
 	// 建索引
 	log.Print("建索引 ... ")
 	// 打乱 docId 顺序进行测试，若 docId 最大值超 Int 则不能用 rand.Perm 方法
-	docIds := rand.Perm(*num_repeat_text * len(lines))
+	docIds := rand.Perm(*numRepeatText * len(lines))
 	docIdx := 0
-	for i := 0; i < *num_repeat_text; i++ {
+	for i := 0; i < *numRepeatText; i++ {
 		for _, line := range lines {
 			searcher.IndexDocument(uint64(docIds[docIdx]+1), types.DocIndexData{
 				Content: line}, false)
@@ -150,13 +150,13 @@ func main() {
 
 	// 记录时间并计算删除索引时间
 	t2 := time.Now()
-	for i := 1; i <= *num_delete_docs; i++ {
+	for i := 1; i <= *numDeleteDocs; i++ {
 		searcher.RemoveDocument(uint64(i), false)
 	}
 	searcher.FlushIndex()
 
 	t3 := time.Now()
-	log.Printf("删除 %d 条索引花费时间 %v", *num_delete_docs, t3.Sub(t2))
+	log.Printf("删除 %d 条索引花费时间 %v", *numDeleteDocs, t3.Sub(t2))
 
 	// 手动做 GC 防止影响性能测试
 	time.Sleep(time.Second)
@@ -198,22 +198,22 @@ func main() {
 	}
 	recordResponse.RUnlock()
 
-	if *use_persistent {
+	if *usePersistent {
 		searcher.Close()
 		t6 := time.Now()
 		searcher1 := engine.Engine{}
 		searcher1.Init(types.EngineInitOptions{
 			SegmenterDict: *dictionaries,
-			StopTokenFile: *stop_token_file,
+			StopTokenFile: *stopTokenFile,
 			IndexerInitOptions: &types.IndexerInitOptions{
-				IndexType: *index_type,
+				IndexType: *indexType,
 			},
 			NumShards:          NumShards,
 			DefaultRankOptions: &options,
-			UseStorage:         *use_persistent,
-			StorageFolder:      *persistent_storage_folder,
+			UseStorage:         *usePersistent,
+			StorageFolder:      *persistentStorageFolder,
 			StorageEngine:      *storageEngine,
-			StorageShards:      *persistent_storage_shards,
+			StorageShards:      *persistentStorageShards,
 		})
 		defer searcher1.Close()
 		t7 := time.Now()
@@ -224,7 +224,7 @@ func main() {
 			float64(searcher1.NumTokenIndexAdded())/t/(1000000))
 
 	}
-	//os.RemoveAll(*persistent_storage_folder)
+	//os.RemoveAll(*persistentStorageFolder)
 }
 
 type recordResponseLock struct {

@@ -33,7 +33,7 @@ const (
 )
 
 var (
-	weibo_data = flag.String(
+	weiboData = flag.String(
 		"weibo_data",
 		"../../testdata/weibo_data.txt",
 		"索引的微博帖子，每行当作一个文档")
@@ -45,7 +45,7 @@ var (
 		"dictionaries",
 		"../../data/dict/dictionary.txt",
 		"分词字典文件")
-	stop_token_file = flag.String(
+	stopTokenFile = flag.String(
 		"stop_token_file",
 		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
@@ -59,7 +59,7 @@ var (
 	searchQueries = []string{}
 )
 
-// 微博评分字段
+// WeiboScoringFields 微博评分字段
 type WeiboScoringFields struct {
 	// 帖子的时间戳
 	Timestamp uint32
@@ -71,7 +71,7 @@ type WeiboScoringFields struct {
 	TextLength int
 }
 
-// 自定义的微博评分规则
+// WeiboScoringCriteria 自定义的微博评分规则
 type WeiboScoringCriteria struct {
 }
 
@@ -101,7 +101,7 @@ func main() {
 	gob.Register(WeiboScoringFields{})
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictionaries,
-		StopTokenFile: *stop_token_file,
+		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
 			IndexType: types.LocationsIndex,
 		},
@@ -110,12 +110,12 @@ func main() {
 	defer searcher.Close()
 
 	// 读入微博数据
-	file, err := os.Open(*weibo_data)
+	file, err := os.Open(*weiboData)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	log.Printf("读入文本 %s", *weibo_data)
+	log.Printf("读入文本 %s", *weiboData)
 	scanner := bufio.NewScanner(file)
 	lines := []string{}
 	fieldsSlice := []WeiboScoringFields{}
