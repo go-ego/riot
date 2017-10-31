@@ -131,9 +131,10 @@ func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	docs := []*Weibo{}
 	for _, doc := range output.Docs {
 		wb := wbs[doc.DocId]
-		for _, t := range output.Tokens {
-			wb.Text = strings.Replace(wb.Text, t, "<font color=red>"+t+"</font>", -1)
-		}
+		wb.Text = doc.Content
+		// for _, t := range output.Tokens {
+		// 	wb.Text = strings.Replace(wb.Text, t, "<font color=red>"+t+"</font>", -1)
+		// }
 		docs = append(docs, &wb)
 	}
 	response, _ := json.Marshal(&JsonResponse{Docs: docs})

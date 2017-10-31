@@ -287,14 +287,19 @@ func (engine *Engine) PinYin(hans string) []string {
 	// py := pinyin.LazyConvert(sehans[h], nil)
 	py := gpy.LazyConvert(hans, nil)
 
+	// log.Println("py...", py)
 	for i := 0; i < len(py); i++ {
-		str += py[i][0:1]
+		// log.Println("py[i]...", py[i])
 		pystr += py[i]
 		if !engine.stopTokens.IsStopToken(pystr) {
 			strArr = append(strArr, pystr)
 		}
-		if !engine.stopTokens.IsStopToken(str) {
-			strArr = append(strArr, str)
+
+		if len(py[i]) > 0 {
+			str += py[i][0:1]
+			if !engine.stopTokens.IsStopToken(str) {
+				strArr = append(strArr, str)
+			}
 		}
 	}
 
