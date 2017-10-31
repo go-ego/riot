@@ -15,6 +15,7 @@ examples/codelab/codelab
 examples/logic/logic
 examples/pinyin/pinyin
 examples/pinyin/index
+examples/pinyin_weibo/pinyin_weibo
 examples/store/store
 examples/store/index
 examples/simple/simple

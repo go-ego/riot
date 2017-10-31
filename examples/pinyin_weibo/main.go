@@ -1,19 +1,16 @@
-// 一个微博搜索的例子。
+// 一个微博 pinyin 搜索的例子。
 package main
 
 import (
 	"bufio"
-	"encoding/gob"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"reflect"
-	"strconv"
-	"strings"
 
 	"github.com/go-ego/riot/engine"
 	"github.com/go-ego/riot/types"
@@ -27,7 +24,7 @@ const (
 var (
 	searcher      = engine.Engine{}
 	wbs           = map[uint64]Weibo{}
-	weiboData     = flag.String("weibo_data", "../../testdata/weibo_data.txt", "微博数据文件")
+	weiboData     = flag.String("weibo_data", "weibo.txt", "微博数据文件")
 	dictFile      = flag.String("dict_file", "../../data/dict/dictionary.txt", "词典文件")
 	stopTokenFile = flag.String("stop_token_file", "../../data/dict/stop_tokens.txt", "停用词文件")
 	staticFolder  = flag.String("static_folder", "static", "静态文件目录")
@@ -41,72 +38,49 @@ type Weibo struct {
 	Text         string `json:"text"`
 }
 
-/*******************************************************************************
-    索引
-*******************************************************************************/
 func indexWeibo() {
-	// 读入微博数据
+	fmt.Println("index start")
+
 	file, err := os.Open(*weiboData)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("read file error")
+		return
 	}
 	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		data := strings.Split(scanner.Text(), "||||")
-		if len(data) != 10 {
-			continue
-		}
-		wb := Weibo{}
-		wb.Id, _ = strconv.ParseUint(data[0], 10, 64)
-		wb.Timestamp, _ = strconv.ParseUint(data[1], 10, 64)
-		wb.UserName = data[3]
-		wb.RepostsCount, _ = strconv.ParseUint(data[4], 10, 64)
-		wb.Text = data[9]
-		wbs[wb.Id] = wb
-	}
 
-	log.Print("添加索引")
-	for docId, weibo := range wbs {
-		searcher.IndexDocument(docId, types.DocIndexData{
-			Content: weibo.Text,
-			Fields: WeiboScoringFields{
-				Timestamp:    weibo.Timestamp,
-				RepostsCount: weibo.RepostsCount,
-			},
-		}, false)
+	br := bufio.NewReader(file)
+
+	var tokenDatas []types.TokenData
+	var index uint64
+	var tokens []string
+
+	index = 1
+
+	for {
+		buf, _, c := br.ReadLine()
+		if c == io.EOF {
+			break
+		}
+
+		// fmt.Printf("buf: %s\n", buf)
+
+		tokens = searcher.PinYin(string(buf))
+
+		for i := 0; i < len(tokens); i++ {
+			// fmt.Printf("tokens[%d]: %s\n", i, tokens[i])
+
+			tokenData := types.TokenData{Text: tokens[i]}
+			tokenDatas = append(tokenDatas, tokenData)
+		}
+
+		searcher.IndexDocument(index, types.DocIndexData{Tokens: tokenDatas, Fields: string(buf)}, false)
+		index++
+		searcher.IndexDocument(index, types.DocIndexData{Content: string(buf), Tokens: tokenDatas}, false)
+		index++
 	}
 
 	searcher.FlushIndex()
-	log.Printf("索引了%d条微博\n", len(wbs))
-}
-
-/*******************************************************************************
-    评分
-*******************************************************************************/
-type WeiboScoringFields struct {
-	Timestamp    uint64
-	RepostsCount uint64
-}
-
-type WeiboScoringCriteria struct {
-}
-
-func (criteria WeiboScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
-	if reflect.TypeOf(fields) != reflect.TypeOf(WeiboScoringFields{}) {
-		return []float32{}
-	}
-	wsf := fields.(WeiboScoringFields)
-	output := make([]float32, 3)
-	if doc.TokenProximity > MaxTokenProximity {
-		output[0] = 1.0 / float32(doc.TokenProximity)
-	} else {
-		output[0] = 1.0
-	}
-	output[1] = float32(wsf.Timestamp / (SecondsInADay * 3))
-	output[2] = float32(doc.BM25 * (1 + float32(wsf.RepostsCount)/10000))
-	return output
+	fmt.Println("index done")
 }
 
 /*******************************************************************************
@@ -118,27 +92,26 @@ type JsonResponse struct {
 
 func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query().Get("query")
+	fmt.Printf("Req: %s\n", query)
 	output := searcher.Search(types.SearchRequest{
 		Text: query,
 		RankOptions: &types.RankOptions{
-			ScoringCriteria: &WeiboScoringCriteria{},
-			OutputOffset:    0,
-			MaxOutputs:      100,
+			OutputOffset: 0,
+			MaxOutputs:   100,
 		},
 	})
+
+	// fmt.Println("output...", output)
 
 	// 整理为输出格式
 	docs := []*Weibo{}
 	for _, doc := range output.Docs {
 		wb := wbs[doc.DocId]
 		wb.Text = doc.Content
-		// for _, t := range output.Tokens {
-		// 	wb.Text = strings.Replace(wb.Text, t, "<font color=red>"+t+"</font>", -1)
-		// }
 		docs = append(docs, &wb)
 	}
-	response, _ := json.Marshal(&JsonResponse{Docs: docs})
 
+	response, _ := json.Marshal(&JsonResponse{Docs: docs})
 	// fmt.Println("response...", response)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -149,17 +122,22 @@ func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	主函数
 *******************************************************************************/
 func main() {
+
+	// runtime.GOMAXPROCS(runtime.NumCPU())
+
 	// 解析命令行参数
 	flag.Parse()
 
 	// 初始化
-	gob.Register(WeiboScoringFields{})
-	log.Print("引擎开始初始化")
+	//gob.Register(WeiboScoringFields{})
+	log.Print("searcher init start")
 	searcher.Init(types.EngineInitOptions{
+		Using:         4,
 		SegmenterDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
-			IndexType: types.LocationsIndex,
+			//IndexType: types.LocationsIndex,
+			IndexType: types.DocIdsIndex,
 		},
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用leveldb持久化，如果你希望修改数据库类型
@@ -168,13 +146,11 @@ func main() {
 		// StorageFolder: "weibo_search",
 		// StorageEngine: "bg",
 	})
-	log.Print("引擎初始化完毕")
+	log.Print("searcher init end")
 	wbs = make(map[uint64]Weibo)
 
 	// 索引
-	log.Print("建索引开始")
 	go indexWeibo()
-	log.Print("建索引完毕")
 
 	// 捕获ctrl-c
 	c := make(chan os.Signal, 1)
