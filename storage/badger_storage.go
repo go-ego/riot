@@ -58,7 +58,8 @@ func (s *Badger) WALName() string {
 // the existing value is overwritten with the one provided.
 func (s *Badger) Set(k, v []byte) error {
 	err := s.db.Update(func(txn *badger.Txn) error {
-		return txn.Set(k, v, 0x00)
+		// return txn.Set(k, v, 0x00)
+		return txn.Set(k, v)
 	})
 
 	return err
