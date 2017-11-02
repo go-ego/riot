@@ -15,6 +15,7 @@
 
 package types
 
+// SearchRequest search request options
 type SearchRequest struct {
 	// 搜索的短语（必须是UTF-8格式），会被分词
 	// 当值为空字符串时关键词会从下面的Tokens读入

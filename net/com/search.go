@@ -26,7 +26,8 @@ import (
 var (
 	// Searcher is coroutine safe
 	Searcher = engine.Engine{}
-	Conf     Config
+	// Conf is config
+	Conf Config
 )
 
 // InitEngine init engine

@@ -64,7 +64,6 @@ type ScoredDocument struct {
 }
 
 // ScoredDocuments 为了方便排序
-
 type ScoredDocuments []ScoredDocument
 
 func (docs ScoredDocuments) Len() int {

@@ -14,6 +14,7 @@
 
 package utils
 
+// AbsInt return to the opposite number
 func AbsInt(a int) int {
 	if a < 0 {
 		return -a
@@ -21,6 +22,7 @@ func AbsInt(a int) int {
 	return a
 }
 
+// MinInt return to the small number
 func MinInt(a, b int) int {
 	if a < b {
 		return a

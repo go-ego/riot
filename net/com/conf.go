@@ -14,6 +14,7 @@
 
 package com
 
+// Config search config options
 type Config struct {
 	Engine Engine
 	Etcd   Etcd
@@ -23,6 +24,7 @@ type Config struct {
 	Url []string
 }
 
+// Engine search engine options
 type Engine struct {
 	Mode  string
 	Using int
@@ -41,6 +43,7 @@ type Engine struct {
 	Ts            int64
 }
 
+// Rpc search rpc options
 type Rpc struct {
 	GrpcPort []string `toml:"grpc_port"`
 	// GrpcPort []int    `toml:"grpc_port"`
@@ -48,6 +51,7 @@ type Rpc struct {
 	Port     string
 }
 
+// Etcd search etcd options
 type Etcd struct {
 	Addr     string
 	SverName string `toml:"sver_name"`
