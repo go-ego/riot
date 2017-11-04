@@ -27,6 +27,7 @@ import (
 	zlog "github.com/go-vgo/gt/zlog"
 )
 
+// Doc grpc response
 type Doc struct {
 	DocId   uint64
 	Content string
@@ -39,6 +40,7 @@ type Doc struct {
 	ForceUpdate bool
 }
 
+// InitGrpcc init grpc client
 func InitGrpcc(address string, doc Doc) int32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())

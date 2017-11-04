@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// Expect test
 func Expect(t *testing.T, expect string, actual interface{}) {
 	actualString := fmt.Sprint(actual)
 	if expect != actualString {

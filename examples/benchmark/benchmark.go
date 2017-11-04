@@ -56,6 +56,7 @@ var (
 	}
 	searchQueries = []string{}
 
+	// NumShards shards number
 	NumShards       = 2
 	numQueryThreads = runtime.NumCPU() / NumShards
 )

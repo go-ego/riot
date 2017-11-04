@@ -28,7 +28,9 @@ import (
 )
 
 const (
-	SecondsInADay     = 86400
+	// SecondsInADay seconds in a day
+	SecondsInADay = 86400
+	// MaxTokenProximity max token proximity
 	MaxTokenProximity = 150
 )
 
