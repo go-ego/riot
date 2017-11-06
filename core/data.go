@@ -24,6 +24,7 @@ import (
 var DocInfoGroup = make(map[int]*types.DocInfosShard)
 var docInfosGroupRWMutex sync.RWMutex
 
+// AddDocInfosShard add document infos shard
 func AddDocInfosShard(shard int) {
 	docInfosGroupRWMutex.Lock()
 	defer docInfosGroupRWMutex.Unlock()

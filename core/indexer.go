@@ -365,10 +365,9 @@ func (indexer *Indexer) Lookup(
 		if !found {
 			// 当反向索引表中无此搜索键时直接返回
 			return
-		} else {
-			// 否则加入反向表中
-			table[i] = indices
 		}
+		// 否则加入反向表中
+		table[i] = indices
 	}
 
 	// 当没有找到时直接返回
@@ -410,12 +409,12 @@ func (indexer *Indexer) Lookup(
 					// 该搜索键中所有的文档ID都比baseDocId大，因此已经没有
 					// 继续查找的必要。
 					return
-				} else {
-					// 继续下一indexPointers[0]的查找
-					indexPointers[iTable] = position - 1
-					found = false
-					break
 				}
+
+				// 继续下一indexPointers[0]的查找
+				indexPointers[iTable] = position - 1
+				found = false
+				break
 			}
 		}
 
@@ -640,9 +639,9 @@ func (indexer *Indexer) LogicLookup(
 			indices, found := indexer.tableLock.table[keyword]
 			if !found {
 				return
-			} else {
-				MustTable = append(MustTable, indices)
 			}
+
+			MustTable = append(MustTable, indices)
 		}
 	}
 
@@ -769,9 +768,9 @@ func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64)
 
 	if len(table) == 0 {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 // findInNotInTable 在逻辑非反向表中对docid进行查找, 若有一个找到则返回true, 都找不到则返回false
