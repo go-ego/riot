@@ -36,7 +36,8 @@ func main() {
 	r := grpclb.NewResolver(*serv)
 	b := grpc.RoundRobin(r)
 
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
 
 	conn, err := grpc.DialContext(ctx, *reg, grpc.WithInsecure(), grpc.WithBalancer(b), grpc.WithBlock())
 	if err != nil {
@@ -46,6 +47,8 @@ func main() {
 
 	add(conn)
 	search(conn)
+
+	defer cancel()
 }
 
 func add(conn *grpc.ClientConn) {
