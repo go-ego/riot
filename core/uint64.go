@@ -146,6 +146,7 @@ func quickSortAsc(data []uint64, a, b, maxDepth int) {
 	}
 }
 
+// Asc asc
 func Asc(data []uint64) {
 	maxDepth := 0
 	for i := len(data); i > 0; i >>= 1 {
@@ -155,6 +156,7 @@ func Asc(data []uint64) {
 	quickSortAsc(data, 0, len(data), maxDepth)
 }
 
+// IsSortedAsc sorted by Asc
 func IsSortedAsc(data []uint64) bool {
 	for i := len(data) - 1; i > 0; i-- {
 		if data[i] < data[i-1] {
@@ -164,6 +166,7 @@ func IsSortedAsc(data []uint64) bool {
 	return true
 }
 
+// StableAsc stable Asc
 func StableAsc(data []uint64) {
 	n := len(data)
 	blockSize := 20
@@ -386,6 +389,7 @@ func quickSortDesc(data []uint64, a, b, maxDepth int) {
 	}
 }
 
+// Desc desc
 func Desc(data []uint64) {
 	maxDepth := 0
 	for i := len(data); i > 0; i >>= 1 {
@@ -395,6 +399,7 @@ func Desc(data []uint64) {
 	quickSortDesc(data, 0, len(data), maxDepth)
 }
 
+// IsSortedDesc  sorted by Desc
 func IsSortedDesc(data []uint64) bool {
 	for i := len(data) - 1; i > 0; i-- {
 		if data[i] > data[i-1] {
@@ -404,6 +409,7 @@ func IsSortedDesc(data []uint64) bool {
 	return true
 }
 
+// StableDesc stable desc
 func StableDesc(data []uint64) {
 	n := len(data)
 	blockSize := 20

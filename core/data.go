@@ -34,6 +34,7 @@ func AddDocInfosShard(shard int) {
 	}
 }
 
+// AddDocInfo add documents info
 func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 	docInfosGroupRWMutex.Lock()
 	defer docInfosGroupRWMutex.Unlock()
@@ -46,6 +47,7 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 	DocInfoGroup[shard].NumDocuments++
 }
 
+// // IsDocExist doc is exist
 // func IsDocExist(docId uint64) bool {
 // 	docInfosGroupRWMutex.RLock()
 // 	defer docInfosGroupRWMutex.RUnlock()
@@ -62,6 +64,7 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 var InvertedIndexGroup = make(map[int]*types.InvertedIndexShard)
 var invertedIndexGroupRWMutex sync.RWMutex
 
+// AddInvertedIndexShard add inverted index shard
 func AddInvertedIndexShard(shard int) {
 	invertedIndexGroupRWMutex.Lock()
 	defer invertedIndexGroupRWMutex.Unlock()
@@ -72,6 +75,7 @@ func AddInvertedIndexShard(shard int) {
 	}
 }
 
+// AddKeywordIndices  add keyword indices
 func AddKeywordIndices(shard int, keyword string, keywordIndices *types.KeywordIndices) {
 	invertedIndexGroupRWMutex.Lock()
 	defer invertedIndexGroupRWMutex.Unlock()

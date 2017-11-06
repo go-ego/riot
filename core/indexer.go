@@ -29,7 +29,7 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
-// 索引器
+// Indexer 索引器
 type Indexer struct {
 	// 从搜索键到文档列表的反向索引
 	// 加了读写锁以保证读写安全
@@ -62,7 +62,7 @@ type Indexer struct {
 	docTokenLengths map[uint64]float32
 }
 
-// 反向索引表的一行，收集了一个搜索键出现的所有文档，按照DocId从小到大排序。
+// KeywordIndices 反向索引表的一行，收集了一个搜索键出现的所有文档，按照DocId从小到大排序。
 type KeywordIndices struct {
 	// 下面的切片是否为空，取决于初始化时IndexType的值
 	docIds      []uint64  // 全部类型都有
@@ -70,7 +70,7 @@ type KeywordIndices struct {
 	locations   [][]int   // IndexType == LocationsIndex
 }
 
-// 初始化索引器
+// Init 初始化索引器
 func (indexer *Indexer) Init(options types.IndexerInitOptions) {
 	if indexer.initialized == true {
 		log.Fatal("索引器不能初始化两次")
@@ -86,17 +86,17 @@ func (indexer *Indexer) Init(options types.IndexerInitOptions) {
 	indexer.docTokenLengths = make(map[uint64]float32)
 }
 
-// 从KeywordIndices中得到第i个文档的DocId
+// getDocId 从 KeywordIndices 中得到第i个文档的 DocId
 func (indexer *Indexer) getDocId(ti *KeywordIndices, i int) uint64 {
 	return ti.docIds[i]
 }
 
-// 得到KeywordIndices中文档总数
+// getIndexLength 得到 KeywordIndices 中文档总数
 func (indexer *Indexer) getIndexLength(ti *KeywordIndices) int {
 	return len(ti.docIds)
 }
 
-// 向 ADDCACHE 中加入一个文档
+// AddDocumentToCache 向 ADDCACHE 中加入一个文档
 func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceUpdate bool) {
 	if indexer.initialized == false {
 		log.Fatal("索引器尚未初始化")
@@ -150,7 +150,7 @@ func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceU
 	}
 }
 
-// 向反向索引表中加入 ADDCACHE 中所有文档
+// AddDocuments 向反向索引表中加入 ADDCACHE 中所有文档
 func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
 	if indexer.initialized == false {
 		log.Fatal("索引器尚未初始化")
@@ -222,7 +222,7 @@ func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
 	}
 }
 
-// 向 REMOVECACHE 中加入一个待删除文档
+// RemoveDocumentToCache 向 REMOVECACHE 中加入一个待删除文档
 // 返回值表示文档是否在索引表中被删除
 func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bool {
 	if indexer.initialized == false {
@@ -260,7 +260,7 @@ func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bo
 	return false
 }
 
-// 向反向索引表中删除 REMOVECACHE 中所有文档
+// RemoveDocuments 向反向索引表中删除 REMOVECACHE 中所有文档
 func (indexer *Indexer) RemoveDocuments(documents *types.DocumentsId) {
 	if indexer.initialized == false {
 		log.Fatal("索引器尚未初始化")
@@ -493,7 +493,7 @@ func (indexer *Indexer) Lookup(
 	return
 }
 
-// 二分法查找indices中某文档的索引项
+// searchIndex 二分法查找indices中某文档的索引项
 // 第一个返回参数为找到的位置或需要插入的位置
 // 第二个返回参数标明是否找到
 func (indexer *Indexer) searchIndex(
@@ -528,7 +528,7 @@ func (indexer *Indexer) searchIndex(
 	return end, false
 }
 
-// 计算搜索键在文本中的紧邻距离
+// computeTokenProximity 计算搜索键在文本中的紧邻距离
 //
 // 假定第 i 个搜索键首字节出现在文本中的位置为 P_i，长度 L_i
 // 紧邻距离计算公式为
@@ -774,7 +774,7 @@ func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64)
 	}
 }
 
-// 在逻辑非反向表中对docid进行查找, 若有一个找到则返回true, 都找不到则返回false
+// findInNotInTable 在逻辑非反向表中对docid进行查找, 若有一个找到则返回true, 都找不到则返回false
 // 如果table为空, 则返回false
 func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
@@ -787,7 +787,7 @@ func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) 
 	return false
 }
 
-// 如果不存在与逻辑检索， 则需要对逻辑或反向表求并集
+// unionTable 如果不存在与逻辑检索， 则需要对逻辑或反向表求并集
 // 先求差集再求并集， 可以减小内存占用
 // docid要保序
 func (indexer *Indexer) unionTable(table []*KeywordIndices, notInTable []*KeywordIndices, countDocsOnly bool) (

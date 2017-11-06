@@ -20,7 +20,9 @@ import (
 )
 
 const (
-	SecondsInADay     = 86400
+	// SecondsInADay seconds in a day
+	SecondsInADay = 86400
+	// MaxTokenProximity max token proximity
 	MaxTokenProximity = 2
 )
 
@@ -33,6 +35,7 @@ var (
 	staticFolder  = flag.String("static_folder", "static", "静态文件目录")
 )
 
+// Weibo weibo json struct
 type Weibo struct {
 	Id           uint64 `json:"id"`
 	Timestamp    uint64 `json:"timestamp"`
@@ -84,14 +87,18 @@ func indexWeibo() {
 /*******************************************************************************
     评分
 *******************************************************************************/
+
+// WeiboScoringFields  weibo scoring fields
 type WeiboScoringFields struct {
 	Timestamp    uint64
 	RepostsCount uint64
 }
 
+// WeiboScoringCriteria custom weibo scoring criteria
 type WeiboScoringCriteria struct {
 }
 
+// Score score and sort
 func (criteria WeiboScoringCriteria) Score(
 	doc types.IndexedDocument, fields interface{}) []float32 {
 	if reflect.TypeOf(fields) != reflect.TypeOf(WeiboScoringFields{}) {
@@ -112,10 +119,13 @@ func (criteria WeiboScoringCriteria) Score(
 /*******************************************************************************
     JSON-RPC
 *******************************************************************************/
+
+// JsonResponse json response
 type JsonResponse struct {
 	Docs []*Weibo `json:"docs"`
 }
 
+// JsonRpcServer json rpc server
 func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query().Get("query")
 	output := searcher.Search(types.SearchRequest{

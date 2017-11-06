@@ -25,6 +25,7 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
+// Ranker ranker
 type Ranker struct {
 	lock struct {
 		sync.RWMutex
@@ -37,6 +38,7 @@ type Ranker struct {
 	initialized bool
 }
 
+// Init init ranker
 func (ranker *Ranker) Init() {
 	if ranker.initialized == true {
 		log.Fatal("排序器不能初始化两次")
@@ -67,7 +69,7 @@ func (ranker *Ranker) AddDoc(
 	ranker.lock.Unlock()
 }
 
-// 删除某个文档的评分字段
+// RemoveDoc 删除某个文档的评分字段
 func (ranker *Ranker) RemoveDoc(docId uint64) {
 	if ranker.initialized == false {
 		log.Fatal("排序器尚未初始化")

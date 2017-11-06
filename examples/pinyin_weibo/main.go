@@ -89,6 +89,7 @@ func indexWeibo() {
 /*******************************************************************************
     JSON-RPC
 *******************************************************************************/
+
 // JsonResponse json response
 type JsonResponse struct {
 	Docs []*Weibo `json:"docs"`

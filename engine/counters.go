@@ -15,14 +15,17 @@
 
 package engine
 
+// NumTokenIndexAdded added token index number
 func (engine *Engine) NumTokenIndexAdded() uint64 {
 	return engine.numTokenIndexAdded
 }
 
+// NumDocumentsIndexed documents indexed number
 func (engine *Engine) NumDocumentsIndexed() uint64 {
 	return engine.numDocumentsIndexed
 }
 
+// NumDocumentsRemoved documents removed number
 func (engine *Engine) NumDocumentsRemoved() uint64 {
 	return engine.numDocumentsRemoved
 }
