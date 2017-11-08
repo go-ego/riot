@@ -29,7 +29,7 @@ func (criteria MyScoringCriteria) Score(
 }
 ```
 
-文档的MyScoringFields数据通过engine.Engine的IndexDocument函数传给排序器保存在内存中。然后通过Search函数的参数调用MyScoringCriteria进行查询。
+文档的MyScoringFields数据通过 riot.Engine 的 IndexDocument 函数传给排序器保存在内存中。然后通过Search函数的参数调用 MyScoringCriteria 进行查询。
 
 当然，MyScoringCriteria的Score函数也可以通过docId从硬盘或数据库读取更多文档数据用于打分，但速度要比从内存中直接读慢许多，请在内存和速度之间合适取舍。
 

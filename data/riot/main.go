@@ -23,14 +23,14 @@ import (
 	rpc "github.com/go-ego/riot/net/grpc"
 	rhttp "github.com/go-ego/riot/net/http"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-vgo/gt/conf"
 	"github.com/go-vgo/gt/zlog"
 )
 
 var (
 	// searcher is coroutine safe
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 )
 
 // var config rpc.Config
