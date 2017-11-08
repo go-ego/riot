@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
@@ -49,7 +49,7 @@ var (
 	storageEngine           = flag.String("storageEngine", "lbd", "use StorageEngine")
 	persistentStorageShards = flag.Int("persistentStorageShards", 0, "持久数据库存储裂分数目")
 
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 	options  = types.RankOptions{
 		OutputOffset: 0,
 		MaxOutputs:   100,
@@ -202,7 +202,7 @@ func main() {
 	if *usePersistent {
 		searcher.Close()
 		t6 := time.Now()
-		searcher1 := engine.Engine{}
+		searcher1 := riot.Engine{}
 		searcher1.Init(types.EngineInitOptions{
 			SegmenterDict: *dictionaries,
 			StopTokenFile: *stopTokenFile,

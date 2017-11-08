@@ -19,13 +19,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
 var (
 	// searcher is coroutine safe
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 )
 
 func initEngine() {

@@ -56,14 +56,14 @@ type Weibo struct {
 
 ```go
 import (
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 ```
 第一个包定义了引擎功能，第二个包定义了常用结构体。在使用引擎之前需要初始化，例如
 
 ```go
-var searcher engine.Engine
+var searcher riot.Engine
 searcher.Init(types.EngineInitOptions{
 	SegmenterDict: "../../data/dict/dictionary.txt",
 	StopTokenFile:         "../../data/dict/stop_tokens.txt",
@@ -184,11 +184,12 @@ response := searcher.Search(types.SearchRequest{
 
 如果你想进一步了解riot 引擎，建议你直接阅读代码。代码的目录结构如下：
 
-    /core       核心部件，包括索引器和排序器
-    /data       字典文件和停用词文件
-    /docs       文档
-    /engine     引擎，包括主协程、分词协程、索引器协程和排序器协程的实现
-    /examples   例子和性能测试程序
-    /testdata   测试数据
-    /types      常用结构体
-    /utils      常用函数
+    riot/           引擎，包括主协程、分词协程、索引器协程和排序器协程的实现
+        /core       核心部件，包括索引器和排序器
+        /data       字典文件和停用词文件
+        /docs       文档
+        /engine     引擎，包括主协程、分词协程、索引器协程和排序器协程的实现, 已移到主目录
+        /examples   例子和性能测试程序
+        /testdata   测试数据
+        /types      常用结构体
+        /utils      常用函数

@@ -18,13 +18,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
 var (
 	// searcher是协程安全的
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 )
 
 func initEngine() {

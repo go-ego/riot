@@ -12,7 +12,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	searcher      = engine.Engine{}
+	searcher      = riot.Engine{}
 	wbs           = map[uint64]Weibo{}
 	weiboData     = flag.String("weibo_data", "weibo.txt", "微博数据文件")
 	dictFile      = flag.String("dict_file", "../../data/dict/dictionary.txt", "词典文件")

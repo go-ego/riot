@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
@@ -52,7 +52,7 @@ var (
 		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
 
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 	options  = types.RankOptions{
 		ScoringCriteria: WeiboScoringCriteria{},
 		OutputOffset:    0,

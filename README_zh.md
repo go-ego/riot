@@ -64,13 +64,13 @@ package main
 import (
 	"log"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 )
 
 var (
 	// searcher 是协程安全的
-	searcher = engine.Engine{}
+	searcher = riot.Engine{}
 )
 
 func main() {

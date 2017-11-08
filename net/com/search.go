@@ -18,14 +18,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-ego/riot/engine"
+	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
 	// "github.com/go-vgo/gt/zlog"
 )
 
 var (
 	// Searcher is coroutine safe
-	Searcher = engine.Engine{}
+	Searcher = riot.Engine{}
 	// Conf is config
 	Conf Config
 )
