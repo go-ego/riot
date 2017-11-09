@@ -41,7 +41,7 @@ var (
 		"索引的微博帖子，每行当作一个文档")
 	query = flag.String(
 		"query",
-		"chinajoy游戏",
+		"chinajoy 游戏",
 		"待搜索的短语")
 	dictionaries = flag.String(
 		"dictionaries",
@@ -103,6 +103,7 @@ func main() {
 	// 初始化
 	gob.Register(WeiboScoringFields{})
 	searcher.Init(types.EngineInitOptions{
+		Using:         1,
 		SegmenterDict: *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
@@ -156,7 +157,7 @@ func main() {
 	output := searcher.Search(types.SearchRequest{Text: *query})
 
 	// 显示
-	fmt.Println()
+	fmt.Println("output...")
 	for _, doc := range output.Docs {
 		fmt.Printf("%v %s\n\n", doc.Scores, lines[doc.DocId])
 	}
