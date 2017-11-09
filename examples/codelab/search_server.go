@@ -166,6 +166,7 @@ func main() {
 	gob.Register(WeiboScoringFields{})
 	log.Print("引擎开始初始化")
 	searcher.Init(types.EngineInitOptions{
+		Using:         1,
 		SegmenterDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerInitOptions: &types.IndexerInitOptions{
