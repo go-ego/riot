@@ -56,6 +56,7 @@ func InitEngine(conf Config) {
 		numShards = conf.Engine.NumShards
 	}
 
+	// var segmenterDict string
 	segmenterDict := "../dict/dictionary.txt"
 	if conf.Engine.SegmenterDict != "" {
 		segmenterDict = conf.Engine.SegmenterDict

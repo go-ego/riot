@@ -57,6 +57,7 @@ type EngineInitOptions struct {
 	// 半角逗号分隔的字典文件，具体用法见
 	// sego.Segmenter.LoadDict函数的注释
 	SegmenterDict string
+	// SegmenterDict []string
 
 	// 停用词文件
 	StopTokenFile string
@@ -96,8 +97,10 @@ type EngineInitOptions struct {
 // Init 初始化 EngineInitOptions，当用户未设定某个选项的值时用默认值取代
 func (options *EngineInitOptions) Init() {
 	if !options.NotUsingSegmenter {
+		// if len(options.SegmenterDict) == 0 {
 		if options.SegmenterDict == "" {
-			log.Fatal("字典文件不能为空")
+			// log.Fatal("字典文件不能为空")
+			log.Printf("Dictionary file is empty, start the default dictionary.")
 		}
 	}
 
