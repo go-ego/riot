@@ -15,10 +15,10 @@
 			"revisionTime": "2016-09-24T22:28:19Z"
 		},
 		{
-			"checksumSHA1": "R1Q34Pfnt197F/nCOO9kG8c+Z90=",
+			"checksumSHA1": "Ac0sHflTyYX4PmgBEJ+POSTyd5o=",
 			"path": "github.com/boltdb/bolt",
-			"revision": "2f1ce7a837dcb8da3ec595b1dac9d0632f0f99e8",
-			"revisionTime": "2017-07-17T17:11:48Z"
+			"revision": "fa5367d20c994db73282594be0146ab221657943",
+			"revisionTime": "2017-09-07T20:20:52Z"
 		},
 		{
 			"checksumSHA1": "V8ZEAhJEjh4083nKwsEDXMsdKgI=",
