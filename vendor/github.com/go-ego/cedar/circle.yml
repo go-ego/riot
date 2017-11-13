@@ -1,0 +1,15 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: golang:1.9.1
+    working_directory: /go/src/github.com/go-ego/cedar
+    steps:
+      - checkout
+      # - run:
+      #     name: "Build & Test"
+      #     command: make dev
+      # specify any bash command here prefixed with `run: `
+      - run: go get -v -t -d ./...
+      - run: go test -v ./...    
