@@ -26,6 +26,8 @@
 * Support distributed index and search
 * Can be achieved [distributed index and search](/docs/zh/distributed_indexing_and_search.md)
 
+* [Look at Word segmentation rules](https://github.com/go-ego/riot/blob/master/docs/en/segmenter.md)
+
 ## Requirements
 Go version >= 1.8
 

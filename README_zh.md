@@ -25,6 +25,8 @@
 * 可实现[分布式索引和搜索](/docs/zh/distributed_indexing_and_search.md)
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
 
+* [查看分词规则](https://github.com/go-ego/riot/blob/master/docs/zh/segmenter.md)
+
 QQ 群: 120563750
 
 ## 安装/更新
