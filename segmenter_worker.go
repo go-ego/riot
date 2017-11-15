@@ -83,7 +83,7 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 
 	if request.data.Content != "" {
 		request.data.Content = strings.ToLower(request.data.Content)
-		if engine.initOptions.Using == 4 {
+		if engine.initOptions.Using == 3 {
 			// use segmenter
 			segments := engine.segmenter.Segment([]byte(request.data.Content))
 			for _, segment := range segments {
@@ -95,7 +95,7 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 			numTokens += len(segments)
 		}
 
-		if engine.initOptions.Using == 5 {
+		if engine.initOptions.Using == 4 {
 			// use segmenter
 			splSpaData := strings.Split(request.data.Content, " ")
 			num := len(splSpaData)
@@ -106,7 +106,7 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 			}
 		}
 
-		if engine.initOptions.Using != 5 {
+		if engine.initOptions.Using != 4 {
 			splData := strings.Split(request.data.Content, "")
 			num = len(splData)
 			tokenMap, numToken := engine.Segspl(splData, num)
@@ -132,6 +132,27 @@ func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
 	tokensMap := make(map[string][]int)
 	numTokens := 0
 
+	if engine.initOptions.Using == 0 && request.data.Content != "" {
+		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
+		segments := engine.segmenter.Segment([]byte(request.data.Content))
+		for _, segment := range segments {
+			token := segment.Token().Text()
+			if !engine.stopTokens.IsStopToken(token) {
+				tokensMap[token] = append(tokensMap[token], segment.Start())
+			}
+		}
+
+		for _, t := range request.data.Tokens {
+			if !engine.stopTokens.IsStopToken(t.Text) {
+				tokensMap[t.Text] = t.Locations
+			}
+		}
+
+		numTokens = len(segments) + len(request.data.Tokens)
+
+		return tokensMap, numTokens
+	}
+
 	if engine.initOptions.Using == 1 && request.data.Content != "" {
 		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
 		segments := engine.segmenter.Segment([]byte(request.data.Content))
@@ -156,27 +177,6 @@ func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
 		}
 
 		numTokens = len(request.data.Tokens)
-
-		return tokensMap, numTokens
-	}
-
-	if engine.initOptions.Using == 3 && request.data.Content != "" {
-		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
-		segments := engine.segmenter.Segment([]byte(request.data.Content))
-		for _, segment := range segments {
-			token := segment.Token().Text()
-			if !engine.stopTokens.IsStopToken(token) {
-				tokensMap[token] = append(tokensMap[token], segment.Start())
-			}
-		}
-
-		for _, t := range request.data.Tokens {
-			if !engine.stopTokens.IsStopToken(t.Text) {
-				tokensMap[t.Text] = t.Locations
-			}
-		}
-
-		numTokens = len(segments) + len(request.data.Tokens)
 
 		return tokensMap, numTokens
 	}
