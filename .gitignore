@@ -12,6 +12,7 @@ data/riot1/heartb/heartb
 data/client/client
 examples/benchmark/benchmark
 examples/codelab/codelab
+examples/dict/dict
 examples/logic/logic
 examples/pinyin/pinyin
 examples/pinyin/index
