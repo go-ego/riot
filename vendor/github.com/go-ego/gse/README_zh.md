@@ -68,7 +68,7 @@ func main() {
 	segments := segmenter.Segment(text)
   
 	// 处理分词结果
-	// 支持普通模式和搜索模式两种分词，见代码中ToString函数的注释。
+	// 支持普通模式和搜索模式两种分词，见代码中 ToString 函数的注释。
 	fmt.Println(gse.ToString(segments, false)) 
 }
 ```

@@ -28,6 +28,14 @@ func ToString(segs []Segment, searchMode bool) (output string) {
 	return
 }
 
+func tokenToBytes(token *Token) (output []byte) {
+	for _, s := range token.segments {
+		output = append(output, tokenToBytes(s.token)...)
+	}
+	output = append(output, []byte(fmt.Sprintf("%s/%s ", textSliceToString(token.text), token.pos))...)
+	return
+}
+
 func tokenToString(token *Token) (output string) {
 	for _, s := range token.segments {
 		output += tokenToString(s.token)

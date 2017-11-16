@@ -35,8 +35,15 @@ import (
 )
 
 const (
+	version string = "v0.10.0.44, Mount Qomolangma!"
+
 	minTokenFrequency = 2 // 仅从字典文件中读取大于等于此频率的分词
 )
+
+// GetVersion get version
+func GetVersion() string {
+	return version
+}
 
 // Segmenter 分词器结构体
 type Segmenter struct {
@@ -103,6 +110,11 @@ func (seg *Segmenter) Read(file string) error {
 		// 过滤频率太小的词
 		if frequency < minTokenFrequency {
 			continue
+		}
+		// 过滤, 降低词频
+		if len([]rune(text)) < 2 {
+			// continue
+			frequency = 2
 		}
 
 		// 将分词添加到字典中

@@ -1,6 +1,6 @@
 # gse
 
-Go 语言分词
+Go language Text Segmentation
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
@@ -13,14 +13,16 @@ Go 语言分词
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
-<a href="https://github.com/go-ego/gse/blob/master/dictionary.go">词典</a>用双数组trie（Double-Array Trie）实现，
-<a href="https://github.com/go-ego/gse/blob/master/segmenter.go">分词器</a>算法为基于词频的最短路径加动态规划。
+[简体中文](https://github.com/go-ego/gse/blob/master/README_zh.md)
 
-支持普通和搜索引擎两种分词模式，支持用户词典、词性标注，可运行<a href="https://github.com/go-ego/gse/blob/master/server/server.go">JSON RPC服务</a>。
+<a href="https://github.com/go-ego/gse/blob/master/dictionary.go">Dictionary </a> with double array trie (Double-Array Trie) to achieve,
+<a href="https://github.com/go-ego/gse/blob/master/segmenter.go">Sender </a> algorithm is the shortest path based on word frequency plus dynamic programming.
 
-分词速度<a href="https://github.com/go-ego/gse/blob/master/tools/benchmark.go">单线程</a>9MB/s，<a href="https://github.com/go-ego/gse/blob/master/tools/goroutines.go">goroutines并发</a>42MB/s（8核Macbook Pro）。
+Support common and search engine two participle mode, support user dictionary, POS tagging, run<a href="https://github.com/go-ego/gse/blob/master/server/server.go"> JSON RPC service</a>.
 
-## 安装/更新
+Text Segmentation speed<a href="https://github.com/go-ego/gse/blob/master/tools/benchmark.go"> single thread</a> 9MB/s，<a href="https://github.com/go-ego/gse/blob/master/tools/goroutines.go">goroutines concurrent</a> 42MB/s (8 nuclear Macbook Pro).
+
+## Install / update
 
 ```
 go get -u github.com/go-ego/gse
@@ -45,7 +47,7 @@ $ cd my-gse && re run
 ```
 
 
-## 使用
+## Use
 
 
 ```go
@@ -58,17 +60,17 @@ import (
 )
 
 func main() {
-	// 载入词典
+	// Load the dictionary
 	var segmenter gse.Segmenter
 	segmenter.LoadDict()
 	// segmenter.LoadDict("your gopath"+"/src/github.com/go-ego/gse/data/dict/dictionary.txt")
 
-	// 分词
-	text := []byte("中华人民共和国中央人民政府")
+	// Text Segmentation
+	text := []byte("你好世界, Hello world.")
 	segments := segmenter.Segment(text)
   
-	// 处理分词结果
-	// 支持普通模式和搜索模式两种分词，见代码中ToString函数的注释。
+	// Handle word segmentation results
+	// Support for normal mode and search mode two participle, see the comments in the code ToString function.
 	fmt.Println(gse.ToString(segments, false)) 
 }
 ```
