@@ -108,6 +108,8 @@ func main() {
 
 #### [拼音搜索的例子](https://github.com/go-ego/riot/blob/master/examples/pinyin/main.go)
 
+#### [不同字典和语言例子](https://github.com/go-ego/riot/blob/master/examples/dict/main.go)
+
 #### [benchmark](https://github.com/go-ego/riot/blob/master/examples/benchmark/benchmark.go)
 
 #### [Riot 搜索模板, 客户端和字典](https://github.com/go-ego/riot/tree/master/data)
