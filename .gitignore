@@ -2,6 +2,7 @@
 .DS_Store
 .vscode
 .idea
+
 data/data
 data/riot/riot
 data/riot/heartb/heartb
@@ -20,6 +21,7 @@ examples/pinyin_weibo/pinyin_weibo
 examples/store/store
 examples/store/index
 examples/simple/simple
+examples/simple/zh/zh
 examples/weibo/weibo
 
 # Debug files
