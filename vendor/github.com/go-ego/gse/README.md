@@ -1,6 +1,6 @@
 # gse
 
-Go language Text Segmentation
+Go efficient text segmentation; support english, chinese, japanese and other.
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->

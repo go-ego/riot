@@ -1,6 +1,6 @@
-# gse
+# [gse](https://github.com/go-ego/gse)
 
-Go 语言分词
+Go 语言高效分词, 支持英文、中文、日文等
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
@@ -70,6 +70,10 @@ func main() {
 	// 处理分词结果
 	// 支持普通模式和搜索模式两种分词，见代码中 ToString 函数的注释。
 	fmt.Println(gse.ToString(segments, false)) 
+
+	text1 := []byte("深圳地标建筑, 深圳地王大厦")
+	segments1 := seg.Segment([]byte(text1))
+	fmt.Println(gse.ToString(segments1, false)) 
 }
 ```
 ## License
