@@ -551,3 +551,60 @@ func TestSearchJp(t *testing.T) {
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
 	utils.Expect(t, "[0 15]", outputs.Docs[0].TokenSnippetLocations)
 }
+
+func TestSearchGse(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineInitOptions{
+		// Using:         1,
+		SegmenterDict: "./testdata/test_dict_jp.txt",
+		DefaultRankOptions: &types.RankOptions{
+			ReverseOrder:    true,
+			OutputOffset:    0,
+			MaxOutputs:      10,
+			ScoringCriteria: &RankByTokenProximity{},
+		},
+		IndexerInitOptions: &types.IndexerInitOptions{
+			IndexType: types.LocationsIndex,
+		},
+	})
+
+	AddDocs(&engine)
+
+	engine.IndexDocument(6, types.DocIndexData{
+		Content: "こんにちは世界, こんにちは",
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+
+	tokenData := types.TokenData{Text: "こんにちは"}
+	tokenDatas := []types.TokenData{tokenData}
+	engine.IndexDocument(7, types.DocIndexData{
+		Content: "你好世界, hello world!",
+		Tokens:  tokenDatas,
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+	docIds[6] = true
+	docIds[7] = true
+	outputs := engine.Search(types.SearchRequest{
+		Text:   "こんにちは世界",
+		DocIds: docIds,
+	})
+
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "こんにちは", outputs.Tokens[0])
+	utils.Expect(t, "世界", outputs.Tokens[1])
+	log.Println("outputs docs...", outputs.Docs)
+	utils.Expect(t, "2", len(outputs.Docs))
+
+	utils.Expect(t, "7", outputs.Docs[0].DocId)
+	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+
+	utils.Expect(t, "6", outputs.Docs[1].DocId)
+	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
+}
