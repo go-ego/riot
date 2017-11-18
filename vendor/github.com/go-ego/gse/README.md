@@ -74,6 +74,11 @@ func main() {
 	fmt.Println(gse.ToString(segments, false)) 
 }
 ```
+
+[Look at an Chinese example](https://github.com/go-ego/gse/blob/master/examples/example.go)
+
+[Look at an Japanese example](https://github.com/go-ego/gse/blob/master/examples/jp/main.go)
+
 ## License
 
 Gse is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [sego](https://github.com/huichen/sego)
