@@ -5,12 +5,12 @@
 
 N关键词的紧邻距离计算公式如下：
 
-假定第i个关键词首字节出现在文本中的位置为P_i，长度L_i，紧邻距离为
+假定第i个关键词首字节出现在文本中的位置为 P_i，长度L_i，紧邻距离为
 
   ArgMin(Sum(Abs(P_(i+1) - P_i - L_i)))
 
-具体计算过程为先取定一个P_1，计算所有P_2的可能值中令Abs(P_2 - P_1 - L1)最小，然后固定P2后依照同样的方法选择P3，P4，等等。遍历所有可能的P_1得到最小值。
+具体计算过程为先取定一个 P_1，计算所有P_2的可能值中令 Abs(P_2 - P_1 - L1) 最小，然后固定  P2 后依照同样的方法选择 P3，P4，等等。遍历所有可能的P_1得到最小值。
 
-具体实现见[core/indexer.go](/core/indexer.go)文件中computeTokenProximity函数。
+具体实现见[core/indexer.go](/core/indexer.go) 文件中 computeTokenProximity 函数。
 
-紧邻距离计算需要在索引器中保存每个分词的位置，这需要额外消耗内存，因此是默认关闭的，打开这一功能请在引擎初始化时设定 EngineInitOptions.IndexerInitOptions.IndexType为LocationsIndex。
+紧邻距离计算需要在索引器中保存每个分词的位置，这需要额外消耗内存，因此是默认关闭的，打开这一功能请在引擎初始化时设定 EngineInitOptions.IndexerInitOptions.IndexType 为 LocationsIndex。

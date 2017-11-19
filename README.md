@@ -14,7 +14,7 @@
 [简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
 
 
-* [Efficient indexing and search](/docs/zh/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
+* [Efficient indexing and search](/docs/en/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for logical search
 * Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse) concurrent word, speed 27MB / s）
 * Support the calculation of the keyword in the text [close to the distance](/docs/zh/token_proximity.md)（token proximity）
