@@ -12,12 +12,12 @@ type MyScoringFields struct {
 	someScore float32
 }
 
-// MyScoringCriteria实现了types.ScoringCriteria接口，也就是下面的Score函数
+// MyScoringCriteria 实现了 types.ScoringCriteria 接口，也就是下面的 Score 函数
 type MyScoringCriteria struct {
 }
 func (criteria MyScoringCriteria) Score(
 	doc types.IndexedDocument, fields interface{}) []float32 {
-	// 首先检查评分字段是否为MyScoringFields类型的，如果不是则返回空切片，此文档将从结果中剔除
+	// 首先检查评分字段是否为 MyScoringFields 类型的，如果不是则返回空切片，此文档将从结果中剔除
 	if reflect.TypeOf(fields) != reflect.TypeOf(MySearchFields{}) {
 		return []float32{}
 	}
@@ -25,7 +25,7 @@ func (criteria MyScoringCriteria) Score(
 	// 匹配则进行类型转换
 	myFields := fields.(MySearchFields)
 	
-	// 下面利用myFields中的数据给文档评分并返回分值
+	// 下面利用 myFields 中的数据给文档评分并返回分值
 }
 ```
 
@@ -33,4 +33,4 @@ func (criteria MyScoringCriteria) Score(
 
 当然，MyScoringCriteria的Score 函数也可以通过 docId 从硬盘或数据库读取更多文档数据用于打分，但速度要比从内存中直接读慢许多，请在内存和速度之间合适取舍。
 
-[examples/custom_scoring_criteria.go](/examples/custom_scoring_criteria.go) 中包含了一个利用自定义规则查询微博数据的例子。
+[examples/weibo/custom_scoring_criteria.go](/examples/custom_scoring_criteria.go) 中包含了一个利用自定义规则查询微博数据的例子。
