@@ -27,8 +27,8 @@ type DocIndexData struct {
 	Attri interface{}
 
 	// 文档的关键词
-	// 当Content不为空的时候，优先从Content中分词得到关键词。
-	// Tokens存在的意义在于绕过悟空内置的分词器，在引擎外部
+	// 当Content不为空的时候，优先从 Content 中分词得到关键词。
+	// Tokens 存在的意义在于绕过 riot 内置的分词器，在引擎外部
 	// 进行分词和预处理。
 	// Tokens []*TokenData
 	Tokens []TokenData

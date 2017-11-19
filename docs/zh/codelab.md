@@ -97,7 +97,7 @@ searcher.IndexDocument(docId, types.DocIndexData{
 文档的 docId 必须大于 0 且唯一，对微博来说可以直接用微博的 ID。riot 引擎允许你加入三种索引数据：
 
 1. 文档的正文（content），会被分词为关键词（tokens）加入索引。
-2. 文档的关键词（tokens）。当正文为空的时候，允许用户绕过悟空内置的分词器直接输入文档关键词，这使得在引擎外部进行文档分词成为可能。
+2. 文档的关键词（tokens）。当正文为空的时候，允许用户绕过 riot 内置的分词器直接输入文档关键词，这使得在引擎外部进行文档分词成为可能。
 3. 文档的属性标签（labels），比如微博的作者，类别等。标签并不出现在正文中。
 4. 自定义评分字段（scoring fields），这允许你给文档添加 **任意类型** 、 **任意结构** 的数据用于排序。“搜索”一节会进一步介绍自定义评分字段的用法。
 
@@ -168,7 +168,7 @@ response := searcher.Search(types.SearchRequest{
 })
 ```
 
-其中，Text是输入的搜索短语（必须是UTF-8格式），会被分词为关键词。和索引时相同，riot 引擎允许绕过内置的分词器直接输入关键词和文档标签，见 types.SearchRequest 结构体的注释。RankOptions定义了排序选项。WeiboScoringCriteria 就是我们在上面定义的评分规则。另外你也可以通过 OutputOffset 和 MaxOutputs 参数控制分页输出。搜索结果保存在 response 变量中，具体内容见 [types/search_response.go](/types/search_response.go)文件中定义的SearchResponse 结构体，比如这个结构体返回了关键词出现在文档中的位置，可以用来生成文档的摘要。
+其中，Text是输入的搜索短语（必须是UTF-8格式），会被分词为关键词。和索引时相同，riot 引擎允许绕过内置的分词器直接输入关键词和文档标签，见 types.SearchRequest 结构体的注释。RankOptions 定义了排序选项。WeiboScoringCriteria 就是我们在上面定义的评分规则。另外你也可以通过 OutputOffset 和 MaxOutputs 参数控制分页输出。搜索结果保存在 response 变量中，具体内容见 [types/search_response.go](/types/search_response.go)文件中定义的SearchResponse 结构体，比如这个结构体返回了关键词出现在文档中的位置，可以用来生成文档的摘要。
 
 ## 显示
 
