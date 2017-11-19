@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.176, Mount Qomolangma!"
+	version string = "v0.10.0.188, Mount Qomolangma!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000

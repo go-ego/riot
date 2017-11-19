@@ -608,3 +608,77 @@ func TestSearchGse(t *testing.T) {
 	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
 	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
 }
+
+func TestSearchLogic(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineInitOptions{
+		SegmenterDict: "./testdata/test_dict_jp.txt",
+		DefaultRankOptions: &types.RankOptions{
+			ReverseOrder:    true,
+			OutputOffset:    0,
+			MaxOutputs:      10,
+			ScoringCriteria: &RankByTokenProximity{},
+		},
+		IndexerInitOptions: &types.IndexerInitOptions{
+			IndexType: types.LocationsIndex,
+		},
+	})
+
+	AddDocs(&engine)
+
+	engine.IndexDocument(6, types.DocIndexData{
+		Content: "こんにちは世界, こんにちは",
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+
+	tokenData := types.TokenData{Text: "こんにちは"}
+	tokenDatas := []types.TokenData{tokenData}
+	engine.IndexDocument(7, types.DocIndexData{
+		Content: "你好世界, hello world!",
+		Tokens:  tokenDatas,
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+
+	engine.IndexDocument(8, types.DocIndexData{
+		Content: "你好世界, hello world!",
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+
+	engine.IndexDocument(9, types.DocIndexData{
+		Content: "你好世界, hello!",
+		Fields:  ScoringFields{1, 2, 3},
+	}, false)
+
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	for index := 0; index < 10; index++ {
+		docIds[uint64(index)] = true
+	}
+
+	strArr := []string{"こんにちは"}
+	outputs := engine.Search(types.SearchRequest{
+		Text:   "こんにちは世界",
+		DocIds: docIds,
+		Logic: types.Logic{
+			ShouldLabels: true,
+			LogicExpression: types.LogicExpression{
+				NotInLabels: strArr,
+			},
+		},
+	})
+
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "こんにちは", outputs.Tokens[0])
+	utils.Expect(t, "世界", outputs.Tokens[1])
+	log.Println("outputs docs...", outputs.Docs)
+	utils.Expect(t, "2", len(outputs.Docs))
+
+	utils.Expect(t, "9", outputs.Docs[0].DocId)
+	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+
+	utils.Expect(t, "8", outputs.Docs[1].DocId)
+	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocations)
+}
