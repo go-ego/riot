@@ -1,9 +1,9 @@
-docker支持
+docker 支持
 ===
 
-## 从源代码 build docker镜像
+## 从源代码 build docker 镜像
 
-1、请从[这里](https://github.com/go-ego/riot/blob/43f20b4c0921cc704cf41fe8653e66a3fcbb7e31/testdata/weibo_data.txt?raw=true)下载 weibo_data.txt，放在 testdata/目录下
+1、请从[这里](https://github.com/go-ego/riot/blob/43f20b4c0921cc704cf41fe8653e66a3fcbb7e31/testdata/weibo_data.txt?raw=true)下载 weibo_data.txt，放在 testdata/目录下; 可省略
 
 2、进入 examples/codelab 目录
 
@@ -15,7 +15,7 @@ docker支持
 
 	docker run -d -p 8080:8080 unmerged/riot-codelab
 
-在浏览器中打开 localhost:8080 即可打开搜索页面
+在浏览器中打开 `localhost:8080` 即可打开搜索页面
 
 ## 直接从 docker hub 下载镜像
 
