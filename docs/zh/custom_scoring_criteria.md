@@ -33,4 +33,4 @@ func (criteria MyScoringCriteria) Score(
 
 当然，MyScoringCriteria的Score 函数也可以通过 docId 从硬盘或数据库读取更多文档数据用于打分，但速度要比从内存中直接读慢许多，请在内存和速度之间合适取舍。
 
-[examples/weibo/custom_scoring_criteria.go](/examples/custom_scoring_criteria.go) 中包含了一个利用自定义规则查询微博数据的例子。
+[examples/weibo/custom_scoring_criteria.go](/examples/weibo/custom_scoring_criteria.go) 中包含了一个利用自定义规则查询微博数据的例子。

@@ -33,4 +33,4 @@ Document MyScoringFields data through riot.Engine IndexDocument function passed 
 
 Of course, the Score function of MyScoringCriteria can also read more document data from the hard disk or database through docId for scoring, but the speed is much slower than directly reading from memory. Please choose between memory and speed.
 
-[examples/weibo/custom_scoring_criteria.go](/examples/custom_scoring_criteria.go)   contains an example of using custom rules to query Weibo data.
+[examples/weibo/custom_scoring_criteria.go](/examples/weibo/custom_scoring_criteria.go)   contains an example of using custom rules to query Weibo data.
