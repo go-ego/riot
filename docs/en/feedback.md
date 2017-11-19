@@ -1,3 +1,3 @@
-如果你想使用这个引擎，除了需要遵守 Apache License v2 外没有任何限制，欢迎商业应用。
+If you want to use this engine, in addition to comply with the Apache License v2 without any restrictions, welcomed the commercial application.
 
-如果你想了解开发规划或者和我讨论这个引擎，请发信给我 vzvway [at] gmail [dot] com
+If you want to understand development planning or discuss this engine with me, send me a letter vzvway [at] gmail [dot] com.

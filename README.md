@@ -17,14 +17,14 @@
 * [Efficient indexing and search](/docs/en/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for logical search
 * Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse) concurrent word, speed 27MB / s）
-* Support the calculation of the keyword in the text [close to the distance](/docs/zh/token_proximity.md)（token proximity）
-* Support calculation [BM25 correlation](/docs/zh/bm25.md)
-* Support [custom scoring field and scoring rules](/docs/zh/custom_scoring_criteria.md)
-* Support [add online, delete index](/docs/zh/realtime_indexing.md)
+* Support the calculation of the keyword in the text [close to the distance](/docs/en/token_proximity.md)（token proximity）
+* Support calculation [BM25 correlation](/docs/en/bm25.md)
+* Support [custom scoring field and scoring rules](/docs/en/custom_scoring_criteria.md)
+* Support [add online, delete index](/docs/en/realtime_indexing.md)
 * Support heartbeat
-* Support multiple [persistent storage](/docs/zh/persistent_storage.md)
+* Support multiple [persistent storage](/docs/en/persistent_storage.md)
 * Support distributed index and search
-* Can be achieved [distributed index and search](/docs/zh/distributed_indexing_and_search.md)
+* Can be achieved [distributed index and search](/docs/en/distributed_indexing_and_search.md)
 
 * [Look at Word segmentation rules](https://github.com/go-ego/riot/blob/master/docs/en/segmenter.md)
 
