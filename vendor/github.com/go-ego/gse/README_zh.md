@@ -13,12 +13,14 @@ Go 语言高效分词, 支持英文、中文、日文等
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
-<a href="https://github.com/go-ego/gse/blob/master/dictionary.go">词典</a>用双数组trie（Double-Array Trie）实现，
+<a href="https://github.com/go-ego/gse/blob/master/dictionary.go">词典</a>用双数组 trie（Double-Array Trie）实现，
 <a href="https://github.com/go-ego/gse/blob/master/segmenter.go">分词器</a>算法为基于词频的最短路径加动态规划。
 
-支持普通和搜索引擎两种分词模式，支持用户词典、词性标注，可运行<a href="https://github.com/go-ego/gse/blob/master/server/server.go">JSON RPC服务</a>。
+支持普通和搜索引擎两种分词模式，支持用户词典、词性标注，可运行<a href="https://github.com/go-ego/gse/blob/master/server/server.go"> JSON RPC 服务</a>。
 
-分词速度<a href="https://github.com/go-ego/gse/blob/master/tools/benchmark.go">单线程</a>9MB/s，<a href="https://github.com/go-ego/gse/blob/master/tools/goroutines.go">goroutines并发</a>42MB/s（8核Macbook Pro）。
+分词速度<a href="https://github.com/go-ego/gse/blob/master/tools/benchmark.go">单线程</a> 9MB/s，<a href="https://github.com/go-ego/gse/blob/master/tools/goroutines.go">goroutines 并发</a> 42MB/s（8核 Macbook Pro）。
+
+QQ 群: 120563750
 
 ## 安装/更新
 

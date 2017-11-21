@@ -389,29 +389,14 @@ func (engine *Engine) Segment(content string) (keywords []string) {
 			keywords = append(keywords, token)
 		}
 	}
+
 	return
 }
 
-// Search find the document that satisfies the search criteria.
-// This function is thread safe
-// 查找满足搜索条件的文档，此函数线程安全
-func (engine *Engine) Search(request types.SearchRequest) (output types.SearchResponse) {
-	if !engine.initialized {
-		log.Fatal("The engine must be initialized first")
-	}
-
-	var rankOptions types.RankOptions
-	if request.RankOptions == nil {
-		rankOptions = *engine.initOptions.DefaultRankOptions
-	} else {
-		rankOptions = *request.RankOptions
-	}
-	if rankOptions.ScoringCriteria == nil {
-		rankOptions.ScoringCriteria = engine.initOptions.DefaultRankOptions.ScoringCriteria
-	}
-
+// Tokens get the engine tokens
+func (engine *Engine) Tokens(request types.SearchRequest) (tokens []string) {
 	// 收集关键词
-	tokens := []string{}
+	// tokens := []string{}
 	if request.Text != "" {
 		request.Text = strings.ToLower(request.Text)
 		if engine.initOptions.NotUsingSegmenter {
@@ -438,6 +423,29 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 		for _, t := range request.Tokens {
 			tokens = append(tokens, t)
 		}
+	}
+
+	return
+}
+
+// Search find the document that satisfies the search criteria.
+// This function is thread safe
+// 查找满足搜索条件的文档，此函数线程安全
+func (engine *Engine) Search(request types.SearchRequest) (output types.SearchResponse) {
+	if !engine.initialized {
+		log.Fatal("The engine must be initialized first")
+	}
+
+	tokens := engine.Tokens(request)
+
+	var rankOptions types.RankOptions
+	if request.RankOptions == nil {
+		rankOptions = *engine.initOptions.DefaultRankOptions
+	} else {
+		rankOptions = *request.RankOptions
+	}
+	if rankOptions.ScoringCriteria == nil {
+		rankOptions.ScoringCriteria = engine.initOptions.DefaultRankOptions.ScoringCriteria
 	}
 
 	// 建立排序器返回的通信通道
