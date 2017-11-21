@@ -63,4 +63,4 @@
 - [FIX] Adjust frequency and update load dictionary, fix gse segmentater and other
 
 
-See Commits for more details.
+See Commits for more details, from Oct 23 onwards, Oct 23 used to be the base code.

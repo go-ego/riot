@@ -23,7 +23,7 @@
 * Support [add online, delete index](/docs/en/realtime_indexing.md)
 * Support heartbeat
 * Support multiple [persistent storage](/docs/en/persistent_storage.md)
-* Support distributed index and search
+* Support [distributed index and search](https://github.com/go-ego/riot/tree/master/data)
 * Can be achieved [distributed index and search](/docs/en/distributed_indexing_and_search.md)
 
 * [Look at Word segmentation rules](https://github.com/go-ego/riot/blob/master/docs/en/segmenter.md)

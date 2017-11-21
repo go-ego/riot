@@ -21,7 +21,7 @@
 * 支持[在线添加、删除索引](/docs/zh/realtime_indexing.md)
 * 支持多种[持久存储](/docs/zh/persistent_storage.md)
 * 支持 heartbeat
-* 支持分布式索引和搜索
+* 支持[分布式索引和搜索](https://github.com/go-ego/riot/tree/master/data)
 * 可实现[分布式索引和搜索](/docs/zh/distributed_indexing_and_search.md)
 * 采用对商业应用友好的[Apache License v2](/license.txt)发布
 
