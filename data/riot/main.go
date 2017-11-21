@@ -62,6 +62,6 @@ func main() {
 
 	http.HandleFunc("/search", rhttp.Search)
 	http.HandleFunc("/dist", rhttp.WgDist)
-	log.Println("服务器 8080 启动...")
+	log.Println("listen and serve on 8080...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
