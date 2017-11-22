@@ -86,6 +86,7 @@ func main() {
 	speaker early`
 	text2 := `Google is testing another Search results layout with 
 	rounded cards, new colors, and the 4 mysterious colored dots again`
+	
 	// Add the document to the index, docId starts at 1
 	searcher.IndexDocument(1, types.DocIndexData{Content: text}, false)
 	searcher.IndexDocument(2, types.DocIndexData{Content: text1}, false)

@@ -87,6 +87,7 @@ func main() {
 	text := "此次百度收购将成中国互联网最大并购"
 	text1 := "百度宣布拟全资收购91无线业务"
 	text2 := "百度是中国最大的搜索引擎"
+	
 	// 将文档加入索引，docId 从1开始
 	searcher.IndexDocument(1, types.DocIndexData{Content: text}, false)
 	searcher.IndexDocument(2, types.DocIndexData{Content: text1}, false)
