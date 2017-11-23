@@ -15,7 +15,7 @@
 
 /*
 
-package gse Go 语言分词
+package gse Go efficient text segmentation, Go 语言分词
 */
 
 package gse
@@ -35,7 +35,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.48, Mount Qomolangma!"
+	version string = "v0.10.0.51, Mount Qomolangma!"
 
 	minTokenFrequency = 2 // 仅从字典文件中读取大于等于此频率的分词
 )

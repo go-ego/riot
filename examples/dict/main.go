@@ -48,10 +48,14 @@ func dictJp() {
 	})
 	defer searcher2.Close()
 
+	text := "此次百度收购将成中国互联网最大并购"
+	text1 := "百度宣布拟全资收购91无线业务"
+	text2 := "こんにちは世界"
+
 	// 将文档加入索引，docId 从1开始
-	searcher2.IndexDocument(1, types.DocIndexData{Content: "此次百度收购将成中国互联网最大并购"}, false)
-	searcher2.IndexDocument(2, types.DocIndexData{Content: "百度宣布拟全资收购91无线业务"}, false)
-	searcher2.IndexDocument(3, types.DocIndexData{Content: "こんにちは世界"}, false)
+	searcher2.IndexDocument(1, types.DocIndexData{Content: text}, false)
+	searcher2.IndexDocument(2, types.DocIndexData{Content: text1}, false)
+	searcher2.IndexDocument(3, types.DocIndexData{Content: text2}, false)
 
 	// 等待索引刷新完毕
 	searcher2.FlushIndex()

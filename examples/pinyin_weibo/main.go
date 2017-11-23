@@ -76,9 +76,12 @@ func indexWeibo() {
 			tokenDatas = append(tokenDatas, tokenData)
 		}
 
-		searcher.IndexDocument(index, types.DocIndexData{Tokens: tokenDatas, Fields: string(buf)}, false)
+		index1 := types.DocIndexData{Tokens: tokenDatas, Fields: string(buf)}
+		index2 := types.DocIndexData{Content: string(buf), Tokens: tokenDatas}
+
+		searcher.IndexDocument(index, index1, false)
 		index++
-		searcher.IndexDocument(index, types.DocIndexData{Content: string(buf), Tokens: tokenDatas}, false)
+		searcher.IndexDocument(index, index2, false)
 		index++
 	}
 

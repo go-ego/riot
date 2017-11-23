@@ -59,16 +59,10 @@ var (
 	// NumShards shards number
 	NumShards       = 2
 	numQueryThreads = runtime.NumCPU() / NumShards
+	t0              time.Time
 )
 
-func main() {
-	// 解析命令行参数
-	flag.Parse()
-	searchQueries = strings.Split(*queries, ",")
-	log.Printf("待搜索的关键词为\"%s\"", searchQueries)
-
-	// 初始化
-	tBeginInit := time.Now()
+func initEngine() {
 	searcher.Init(types.EngineInitOptions{
 		SegmenterDict: *dictionaries,
 		StopTokenFile: *stopTokenFile,
@@ -81,9 +75,9 @@ func main() {
 		StorageFolder:      *persistentStorageFolder,
 		StorageShards:      *persistentStorageShards,
 	})
-	tEndInit := time.Now()
-	defer searcher.Close()
+}
 
+func openFile() {
 	// 打开将要搜索的文件
 	file, err := os.Open(*weiboData)
 	if err != nil {
@@ -112,7 +106,7 @@ func main() {
 	log.Print("文件行数", len(lines))
 
 	// 记录时间
-	t0 := time.Now()
+	t0 = time.Now()
 
 	// 打开处理器profile文件
 	if *cpuprofile != "" {
@@ -140,9 +134,9 @@ func main() {
 			}
 		}
 	}
-	searcher.FlushIndex()
-	log.Print("加入的索引总数", searcher.NumTokenIndexAdded())
+}
 
+func deleteDoc() {
 	// 记录时间
 	t1 := time.Now()
 	log.Printf("建立索引花费时间 %v", t1.Sub(t0))
@@ -158,21 +152,9 @@ func main() {
 
 	t3 := time.Now()
 	log.Printf("删除 %d 条索引花费时间 %v", *numDeleteDocs, t3.Sub(t2))
+}
 
-	// 手动做 GC 防止影响性能测试
-	time.Sleep(time.Second)
-	runtime.GC()
-
-	// 写入内存profile文件
-	if *memprofile != "" {
-		f, err := os.Create(*memprofile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		pprof.WriteHeapProfile(f)
-		defer f.Close()
-	}
-
+func searchQu() {
 	t4 := time.Now()
 	done := make(chan bool)
 	recordResponse := recordResponseLock{}
@@ -198,34 +180,77 @@ func main() {
 		log.Printf("关键词 [%s] 共搜索到 %d 个相关文档", keyword, count)
 	}
 	recordResponse.RUnlock()
+}
+
+func useStore(tBeginInit, tEndInit time.Time) {
+	searcher.Close()
+	t6 := time.Now()
+	searcher1 := riot.Engine{}
+	searcher1.Init(types.EngineInitOptions{
+		SegmenterDict: *dictionaries,
+		StopTokenFile: *stopTokenFile,
+		IndexerInitOptions: &types.IndexerInitOptions{
+			IndexType: *indexType,
+		},
+		NumShards:          NumShards,
+		DefaultRankOptions: &options,
+		UseStorage:         *usePersistent,
+		StorageFolder:      *persistentStorageFolder,
+		StorageEngine:      *storageEngine,
+		StorageShards:      *persistentStorageShards,
+	})
+	defer searcher1.Close()
+	t7 := time.Now()
+	t := t7.Sub(t6).Seconds() - tEndInit.Sub(tBeginInit).Seconds()
+	log.Print("从持久存储加入的索引总数", searcher1.NumTokenIndexAdded())
+	log.Printf("从持久存储建立索引花费时间 %v 秒", t)
+	log.Printf("从持久存储建立索引速度每秒添加 %f 百万个索引",
+		float64(searcher1.NumTokenIndexAdded())/t/(1000000))
+}
+
+func main() {
+	// 解析命令行参数
+	flag.Parse()
+	searchQueries = strings.Split(*queries, ",")
+	log.Printf("待搜索的关键词为\"%s\"", searchQueries)
+
+	// 初始化
+	tBeginInit := time.Now()
+
+	initEngine()
+
+	tEndInit := time.Now()
+	defer searcher.Close()
+
+	openFile()
+
+	searcher.FlushIndex()
+	log.Print("加入的索引总数", searcher.NumTokenIndexAdded())
+
+	deleteDoc()
+
+	// 手动做 GC 防止影响性能测试
+	time.Sleep(time.Second)
+	runtime.GC()
+
+	// 写入内存profile文件
+	if *memprofile != "" {
+		f, err := os.Create(*memprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.WriteHeapProfile(f)
+		defer f.Close()
+	}
+
+	searchQu()
 
 	if *usePersistent {
-		searcher.Close()
-		t6 := time.Now()
-		searcher1 := riot.Engine{}
-		searcher1.Init(types.EngineInitOptions{
-			SegmenterDict: *dictionaries,
-			StopTokenFile: *stopTokenFile,
-			IndexerInitOptions: &types.IndexerInitOptions{
-				IndexType: *indexType,
-			},
-			NumShards:          NumShards,
-			DefaultRankOptions: &options,
-			UseStorage:         *usePersistent,
-			StorageFolder:      *persistentStorageFolder,
-			StorageEngine:      *storageEngine,
-			StorageShards:      *persistentStorageShards,
-		})
-		defer searcher1.Close()
-		t7 := time.Now()
-		t := t7.Sub(t6).Seconds() - tEndInit.Sub(tBeginInit).Seconds()
-		log.Print("从持久存储加入的索引总数", searcher1.NumTokenIndexAdded())
-		log.Printf("从持久存储建立索引花费时间 %v 秒", t)
-		log.Printf("从持久存储建立索引速度每秒添加 %f 百万个索引",
-			float64(searcher1.NumTokenIndexAdded())/t/(1000000))
-
+		useStore(tBeginInit, tEndInit)
 	}
 	//os.RemoveAll(*persistentStorageFolder)
+
+	log.Println("end...")
 }
 
 type recordResponseLock struct {

@@ -70,7 +70,8 @@ func main() {
 	segments := segmenter.Segment(text)
   
 	// Handle word segmentation results
-	// Support for normal mode and search mode two participle, see the comments in the code ToString function.
+	// Support for normal mode and search mode two participle,
+	// see the comments in the code ToString function.
 	fmt.Println(gse.ToString(segments, false)) 
 }
 ```

@@ -21,10 +21,10 @@
 			"revisionTime": "2017-09-07T20:20:52Z"
 		},
 		{
-			"checksumSHA1": "JW8arAz1VB/JR70geWq7b2KDymc=",
+			"checksumSHA1": "ZvGeN4O16MBzSPlq5tJyuj0N6wE=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "3b57d2fc988219f8f22dd0e33459ca7443b59200",
-			"revisionTime": "2017-11-14T11:24:37Z"
+			"revision": "bd9447c51360d3a3ca6c206be5bc2e42eba4c737",
+			"revisionTime": "2017-11-22T02:35:06Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
@@ -75,10 +75,10 @@
 			"revisionTime": "2017-10-21T14:50:48Z"
 		},
 		{
-			"checksumSHA1": "f7wIXmOspAWbTA1Rc9QhUgy3iCE=",
+			"checksumSHA1": "Smg+8jraEeyehabAltCVitgS8GQ=",
 			"path": "github.com/go-ego/gse",
-			"revision": "89de1c35652f04a8e41e48e999b6884ce05c6475",
-			"revisionTime": "2017-11-20T15:00:20Z"
+			"revision": "edfd8926b933369445dfd04d5418dc4770d89f36",
+			"revisionTime": "2017-11-22T15:17:03Z"
 		},
 		{
 			"checksumSHA1": "WHaHGer23rilcJn9cr2k1HZWp18=",
