@@ -43,7 +43,7 @@ type Ranker struct {
 }
 
 // Init init ranker
-func (ranker *Ranker) Init(onlyID bool) {
+func (ranker *Ranker) Init(onlyID ...bool) {
 	if ranker.initialized == true {
 		log.Fatal("排序器不能初始化两次")
 	}
@@ -52,8 +52,11 @@ func (ranker *Ranker) Init(onlyID bool) {
 	ranker.lock.fields = make(map[uint64]interface{})
 	ranker.lock.docs = make(map[uint64]bool)
 
-	gOnlyID = onlyID
-	if !onlyID {
+	if len(onlyID) > 0 {
+		gOnlyID = onlyID[0]
+	}
+
+	if !gOnlyID {
 		// new
 		ranker.lock.content = make(map[uint64]string)
 		ranker.lock.attri = make(map[uint64]interface{})
