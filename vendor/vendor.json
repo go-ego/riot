@@ -119,14 +119,14 @@
 		{
 			"checksumSHA1": "UuwHornIODuEq7fYnsZwdVgERLk=",
 			"path": "github.com/shirou/gopsutil/mem",
-			"revision": "a8bc26299477e53c4ca89f7ec60160a74d4c0890",
-			"revisionTime": "2017-11-12T16:40:41Z"
+			"revision": "bfe3c2e8f406bf352bc8df81f98c752224867349",
+			"revisionTime": "2017-11-21T12:01:14Z"
 		},
 		{
-			"checksumSHA1": "yHbyLpI/Meh0DGrmi8x6FrDxxUY=",
+			"checksumSHA1": "spMeORRgS1azN91KYqJgoxBmhMw=",
 			"path": "github.com/syndtr/goleveldb/leveldb",
-			"revision": "549b6d6b1c0419617182954dd77770f2e2685ed5",
-			"revisionTime": "2017-11-05T03:26:30Z"
+			"revision": "adf24ef3f94bd13ec4163060b21a5678f22b429b",
+			"revisionTime": "2017-11-20T00:00:13Z"
 		},
 		{
 			"checksumSHA1": "EKIow7XkgNdWvR/982ffIZxKG8Y=",

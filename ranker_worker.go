@@ -47,8 +47,13 @@ type rankerRemoveDocRequest struct {
 func (engine *Engine) rankerAddDocWorker(shard int) {
 	for {
 		request := <-engine.rankerAddDocChannels[shard]
-		// engine.rankers[shard].AddDoc(request.docId, request.fields)
+		if engine.initOptions.OnlyID {
+			engine.rankers[shard].AddDoc(request.docId, request.fields)
+			return
+		}
+		// } else {
 		engine.rankers[shard].AddDoc(request.docId, request.fields, request.content, request.attri)
+		// }
 	}
 }
 

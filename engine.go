@@ -246,7 +246,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 		engine.indexers[shard].Init(*options.IndexerInitOptions)
 
 		engine.rankers = append(engine.rankers, core.Ranker{})
-		engine.rankers[shard].Init()
+		engine.rankers[shard].Init(options.OnlyID)
 	}
 
 	// 初始化分词器通道
