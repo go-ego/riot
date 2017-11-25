@@ -238,8 +238,8 @@ func IsChineseChar(str string) bool {
 	return false
 }
 
-// PinyinN 汉字转拼音，支持多音字模式.
-func PinyinN(s string, a Args) [][]string {
+// HanPinyin 汉字转拼音，支持多音字模式.
+func HanPinyin(s string, a Args) [][]string {
 	pys := [][]string{}
 	for _, r := range s {
 		py := SinglePinyin(r, a)

@@ -15,10 +15,10 @@
 			"revisionTime": "2016-09-24T22:28:19Z"
 		},
 		{
-			"checksumSHA1": "Ac0sHflTyYX4PmgBEJ+POSTyd5o=",
+			"checksumSHA1": "lbE4q2dpUgue10EEx8eutP36vzo=",
 			"path": "github.com/boltdb/bolt",
-			"revision": "fa5367d20c994db73282594be0146ab221657943",
-			"revisionTime": "2017-09-07T20:20:52Z"
+			"revision": "9da31745363232bc1e27dbab3569e77383a51585",
+			"revisionTime": "2017-11-20T01:03:07Z"
 		},
 		{
 			"checksumSHA1": "ZvGeN4O16MBzSPlq5tJyuj0N6wE=",
@@ -69,10 +69,10 @@
 			"revisionTime": "2017-10-11T12:38:23Z"
 		},
 		{
-			"checksumSHA1": "9EFduD0SUHsqEYNcf9A3CwpCAs4=",
+			"checksumSHA1": "BR3dxYEHzYmTpNAAh63m5KCvPRs=",
 			"path": "github.com/go-ego/gpy",
-			"revision": "66bb7e1b2fd0bc98832db09ac0988657c05d7baf",
-			"revisionTime": "2017-10-21T14:50:48Z"
+			"revision": "f56e8e29d13b730b1fe359314fb7b1565d2949a4",
+			"revisionTime": "2017-11-25T11:42:09Z"
 		},
 		{
 			"checksumSHA1": "Smg+8jraEeyehabAltCVitgS8GQ=",
