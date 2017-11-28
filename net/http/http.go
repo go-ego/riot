@@ -35,7 +35,7 @@ var (
 	searcher = com.Searcher
 )
 
-// Post http, params is url.Values type
+// Post http post, params is url.Values type
 func Post(apiUrl string, params url.Values) (rs []byte, err error) {
 	c := &http.Client{
 		Timeout: 1000 * time.Millisecond,

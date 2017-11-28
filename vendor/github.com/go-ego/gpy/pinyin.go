@@ -9,9 +9,14 @@ import (
 
 // Meta
 const (
-	Version = "0.12.0"
+	version = "0.10.0.29"
 	// License   = "MIT"
 )
+
+// GetVersion get version
+func GetVersion() string {
+	return version
+}
 
 // 拼音风格(推荐)
 const (
@@ -39,29 +44,33 @@ const (
 	FINALS_TONE2 = FinalsTone2
 )
 
-// 声母表
-var initialArray = strings.Split(
-	"b,p,m,f,d,t,n,l,g,k,h,j,q,x,r,zh,ch,sh,z,c,s",
-	",",
+var (
+	// 声母表
+	initialArray = strings.Split(
+		"b,p,m,f,d,t,n,l,g,k,h,j,q,x,r,zh,ch,sh,z,c,s",
+		",",
+	)
+
+	// 所有带声调的字符
+	rePhoneticSymbolSource = func(m map[string]string) string {
+		s := ""
+		for k := range m {
+			s = s + k
+		}
+		return s
+	}(phoneticSymbol)
 )
 
-// 所有带声调的字符
-var rePhoneticSymbolSource = func(m map[string]string) string {
-	s := ""
-	for k := range m {
-		s = s + k
-	}
-	return s
-}(phoneticSymbol)
+var (
+	// 匹配带声调字符的正则表达式
+	rePhoneticSymbol = regexp.MustCompile("[" + rePhoneticSymbolSource + "]")
 
-// 匹配带声调字符的正则表达式
-var rePhoneticSymbol = regexp.MustCompile("[" + rePhoneticSymbolSource + "]")
+	// 匹配使用数字标识声调的字符的正则表达式
+	reTone2 = regexp.MustCompile("([aeoiuvnm])([1-4])$")
 
-// 匹配使用数字标识声调的字符的正则表达式
-var reTone2 = regexp.MustCompile("([aeoiuvnm])([1-4])$")
-
-// 匹配 Tone2 中标识韵母声调的正则表达式
-var reTone3 = regexp.MustCompile("^([a-z]+)([1-4])([a-z]*)$")
+	// 匹配 Tone2 中标识韵母声调的正则表达式
+	reTone3 = regexp.MustCompile("^([a-z]+)([1-4])([a-z]*)$")
+)
 
 // Args 配置信息
 type Args struct {
@@ -74,28 +83,31 @@ type Args struct {
 	Fallback func(r rune, a Args) []string
 }
 
-// Style 默认配置：风格
-var Style = Normal
+var (
+	// Style 默认配置：风格
+	Style = Normal
 
-// Heteronym 默认配置：是否启用多音字模式
-var Heteronym = false
+	// Heteronym 默认配置：是否启用多音字模式
+	Heteronym = false
 
-// Separator 默认配置： `Slug` 中 Join 所用的分隔符
-var Separator = "-"
+	// Separator 默认配置： `Slug` 中 Join 所用的分隔符
+	Separator = "-"
 
-// Fallback 默认配置: 如何处理没有拼音的字符(忽略这个字符)
-var Fallback = func(r rune, a Args) []string {
-	return []string{}
-}
+	// Fallback 默认配置: 如何处理没有拼音的字符(忽略这个字符)
+	Fallback = func(r rune, a Args) []string {
+		return []string{}
+	}
 
-var finalExceptionsMap = map[string]string{
-	"ū": "ǖ",
-	"ú": "ǘ",
-	"ǔ": "ǚ",
-	"ù": "ǜ",
-}
-var reFinalExceptions = regexp.MustCompile("^(j|q|x)(ū|ú|ǔ|ù)$")
-var reFinal2Exceptions = regexp.MustCompile("^(j|q|x)u(\\d?)$")
+	finalExceptionsMap = map[string]string{
+		"ū": "ǖ",
+		"ú": "ǘ",
+		"ǔ": "ǚ",
+		"ù": "ǜ",
+	}
+
+	reFinalExceptions  = regexp.MustCompile("^(j|q|x)(ū|ú|ǔ|ù)$")
+	reFinal2Exceptions = regexp.MustCompile("^(j|q|x)u(\\d?)$")
+)
 
 // NewArgs 返回包含默认配置的 `Args`
 func NewArgs() Args {
