@@ -66,8 +66,11 @@ func (dict *Dictionary) addToken(token Token) {
 // lookupTokens 在词典中查找和字元组words可以前缀匹配的所有分词
 // 返回值为找到的分词数
 func (dict *Dictionary) lookupTokens(words []Text, tokens []*Token) (numOfTokens int) {
-	var id, value int
-	var err error
+	var (
+		id, value int
+		err       error
+	)
+
 	for _, word := range words {
 		id, err = dict.trie.Jump(word, id)
 		if err != nil {
@@ -79,5 +82,6 @@ func (dict *Dictionary) lookupTokens(words []Text, tokens []*Token) (numOfTokens
 			numOfTokens++
 		}
 	}
+
 	return
 }

@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: golang:1.9.1
+      - image: golang:1.9.2
     working_directory: /go/src/github.com/go-ego/cedar
     steps:
       - checkout

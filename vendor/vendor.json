@@ -23,8 +23,8 @@
 		{
 			"checksumSHA1": "6a1NxjoKJZeyhWaYDM8DYE7chYU=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "ee1bfd6fcef4b9c10149e19eb595f30f7c4fb31e",
-			"revisionTime": "2017-11-28T05:12:52Z"
+			"revision": "bc45f5c6d940c6d034ad3ba66f4b91de0c8488fd",
+			"revisionTime": "2017-11-28T06:06:52Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
@@ -63,22 +63,22 @@
 			"revisionTime": "2017-05-02T03:43:17Z"
 		},
 		{
-			"checksumSHA1": "Zxs05+4l/rgSxFlncFPTUoHPoH0=",
+			"checksumSHA1": "PFL/DjxC68DvAUkGhNwyZroXzMY=",
 			"path": "github.com/go-ego/cedar",
-			"revision": "5ebe674aeba18c740e803ec8b5c06369159e370e",
-			"revisionTime": "2017-10-11T12:38:23Z"
+			"revision": "9282d612ae50d377c6e071784af7768c95c498f1",
+			"revisionTime": "2017-11-29T09:21:30Z"
 		},
 		{
-			"checksumSHA1": "y8+PyFph9s7z/Te6OxctJoXG2Co=",
+			"checksumSHA1": "SUBP+NvM6E6LxMZzrx+Z4xyfAnU=",
 			"path": "github.com/go-ego/gpy",
-			"revision": "4c891fd5ff0c2fc18ded08b6f19e46888edbeaf4",
-			"revisionTime": "2017-11-28T09:26:25Z"
+			"revision": "725ca444e4a75069571c50e7cd8401a85b427010",
+			"revisionTime": "2017-11-29T08:51:34Z"
 		},
 		{
-			"checksumSHA1": "Smg+8jraEeyehabAltCVitgS8GQ=",
+			"checksumSHA1": "xppMMsb4EUeHYzmXQE1zateETMs=",
 			"path": "github.com/go-ego/gse",
-			"revision": "edfd8926b933369445dfd04d5418dc4770d89f36",
-			"revisionTime": "2017-11-22T15:17:03Z"
+			"revision": "56f813513c8a5fee38a0883c3419e9f500a49ea9",
+			"revisionTime": "2017-11-29T09:25:41Z"
 		},
 		{
 			"checksumSHA1": "WHaHGer23rilcJn9cr2k1HZWp18=",

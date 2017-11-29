@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This document explains how to contribute changes to the Ego project. It assumes you have followed the README.md and [API Document](https://github.com/go-ego/re/blob/master/docs/doc.md). <!--Sensitive security-related issues should be reported to [security@Ego.io](mailto:security@Ego.io.)-->
+This document explains how to contribute changes to the Ego project. It assumes you have followed the README.md and [API Document](https://github.com/go-ego/gpy/blob/master/docs/doc.md). <!--Sensitive security-related issues should be reported to [security@Ego.io](mailto:security@Ego.io.)-->
 
 ## Bug reports
 
 Please search the issues on the issue tracker with a variety of keywords to ensure your bug is not already reported.
 
-If unique, [open an issue](https://github.com/go-ego/re/issues/new) and answer the questions so we can understand and reproduce the problematic behavior.
+If unique, [open an issue](https://github.com/go-ego/gpy/issues/new) and answer the questions so we can understand and reproduce the problematic behavior.
 
 The burden is on you to convince us that it is actually a bug in Ego. This is easiest to do when you write clear, concise instructions so we can reproduce the behavior (even if it seems obvious). The more detailed and specific you are, the faster we will be able to help you. Check out [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html).
 
@@ -18,7 +18,7 @@ Please be kind, remember that Ego comes at no cost to you, and you're getting fr
 
 The project welcomes submissions but please let everyone know what you're working on if you want to change or add something to the Ego repositories.
 
-Before starting to write something new for the Ego project, please [file an issue](https://github.com/go-ego/re/issues/new). Significant changes must go through the [change proposal process](https://github.com/go-ego/proposals) before they can be accepted.
+Before starting to write something new for the Ego project, please [file an issue](https://github.com/go-ego/gpy/issues/new). Significant changes must go through the [change proposal process](https://github.com/go-ego/proposals) before they can be accepted.
 
 This process gives everyone a chance to validate the design, helps prevent duplication of effort, and ensures that the idea fits inside the goals for the project and tools. It also checks that the design is sound before code is written; the code review tool is not the place for high-level discussions.
 
@@ -57,7 +57,7 @@ Code that you contribute should use the standard copyright header:
 ```
 // Copyright 2016-2017 The go-ego Project Developers. See the COPYRIGHT
 // file at the top-level directory of this distribution and at
-// https://github.com/go-ego/ego/blob/master/LICENSE
+// https://github.com/go-ego/gpy/blob/master/LICENSE
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
