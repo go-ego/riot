@@ -1,4 +1,4 @@
-// Murmur3 32bit hash function based on
+// Package murmur Murmur3 32bit hash function based on
 // http://en.wikipedia.org/wiki/MurmurHash
 package murmur
 
@@ -14,9 +14,11 @@ const (
 )
 
 var (
+	// Seed murmur seed
 	Seed = uint32(1)
 )
 
+// Murmur3 murmur Hash32
 func Murmur3(key []byte) (hash uint32) {
 	hash = Seed
 	iByte := 0
@@ -53,6 +55,5 @@ func Murmur3(key []byte) (hash uint32) {
 	hash *= c4
 	hash ^= hash >> 16
 
-	// 出发吧，狗嬷嬷！
 	return
 }

@@ -57,10 +57,10 @@
 			"revisionTime": "2017-11-13T03:04:41Z"
 		},
 		{
-			"checksumSHA1": "FCHRnXIurWk5RfGtQWiFE60XVK4=",
+			"checksumSHA1": "mX9RBu3vRiJO6ROLiqWYARdf/4c=",
 			"path": "github.com/dgryski/go-farm",
-			"revision": "e2d0fe22b456fa0a35cd883ba355ecfcf1881490",
-			"revisionTime": "2017-05-02T03:43:17Z"
+			"revision": "ac7624ea8da311f2fbbd94401d8c1cf66089f9fb",
+			"revisionTime": "2017-11-19T14:13:06Z"
 		},
 		{
 			"checksumSHA1": "PFL/DjxC68DvAUkGhNwyZroXzMY=",
@@ -81,10 +81,10 @@
 			"revisionTime": "2017-11-29T09:25:41Z"
 		},
 		{
-			"checksumSHA1": "WHaHGer23rilcJn9cr2k1HZWp18=",
+			"checksumSHA1": "Jw4ClEG6yYBx/dsKT27jhJmZdBU=",
 			"path": "github.com/go-ego/murmur",
-			"revision": "84b529b16d22c6d88ad6dbb228a86ef06d27400a",
-			"revisionTime": "2017-08-02T12:46:13Z"
+			"revision": "429a0267f70e6d0a90718211576bf10084eb0ac7",
+			"revisionTime": "2017-11-29T10:23:56Z"
 		},
 		{
 			"checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
