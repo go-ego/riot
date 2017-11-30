@@ -232,7 +232,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	engine.initOptions = options
 	engine.initialized = true
 
-	if !options.NotUsingSegmenter {
+	if !options.NotUsingGse {
 		// 载入分词器词典
 		engine.segmenter.LoadDict(options.SegmenterDict)
 
@@ -399,7 +399,7 @@ func (engine *Engine) Tokens(request types.SearchRequest) (tokens []string) {
 	// tokens := []string{}
 	if request.Text != "" {
 		request.Text = strings.ToLower(request.Text)
-		if engine.initOptions.NotUsingSegmenter {
+		if engine.initOptions.NotUsingGse {
 			tokens = strings.Split(request.Text, " ")
 		} else {
 			// querySegments := engine.segmenter.Segment([]byte(request.Text))

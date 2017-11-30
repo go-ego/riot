@@ -49,7 +49,7 @@ type EngineOpts struct {
 	// 默认使用，否则在启动阶段跳过SegmenterDict和StopTokenFile设置
 	// 如果你不需要在引擎内分词，可以将这个选项设为true
 	// 注意，如果你不用分词器，那么在调用IndexDoc时DocIndexData中的Content会被忽略
-	NotUsingSegmenter bool
+	NotUsingGse bool
 
 	// new
 	Using int
@@ -98,7 +98,7 @@ type EngineOpts struct {
 
 // Init 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
 func (options *EngineOpts) Init() {
-	if !options.NotUsingSegmenter {
+	if !options.NotUsingGse {
 		// if len(options.SegmenterDict) == 0 {
 		if options.SegmenterDict == "" {
 			// log.Fatal("字典文件不能为空")

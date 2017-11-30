@@ -204,7 +204,7 @@ func (engine *Engine) segmenterWorker() {
 
 		// 加入非分词的文档标签
 		for _, label := range request.data.Labels {
-			if !engine.initOptions.NotUsingSegmenter {
+			if !engine.initOptions.NotUsingGse {
 				if !engine.stopTokens.IsStopToken(label) {
 					//当正文中已存在关键字时，若不判断，位置信息将会丢失
 					if _, ok := tokensMap[label]; !ok {
@@ -278,7 +278,7 @@ func (engine *Engine) PinYin(hans string) []string {
 	}
 
 	// Segment 分词
-	if !engine.initOptions.NotUsingSegmenter {
+	if !engine.initOptions.NotUsingGse {
 		sehans := engine.Segment(hans)
 		for h := 0; h < len(sehans); h++ {
 			if !engine.stopTokens.IsStopToken(sehans[h]) {
