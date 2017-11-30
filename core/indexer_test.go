@@ -42,7 +42,7 @@ func TestAddKeywords(t *testing.T) {
 	utils.Expect(t, "7 ", indicesToString(&indexer, "token77"))
 }
 
-func TestRemoveDoc(t *testing.T) {
+func TestRemoveDocToCache(t *testing.T) {
 	var indexer Indexer
 	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
 
