@@ -60,7 +60,7 @@ func (engine *Engine) indexerAddDocumentWorker(shard int) {
 func (engine *Engine) indexerRemoveDocWorker(shard int) {
 	for {
 		request := <-engine.indexerRemoveDocChannels[shard]
-		engine.indexers[shard].RemoveDocumentToCache(request.docId, request.forceUpdate)
+		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
 		if request.docId != 0 {
 			atomic.AddUint64(&engine.numDocumentsRemoved, 1)
 		}

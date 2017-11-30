@@ -71,7 +71,7 @@ func indexWeibo() {
 
 	log.Print("添加索引")
 	for docId, weibo := range wbs {
-		searcher.IndexDocument(docId, types.DocIndexData{
+		searcher.IndexDoc(docId, types.DocIndexData{
 			Content: weibo.Text,
 			Fields: WeiboScoringFields{
 				Timestamp:    weibo.Timestamp,

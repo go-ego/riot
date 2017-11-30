@@ -56,8 +56,8 @@ func initEngine() {
 	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
 	index2 := types.DocIndexData{Content: "在路上, in the way", Tokens: tokenDatas}
 
-	searcher.IndexDocument(10, index1, false)
-	searcher.IndexDocument(11, index2, false)
+	searcher.IndexDoc(10, index1, false)
+	searcher.IndexDoc(11, index2, false)
 
 	// 等待索引刷新完毕
 	searcher.FlushIndex()

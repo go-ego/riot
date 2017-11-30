@@ -135,7 +135,7 @@ func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceU
 		}
 
 		indexer.tableLock.Unlock()
-		if indexer.RemoveDocumentToCache(0, forceUpdate) {
+		if indexer.RemoveDocToCache(0, forceUpdate) {
 			// 只有当存在于索引表中的文档已被删除，其才可以重新加入到索引表中
 			position = 0
 		}
@@ -222,9 +222,9 @@ func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
 	}
 }
 
-// RemoveDocumentToCache 向 REMOVECACHE 中加入一个待删除文档
+// RemoveDocToCache 向 REMOVECACHE 中加入一个待删除文档
 // 返回值表示文档是否在索引表中被删除
-func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bool {
+func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}
@@ -253,15 +253,15 @@ func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bo
 		indexer.removeCacheLock.removeCachePointer = 0
 		indexer.removeCacheLock.Unlock()
 		sort.Sort(removeCachedDocuments)
-		indexer.RemoveDocuments(&removeCachedDocuments)
+		indexer.RemoveDocs(&removeCachedDocuments)
 		return true
 	}
 	indexer.removeCacheLock.Unlock()
 	return false
 }
 
-// RemoveDocuments 向反向索引表中删除 REMOVECACHE 中所有文档
-func (indexer *Indexer) RemoveDocuments(documents *types.DocumentsId) {
+// RemoveDocs 向反向索引表中删除 REMOVECACHE 中所有文档
+func (indexer *Indexer) RemoveDocs(documents *types.DocumentsId) {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}

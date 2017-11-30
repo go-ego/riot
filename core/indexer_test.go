@@ -42,7 +42,7 @@ func TestAddKeywords(t *testing.T) {
 	utils.Expect(t, "7 ", indicesToString(&indexer, "token77"))
 }
 
-func TestRemoveDocument(t *testing.T) {
+func TestRemoveDoc(t *testing.T) {
 	var indexer Indexer
 	indexer.Init(types.IndexerInitOptions{IndexType: types.LocationsIndex})
 
@@ -66,7 +66,7 @@ func TestRemoveDocument(t *testing.T) {
 	utils.Expect(t, "1 2 ", indicesToString(&indexer, "token2"))
 	utils.Expect(t, "1 ", indicesToString(&indexer, "token3"))
 
-	indexer.RemoveDocumentToCache(2, false)
+	indexer.RemoveDocToCache(2, false)
 	// doc1 = "token1 token3"
 	indexer.AddDocumentToCache(&types.DocumentIndex{
 		DocId: 1,
@@ -100,7 +100,7 @@ func TestRemoveDocument(t *testing.T) {
 			{"token2", 0, []int{7}},
 		},
 	}, true)
-	indexer.RemoveDocumentToCache(3, true)
+	indexer.RemoveDocToCache(3, true)
 	utils.Expect(t, "1 2 ", indicesToString(&indexer, "token1"))
 	utils.Expect(t, "2 ", indicesToString(&indexer, "token2"))
 	utils.Expect(t, "1 2 ", indicesToString(&indexer, "token3"))
@@ -457,7 +457,7 @@ func TestLookupWithLocations(t *testing.T) {
 		},
 	}, true)
 
-	indexer.RemoveDocumentToCache(2, true)
+	indexer.RemoveDocToCache(2, true)
 	docs, _ := indexer.Lookup([]string{"token2", "token3"}, []string{}, nil, false)
 	utils.Expect(t, "[[0 21] [28]]", docs[0].TokenLocations)
 }

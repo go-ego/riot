@@ -85,7 +85,7 @@ These three indexes consume more memory from top to bottom while providing more 
 Initialization can be added after the index, the following example will be a microblogging engine:
 
 ```go
-searcher.IndexDocument(docId, types.DocIndexData{
+searcher.IndexDoc(docId, types.DocIndexData{
 	Content: weibo.Text, // Weibo structure See above definition. Must be UTF-8 format.
 	Fields: WeiboScoringFields{
 		Timestamp:    weibo.Timestamp,
@@ -103,7 +103,7 @@ Document docId must be greater than 0 and unique, for Weibo can use Weibo ID. ri
 
 **Special attention** is given to the fact that keywords such as tokens and labels make up the search key in the indexer. Do not confuse these three concepts with documents and code. The search for the text is a logical query on the search key. For example, the keyword "bicycle" appears in the body of a document, and the category label such as "fitness", but the word "fitness" does not directly appear in the text. This article will be queried when searching for a combination of search keys such as "Bike" + "Fitness". The purpose of the label is to facilitate narrowing down the query quickly from a non-literal dimension.
 
-The engine uses asynchronous indexing, which means that the index may not have been added to the indexed table when IndexDocument returns, which makes it easy for you to iterate through the index. If you need to wait for the index is added after the follow-up operation, please call the following function:
+The engine uses asynchronous indexing, which means that the index may not have been added to the indexed table when IndexDoc returns, which makes it easy for you to iterate through the index. If you need to wait for the index is added after the follow-up operation, please call the following function:
 
 ```go
 searcher.FlushIndex()
@@ -127,7 +127,7 @@ type WeiboScoringFields struct {
         RepostsCount uint64
 }
 ```
-As you may have noticed, this is the type of argument passed in the IndexDocument function that was called when the document was indexed in the previous section (in fact that argument is of type interface {}, so you can pass in any type of structure). These data are saved in the sequencer's memory to be called.
+As you may have noticed, this is the type of argument passed in the IndexDoc function that was called when the document was indexed in the previous section (in fact that argument is of type interface {}, so you can pass in any type of structure). These data are saved in the sequencer's memory to be called.
 
 With these data, we can score, the code is as follows:
 ```go

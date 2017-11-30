@@ -89,9 +89,9 @@ func main() {
 	text2 := "百度是中国最大的搜索引擎"
 	
 	// 将文档加入索引，docId 从1开始
-	searcher.IndexDocument(1, types.DocIndexData{Content: text}, false)
-	searcher.IndexDocument(2, types.DocIndexData{Content: text1}, false)
-	searcher.IndexDocument(3, types.DocIndexData{Content: text2}, false)
+	searcher.IndexDoc(1, types.DocIndexData{Content: text}, false)
+	searcher.IndexDoc(2, types.DocIndexData{Content: text1}, false)
+	searcher.IndexDoc(3, types.DocIndexData{Content: text2}, false)
 
 	// 等待索引刷新完毕
 	searcher.FlushIndex()

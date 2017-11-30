@@ -73,7 +73,7 @@ func addDoc(in *pb.DocReq) {
 
 // DelDoc delete doc
 func DelDoc(in *pb.DeleteReq) {
-	searcher.RemoveDocument(in.DocId, false)
+	searcher.RemoveDoc(in.DocId, false)
 }
 
 func (s *server) HeartBeat(ctx context.Context, in *pb.HeartReq) (*pb.Reply, error) {

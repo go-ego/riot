@@ -92,7 +92,7 @@ func InitEngine(conf Config) {
 
 // AddDocInx add index document
 func AddDocInx(docId uint64, data types.DocIndexData, forceUpdate bool) {
-	Searcher.IndexDocument(docId, data, forceUpdate)
+	Searcher.IndexDoc(docId, data, forceUpdate)
 
 	Searcher.FlushIndex()
 }
@@ -125,5 +125,5 @@ func Search(sea SearchArgs) types.SearchResponse {
 
 // Delete delete document
 func Delete(docid uint64, forceUpdate bool) {
-	Searcher.RemoveDocument(docid, forceUpdate)
+	Searcher.RemoveDoc(docid, forceUpdate)
 }
