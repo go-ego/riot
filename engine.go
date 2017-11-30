@@ -104,13 +104,13 @@ func (engine *Engine) Indexer(options types.EngineOpts) {
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexerAddDocChannels[shard] = make(
 			chan indexerAddDocRequest,
-			options.IndexerBufferLength)
+			options.IndexerBufLength)
 		engine.indexerRemoveDocChannels[shard] = make(
 			chan indexerRemoveDocRequest,
-			options.IndexerBufferLength)
+			options.IndexerBufLength)
 		engine.indexerLookupChannels[shard] = make(
 			chan indexerLookupRequest,
-			options.IndexerBufferLength)
+			options.IndexerBufLength)
 	}
 }
 
@@ -125,13 +125,13 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.rankerAddDocChannels[shard] = make(
 			chan rankerAddDocRequest,
-			options.RankerBufferLength)
+			options.RankerBufLength)
 		engine.rankerRankChannels[shard] = make(
 			chan rankerRankRequest,
-			options.RankerBufferLength)
+			options.RankerBufLength)
 		engine.rankerRemoveDocChannels[shard] = make(
 			chan rankerRemoveDocRequest,
-			options.RankerBufferLength)
+			options.RankerBufLength)
 	}
 }
 
