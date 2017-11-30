@@ -8,7 +8,7 @@ url = ["http://localhost:8080", "http://localhost:8081"]
 
 [engine]
 mode = "dev"
-using = 4
+using = 3
 storage_shards = 10
 num_shards = 10
 # segmenter_dict = "./data/dict/dictionary.txt"

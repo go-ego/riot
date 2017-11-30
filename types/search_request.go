@@ -79,11 +79,11 @@ type Logic struct {
 	// 非查询, 不包含
 	NotInLabels bool
 
-	LogicExpression LogicExpression
+	LogicExpr LogicExpr
 }
 
-// LogicExpression logic expression options
-type LogicExpression struct {
+// LogicExpr logic expression options
+type LogicExpr struct {
 
 	// 与查询, 必须都存在
 	MustLabels []string

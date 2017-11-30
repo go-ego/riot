@@ -348,8 +348,8 @@ func (indexer *Indexer) Lookup(
 			return
 		}
 
-		if logic != nil && (len(logic[0].LogicExpression.MustLabels) > 0 || len(logic[0].LogicExpression.ShouldLabels) > 0) &&
-			len(logic[0].LogicExpression.NotInLabels) >= 0 {
+		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 || len(logic[0].LogicExpr.ShouldLabels) > 0) &&
+			len(logic[0].LogicExpr.NotInLabels) >= 0 {
 
 			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
 
@@ -616,7 +616,7 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 
 // LogicLookup logic Lookup
 func (indexer *Indexer) LogicLookup(
-	docIds map[uint64]bool, countDocsOnly bool, LogicExpression []string,
+	docIds map[uint64]bool, countDocsOnly bool, LogicExpr []string,
 	logic types.Logic) (docs []types.IndexedDocument, numDocs int) {
 
 	indexer.tableLock.RLock()
@@ -631,11 +631,11 @@ func (indexer *Indexer) LogicLookup(
 	// 如果存在与搜索键, 则要求所有的与搜索键都有对应的反向表
 	MustTable := make([]*KeywordIndices, 0)
 
-	if len(logic.LogicExpression.MustLabels) > 0 {
-		LogicExpression = logic.LogicExpression.MustLabels
+	if len(logic.LogicExpr.MustLabels) > 0 {
+		LogicExpr = logic.LogicExpr.MustLabels
 	}
-	if logic.MustLabels == true || len(logic.LogicExpression.MustLabels) > 0 {
-		for _, keyword := range LogicExpression {
+	if logic.MustLabels == true || len(logic.LogicExpr.MustLabels) > 0 {
+		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if !found {
 				return
@@ -650,12 +650,12 @@ func (indexer *Indexer) LogicLookup(
 	// 2. 逻辑或和逻辑与之间是与关系
 	ShouldTable := make([]*KeywordIndices, 0)
 
-	if len(logic.LogicExpression.ShouldLabels) > 0 {
-		LogicExpression = logic.LogicExpression.ShouldLabels
+	if len(logic.LogicExpr.ShouldLabels) > 0 {
+		LogicExpr = logic.LogicExpr.ShouldLabels
 	}
 
-	if logic.ShouldLabels == true || len(logic.LogicExpression.ShouldLabels) > 0 {
-		for _, keyword := range LogicExpression {
+	if logic.ShouldLabels == true || len(logic.LogicExpr.ShouldLabels) > 0 {
+		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if found {
 				ShouldTable = append(ShouldTable, indices)
@@ -671,11 +671,11 @@ func (indexer *Indexer) LogicLookup(
 	// 可以不存在逻辑非搜索（NotInTable为空), 允许逻辑非搜索键对应的反向表为空
 	NotInTable := make([]*KeywordIndices, 0)
 
-	if len(logic.LogicExpression.NotInLabels) > 0 {
-		LogicExpression = logic.LogicExpression.NotInLabels
+	if len(logic.LogicExpr.NotInLabels) > 0 {
+		LogicExpr = logic.LogicExpr.NotInLabels
 	}
-	if logic.NotInLabels == true || len(logic.LogicExpression.NotInLabels) > 0 {
-		for _, keyword := range LogicExpression {
+	if logic.NotInLabels == true || len(logic.LogicExpr.NotInLabels) > 0 {
+		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if found {
 				NotInTable = append(NotInTable, indices)
@@ -685,7 +685,7 @@ func (indexer *Indexer) LogicLookup(
 
 	// 开始检索
 	numDocs = 0
-	if logic.MustLabels == true || len(logic.LogicExpression.MustLabels) > 0 {
+	if logic.MustLabels == true || len(logic.LogicExpr.MustLabels) > 0 {
 		// 如果存在逻辑与检索
 		for idx := indexer.getIndexLength(MustTable[0]) - 1; idx >= 0; idx-- {
 			baseDocId := indexer.getDocId(MustTable[0], idx)
@@ -712,7 +712,7 @@ func (indexer *Indexer) LogicLookup(
 	} else {
 		// 不存在逻辑与检索, 则必须存在逻辑或检索
 		// 这时进行求并集操作
-		if logic.ShouldLabels == true || len(logic.LogicExpression.ShouldLabels) > 0 {
+		if logic.ShouldLabels == true || len(logic.LogicExpr.ShouldLabels) > 0 {
 			docs, numDocs = indexer.unionTable(ShouldTable, NotInTable, countDocsOnly)
 		} else {
 			uintDocIds := make([]uint64, 0)

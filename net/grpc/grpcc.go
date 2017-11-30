@@ -77,17 +77,17 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
 
-	logicExp := &pb.LogicExpression{
-		MustLabels:   sea.Logic.LogicExpression.MustLabels,
-		ShouldLabels: sea.Logic.LogicExpression.ShouldLabels,
-		NotInLabels:  sea.Logic.LogicExpression.NotInLabels,
+	logicExp := &pb.LogicExpr{
+		MustLabels:   sea.Logic.LogicExpr.MustLabels,
+		ShouldLabels: sea.Logic.LogicExpr.ShouldLabels,
+		NotInLabels:  sea.Logic.LogicExpr.NotInLabels,
 	}
 
 	logic := &pb.Logic{
 		MustLabels:      sea.Logic.MustLabels,
 		ShouldLabels:    sea.Logic.ShouldLabels,
 		NotInLabels:     sea.Logic.NotInLabels,
-		LogicExpression: logicExp,
+		LogicExpr: logicExp,
 	}
 
 	// Contact the server and print out its response.

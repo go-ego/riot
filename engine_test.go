@@ -662,7 +662,7 @@ func TestSearchLogic(t *testing.T) {
 		DocIds: docIds,
 		Logic: types.Logic{
 			ShouldLabels: true,
-			LogicExpression: types.LogicExpression{
+			LogicExpr: types.LogicExpr{
 				NotInLabels: strArr,
 			},
 		},

@@ -46,12 +46,12 @@ func InitEngine(conf Config) {
 		path = conf.Engine.StorageFolder
 	}
 
-	storageShards := 100
+	storageShards := 10
 	if conf.Engine.StorageShards != 0 {
 		storageShards = conf.Engine.StorageShards
 	}
 
-	numShards := 100
+	numShards := 10
 	if conf.Engine.NumShards != 0 {
 		numShards = conf.Engine.NumShards
 	}

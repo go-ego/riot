@@ -97,11 +97,11 @@ message Logic {
     // 非查询, 不包含
     bool notInLabels = 3;
     
-    LogicExpression logicExpression = 4;
+    LogicExpr LogicExpr = 4;
 }
     
-// LogicExpression logic expression options
-message LogicExpression {
+// LogicExpr logic expression options
+message LogicExpr {
     // mustLabels, with the query that must exist
     repeated string  mustLabels = 1;
     // shouldLabels, there is one can exist

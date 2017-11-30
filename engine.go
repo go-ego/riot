@@ -574,6 +574,44 @@ func (engine *Engine) Close() {
 	}
 }
 
+// New create a new engine
+func (engine *Engine) New() Engine {
+	// func (engine *Engine) New(conf com.Config) Engine{
+	var (
+		searcher = Engine{}
+
+		path          = "./index"
+		storageShards = 10
+		numShards     = 10
+
+		segmenterDict string
+	)
+
+	searcher.Init(types.EngineOpts{
+		// Using:         using,
+		StorageShards: storageShards,
+		NumShards:     numShards,
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.DocIdsIndex,
+		},
+		UseStorage:    true,
+		StorageFolder: path,
+		// StorageEngine: storageEngine,
+		SegmenterDict: segmenterDict,
+		// StopTokenFile: stopTokenFile,
+	})
+
+	// defer searcher.Close()
+	os.MkdirAll(path, 0777)
+
+	// 等待索引刷新完毕
+	searcher.FlushIndex()
+
+	log.Println("recover index number:", searcher.NumDocumentsIndexed())
+
+	return searcher
+}
+
 // 从文本hash得到要分配到的shard
 func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*uint32(engine.initOptions.NumShards))

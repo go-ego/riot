@@ -56,7 +56,7 @@ func main() {
 		Text: query,
 		Logic: types.Logic{
 			ShouldLabels: true,
-			LogicExpression: types.LogicExpression{
+			LogicExpr: types.LogicExpr{
 				NotInLabels: strArr,
 			},
 		},
