@@ -31,11 +31,11 @@ import (
 var (
 	// searcher is coroutine safe
 	searcher = riot.Engine{}
-)
 
-// var config rpc.Config
-var config com.Config
-var wg sync.WaitGroup
+	// config rpc.Config
+	config com.Config
+	wg     sync.WaitGroup
+)
 
 func init() {
 	zlog.Init("../conf/log.toml")

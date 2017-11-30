@@ -74,8 +74,10 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 	for {
 		request := <-engine.indexerLookupChannels[shard]
 
-		var docs []types.IndexedDocument
-		var numDocs int
+		var (
+			docs    []types.IndexedDocument
+			numDocs int
+		)
 		if request.docIds == nil {
 			docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, nil, request.countDocsOnly, request.logic)
 			// docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, nil, request.countDocsOnly)

@@ -42,6 +42,7 @@ func (engine *Engine) ForSplitData(splData []string, num int) (Map, int) {
 		splitStr  string
 	)
 	tokensMap := make(map[string][]int)
+
 	for i := 0; i < num; i++ {
 		if splData[i] != "" {
 			if !engine.stopTokens.IsStopToken(splData[i]) {
@@ -75,11 +76,11 @@ func (engine *Engine) ForSplitData(splData []string, num int) (Map, int) {
 }
 
 func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
-	tokensMap := make(map[string][]int)
 	var (
 		num       int
 		numTokens int
 	)
+	tokensMap := make(map[string][]int)
 
 	if request.data.Content != "" {
 		request.data.Content = strings.ToLower(request.data.Content)

@@ -28,8 +28,10 @@ import (
 	"github.com/go-ego/riot/net/com"
 )
 
-var wgdata [][]byte
-var wg sync.WaitGroup
+var (
+	wgdata [][]byte
+	wg     sync.WaitGroup
+)
 
 // WgPost post
 func WgPost(url string, param url.Values) {

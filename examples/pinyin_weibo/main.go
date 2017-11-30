@@ -53,9 +53,11 @@ func indexWeibo() {
 
 	br := bufio.NewReader(file)
 
-	var tokenDatas []types.TokenData
-	var index uint64
-	var tokens []string
+	var (
+		tokenDatas []types.TokenData
+		index      uint64
+		tokens     []string
+	)
 
 	index = 1
 

@@ -30,9 +30,9 @@ import (
 var (
 	// searcher is coroutine safe
 	searcher = riot.Engine{}
-)
 
-var config com.Config
+	config com.Config
+)
 
 func init() {
 	zlog.Init("../conf/log.toml")
