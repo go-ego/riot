@@ -160,8 +160,8 @@ func (engine *Engine) CheckMem() {
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
-			engine.initOptions.StorageFolder = "./index"
-			os.MkdirAll("./index", 0777)
+			engine.initOptions.StorageFolder = "./riot-index"
+			os.MkdirAll("./riot-index", 0777)
 		}
 	}
 }
@@ -575,17 +575,21 @@ func (engine *Engine) Close() {
 }
 
 // New create a new engine
-func (engine *Engine) New() Engine {
-	// func (engine *Engine) New(conf com.Config) Engine{
+func New(dict ...string) *Engine {
+	// func (engine *Engine) New(conf com.Config) *Engine{
 	var (
-		searcher = Engine{}
+		searcher = &Engine{}
 
-		path          = "./index"
+		path          = "./riot-index"
 		storageShards = 10
 		numShards     = 10
 
 		segmenterDict string
 	)
+
+	if len(dict) > 0 {
+		segmenterDict = dict[0]
+	}
 
 	searcher.Init(types.EngineOpts{
 		// Using:         using,
@@ -605,9 +609,8 @@ func (engine *Engine) New() Engine {
 	os.MkdirAll(path, 0777)
 
 	// 等待索引刷新完毕
-	searcher.FlushIndex()
-
-	log.Println("recover index number:", searcher.NumDocumentsIndexed())
+	// searcher.FlushIndex()
+	// log.Println("recover index number:", searcher.NumDocumentsIndexed())
 
 	return searcher
 }

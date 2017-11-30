@@ -29,7 +29,7 @@ var (
 )
 
 func initEngine() {
-	var path = "./index"
+	var path = "./riot-index"
 
 	searcher.Init(types.EngineOpts{
 		Using: 1,
@@ -63,7 +63,7 @@ func initEngine() {
 }
 
 func restoreIndex() {
-	var path = "./index"
+	var path = "./riot-index"
 
 	searcher.Init(types.EngineOpts{
 		Using: 1,

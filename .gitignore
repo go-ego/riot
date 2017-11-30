@@ -3,6 +3,7 @@
 .vscode
 .idea
 
+riot-index
 data/data
 data/riot/riot
 data/riot/heartb/heartb

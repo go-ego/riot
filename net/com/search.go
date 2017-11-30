@@ -32,12 +32,12 @@ var (
 
 // InitEngine init engine
 func InitEngine(conf Config) {
-	// os.RemoveAll("./index")
+	// os.RemoveAll("./riot-index")
 	Conf = conf
 
 	log.Println("conf.config.Etcd", Conf.Etcd)
 
-	var path = "./index"
+	var path = "./riot-index"
 	if conf.Engine.StorageFolder != "" {
 		path = conf.Engine.StorageFolder
 	}

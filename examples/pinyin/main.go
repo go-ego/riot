@@ -28,7 +28,7 @@ var (
 )
 
 func initEngine() {
-	var path = "./index"
+	var path = "./riot-index"
 
 	searcher.Init(types.EngineOpts{
 		// Using: 1,

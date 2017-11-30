@@ -443,6 +443,38 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	os.RemoveAll("riot.persistent")
 }
 
+func TestEngineIndexDocWithNewStorage(t *testing.T) {
+	gob.Register(ScoringFields{})
+	var engine = New("./testdata/test_dict.txt")
+	log.Println("engine.............")
+	// engine = engine.New()
+	AddDocs(engine)
+	engine.RemoveDoc(5, true)
+	engine.Close()
+
+	var engine1 = New("./testdata/test_dict.txt")
+	// engine1 = engine1.New()
+	log.Println("test")
+	engine1.FlushIndex()
+	log.Println("engine1.............")
+
+	outputs := engine1.Search(types.SearchRequest{Text: "中国人口"})
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "中国", outputs.Tokens[0])
+	utils.Expect(t, "人口", outputs.Tokens[1])
+	utils.Expect(t, "2", len(outputs.Docs))
+
+	utils.Expect(t, "2", outputs.Docs[0].DocId)
+	utils.Expect(t, "0", int(outputs.Docs[0].Scores[0]*1000))
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+
+	utils.Expect(t, "1", outputs.Docs[1].DocId)
+	utils.Expect(t, "0", int(outputs.Docs[1].Scores[0]*1000))
+	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocations)
+
+	engine1.Close()
+	os.RemoveAll("riot-index")
+}
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
