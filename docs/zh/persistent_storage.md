@@ -1,10 +1,10 @@
 持久存储
 ====
 
-riot 引擎支持将搜索数据存入硬盘，并在当机重启动时从硬盘恢复数据。使用持久存储只需设置EngineInitOptions 中的三个选项：
+riot 引擎支持将搜索数据存入硬盘，并在当机重启动时从硬盘恢复数据。使用持久存储只需设置EngineOpts 中的三个选项：
 
 ```go
-type EngineInitOptions struct {
+type EngineOpts struct {
   // 略过其他选项
 
   // 是否使用持久数据库，以及数据库文件保存的目录和裂分数目

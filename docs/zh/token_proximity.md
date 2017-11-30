@@ -13,4 +13,4 @@ N 关键词的紧邻距离计算公式如下：
 
 具体实现见[core/indexer.go](/core/indexer.go) 文件中 computeTokenProximity 函数。
 
-紧邻距离计算需要在索引器中保存每个分词的位置，这需要额外消耗内存，因此是默认关闭的，打开这一功能请在引擎初始化时设定 EngineInitOptions.IndexerInitOptions.IndexType 为  LocationsIndex。
+紧邻距离计算需要在索引器中保存每个分词的位置，这需要额外消耗内存，因此是默认关闭的，打开这一功能请在引擎初始化时设定 EngineOpts.IndexerOpts.IndexType 为  LocationsIndex。

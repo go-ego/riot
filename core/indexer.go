@@ -49,7 +49,7 @@ type Indexer struct {
 		removeCache        types.DocumentsId
 	}
 
-	initOptions types.IndexerInitOptions
+	initOptions types.IndexerOpts
 	initialized bool
 
 	// 这实际上是总文档数的一个近似
@@ -71,7 +71,7 @@ type KeywordIndices struct {
 }
 
 // Init 初始化索引器
-func (indexer *Indexer) Init(options types.IndexerInitOptions) {
+func (indexer *Indexer) Init(options types.IndexerOpts) {
 	if indexer.initialized == true {
 		log.Fatal("The Indexer can not be initialized twice.")
 	}

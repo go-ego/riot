@@ -68,7 +68,7 @@ type Engine struct {
 	numDocumentsStored       uint64
 
 	// 记录初始化参数
-	initOptions types.EngineInitOptions
+	initOptions types.EngineOpts
 	initialized bool
 
 	indexers   []core.Indexer
@@ -94,7 +94,7 @@ type Engine struct {
 }
 
 // Indexer initialize the indexer channel
-func (engine *Engine) Indexer(options types.EngineInitOptions) {
+func (engine *Engine) Indexer(options types.EngineOpts) {
 	engine.indexerAddDocChannels = make(
 		[]chan indexerAddDocumentRequest, options.NumShards)
 	engine.indexerRemoveDocChannels = make(
@@ -115,7 +115,7 @@ func (engine *Engine) Indexer(options types.EngineInitOptions) {
 }
 
 // Ranker initialize the ranker channel
-func (engine *Engine) Ranker(options types.EngineInitOptions) {
+func (engine *Engine) Ranker(options types.EngineOpts) {
 	engine.rankerAddDocChannels = make(
 		[]chan rankerAddDocRequest, options.NumShards)
 	engine.rankerRankChannels = make(
@@ -219,7 +219,7 @@ func (engine *Engine) Storage() {
 }
 
 // Init initialize the engine
-func (engine *Engine) Init(options types.EngineInitOptions) {
+func (engine *Engine) Init(options types.EngineOpts) {
 	// 将线程数设置为CPU数
 	// runtime.GOMAXPROCS(runtime.NumCPU())
 	// runtime.GOMAXPROCS(128)
@@ -243,7 +243,7 @@ func (engine *Engine) Init(options types.EngineInitOptions) {
 	// 初始化索引器和排序器
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexers = append(engine.indexers, core.Indexer{})
-		engine.indexers[shard].Init(*options.IndexerInitOptions)
+		engine.indexers[shard].Init(*options.IndexerOpts)
 
 		engine.rankers = append(engine.rankers, core.Ranker{})
 		engine.rankers[shard].Init(options.OnlyID)

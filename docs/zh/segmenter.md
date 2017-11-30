@@ -1,7 +1,7 @@
 ## 分词规则:
 
 ```Go
-types.EngineInitOptions{
+types.EngineOpts{
 		Using:         4,
 }
 ```

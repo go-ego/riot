@@ -165,11 +165,11 @@ func main() {
 	// 初始化
 	gob.Register(WeiboScoringFields{})
 	log.Print("引擎开始初始化")
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 		// 如果你希望使用持久存储，启用下面的选项

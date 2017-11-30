@@ -63,10 +63,10 @@ var (
 )
 
 func initEngine() {
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		SegmenterDict: *dictionaries,
 		StopTokenFile: *stopTokenFile,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
 		NumShards:          NumShards,
@@ -186,10 +186,10 @@ func useStore(tBeginInit, tEndInit time.Time) {
 	searcher.Close()
 	t6 := time.Now()
 	searcher1 := riot.Engine{}
-	searcher1.Init(types.EngineInitOptions{
+	searcher1.Init(types.EngineOpts{
 		SegmenterDict: *dictionaries,
 		StopTokenFile: *stopTokenFile,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
 		NumShards:          NumShards,

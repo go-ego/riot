@@ -14,7 +14,7 @@ Changing the NumShards variable in the test program can change the number of sin
 
 The index item here refers to a non-repeating "search key" - "document" pair. For example, when there are N different search keys in a document, the document generates N index items.
 
-The program uses 8 shards by default, and you can change this value when initializing the engine based on your specific requirements, see [types.EngineInitOptions.NumShards](/types/engine_init_options.go)
+The program uses 8 shards by default, and you can change this value when initializing the engine based on your specific requirements, see [types.EngineOpts.NumShards](/types/engine_init_options.go)
 
 # performance analysis
 

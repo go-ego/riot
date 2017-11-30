@@ -77,7 +77,7 @@ var (
 
 func main() {
 	// 初始化
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using:             3,
 		SegmenterDict: "zh",
 		// SegmenterDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/dictionary.txt",

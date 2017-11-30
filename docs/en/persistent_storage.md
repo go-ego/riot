@@ -1,10 +1,10 @@
 Persistent storage
 ====
 
-The riot engine supports saving search data to the hard drive and restoring data from the hard drive when the machine restarts. Just use persistent storage to set the three options in EngineInitOptions:
+The riot engine supports saving search data to the hard drive and restoring data from the hard drive when the machine restarts. Just use persistent storage to set the three options in EngineOpts:
 
 ```go
-type EngineInitOptions struct {
+type EngineOpts struct {
   // Skip other options
 
   // Whether to use persistent databases, and the number of directories and splits that database files hold

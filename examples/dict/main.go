@@ -14,7 +14,7 @@ var (
 
 func dictZh() {
 	// 初始化
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		// Using:         3,
 		SegmenterDict: "zh",
 		// SegmenterDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/dictionary.txt",
@@ -41,7 +41,7 @@ func dictZh() {
 func dictJp() {
 	var searcher2 = riot.Engine{}
 	// 初始化
-	searcher2.Init(types.EngineInitOptions{
+	searcher2.Init(types.EngineOpts{
 		// Using:         3,
 		SegmenterDict: "jp",
 		// SegmenterDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/jp/dict.txt",

@@ -28,7 +28,7 @@ var (
 
 func main() {
 	// Init engine
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using:             4,
 		NotUsingSegmenter: true})
 	defer searcher.Close()

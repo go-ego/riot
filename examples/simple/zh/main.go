@@ -20,7 +20,7 @@ var (
 
 func main() {
 	// 初始化
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using:         3,
 		SegmenterDict: "../../../data/dict/dictionary.txt"})
 	defer searcher.Close()

@@ -64,17 +64,17 @@ import (
 
 ```go
 var searcher riot.Engine
-searcher.Init(types.EngineInitOptions{
+searcher.Init(types.EngineOpts{
 	SegmenterDict: "../../data/dict/dictionary.txt",
 	StopTokenFile:         "../../data/dict/stop_tokens.txt",
-	IndexerInitOptions: &types.IndexerInitOptions{
+	IndexerOpts: &types.IndexerOpts{
 		IndexType: types.LocationsIndex,
 	},
 })
 ```
-[types.EngineInitOptions](/types/engine_init_options.go) 定义了初始化引擎需要设定的参数，比如从何处载入分词字典文件，停用词列表，索引器类型，BM25 参数等，以及默认的评分规则（见“搜索”一节）和输出分页选项。具体细节请阅读代码中结构体的注释。
+[types.EngineOpts](/types/engine_init_options.go) 定义了初始化引擎需要设定的参数，比如从何处载入分词字典文件，停用词列表，索引器类型，BM25 参数等，以及默认的评分规则（见“搜索”一节）和输出分页选项。具体细节请阅读代码中结构体的注释。
 
-特别需要强调的是请慎重选择 IndexerInitOptions.IndexType 的类型，共有三种不同类型的索引表：
+特别需要强调的是请慎重选择 IndexerOpts.IndexType 的类型，共有三种不同类型的索引表：
 
 1. DocIdsIndex，提供了最基本的索引，仅仅记录搜索键出现的文档 docid。
 2. FrequenciesIndex，除了记录 docid 外，还保存了搜索键在每个文档中出现的频率，如果你需要BM25那么 FrequenciesIndex 是你需要的。

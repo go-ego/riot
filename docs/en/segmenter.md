@@ -1,7 +1,7 @@
 ## Word segmentation rules:
 
 ```Go
-types.EngineInitOptions{
+types.EngineOpts{
 		Using:         4,
 }
 ```

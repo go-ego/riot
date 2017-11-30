@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	// EngineInitOptions的默认值
+	// EngineOpts的默认值
 	defaultNumSegmenterThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
 	defaultNumShards                 = 8
@@ -32,7 +32,7 @@ var (
 	defaultDefaultRankOptions        = RankOptions{
 		ScoringCriteria: RankByBM25{},
 	}
-	defaultIndexerInitOptions = IndexerInitOptions{
+	defaultIndexerOpts = IndexerOpts{
 		IndexType:      FrequenciesIndex,
 		BM25Parameters: &defaultBM25Parameters,
 	}
@@ -43,8 +43,8 @@ var (
 	defaultStorageShards = 8
 )
 
-// EngineInitOptions init engine options
-type EngineInitOptions struct {
+// EngineOpts init engine options
+type EngineOpts struct {
 	// 是否使用分词器
 	// 默认使用，否则在启动阶段跳过SegmenterDict和StopTokenFile设置
 	// 如果你不需要在引擎内分词，可以将这个选项设为true
@@ -82,7 +82,7 @@ type EngineInitOptions struct {
 	NumRankerThreadsPerShard int
 
 	// 索引器初始化选项
-	IndexerInitOptions *IndexerInitOptions
+	IndexerOpts *IndexerOpts
 
 	// 默认的搜索选项
 	DefaultRankOptions *RankOptions
@@ -96,8 +96,8 @@ type EngineInitOptions struct {
 	OnlyID bool
 }
 
-// Init 初始化 EngineInitOptions，当用户未设定某个选项的值时用默认值取代
-func (options *EngineInitOptions) Init() {
+// Init 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
+func (options *EngineOpts) Init() {
 	if !options.NotUsingSegmenter {
 		// if len(options.SegmenterDict) == 0 {
 		if options.SegmenterDict == "" {
@@ -130,12 +130,12 @@ func (options *EngineInitOptions) Init() {
 		options.NumRankerThreadsPerShard = defaultNumRankerThreadsPerShard
 	}
 
-	if options.IndexerInitOptions == nil {
-		options.IndexerInitOptions = &defaultIndexerInitOptions
+	if options.IndexerOpts == nil {
+		options.IndexerOpts = &defaultIndexerOpts
 	}
 
-	if options.IndexerInitOptions.BM25Parameters == nil {
-		options.IndexerInitOptions.BM25Parameters = &defaultBM25Parameters
+	if options.IndexerOpts.BM25Parameters == nil {
+		options.IndexerOpts.BM25Parameters = &defaultBM25Parameters
 	}
 
 	if options.DefaultRankOptions == nil {

@@ -86,7 +86,7 @@ func (rule RankByTokenProximity) Score(
 
 func TestEngineIndexDoc(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -94,7 +94,7 @@ func TestEngineIndexDoc(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -123,7 +123,7 @@ func TestEngineIndexDoc(t *testing.T) {
 
 func TestReverseOrder(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -132,7 +132,7 @@ func TestReverseOrder(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -149,7 +149,7 @@ func TestReverseOrder(t *testing.T) {
 
 func TestOffsetAndMaxOutputs(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -158,7 +158,7 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 			MaxOutputs:      3,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -186,13 +186,13 @@ func (criteria TestScoringCriteria) Score(
 
 func TestSearchWithCriteria(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ScoringCriteria: TestScoringCriteria{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -212,7 +212,7 @@ func TestSearchWithCriteria(t *testing.T) {
 
 func TestCompactIndex(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -245,13 +245,13 @@ func (criteria BM25ScoringCriteria) Score(
 
 func TestFrequenciesIndex(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ScoringCriteria: BM25ScoringCriteria{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.FrequenciesIndex,
 		},
 	})
@@ -270,7 +270,7 @@ func TestFrequenciesIndex(t *testing.T) {
 
 func TestRemoveDoc(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -299,7 +299,7 @@ func TestRemoveDoc(t *testing.T) {
 
 func TestEngineIndexDocWithTokens(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -307,7 +307,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -359,15 +359,15 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 
 func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	var engine1, engine2 Engine
-	engine1.Init(types.EngineInitOptions{
+	engine1.Init(types.EngineOpts{
 		SegmenterDict: "./data/dict/dictionary.txt",
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
-	engine2.Init(types.EngineInitOptions{
+	engine2.Init(types.EngineOpts{
 		SegmenterDict: "./data/dict/dictionary.txt",
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 	})
@@ -388,7 +388,7 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -396,7 +396,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 		UseStorage:    true,
@@ -408,7 +408,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	engine.Close()
 
 	var engine1 Engine
-	engine1.Init(types.EngineInitOptions{
+	engine1.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -416,7 +416,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 		UseStorage:    true,
@@ -445,7 +445,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -454,7 +454,7 @@ func TestCountDocsOnly(t *testing.T) {
 			MaxOutputs:      1,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -471,7 +471,7 @@ func TestCountDocsOnly(t *testing.T) {
 
 func TestSearchWithin(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -480,7 +480,7 @@ func TestSearchWithin(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -510,7 +510,7 @@ func TestSearchWithin(t *testing.T) {
 
 func TestSearchJp(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -519,7 +519,7 @@ func TestSearchJp(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -554,7 +554,7 @@ func TestSearchJp(t *testing.T) {
 
 func TestSearchGse(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		// Using:         1,
 		SegmenterDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOptions: &types.RankOptions{
@@ -563,7 +563,7 @@ func TestSearchGse(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})
@@ -611,7 +611,7 @@ func TestSearchGse(t *testing.T) {
 
 func TestSearchLogic(t *testing.T) {
 	var engine Engine
-	engine.Init(types.EngineInitOptions{
+	engine.Init(types.EngineOpts{
 		SegmenterDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOptions: &types.RankOptions{
 			ReverseOrder:    true,
@@ -619,7 +619,7 @@ func TestSearchLogic(t *testing.T) {
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
 		},
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
 	})

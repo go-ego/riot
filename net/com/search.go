@@ -66,11 +66,11 @@ func InitEngine(conf Config) {
 	storageEngine := conf.Engine.StorageEngine
 	stopTokenFile := conf.Engine.StopTokenFile
 
-	Searcher.Init(types.EngineInitOptions{
+	Searcher.Init(types.EngineOpts{
 		Using:         using,
 		StorageShards: storageShards,
 		NumShards:     numShards,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStorage:    true,

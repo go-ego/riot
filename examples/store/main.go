@@ -31,9 +31,9 @@ var (
 func initEngine() {
 	var path = "./index"
 
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using: 1,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStorage:    true,
@@ -65,9 +65,9 @@ func initEngine() {
 func restoreIndex() {
 	var path = "./index"
 
-	searcher.Init(types.EngineInitOptions{
+	searcher.Init(types.EngineOpts{
 		Using: 1,
-		IndexerInitOptions: &types.IndexerInitOptions{
+		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStorage:    true,

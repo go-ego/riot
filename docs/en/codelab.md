@@ -64,17 +64,17 @@ The first package defines the engine function, the second package defines the co
 
 ```go
 var searcher riot.Engine
-searcher.Init(types.EngineInitOptions{
+searcher.Init(types.EngineOpts{
 	SegmenterDict: "../../data/dict/dictionary.txt",
 	StopTokenFile:         "../../data/dict/stop_tokens.txt",
-	IndexerInitOptions: &types.IndexerInitOptions{
+	IndexerOpts: &types.IndexerOpts{
 		IndexType: types.LocationsIndex,
 	},
 })
 ```
-[types.EngineInitOptions](/types/engine_init_options.go) defines parameters that need to be set by the initialization engine, such as where to load the word dictionary file, stop word list, indexer type, BM25 parameters, etc., as well as the default scoring rules (see the "Search" section) and Output Paging Option. Please read the structure of the code for details.
+[types.EngineOpts](/types/engine_init_options.go) defines parameters that need to be set by the initialization engine, such as where to load the word dictionary file, stop word list, indexer type, BM25 parameters, etc., as well as the default scoring rules (see the "Search" section) and Output Paging Option. Please read the structure of the code for details.
 
-In particular, it should be emphasized that please carefully choose IndexerInitOptions.IndexType types, there are three different types of index table:
+In particular, it should be emphasized that please carefully choose IndexerOpts.IndexType types, there are three different types of index table:
 
 1. DocIdsIndex, provides the most basic index, only record the document key docid appears.
 2. FrequenciesIndex, in addition to record docid, but also save the search key appear in each document frequency, if you need BM25 then FrequenciesIndex is what you need.

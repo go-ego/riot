@@ -14,7 +14,7 @@
 
 这里的索引项是指一个不重复的“搜索键”-“文档”对，比如当一个文档中有N个不一样的搜索键时，该文档会产生N个索引项。
 
-程序默认使用 8个 shard，你可以根据具体的需求在初始化引擎时改变这个值，见[types.EngineInitOptions.NumShards](/types/engine_init_options.go)
+程序默认使用 8个 shard，你可以根据具体的需求在初始化引擎时改变这个值，见[types.EngineOpts.NumShards](/types/engine_init_options.go)
 
 # 性能分析
 

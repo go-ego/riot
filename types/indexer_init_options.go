@@ -31,8 +31,8 @@ const (
 	defaultDocCacheSize = 300000
 )
 
-// IndexerInitOptions 初始化索引器选项
-type IndexerInitOptions struct {
+// IndexerOpts 初始化索引器选项
+type IndexerOpts struct {
 	// 索引表的类型，见上面的常数
 	IndexType int
 
@@ -50,8 +50,8 @@ type BM25Parameters struct {
 	B  float32
 }
 
-// Init init IndexerInitOptions
-func (options *IndexerInitOptions) Init() {
+// Init init IndexerOpts
+func (options *IndexerOpts) Init() {
 	if options.DocCacheSize == 0 {
 		options.DocCacheSize = defaultDocCacheSize
 	}
