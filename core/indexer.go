@@ -73,7 +73,7 @@ type KeywordIndices struct {
 // Init 初始化索引器
 func (indexer *Indexer) Init(options types.IndexerInitOptions) {
 	if indexer.initialized == true {
-		log.Fatal("索引器不能初始化两次")
+		log.Fatal("The Indexer can not be initialized twice.")
 	}
 	options.Init()
 	indexer.initOptions = options
@@ -99,7 +99,7 @@ func (indexer *Indexer) getIndexLength(ti *KeywordIndices) int {
 // AddDocumentToCache 向 ADDCACHE 中加入一个文档
 func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceUpdate bool) {
 	if indexer.initialized == false {
-		log.Fatal("索引器尚未初始化")
+		log.Fatal("The Indexer has not been initialized.")
 	}
 
 	indexer.addCacheLock.Lock()
@@ -153,7 +153,7 @@ func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceU
 // AddDocuments 向反向索引表中加入 ADDCACHE 中所有文档
 func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
 	if indexer.initialized == false {
-		log.Fatal("索引器尚未初始化")
+		log.Fatal("The Indexer has not been initialized.")
 	}
 
 	indexer.tableLock.Lock()
@@ -226,7 +226,7 @@ func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
 // 返回值表示文档是否在索引表中被删除
 func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bool {
 	if indexer.initialized == false {
-		log.Fatal("索引器尚未初始化")
+		log.Fatal("The Indexer has not been initialized.")
 	}
 
 	indexer.removeCacheLock.Lock()
@@ -263,7 +263,7 @@ func (indexer *Indexer) RemoveDocumentToCache(docId uint64, forceUpdate bool) bo
 // RemoveDocuments 向反向索引表中删除 REMOVECACHE 中所有文档
 func (indexer *Indexer) RemoveDocuments(documents *types.DocumentsId) {
 	if indexer.initialized == false {
-		log.Fatal("索引器尚未初始化")
+		log.Fatal("The Indexer has not been initialized.")
 	}
 
 	indexer.tableLock.Lock()
@@ -327,7 +327,7 @@ func (indexer *Indexer) Lookup(
 	logic ...types.Logic) (docs []types.IndexedDocument, numDocs int) {
 
 	if indexer.initialized == false {
-		log.Fatal("索引器尚未初始化")
+		log.Fatal("The Indexer has not been initialized.")
 	}
 
 	if indexer.numDocuments == 0 {

@@ -45,7 +45,7 @@ type Ranker struct {
 // Init init ranker
 func (ranker *Ranker) Init(onlyID ...bool) {
 	if ranker.initialized == true {
-		log.Fatal("排序器不能初始化两次")
+		log.Fatal("The Ranker can not be initialized twice.")
 	}
 	ranker.initialized = true
 
@@ -69,7 +69,7 @@ func (ranker *Ranker) AddDoc(
 	// docId uint64, fields interface{}, content string, attri interface{}) {
 	docId uint64, fields interface{}, content ...interface{}) {
 	if ranker.initialized == false {
-		log.Fatal("排序器尚未初始化")
+		log.Fatal("The Ranker has not been initialized.")
 	}
 
 	ranker.lock.Lock()
@@ -93,7 +93,7 @@ func (ranker *Ranker) AddDoc(
 // RemoveDoc 删除某个文档的评分字段
 func (ranker *Ranker) RemoveDoc(docId uint64) {
 	if ranker.initialized == false {
-		log.Fatal("排序器尚未初始化")
+		log.Fatal("The Ranker has not been initialized.")
 	}
 
 	ranker.lock.Lock()
@@ -116,7 +116,7 @@ func (ranker *Ranker) Rank(
 	countDocsOnly bool) (types.ScoredDocuments, int) {
 
 	if ranker.initialized == false {
-		log.Fatal("排序器尚未初始化")
+		log.Fatal("The Ranker has not been initialized.")
 	}
 
 	// 对每个文档评分
