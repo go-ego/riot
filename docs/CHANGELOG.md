@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## riot v0.20.0
+
+### API
+- IndexDocument   	    ->	IndexDoc
+- RemoveDocument  	    ->	RemoveDoc
+- AddDocument		    ->	AddDoc
+- EngineInitOptions     ->	EngineOpts
+- IndexerInitOptions  	->	IndexerOpts
+- NotUsingSegmenter    	->  NotUsingGse
+- IndexerBufferLength	->  IndexerBufLength
+- RankerBufferLength  	->  RankerBufLength
+- LogicExpression       ->  LogicExpr
+
 ## riot v0.10.0, Danube River
 
 ### Add  
