@@ -193,7 +193,7 @@ func (engine *Engine) segmenterWorker() {
 		if request.docId == 0 {
 			if request.forceUpdate {
 				for i := 0; i < engine.initOptions.NumShards; i++ {
-					engine.indexerAddDocChannels[i] <- indexerAddDocumentRequest{forceUpdate: true}
+					engine.indexerAddDocChannels[i] <- indexerAddDocRequest{forceUpdate: true}
 				}
 			}
 			continue
@@ -219,7 +219,7 @@ func (engine *Engine) segmenterWorker() {
 			}
 		}
 
-		indexerRequest := indexerAddDocumentRequest{
+		indexerRequest := indexerAddDocRequest{
 			document: &types.DocumentIndex{
 				DocId:       request.docId,
 				TokenLength: float32(numTokens),
@@ -243,7 +243,7 @@ func (engine *Engine) segmenterWorker() {
 				if i == shard {
 					continue
 				}
-				engine.indexerAddDocChannels[i] <- indexerAddDocumentRequest{forceUpdate: true}
+				engine.indexerAddDocChannels[i] <- indexerAddDocRequest{forceUpdate: true}
 			}
 		}
 		rankerRequest := rankerAddDocRequest{

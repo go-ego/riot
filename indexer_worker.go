@@ -21,7 +21,7 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type indexerAddDocumentRequest struct {
+type indexerAddDocRequest struct {
 	document    *types.DocumentIndex
 	forceUpdate bool
 }
@@ -42,10 +42,10 @@ type indexerRemoveDocRequest struct {
 	forceUpdate bool
 }
 
-func (engine *Engine) indexerAddDocumentWorker(shard int) {
+func (engine *Engine) indexerAddDocWorker(shard int) {
 	for {
 		request := <-engine.indexerAddDocChannels[shard]
-		engine.indexers[shard].AddDocumentToCache(request.document, request.forceUpdate)
+		engine.indexers[shard].AddDocToCache(request.document, request.forceUpdate)
 		if request.document != nil {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
 				uint64(len(request.document.Keywords)))

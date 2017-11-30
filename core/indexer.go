@@ -96,8 +96,8 @@ func (indexer *Indexer) getIndexLength(ti *KeywordIndices) int {
 	return len(ti.docIds)
 }
 
-// AddDocumentToCache 向 ADDCACHE 中加入一个文档
-func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceUpdate bool) {
+// AddDocToCache 向 ADDCACHE 中加入一个文档
+func (indexer *Indexer) AddDocToCache(document *types.DocumentIndex, forceUpdate bool) {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}
@@ -144,14 +144,14 @@ func (indexer *Indexer) AddDocumentToCache(document *types.DocumentIndex, forceU
 		indexer.addCacheLock.addCachePointer = position
 		indexer.addCacheLock.Unlock()
 		sort.Sort(addCachedDocuments)
-		indexer.AddDocuments(&addCachedDocuments)
+		indexer.AddDocs(&addCachedDocuments)
 	} else {
 		indexer.addCacheLock.Unlock()
 	}
 }
 
-// AddDocuments 向反向索引表中加入 ADDCACHE 中所有文档
-func (indexer *Indexer) AddDocuments(documents *types.DocumentsIndex) {
+// AddDocs 向反向索引表中加入 ADDCACHE 中所有文档
+func (indexer *Indexer) AddDocs(documents *types.DocumentsIndex) {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}

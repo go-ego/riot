@@ -79,7 +79,7 @@ type Engine struct {
 
 	// 建立索引器使用的通信通道
 	segmenterChannel         chan segmenterRequest
-	indexerAddDocChannels    []chan indexerAddDocumentRequest
+	indexerAddDocChannels    []chan indexerAddDocRequest
 	indexerRemoveDocChannels []chan indexerRemoveDocRequest
 	rankerAddDocChannels     []chan rankerAddDocRequest
 
@@ -96,14 +96,14 @@ type Engine struct {
 // Indexer initialize the indexer channel
 func (engine *Engine) Indexer(options types.EngineOpts) {
 	engine.indexerAddDocChannels = make(
-		[]chan indexerAddDocumentRequest, options.NumShards)
+		[]chan indexerAddDocRequest, options.NumShards)
 	engine.indexerRemoveDocChannels = make(
 		[]chan indexerRemoveDocRequest, options.NumShards)
 	engine.indexerLookupChannels = make(
 		[]chan indexerLookupRequest, options.NumShards)
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexerAddDocChannels[shard] = make(
-			chan indexerAddDocumentRequest,
+			chan indexerAddDocRequest,
 			options.IndexerBufferLength)
 		engine.indexerRemoveDocChannels[shard] = make(
 			chan indexerRemoveDocRequest,
@@ -272,7 +272,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 
 	// 启动索引器和排序器
 	for shard := 0; shard < options.NumShards; shard++ {
-		go engine.indexerAddDocumentWorker(shard)
+		go engine.indexerAddDocWorker(shard)
 		go engine.indexerRemoveDocWorker(shard)
 		go engine.rankerAddDocWorker(shard)
 		go engine.rankerRemoveDocWorker(shard)
