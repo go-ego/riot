@@ -7,8 +7,8 @@ riot-index
 data/data
 data/riot/riot
 data/riot/heartb/heartb
-data/riot/index
-data/riot1/index
+data/riot/riot-index
+data/riot1/riot-index
 data/riot1/riot1
 data/riot1/heartb/heartb
 data/client/client
@@ -17,10 +17,10 @@ examples/codelab/codelab
 examples/dict/dict
 examples/logic/logic
 examples/pinyin/pinyin
-examples/pinyin/index
+examples/pinyin/riot-index
 examples/pinyin_weibo/pinyin_weibo
 examples/store/store
-examples/store/index
+examples/store/riot-index
 examples/simple/simple
 examples/simple/zh/zh
 examples/weibo/weibo
