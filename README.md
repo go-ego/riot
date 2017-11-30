@@ -28,6 +28,9 @@
 
 * [Look at Word segmentation rules](https://github.com/go-ego/riot/blob/master/docs/en/segmenter.md)
 
+
+Riot v0.10.0 was released in Nov 2017, check the [Changelog](https://github.com/go-ego/riot/blob/master/docs/CHANGELOG.md) for the full details.
+
 ## Requirements
 Go version >= 1.8
 

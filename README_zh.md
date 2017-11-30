@@ -27,6 +27,8 @@
 
 * [查看分词规则](https://github.com/go-ego/riot/blob/master/docs/zh/segmenter.md)
 
+Riot v0.10.0 was released in Nov 2017, check the [Changelog](https://github.com/go-ego/riot/blob/master/docs/CHANGELOG.md) for the full details.
+
 QQ 群: 120563750
 
 ## 安装/更新
