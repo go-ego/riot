@@ -84,10 +84,10 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 	}
 
 	logic := &pb.Logic{
-		MustLabels:      sea.Logic.MustLabels,
-		ShouldLabels:    sea.Logic.ShouldLabels,
-		NotInLabels:     sea.Logic.NotInLabels,
-		LogicExpr: logicExp,
+		MustLabels:   sea.Logic.MustLabels,
+		ShouldLabels: sea.Logic.ShouldLabels,
+		NotInLabels:  sea.Logic.NotInLabels,
+		LogicExpr:    logicExp,
 	}
 
 	// Contact the server and print out its response.

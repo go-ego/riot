@@ -103,10 +103,10 @@ func (s *server) Search(ctx context.Context, in *pb.SearchReq) (*pb.SearchReply,
 	}
 
 	logic := types.Logic{
-		MustLabels:      in.Logic.MustLabels,
-		ShouldLabels:    in.Logic.ShouldLabels,
-		NotInLabels:     in.Logic.NotInLabels,
-		LogicExpr: logicExp,
+		MustLabels:   in.Logic.MustLabels,
+		ShouldLabels: in.Logic.ShouldLabels,
+		NotInLabels:  in.Logic.NotInLabels,
+		LogicExpr:    logicExp,
 	}
 
 	var (

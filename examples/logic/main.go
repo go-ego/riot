@@ -29,7 +29,7 @@ var (
 func main() {
 	// Init engine
 	searcher.Init(types.EngineOpts{
-		Using:             4,
+		Using:       4,
 		NotUsingGse: true})
 	defer searcher.Close()
 

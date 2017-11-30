@@ -29,8 +29,8 @@ var (
 func main() {
 	// Init searcher
 	searcher.Init(types.EngineOpts{
-		Using:             4,
-		OnlyID:            true,
+		Using:       4,
+		OnlyID:      true,
 		NotUsingGse: true})
 	defer searcher.Close()
 
