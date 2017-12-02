@@ -20,12 +20,12 @@ func (engine *Engine) NumTokenIndexAdded() uint64 {
 	return engine.numTokenIndexAdded
 }
 
-// NumDocumentsIndexed documents indexed number
-func (engine *Engine) NumDocumentsIndexed() uint64 {
-	return engine.numDocumentsIndexed
+// NumDocsIndexed documents indexed number
+func (engine *Engine) NumDocsIndexed() uint64 {
+	return engine.numDocsIndexed
 }
 
-// NumDocumentsRemoved documents removed number
-func (engine *Engine) NumDocumentsRemoved() uint64 {
-	return engine.numDocumentsRemoved
+// NumDocsRemoved documents removed number
+func (engine *Engine) NumDocsRemoved() uint64 {
+	return engine.numDocsRemoved
 }

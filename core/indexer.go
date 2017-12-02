@@ -41,7 +41,7 @@ type Indexer struct {
 	addCacheLock struct {
 		sync.RWMutex
 		addCachePointer int
-		addCache        types.DocumentsIndex
+		addCache        types.DocsIndex
 	}
 	removeCacheLock struct {
 		sync.RWMutex
@@ -53,7 +53,7 @@ type Indexer struct {
 	initialized bool
 
 	// 这实际上是总文档数的一个近似
-	numDocuments uint64
+	numDocs uint64
 
 	// 所有被索引文本的总关键词数
 	totalTokenLength float32
@@ -81,7 +81,7 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 
 	indexer.tableLock.table = make(map[string]*KeywordIndices)
 	indexer.tableLock.docsState = make(map[uint64]int)
-	indexer.addCacheLock.addCache = make([]*types.DocumentIndex, indexer.initOptions.DocCacheSize)
+	indexer.addCacheLock.addCache = make([]*types.DocIndex, indexer.initOptions.DocCacheSize)
 	indexer.removeCacheLock.removeCache = make([]uint64, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLengths = make(map[uint64]float32)
 }
@@ -97,7 +97,7 @@ func (indexer *Indexer) getIndexLength(ti *KeywordIndices) int {
 }
 
 // AddDocToCache 向 ADDCACHE 中加入一个文档
-func (indexer *Indexer) AddDocToCache(document *types.DocumentIndex, forceUpdate bool) {
+func (indexer *Indexer) AddDocToCache(document *types.DocIndex, forceUpdate bool) {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}
@@ -126,7 +126,7 @@ func (indexer *Indexer) AddDocToCache(document *types.DocumentIndex, forceUpdate
 					indexer.removeCacheLock.removeCachePointer++
 					indexer.removeCacheLock.Unlock()
 					indexer.tableLock.docsState[docIndex.DocId] = 1
-					indexer.numDocuments--
+					indexer.numDocs--
 				}
 				position++
 			} else if !ok {
@@ -151,7 +151,7 @@ func (indexer *Indexer) AddDocToCache(document *types.DocumentIndex, forceUpdate
 }
 
 // AddDocs 向反向索引表中加入 ADDCACHE 中所有文档
-func (indexer *Indexer) AddDocs(documents *types.DocumentsIndex) {
+func (indexer *Indexer) AddDocs(documents *types.DocsIndex) {
 	if indexer.initialized == false {
 		log.Fatal("The Indexer has not been initialized.")
 	}
@@ -217,7 +217,7 @@ func (indexer *Indexer) AddDocs(documents *types.DocumentsIndex) {
 		// 更新文章状态和总数
 		if docIdIsNew {
 			indexer.tableLock.docsState[document.DocId] = 0
-			indexer.numDocuments++
+			indexer.numDocs++
 		}
 	}
 }
@@ -236,7 +236,7 @@ func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 			indexer.removeCacheLock.removeCache[indexer.removeCacheLock.removeCachePointer] = docId
 			indexer.removeCacheLock.removeCachePointer++
 			indexer.tableLock.docsState[docId] = 1
-			indexer.numDocuments--
+			indexer.numDocs--
 		} else if ok && docState == 2 {
 			// 删除一个等待加入的文档
 			indexer.tableLock.docsState[docId] = 1
@@ -330,7 +330,7 @@ func (indexer *Indexer) Lookup(
 		log.Fatal("The Indexer has not been initialized.")
 	}
 
-	if indexer.numDocuments == 0 {
+	if indexer.numDocs == 0 {
 		return
 	}
 	numDocs = 0
@@ -383,7 +383,7 @@ func (indexer *Indexer) Lookup(
 	}
 
 	// 平均文本关键词长度，用于计算BM25
-	avgDocLength := indexer.totalTokenLength / float32(indexer.numDocuments)
+	avgDocLength := indexer.totalTokenLength / float32(indexer.numDocs)
 	for ; indexPointers[0] >= 0; indexPointers[0]-- {
 		// 以第一个搜索键出现的文档作为基准，并遍历其他搜索键搜索同一文档
 		baseDocId := indexer.getDocId(table[0], indexPointers[0])
@@ -472,7 +472,7 @@ func (indexer *Indexer) Lookup(
 					// 计算BM25
 					if len(t.docIds) > 0 && frequency > 0 && indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
 						// 带平滑的idf
-						idf := float32(math.Log2(float64(indexer.numDocuments)/float64(len(t.docIds)) + 1))
+						idf := float32(math.Log2(float64(indexer.numDocs)/float64(len(t.docIds)) + 1))
 						k1 := indexer.initOptions.BM25Parameters.K1
 						b := indexer.initOptions.BM25Parameters.B
 						bm25 += idf * frequency * (k1 + 1) / (frequency + k1*(1-b+b*d/avgDocLength))

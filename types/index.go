@@ -19,8 +19,8 @@ Package types is riot types
 */
 package types
 
-// DocumentIndex document's index
-type DocumentIndex struct {
+// DocIndex document's index
+type DocIndex struct {
 	// DocId 文本的 DocId
 	DocId uint64
 
@@ -64,18 +64,18 @@ type IndexedDocument struct {
 	TokenLocations [][]int
 }
 
-// DocumentsIndex 方便批量加入文档索引
-type DocumentsIndex []*DocumentIndex
+// DocsIndex 方便批量加入文档索引
+type DocsIndex []*DocIndex
 
-func (docs DocumentsIndex) Len() int {
+func (docs DocsIndex) Len() int {
 	return len(docs)
 }
 
-func (docs DocumentsIndex) Swap(i, j int) {
+func (docs DocsIndex) Swap(i, j int) {
 	docs[i], docs[j] = docs[j], docs[i]
 }
 
-func (docs DocumentsIndex) Less(i, j int) bool {
+func (docs DocsIndex) Less(i, j int) bool {
 	return docs[i].DocId < docs[j].DocId
 }
 

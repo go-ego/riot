@@ -45,7 +45,7 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 		}
 	}
 	DocInfoGroup[shard].DocInfos[docId] = docinfo
-	DocInfoGroup[shard].NumDocuments++
+	DocInfoGroup[shard].NumDocs++
 }
 
 // // IsDocExist doc is exist

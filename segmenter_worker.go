@@ -220,7 +220,7 @@ func (engine *Engine) segmenterWorker() {
 		}
 
 		indexerRequest := indexerAddDocRequest{
-			document: &types.DocumentIndex{
+			document: &types.DocIndex{
 				DocId:       request.docId,
 				TokenLength: float32(numTokens),
 				Keywords:    make([]types.KeywordIndex, len(tokensMap)),

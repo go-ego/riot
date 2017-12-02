@@ -59,7 +59,7 @@ func initEngine() {
 	// Wait for the index to refresh
 	searcher.FlushIndex()
 
-	log.Println("recover index number:", searcher.NumDocumentsIndexed())
+	log.Println("recover index number:", searcher.NumDocsIndexed())
 }
 
 func restoreIndex() {
@@ -82,7 +82,7 @@ func restoreIndex() {
 	// Wait for the index to refresh
 	searcher.FlushIndex()
 
-	log.Println("recover index number:", searcher.NumDocumentsIndexed())
+	log.Println("recover index number:", searcher.NumDocsIndexed())
 }
 
 func main() {

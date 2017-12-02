@@ -22,7 +22,7 @@ import (
 )
 
 type indexerAddDocRequest struct {
-	document    *types.DocumentIndex
+	document    *types.DocIndex
 	forceUpdate bool
 }
 
@@ -49,10 +49,10 @@ func (engine *Engine) indexerAddDocWorker(shard int) {
 		if request.document != nil {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
 				uint64(len(request.document.Keywords)))
-			atomic.AddUint64(&engine.numDocumentsIndexed, 1)
+			atomic.AddUint64(&engine.numDocsIndexed, 1)
 		}
 		if request.forceUpdate {
-			atomic.AddUint64(&engine.numDocumentsForceUpdated, 1)
+			atomic.AddUint64(&engine.numDocsForceUpdated, 1)
 		}
 	}
 }
@@ -62,10 +62,10 @@ func (engine *Engine) indexerRemoveDocWorker(shard int) {
 		request := <-engine.indexerRemoveDocChans[shard]
 		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
 		if request.docId != 0 {
-			atomic.AddUint64(&engine.numDocumentsRemoved, 1)
+			atomic.AddUint64(&engine.numDocsRemoved, 1)
 		}
 		if request.forceUpdate {
-			atomic.AddUint64(&engine.numDocumentsForceUpdated, 1)
+			atomic.AddUint64(&engine.numDocsForceUpdated, 1)
 		}
 	}
 }

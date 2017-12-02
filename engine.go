@@ -58,14 +58,14 @@ func GetVersion() string {
 // Engine initialize the engine
 type Engine struct {
 	// 计数器，用来统计有多少文档被索引等信息
-	numDocumentsIndexed      uint64
-	numDocumentsRemoved      uint64
-	numDocumentsForceUpdated uint64
+	numDocsIndexed           uint64
+	numDocsRemoved           uint64
+	numDocsForceUpdated      uint64
 	numIndexingRequests      uint64
 	numRemovingRequests      uint64
 	numForceUpdatingRequests uint64
 	numTokenIndexAdded       uint64
-	numDocumentsStored       uint64
+	numDocsStored            uint64
 
 	// 记录初始化参数
 	initOptions types.EngineOpts
@@ -78,7 +78,7 @@ type Engine struct {
 	dbs        []storage.Storage
 
 	// 建立索引器使用的通信通道
-	segmenterChannel         chan segmenterRequest
+	segmenterChannel      chan segmenterRequest
 	indexerAddDocChans    []chan indexerAddDocRequest
 	indexerRemoveDocChans []chan indexerRemoveDocRequest
 	rankerAddDocChans     []chan rankerAddDocRequest
@@ -90,7 +90,7 @@ type Engine struct {
 
 	// 建立持久存储使用的通信通道
 	storageIndexDocChans []chan storageIndexDocRequest
-	storageInitChannel      chan bool
+	storageInitChannel   chan bool
 }
 
 // Indexer initialize the indexer channel
@@ -196,7 +196,7 @@ func (engine *Engine) Storage() {
 		}
 		for {
 			runtime.Gosched()
-			if engine.numIndexingRequests == engine.numDocumentsIndexed {
+			if engine.numIndexingRequests == engine.numDocsIndexed {
 				break
 			}
 		}
@@ -288,7 +288,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	// 启动持久化存储工作协程
 	engine.Storage()
 
-	atomic.AddUint64(&engine.numDocumentsStored, engine.numIndexingRequests)
+	atomic.AddUint64(&engine.numDocsStored, engine.numIndexingRequests)
 }
 
 // IndexDoc add the document to the index
@@ -546,9 +546,9 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 func (engine *Engine) FlushIndex() {
 	for {
 		runtime.Gosched()
-		if engine.numIndexingRequests == engine.numDocumentsIndexed &&
-			engine.numRemovingRequests*uint64(engine.initOptions.NumShards) == engine.numDocumentsRemoved &&
-			(!engine.initOptions.UseStorage || engine.numIndexingRequests == engine.numDocumentsStored) {
+		if engine.numIndexingRequests == engine.numDocsIndexed &&
+			engine.numRemovingRequests*uint64(engine.initOptions.NumShards) == engine.numDocsRemoved &&
+			(!engine.initOptions.UseStorage || engine.numIndexingRequests == engine.numDocsStored) {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
 			break
 		}
@@ -557,7 +557,7 @@ func (engine *Engine) FlushIndex() {
 	engine.IndexDoc(0, types.DocIndexData{}, true)
 	for {
 		runtime.Gosched()
-		if engine.numForceUpdatingRequests*uint64(engine.initOptions.NumShards) == engine.numDocumentsForceUpdated {
+		if engine.numForceUpdatingRequests*uint64(engine.initOptions.NumShards) == engine.numDocsForceUpdated {
 			return
 		}
 	}
@@ -610,7 +610,7 @@ func New(dict ...string) *Engine {
 
 	// 等待索引刷新完毕
 	// searcher.FlushIndex()
-	// log.Println("recover index number:", searcher.NumDocumentsIndexed())
+	// log.Println("recover index number:", searcher.NumDocsIndexed())
 
 	return searcher
 }

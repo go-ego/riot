@@ -86,7 +86,7 @@ func InitEngine(conf Config) {
 	// 等待索引刷新完毕
 	Searcher.FlushIndex()
 
-	log.Println("recover index number:", Searcher.NumDocumentsIndexed())
+	log.Println("recover index number:", Searcher.NumDocsIndexed())
 
 }
 

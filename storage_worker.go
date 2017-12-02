@@ -43,13 +43,13 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 		enc := gob.NewEncoder(&buf)
 		err := enc.Encode(request.data)
 		if err != nil {
-			atomic.AddUint64(&engine.numDocumentsStored, 1)
+			atomic.AddUint64(&engine.numDocsStored, 1)
 			continue
 		}
 
 		// 将key-value写入数据库
 		engine.dbs[shard].Set(b[0:length], buf.Bytes())
-		atomic.AddUint64(&engine.numDocumentsStored, 1)
+		atomic.AddUint64(&engine.numDocsStored, 1)
 	}
 }
 
