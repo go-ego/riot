@@ -30,7 +30,7 @@ func main() {
 	// Init searcher
 	searcher.Init(types.EngineOpts{
 		Using:       4,
-		OnlyID:      true,
+		IDOnly:      true,
 		NotUsingGse: true})
 	defer searcher.Close()
 

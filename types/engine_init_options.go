@@ -89,14 +89,14 @@ type EngineOpts struct {
 	DefaultRankOpts *RankOpts
 
 	// 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
-	StoreOnly bool
+	StoreOnly  bool
+	UseStorage bool
 
-	UseStorage    bool
 	StorageFolder string
 	StorageShards int
 	StorageEngine string
 
-	OnlyID bool
+	IDOnly bool
 }
 
 // Init 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
