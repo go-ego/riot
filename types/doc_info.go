@@ -36,7 +36,7 @@ type DocInfo struct {
 
 // InvertedIndexShard 反向索引表([关键词]反向索引表)
 type InvertedIndexShard struct {
-	InvertedIndex    map[string]*KeywordIndices
+	InvertedIndex map[string]*KeywordIndices
 	TotalTokenLen float32 //总关键词数
 	sync.RWMutex
 }

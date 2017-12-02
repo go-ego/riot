@@ -367,7 +367,7 @@ func TestLookupWithBM25(t *testing.T) {
 	})
 	// doc1 = "token2 token4 token4 token2 token3 token4"
 	indexer.AddDocToCache(&types.DocIndex{
-		DocId:       1,
+		DocId:    1,
 		TokenLen: 6,
 		Keywords: []types.KeywordIndex{
 			{"token2", 3, []int{0, 21}},
@@ -377,7 +377,7 @@ func TestLookupWithBM25(t *testing.T) {
 	}, false)
 	// doc2 = "token6 token7"
 	indexer.AddDocToCache(&types.DocIndex{
-		DocId:       2,
+		DocId:    2,
 		TokenLen: 2,
 		Keywords: []types.KeywordIndex{
 			{"token6", 3, []int{0}},

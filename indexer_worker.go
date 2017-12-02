@@ -100,7 +100,7 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 			var outputDocs []types.ScoredDoc
 			for _, d := range docs {
 				outputDocs = append(outputDocs, types.ScoredDoc{
-					DocId: d.DocId,
+					DocId:            d.DocId,
 					TokenSnippetLocs: d.TokenSnippetLocs,
 					TokenLocs:        d.TokenLocs})
 			}

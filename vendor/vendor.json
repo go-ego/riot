@@ -131,14 +131,14 @@
 		{
 			"checksumSHA1": "jWpwWWcywJPNhKTYxi4RXds+amQ=",
 			"path": "github.com/shirou/gopsutil/internal/common",
-			"revision": "bfe3c2e8f406bf352bc8df81f98c752224867349",
-			"revisionTime": "2017-11-21T12:01:14Z"
+			"revision": "5c46042e0db59cd67a946f07245ad3afa6a3c755",
+			"revisionTime": "2017-11-30T13:50:17Z"
 		},
 		{
 			"checksumSHA1": "UuwHornIODuEq7fYnsZwdVgERLk=",
 			"path": "github.com/shirou/gopsutil/mem",
-			"revision": "bfe3c2e8f406bf352bc8df81f98c752224867349",
-			"revisionTime": "2017-11-21T12:01:14Z"
+			"revision": "5c46042e0db59cd67a946f07245ad3afa6a3c755",
+			"revisionTime": "2017-11-30T13:50:17Z"
 		},
 		{
 			"checksumSHA1": "spMeORRgS1azN91KYqJgoxBmhMw=",

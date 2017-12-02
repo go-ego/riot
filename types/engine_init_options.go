@@ -25,9 +25,9 @@ var (
 	defaultNumSegmenterThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
 	defaultNumShards                 = 8
-	defaultIndexerBufLen          = runtime.NumCPU()
+	defaultIndexerBufLen             = runtime.NumCPU()
 	defaultNumIndexerThreadsPerShard = runtime.NumCPU()
-	defaultRankerBufLen           = runtime.NumCPU()
+	defaultRankerBufLen              = runtime.NumCPU()
 	defaultNumRankerThreadsPerShard  = runtime.NumCPU()
 	defaultDefaultRankOpts           = RankOpts{
 		ScoringCriteria: RankByBM25{},
