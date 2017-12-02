@@ -20,6 +20,8 @@
 - TokenLengths			->	TokenLens
 - TokenLocations		->	TokenLocs
 
+Api basic transformation completed, it will be gradually stabilized after the completion of the disk version and stable in 1.0.0.
+
 ## riot v0.10.0, Danube River
 
 ### Add  
