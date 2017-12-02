@@ -29,7 +29,7 @@ var (
 	defaultNumIndexerThreadsPerShard = runtime.NumCPU()
 	defaultRankerBufLength           = runtime.NumCPU()
 	defaultNumRankerThreadsPerShard  = runtime.NumCPU()
-	defaultDefaultRankOptions        = RankOptions{
+	defaultDefaultRankOpts           = RankOpts{
 		ScoringCriteria: RankByBM25{},
 	}
 	defaultIndexerOpts = IndexerOpts{
@@ -85,9 +85,11 @@ type EngineOpts struct {
 	IndexerOpts *IndexerOpts
 
 	// 默认的搜索选项
-	DefaultRankOptions *RankOptions
+	DefaultRankOpts *RankOpts
 
 	// 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
+	StoreOnly bool
+
 	UseStorage    bool
 	StorageFolder string
 	StorageShards int
@@ -138,12 +140,12 @@ func (options *EngineOpts) Init() {
 		options.IndexerOpts.BM25Parameters = &defaultBM25Parameters
 	}
 
-	if options.DefaultRankOptions == nil {
-		options.DefaultRankOptions = &defaultDefaultRankOptions
+	if options.DefaultRankOpts == nil {
+		options.DefaultRankOpts = &defaultDefaultRankOpts
 	}
 
-	if options.DefaultRankOptions.ScoringCriteria == nil {
-		options.DefaultRankOptions.ScoringCriteria = defaultDefaultRankOptions.ScoringCriteria
+	if options.DefaultRankOpts.ScoringCriteria == nil {
+		options.DefaultRankOpts.ScoringCriteria = defaultDefaultRankOpts.ScoringCriteria
 	}
 
 	if options.StorageShards == 0 {

@@ -394,7 +394,7 @@ func (engine *Engine) Segment(content string) (keywords []string) {
 }
 
 // Tokens get the engine tokens
-func (engine *Engine) Tokens(request types.SearchRequest) (tokens []string) {
+func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	// 收集关键词
 	// tokens := []string{}
 	if request.Text != "" {
@@ -431,21 +431,21 @@ func (engine *Engine) Tokens(request types.SearchRequest) (tokens []string) {
 // Search find the document that satisfies the search criteria.
 // This function is thread safe
 // 查找满足搜索条件的文档，此函数线程安全
-func (engine *Engine) Search(request types.SearchRequest) (output types.SearchResponse) {
+func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) {
 	if !engine.initialized {
 		log.Fatal("The engine must be initialized first")
 	}
 
 	tokens := engine.Tokens(request)
 
-	var rankOptions types.RankOptions
-	if request.RankOptions == nil {
-		rankOptions = *engine.initOptions.DefaultRankOptions
+	var RankOpts types.RankOpts
+	if request.RankOpts == nil {
+		RankOpts = *engine.initOptions.DefaultRankOpts
 	} else {
-		rankOptions = *request.RankOptions
+		RankOpts = *request.RankOpts
 	}
-	if rankOptions.ScoringCriteria == nil {
-		rankOptions.ScoringCriteria = engine.initOptions.DefaultRankOptions.ScoringCriteria
+	if RankOpts.ScoringCriteria == nil {
+		RankOpts.ScoringCriteria = engine.initOptions.DefaultRankOpts.ScoringCriteria
 	}
 
 	// 建立排序器返回的通信通道
@@ -458,7 +458,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 		tokens:              tokens,
 		labels:              request.Labels,
 		docIds:              request.DocIds,
-		options:             rankOptions,
+		options:             RankOpts,
 		rankerReturnChannel: rankerReturnChannel,
 		orderless:           request.Orderless,
 		logic:               request.Logic,
@@ -471,7 +471,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 
 	// 从通信通道读取排序器的输出
 	numDocs := 0
-	rankOutput := types.ScoredDocuments{}
+	rankOutput := types.ScoredDocs{}
 
 	//**********/ begin
 	timeout := request.Timeout
@@ -508,7 +508,7 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 
 	// 再排序
 	if !request.CountDocsOnly && !request.Orderless {
-		if rankOptions.ReverseOrder {
+		if RankOpts.ReverseOrder {
 			sort.Sort(sort.Reverse(rankOutput))
 		} else {
 			sort.Sort(rankOutput)
@@ -524,12 +524,12 @@ func (engine *Engine) Search(request types.SearchRequest) (output types.SearchRe
 			output.Docs = rankOutput
 		} else {
 			var start, end int
-			if rankOptions.MaxOutputs == 0 {
-				start = utils.MinInt(rankOptions.OutputOffset, len(rankOutput))
+			if RankOpts.MaxOutputs == 0 {
+				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
 				end = len(rankOutput)
 			} else {
-				start = utils.MinInt(rankOptions.OutputOffset, len(rankOutput))
-				end = utils.MinInt(start+rankOptions.MaxOutputs, len(rankOutput))
+				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
+				end = utils.MinInt(start+RankOpts.MaxOutputs, len(rankOutput))
 			}
 			output.Docs = rankOutput[start:end]
 		}

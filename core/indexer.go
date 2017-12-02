@@ -341,8 +341,8 @@ func (indexer *Indexer) Lookup(
 	copy(keywords[len(tokens):], labels)
 
 	if len(logic) > 0 {
-		if logic != nil && len(keywords) > 0 && logic[0].MustLabels == true || logic[0].ShouldLabels == true ||
-			logic[0].NotInLabels == true {
+		if logic != nil && len(keywords) > 0 && logic[0].Must == true || logic[0].Should == true ||
+			logic[0].NotIn == true {
 
 			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
 			return
@@ -623,7 +623,7 @@ func (indexer *Indexer) LogicLookup(
 	defer indexer.tableLock.RUnlock()
 
 	// // 有效性检查, 不允许只出现逻辑非检索, 也不允许与或非都不存在
-	// if logic.MustLabels == true && logic.ShouldLabels == true && logic.NotInLabels == true {
+	// if Logic.Must == true && Logic.Should == true && Logic.NotIn == true {
 	// 	return
 	// }
 
@@ -634,7 +634,7 @@ func (indexer *Indexer) LogicLookup(
 	if len(logic.LogicExpr.MustLabels) > 0 {
 		LogicExpr = logic.LogicExpr.MustLabels
 	}
-	if logic.MustLabels == true || len(logic.LogicExpr.MustLabels) > 0 {
+	if logic.Must == true || len(logic.LogicExpr.MustLabels) > 0 {
 		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if !found {
@@ -654,7 +654,7 @@ func (indexer *Indexer) LogicLookup(
 		LogicExpr = logic.LogicExpr.ShouldLabels
 	}
 
-	if logic.ShouldLabels == true || len(logic.LogicExpr.ShouldLabels) > 0 {
+	if logic.Should == true || len(logic.LogicExpr.ShouldLabels) > 0 {
 		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if found {
@@ -674,7 +674,7 @@ func (indexer *Indexer) LogicLookup(
 	if len(logic.LogicExpr.NotInLabels) > 0 {
 		LogicExpr = logic.LogicExpr.NotInLabels
 	}
-	if logic.NotInLabels == true || len(logic.LogicExpr.NotInLabels) > 0 {
+	if logic.NotIn == true || len(logic.LogicExpr.NotInLabels) > 0 {
 		for _, keyword := range LogicExpr {
 			indices, found := indexer.tableLock.table[keyword]
 			if found {
@@ -685,7 +685,7 @@ func (indexer *Indexer) LogicLookup(
 
 	// 开始检索
 	numDocs = 0
-	if logic.MustLabels == true || len(logic.LogicExpr.MustLabels) > 0 {
+	if logic.Must == true || len(logic.LogicExpr.MustLabels) > 0 {
 		// 如果存在逻辑与检索
 		for idx := indexer.getIndexLength(MustTable[0]) - 1; idx >= 0; idx-- {
 			baseDocId := indexer.getDocId(MustTable[0], idx)
@@ -712,7 +712,7 @@ func (indexer *Indexer) LogicLookup(
 	} else {
 		// 不存在逻辑与检索, 则必须存在逻辑或检索
 		// 这时进行求并集操作
-		if logic.ShouldLabels == true || len(logic.LogicExpr.ShouldLabels) > 0 {
+		if logic.Should == true || len(logic.LogicExpr.ShouldLabels) > 0 {
 			docs, numDocs = indexer.unionTable(ShouldTable, NotInTable, countDocsOnly)
 		} else {
 			uintDocIds := make([]uint64, 0)

@@ -41,6 +41,6 @@ func main() {
 	// Wait for the index to refresh
 	searcher.FlushIndex()
 
-	// The search output format is found in the types.SearchResponse structure
-	log.Print(searcher.Search(types.SearchRequest{Text: "google testing"}))
+	// The search output format is found in the types.SearchResp structure
+	log.Print(searcher.Search(types.SearchReq{Text: "google testing"}))
 }

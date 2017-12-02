@@ -112,15 +112,15 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 // Rank rank
 // 给文档评分并排序
 func (ranker *Ranker) Rank(
-	docs []types.IndexedDocument, options types.RankOptions,
-	countDocsOnly bool) (types.ScoredDocuments, int) {
+	docs []types.IndexedDocument, options types.RankOpts,
+	countDocsOnly bool) (types.ScoredDocs, int) {
 
 	if ranker.initialized == false {
 		log.Fatal("The Ranker has not been initialized.")
 	}
 
 	// 对每个文档评分
-	var outputDocs types.ScoredDocuments
+	var outputDocs types.ScoredDocs
 	numDocs := 0
 	for _, d := range docs {
 		ranker.lock.RLock()
@@ -137,7 +137,7 @@ func (ranker *Ranker) Rank(
 			if len(scores) > 0 {
 				if !countDocsOnly {
 					if !gOnlyID {
-						outputDocs = append(outputDocs, types.ScoredDocument{
+						outputDocs = append(outputDocs, types.ScoredDoc{
 							DocId: d.DocId,
 							// new
 							Fields:  fs,
@@ -148,7 +148,7 @@ func (ranker *Ranker) Rank(
 							TokenSnippetLocations: d.TokenSnippetLocations,
 							TokenLocations:        d.TokenLocations})
 					} else {
-						outputDocs = append(outputDocs, types.ScoredDocument{
+						outputDocs = append(outputDocs, types.ScoredDoc{
 							DocId:                 d.DocId,
 							Scores:                scores,
 							TokenSnippetLocations: d.TokenSnippetLocations,

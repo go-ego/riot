@@ -30,13 +30,13 @@ type rankerAddDocRequest struct {
 
 type rankerRankRequest struct {
 	docs                []types.IndexedDocument
-	options             types.RankOptions
+	options             types.RankOpts
 	rankerReturnChannel chan rankerReturnRequest
 	countDocsOnly       bool
 }
 
 type rankerReturnRequest struct {
-	docs    types.ScoredDocuments
+	docs    types.ScoredDocs
 	numDocs int
 }
 

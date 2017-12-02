@@ -33,8 +33,8 @@ func dictZh() {
 	// 等待索引刷新完毕
 	searcher.FlushIndex()
 
-	// 搜索输出格式见types.SearchResponse结构体
-	log.Print(searcher.Search(types.SearchRequest{Text: "百度中国"}))
+	// 搜索输出格式见types.SearchResp结构体
+	log.Print(searcher.Search(types.SearchReq{Text: "百度中国"}))
 }
 
 // TODO
@@ -60,8 +60,8 @@ func dictJp() {
 	// 等待索引刷新完毕
 	searcher2.FlushIndex()
 
-	// 搜索输出格式见types.SearchResponse结构体
-	log.Print(searcher2.Search(types.SearchRequest{Text: "こんにちは世界"}))
+	// 搜索输出格式见types.SearchResp结构体
+	log.Print(searcher2.Search(types.SearchReq{Text: "こんにちは世界"}))
 }
 
 func main() {

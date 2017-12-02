@@ -51,16 +51,16 @@ func main() {
 	strArr := []string{"accidentally"}
 	query := "google testing"
 
-	// The search output format is found in the types.SearchResponse structure
-	docs := searcher.Search(types.SearchRequest{
+	// The search output format is found in the types.SearchResp structure
+	docs := searcher.Search(types.SearchReq{
 		Text: query,
 		Logic: types.Logic{
-			ShouldLabels: true,
+			Should: true,
 			LogicExpr: types.LogicExpr{
 				NotInLabels: strArr,
 			},
 		},
-		RankOptions: &types.RankOptions{
+		RankOpts: &types.RankOpts{
 			OutputOffset: 0,
 			MaxOutputs:   100,
 		}})

@@ -50,7 +50,7 @@ var (
 	persistentStorageShards = flag.Int("persistentStorageShards", 0, "持久数据库存储裂分数目")
 
 	searcher = riot.Engine{}
-	options  = types.RankOptions{
+	options  = types.RankOpts{
 		OutputOffset: 0,
 		MaxOutputs:   100,
 	}
@@ -70,7 +70,7 @@ func initEngine() {
 			IndexType: *indexType,
 		},
 		NumShards:          NumShards,
-		DefaultRankOptions: &options,
+		DefaultRankOpts: &options,
 		UseStorage:         *usePersistent,
 		StorageFolder:      *persistentStorageFolder,
 		StorageShards:      *persistentStorageShards,
@@ -193,7 +193,7 @@ func useStore(tBeginInit, tEndInit time.Time) {
 			IndexType: *indexType,
 		},
 		NumShards:          NumShards,
-		DefaultRankOptions: &options,
+		DefaultRankOpts: &options,
 		UseStorage:         *usePersistent,
 		StorageFolder:      *persistentStorageFolder,
 		StorageEngine:      *storageEngine,
@@ -261,7 +261,7 @@ type recordResponseLock struct {
 func search(ch chan bool, record *recordResponseLock) {
 	for i := 0; i < numRepeatQuery; i++ {
 		for _, query := range searchQueries {
-			output := searcher.Search(types.SearchRequest{Text: query})
+			output := searcher.Search(types.SearchReq{Text: query})
 			record.RLock()
 			if _, found := record.count[query]; !found {
 				record.RUnlock()

@@ -19,8 +19,8 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
-// SearchResponse search response options
-type SearchResponse struct {
+// SearchResp search response options
+type SearchResp struct {
 	// 搜索用到的关键词
 	Tokens []string
 
@@ -28,7 +28,7 @@ type SearchResponse struct {
 	// Class string
 
 	// 搜索到的文档，已排序
-	Docs []ScoredDocument
+	Docs []ScoredDoc
 
 	// 搜索是否超时。超时的情况下也可能会返回部分结果
 	Timeout bool
@@ -37,8 +37,8 @@ type SearchResponse struct {
 	NumDocs int
 }
 
-// ScoredDocument scored document
-type ScoredDocument struct {
+// ScoredDoc scored document
+type ScoredDoc struct {
 	DocId uint64
 
 	// new Content
@@ -54,7 +54,7 @@ type ScoredDocument struct {
 	// 搜索结果按照Scores的值排序，先按照第一个数排，如果相同则按照第二个数排序，依次类推。
 	Scores []float32
 
-	// 用于生成摘要的关键词在文本中的字节位置，该切片长度和SearchResponse.Tokens的长度一样
+	// 用于生成摘要的关键词在文本中的字节位置，该切片长度和SearchResp.Tokens的长度一样
 	// 只有当IndexType == LocationsIndex时不为空
 	TokenSnippetLocations []int
 
@@ -63,18 +63,18 @@ type ScoredDocument struct {
 	TokenLocations [][]int
 }
 
-// ScoredDocuments 为了方便排序
-type ScoredDocuments []ScoredDocument
+// ScoredDocs 为了方便排序
+type ScoredDocs []ScoredDoc
 
-func (docs ScoredDocuments) Len() int {
+func (docs ScoredDocs) Len() int {
 	return len(docs)
 }
 
-func (docs ScoredDocuments) Swap(i, j int) {
+func (docs ScoredDocs) Swap(i, j int) {
 	docs[i], docs[j] = docs[j], docs[i]
 }
 
-func (docs ScoredDocuments) Less(i, j int) bool {
+func (docs ScoredDocs) Less(i, j int) bool {
 	// 为了从大到小排序，这实际上实现的是More的功能
 	for iScore := 0; iScore < utils.MinInt(len(docs[i].Scores), len(docs[j].Scores)); iScore++ {
 		if docs[i].Scores[iScore] > docs[j].Scores[iScore] {

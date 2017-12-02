@@ -67,9 +67,9 @@ func initEngine() {
 func main() {
 	initEngine()
 
-	sea := searcher.Search(types.SearchRequest{
+	sea := searcher.Search(types.SearchReq{
 		Text: "zl",
-		RankOptions: &types.RankOptions{
+		RankOpts: &types.RankOpts{
 			OutputOffset: 0,
 			MaxOutputs:   100,
 		}})

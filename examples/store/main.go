@@ -88,9 +88,9 @@ func restoreIndex() {
 func main() {
 	initEngine()
 
-	sea := searcher.Search(types.SearchRequest{
+	sea := searcher.Search(types.SearchReq{
 		Text: "google testing",
-		RankOptions: &types.RankOptions{
+		RankOpts: &types.RankOpts{
 			OutputOffset: 0,
 			MaxOutputs:   100,
 		}})

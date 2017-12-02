@@ -128,9 +128,9 @@ type JsonResponse struct {
 // JsonRpcServer json rpc server
 func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query().Get("query")
-	output := searcher.Search(types.SearchRequest{
+	output := searcher.Search(types.SearchReq{
 		Text: query,
-		RankOptions: &types.RankOptions{
+		RankOpts: &types.RankOpts{
 			ScoringCriteria: &WeiboScoringCriteria{},
 			OutputOffset:    0,
 			MaxOutputs:      100,

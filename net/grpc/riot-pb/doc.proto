@@ -91,11 +91,11 @@ message Attri {
 
 message Logic {
     // 与查询, 必须都存在
-    bool mustLabels = 1;
+    bool must = 1;
     // 或查询, 有一个存在即可
-    bool shouldLabels = 2;
+    bool should = 2;
     // 非查询, 不包含
-    bool notInLabels = 3;
+    bool notIn = 3;
     
     LogicExpr LogicExpr = 4;
 }

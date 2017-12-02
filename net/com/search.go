@@ -107,15 +107,15 @@ type SearchArgs struct {
 }
 
 // Search search
-func Search(sea SearchArgs) types.SearchResponse {
+func Search(sea SearchArgs) types.SearchResp {
 
-	var docs types.SearchResponse
+	var docs types.SearchResp
 
-	docs = Searcher.Search(types.SearchRequest{Text: sea.Query,
+	docs = Searcher.Search(types.SearchReq{Text: sea.Query,
 		// NotUsingGse: true,
 		DocIds: sea.DocIds,
 		Logic:  sea.Logic,
-		RankOptions: &types.RankOptions{
+		RankOpts: &types.RankOpts{
 			OutputOffset: sea.OutputOffset,
 			MaxOutputs:   sea.MaxOutputs,
 		}})

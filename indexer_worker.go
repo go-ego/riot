@@ -31,7 +31,7 @@ type indexerLookupRequest struct {
 	tokens              []string
 	labels              []string
 	docIds              map[uint64]bool
-	options             types.RankOptions
+	options             types.RankOpts
 	rankerReturnChannel chan rankerReturnRequest
 	orderless           bool
 	logic               types.Logic
@@ -97,9 +97,9 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 		}
 
 		if request.orderless {
-			var outputDocs []types.ScoredDocument
+			var outputDocs []types.ScoredDoc
 			for _, d := range docs {
-				outputDocs = append(outputDocs, types.ScoredDocument{
+				outputDocs = append(outputDocs, types.ScoredDoc{
 					DocId: d.DocId,
 					TokenSnippetLocations: d.TokenSnippetLocations,
 					TokenLocations:        d.TokenLocations})

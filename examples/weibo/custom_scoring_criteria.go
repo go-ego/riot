@@ -53,7 +53,7 @@ var (
 		"停用词文件")
 
 	searcher = riot.Engine{}
-	options  = types.RankOptions{
+	options  = types.RankOpts{
 		ScoringCriteria: WeiboScoringCriteria{},
 		OutputOffset:    0,
 		MaxOutputs:      100,
@@ -109,7 +109,7 @@ func main() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocationsIndex,
 		},
-		DefaultRankOptions: &options,
+		DefaultRankOpts: &options,
 	})
 	defer searcher.Close()
 
@@ -154,7 +154,7 @@ func main() {
 
 	// 搜索
 	log.Printf("开始查询")
-	output := searcher.Search(types.SearchRequest{Text: *query})
+	output := searcher.Search(types.SearchReq{Text: *query})
 
 	// 显示
 	fmt.Println("output...")

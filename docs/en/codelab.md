@@ -159,9 +159,9 @@ WeiboScoringCriteria actually inherits the types.ScoringCriteria interface, whic
 With custom rating data and custom rating rules, we can search, see the code below:
 
 ```go
-response := searcher.Search(types.SearchRequest{
+response := searcher.Search(types.SearchReq{
 	Text: "自行车运动",
-	RankOptions: &types.RankOptions{
+	RankOpts: &types.RankOpts{
 		ScoringCriteria: &WeiboScoringCriteria{},
 		OutputOffset: 0,
 		MaxOutputs:   100,
@@ -169,7 +169,7 @@ response := searcher.Search(types.SearchRequest{
 })
 ```
 
-Among them, Text is the input search phrase (must be UTF-8 format), will be divided into keywords. As with indexing, the riot engine allows you to enter keywords and document labels directly by bypassing the built-in tokenizer, see the comments for the types.SearchRequest structure. RankOptions defines the sorting options. WeiboScoringCriteria is the scoring rule we defined above. In addition, you can control the output of pagination through the OutputOffset and MaxOutputs parameters. The search results are stored in the response variable, as described in the SearchResponse structure defined in the [types/search_response.go] (/types/search_response.go) file. For example, this structure returns the location of the keyword in the document, Used to generate a summary of the document.
+Among them, Text is the input search phrase (must be UTF-8 format), will be divided into keywords. As with indexing, the riot engine allows you to enter keywords and document labels directly by bypassing the built-in tokenizer, see the comments for the types.SearchReq structure. RankOpts defines the sorting options. WeiboScoringCriteria is the scoring rule we defined above. In addition, you can control the output of pagination through the OutputOffset and MaxOutputs parameters. The search results are stored in the response variable, as described in the SearchResp structure defined in the [types/search_response.go] (/types/search_response.go) file. For example, this structure returns the location of the keyword in the document, Used to generate a summary of the document.
 
 ## Output
 

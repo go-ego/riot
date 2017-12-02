@@ -89,7 +89,7 @@ func TestEngineIndexDoc(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
@@ -101,7 +101,7 @@ func TestEngineIndexDoc(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "中国", outputs.Tokens[0])
 	utils.Expect(t, "人口", outputs.Tokens[1])
@@ -126,7 +126,7 @@ func TestReverseOrder(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -139,7 +139,7 @@ func TestReverseOrder(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "3", len(outputs.Docs))
 
 	utils.Expect(t, "1", outputs.Docs[0].DocId)
@@ -152,7 +152,7 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    1,
 			MaxOutputs:      3,
@@ -165,7 +165,7 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	utils.Expect(t, "5", outputs.Docs[0].DocId)
@@ -189,7 +189,7 @@ func TestSearchWithCriteria(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
 		IndexerOpts: &types.IndexerOpts{
@@ -199,7 +199,7 @@ func TestSearchWithCriteria(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	log.Println(outputs.Docs)
@@ -215,14 +215,14 @@ func TestCompactIndex(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
 	})
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	utils.Expect(t, "5", outputs.Docs[0].DocId)
@@ -248,7 +248,7 @@ func TestFrequenciesIndex(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: BM25ScoringCriteria{},
 		},
 		IndexerOpts: &types.IndexerOpts{
@@ -258,7 +258,7 @@ func TestFrequenciesIndex(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	utils.Expect(t, "1", outputs.Docs[0].DocId)
@@ -273,7 +273,7 @@ func TestRemoveDoc(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
 	})
@@ -288,7 +288,7 @@ func TestRemoveDoc(t *testing.T) {
 	}, false)
 	engine.FlushIndex()
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Docs))
 
 	utils.Expect(t, "6", outputs.Docs[0].DocId)
@@ -302,7 +302,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
@@ -337,7 +337,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	}, false)
 	engine.FlushIndex()
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	log.Println("TestEngineIndexDocWithTokens", outputs)
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "中国", outputs.Tokens[0])
@@ -375,8 +375,8 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	addDocsWithLabels(&engine1)
 	addDocsWithLabels(&engine2)
 
-	outputs1 := engine1.Search(types.SearchRequest{Text: "百度"})
-	outputs2 := engine2.Search(types.SearchRequest{Text: "百度"})
+	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
+	outputs2 := engine2.Search(types.SearchReq{Text: "百度"})
 	utils.Expect(t, "1", len(outputs1.Tokens))
 	utils.Expect(t, "1", len(outputs2.Tokens))
 	utils.Expect(t, "百度", outputs1.Tokens[0])
@@ -391,7 +391,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
@@ -411,7 +411,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	engine1.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
 			ScoringCriteria: &RankByTokenProximity{},
@@ -425,7 +425,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	})
 	engine1.FlushIndex()
 
-	outputs := engine1.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "中国", outputs.Tokens[0])
 	utils.Expect(t, "人口", outputs.Tokens[1])
@@ -458,7 +458,7 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	engine1.FlushIndex()
 	log.Println("engine1.............")
 
-	outputs := engine1.Search(types.SearchRequest{Text: "中国人口"})
+	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "中国", outputs.Tokens[0])
 	utils.Expect(t, "人口", outputs.Tokens[1])
@@ -480,7 +480,7 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      1,
@@ -495,7 +495,7 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.RemoveDoc(5, false)
 	engine.FlushIndex()
 
-	outputs := engine.Search(types.SearchRequest{Text: "中国人口", CountDocsOnly: true})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口", CountDocsOnly: true})
 	utils.Expect(t, "0", len(outputs.Docs))
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "2", outputs.NumDocs)
@@ -506,7 +506,7 @@ func TestSearchWithin(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -522,7 +522,7 @@ func TestSearchWithin(t *testing.T) {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
-	outputs := engine.Search(types.SearchRequest{
+	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds,
 	})
@@ -545,7 +545,7 @@ func TestSearchJp(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		SegmenterDict: "./testdata/test_dict_jp.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -568,7 +568,7 @@ func TestSearchJp(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	docIds[6] = true
-	outputs := engine.Search(types.SearchRequest{
+	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
 	})
@@ -589,7 +589,7 @@ func TestSearchGse(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		// Using:         1,
 		SegmenterDict: "./testdata/test_dict_jp.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -621,7 +621,7 @@ func TestSearchGse(t *testing.T) {
 	docIds[1] = true
 	docIds[6] = true
 	docIds[7] = true
-	outputs := engine.Search(types.SearchRequest{
+	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
 	})
@@ -645,7 +645,7 @@ func TestSearchLogic(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		SegmenterDict: "./testdata/test_dict_jp.txt",
-		DefaultRankOptions: &types.RankOptions{
+		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -689,11 +689,11 @@ func TestSearchLogic(t *testing.T) {
 	}
 
 	strArr := []string{"こんにちは"}
-	outputs := engine.Search(types.SearchRequest{
+	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
 		Logic: types.Logic{
-			ShouldLabels: true,
+			Should: true,
 			LogicExpr: types.LogicExpr{
 				NotInLabels: strArr,
 			},

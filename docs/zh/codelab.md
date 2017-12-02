@@ -158,9 +158,9 @@ WeiboScoringCriteria 实际上继承了 types.ScoringCriteria 接口，这个接
 有了自定义评分数据和自定义评分规则，我们就可以进行搜索了，见下面的代码
 
 ```go
-response := searcher.Search(types.SearchRequest{
+response := searcher.Search(types.SearchReq{
 	Text: "自行车运动",
-	RankOptions: &types.RankOptions{
+	RankOpts: &types.RankOpts{
 		ScoringCriteria: &WeiboScoringCriteria{},
 		OutputOffset: 0,
 		MaxOutputs:   100,
@@ -168,7 +168,7 @@ response := searcher.Search(types.SearchRequest{
 })
 ```
 
-其中，Text是输入的搜索短语（必须是UTF-8格式），会被分词为关键词。和索引时相同，riot 引擎允许绕过内置的分词器直接输入关键词和文档标签，见 types.SearchRequest 结构体的注释。RankOptions 定义了排序选项。WeiboScoringCriteria 就是我们在上面定义的评分规则。另外你也可以通过 OutputOffset 和 MaxOutputs 参数控制分页输出。搜索结果保存在 response 变量中，具体内容见 [types/search_response.go](/types/search_response.go)文件中定义的SearchResponse 结构体，比如这个结构体返回了关键词出现在文档中的位置，可以用来生成文档的摘要。
+其中，Text是输入的搜索短语（必须是UTF-8格式），会被分词为关键词。和索引时相同，riot 引擎允许绕过内置的分词器直接输入关键词和文档标签，见 types.SearchReq 结构体的注释。RankOpts 定义了排序选项。WeiboScoringCriteria 就是我们在上面定义的评分规则。另外你也可以通过 OutputOffset 和 MaxOutputs 参数控制分页输出。搜索结果保存在 response 变量中，具体内容见 [types/search_response.go](/types/search_response.go)文件中定义的SearchResp 结构体，比如这个结构体返回了关键词出现在文档中的位置，可以用来生成文档的摘要。
 
 ## 显示
 

@@ -15,8 +15,8 @@
 
 package types
 
-// SearchRequest search request options
-type SearchRequest struct {
+// SearchReq search request options
+type SearchReq struct {
 	// 搜索的短语（必须是UTF-8格式），会被分词
 	// 当值为空字符串时关键词会从下面的Tokens读入
 	Text string
@@ -38,7 +38,7 @@ type SearchRequest struct {
 	DocIds map[uint64]bool
 
 	// 排序选项
-	RankOptions *RankOptions
+	RankOpts *RankOpts
 
 	// 超时，单位毫秒（千分之一秒）。此值小于等于零时不设超时。
 	// 搜索超时的情况下仍有可能返回部分排序结果。
@@ -52,18 +52,18 @@ type SearchRequest struct {
 	Orderless bool
 }
 
-// RankOptions rank options
-type RankOptions struct {
-	// 文档的评分规则，值为nil时使用Engine初始化时设定的规则
+// RankOpts rank options
+type RankOpts struct {
+	// 文档的评分规则，值为 nil 时使用 Engine 初始化时设定的规则
 	ScoringCriteria ScoringCriteria
 
-	// 默认情况下（ReverseOrder=false）按照分数从大到小排序，否则从小到大排序
+	// 默认情况下（ReverseOrder = false）按照分数从大到小排序，否则从小到大排序
 	ReverseOrder bool
 
 	// 从第几条结果开始输出
 	OutputOffset int
 
-	// 最大输出的搜索结果数，为0时无限制
+	// 最大输出的搜索结果数，为 0 时无限制
 	MaxOutputs int
 }
 
@@ -71,13 +71,13 @@ type RankOptions struct {
 type Logic struct {
 
 	// 与查询, 必须都存在
-	MustLabels bool
+	Must bool
 
 	// 或查询, 有一个存在即可
-	ShouldLabels bool
+	Should bool
 
 	// 非查询, 不包含
-	NotInLabels bool
+	NotIn bool
 
 	LogicExpr LogicExpr
 }
