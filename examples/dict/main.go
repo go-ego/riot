@@ -60,7 +60,7 @@ func dictJp() {
 	// 等待索引刷新完毕
 	searcher2.FlushIndex()
 
-	// 搜索输出格式见types.SearchResp结构体
+	// 搜索输出格式见 types.SearchResp 结构体
 	log.Print(searcher2.Search(types.SearchReq{Text: "こんにちは世界"}))
 }
 

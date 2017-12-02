@@ -124,7 +124,7 @@ func (ranker *Ranker) Rank(
 	numDocs := 0
 	for _, d := range docs {
 		ranker.lock.RLock()
-		// 判断doc是否存在
+		// 判断 doc 是否存在
 		if _, ok := ranker.lock.docs[d.DocId]; ok {
 
 			fs := ranker.lock.fields[d.DocId]

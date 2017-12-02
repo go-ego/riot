@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	// EngineOpts的默认值
+	// EngineOpts 的默认值
 	defaultNumSegmenterThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
 	defaultNumShards                 = 8
@@ -46,16 +46,17 @@ var (
 // EngineOpts init engine options
 type EngineOpts struct {
 	// 是否使用分词器
-	// 默认使用，否则在启动阶段跳过SegmenterDict和StopTokenFile设置
-	// 如果你不需要在引擎内分词，可以将这个选项设为true
-	// 注意，如果你不用分词器，那么在调用IndexDoc时DocIndexData中的Content会被忽略
+	// 默认使用，否则在启动阶段跳过 SegmenterDict 和 StopTokenFile 设置
+	// 如果你不需要在引擎内分词，可以将这个选项设为 true
+	// 注意，如果你不用分词器，那么在调用 IndexDoc 时,
+	// DocIndexData 中的 Content 会被忽略
 	NotUsingGse bool
 
 	// new
 	Using int
 
 	// 半角逗号分隔的字典文件，具体用法见
-	// sego.Segmenter.LoadDict函数的注释
+	// sego.Segmenter.LoadDict 函数的注释
 	SegmenterDict string
 	// SegmenterDict []string
 
@@ -65,8 +66,8 @@ type EngineOpts struct {
 	// 分词器线程数
 	NumSegmenterThreads int
 
-	// 索引器和排序器的shard数目
-	// 被检索/排序的文档会被均匀分配到各个shard中
+	// 索引器和排序器的 shard 数目
+	// 被检索/排序的文档会被均匀分配到各个 shard 中
 	NumShards int
 
 	// 索引器的信道缓冲长度
@@ -78,7 +79,7 @@ type EngineOpts struct {
 	// 排序器的信道缓冲长度
 	RankerBufLen int
 
-	// 排序器每个shard分配的线程数
+	// 排序器每个 shard 分配的线程数
 	NumRankerThreadsPerShard int
 
 	// 索引器初始化选项

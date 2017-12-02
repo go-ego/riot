@@ -163,7 +163,7 @@ func main() {
 	// 索引
 	go indexWeibo()
 
-	// 捕获ctrl-c
+	// 捕获 ctrl-c
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {

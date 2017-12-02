@@ -34,11 +34,11 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 	for {
 		request := <-engine.storageIndexDocChans[shard]
 
-		// 得到key
+		// 得到 key
 		b := make([]byte, 10)
 		length := binary.PutUvarint(b, request.docId)
 
-		// 得到value
+		// 得到 value
 		var buf bytes.Buffer
 		enc := gob.NewEncoder(&buf)
 		err := enc.Encode(request.data)
@@ -47,18 +47,18 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 			continue
 		}
 
-		// 将key-value写入数据库
+		// 将 key-value 写入数据库
 		engine.dbs[shard].Set(b[0:length], buf.Bytes())
 		atomic.AddUint64(&engine.numDocsStored, 1)
 	}
 }
 
 func (engine *Engine) storageRemoveDocWorker(docId uint64, shard uint32) {
-	// 得到key
+	// 得到 key
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
 
-	// 从数据库删除该key
+	// 从数据库删除该 key
 	engine.dbs[shard].Delete(b[0:length])
 }
 
@@ -66,10 +66,10 @@ func (engine *Engine) storageRemoveDocWorker(docId uint64, shard uint32) {
 func (engine *Engine) storageInitWorker(shard int) {
 	engine.dbs[shard].ForEach(func(k, v []byte) error {
 		key, value := k, v
-		// 得到docID
+		// 得到 docID
 		docId, _ := binary.Uvarint(key)
 
-		// 得到data
+		// 得到 data
 		buf := bytes.NewReader(value)
 		dec := gob.NewDecoder(buf)
 		var data types.DocIndexData

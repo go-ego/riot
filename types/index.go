@@ -33,7 +33,7 @@ type DocIndex struct {
 
 // KeywordIndex 反向索引项，这实际上标注了一个（搜索键，文档）对。
 type KeywordIndex struct {
-	// Text 搜索键的UTF-8文本
+	// Text 搜索键的 UTF-8 文本
 	Text string
 
 	// Frequency 搜索键词频
@@ -48,19 +48,21 @@ type IndexedDoc struct {
 	// DocId document id
 	DocId uint64
 
-	// BM25，仅当索引类型为FrequenciesIndex或者LocsIndex时返回有效值
+	// BM25，仅当索引类型为 FrequenciesIndex 或者 LocsIndex 时返回有效值
 	BM25 float32
 
-	// TokenProximity 关键词在文档中的紧邻距离，紧邻距离的含义见computeTokenProximity的注释。
-	// 仅当索引类型为LocsIndex时返回有效值。
+	// TokenProximity 关键词在文档中的紧邻距离，
+	// 紧邻距离的含义见 computeTokenProximity 的注释。
+	// 仅当索引类型为 LocsIndex 时返回有效值。
 	TokenProximity int32
 
-	// TokenSnippetLocs 紧邻距离计算得到的关键词位置，和Lookup函数输入tokens的长度一样且一一对应。
-	// 仅当索引类型为LocsIndex时返回有效值。
+	// TokenSnippetLocs 紧邻距离计算得到的关键词位置，
+	// 和 Lookup 函数输入 tokens 的长度一样且一一对应。
+	// 仅当索引类型为 LocsIndex 时返回有效值。
 	TokenSnippetLocs []int
 
 	// TokenLocs 关键词在文本中的具体位置。
-	// 仅当索引类型为LocsIndex时返回有效值。
+	// 仅当索引类型为 LocsIndex 时返回有效值。
 	TokenLocs [][]int
 }
 

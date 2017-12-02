@@ -296,7 +296,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 //
 // 输入参数：
 //  docId	      标识文档编号，必须唯一，docId == 0 表示非法文档（用于强制刷新索引），[1, +oo) 表示合法文档
-//  data	      见DocIndexData注释
+//  data	      见 DocIndexData 注释
 //  forceUpdate 是否强制刷新 cache，如果设为 true，则尽快添加到索引，否则等待 cache 满之后一次全量添加
 //
 // 注意：
@@ -344,7 +344,7 @@ func (engine *Engine) internalIndexDoc(
 // 注意：
 //      1. 这个函数是线程安全的，请尽可能并发调用以提高索引速度
 //      2. 这个函数调用是非同步的，也就是说在函数返回时有可能文档还没有加入索引中，因此
-//         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
+//         如果立刻调用 Search 可能无法查询到这个文档。强制刷新索引请调用 FlushIndex 函数。
 func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 	var force bool
 	if len(forceUpdate) > 0 {
@@ -526,10 +526,10 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 
 	// 准备输出
 	output.Tokens = tokens
-	// 仅当CountDocsOnly为false时才充填output.Docs
+	// 仅当 CountDocsOnly 为 false 时才充填 output.Docs
 	if !request.CountDocsOnly {
 		if request.Orderless {
-			// 无序状态无需对Offset截断
+			// 无序状态无需对 Offset 截断
 			output.Docs = rankOutput
 		} else {
 			var start, end int
@@ -624,7 +624,7 @@ func New(dict ...string) *Engine {
 	return searcher
 }
 
-// 从文本hash得到要分配到的shard
+// 从文本hash得到要分配到的 shard
 func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*uint32(engine.initOptions.NumShards))
 }

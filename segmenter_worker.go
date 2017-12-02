@@ -134,7 +134,7 @@ func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
 	numTokens := 0
 
 	if engine.initOptions.Using == 0 && request.data.Content != "" {
-		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
+		// Content 分词, 当文档正文不为空时，优先从内容分词中得到关键词
 		segments := engine.segmenter.Segment([]byte(request.data.Content))
 		for _, segment := range segments {
 			token := segment.Token().Text()
@@ -155,7 +155,7 @@ func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
 	}
 
 	if engine.initOptions.Using == 1 && request.data.Content != "" {
-		// Content分词, 当文档正文不为空时，优先从内容分词中得到关键词
+		// Content 分词, 当文档正文不为空时，优先从内容分词中得到关键词
 		segments := engine.segmenter.Segment([]byte(request.data.Content))
 		for _, segment := range segments {
 			token := segment.Token().Text()
@@ -206,13 +206,13 @@ func (engine *Engine) segmenterWorker() {
 		for _, label := range request.data.Labels {
 			if !engine.initOptions.NotUsingGse {
 				if !engine.stopTokens.IsStopToken(label) {
-					//当正文中已存在关键字时，若不判断，位置信息将会丢失
+					// 当正文中已存在关键字时，若不判断，位置信息将会丢失
 					if _, ok := tokensMap[label]; !ok {
 						tokensMap[label] = []int{}
 					}
 				}
 			} else {
-				//当正文中已存在关键字时，若不判断，位置信息将会丢失
+				// 当正文中已存在关键字时，若不判断，位置信息将会丢失
 				if _, ok := tokensMap[label]; !ok {
 					tokensMap[label] = []int{}
 				}

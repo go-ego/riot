@@ -37,6 +37,6 @@ func main() {
 	// 等待索引刷新完毕
 	searcher.FlushIndex()
 
-	// 搜索输出格式见types.SearchResp结构体
+	// 搜索输出格式见 types.SearchResp 结构体
 	log.Print(searcher.Search(types.SearchReq{Text: "百度中国"}))
 }

@@ -319,9 +319,9 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 	}
 }
 
-// Lookup lookup
+// Lookup lookup docs
 // 查找包含全部搜索键(AND操作)的文档
-// 当docIds不为nil时仅从docIds指定的文档中查找
+// 当 docIds 不为 nil 时仅从 docIds 指定的文档中查找
 func (indexer *Indexer) Lookup(
 	tokens []string, labels []string, docIds map[uint64]bool, countDocsOnly bool,
 	logic ...types.Logic) (docs []types.IndexedDoc, numDocs int) {
@@ -376,7 +376,7 @@ func (indexer *Indexer) Lookup(
 	}
 
 	// 归并查找各个搜索键出现文档的交集
-	// 从后向前查保证先输出DocId较大文档
+	// 从后向前查保证先输出 DocId 较大文档
 	indexPointers := make([]int, len(table))
 	for iTable := 0; iTable < len(table); iTable++ {
 		indexPointers[iTable] = indexer.getIndexLength(table[iTable]) - 1
@@ -406,12 +406,12 @@ func (indexer *Indexer) Lookup(
 				indexPointers[iTable] = position
 			} else {
 				if position == 0 {
-					// 该搜索键中所有的文档ID都比baseDocId大，因此已经没有
+					// 该搜索键中所有的文档 ID 都比 baseDocId 大，因此已经没有
 					// 继续查找的必要。
 					return
 				}
 
-				// 继续下一indexPointers[0]的查找
+				// 继续下一 indexPointers[0] 的查找
 				indexPointers[iTable] = position - 1
 				found = false
 				break
@@ -424,7 +424,7 @@ func (indexer *Indexer) Lookup(
 			}
 			indexedDoc := types.IndexedDoc{}
 
-			// 当为LocsIndex时计算关键词紧邻距离
+			// 当为 LocsIndex 时计算关键词紧邻距离
 			if indexer.initOptions.IndexType == types.LocsIndex {
 				// 计算有多少关键词是带有距离信息的
 				numTokensWithLocations := 0
@@ -440,7 +440,8 @@ func (indexer *Indexer) Lookup(
 						})
 					}
 					numDocs++
-					//当某个关键字对应多个文档且有lable关键字存在时，若直接break,将会丢失相当一部分搜索结果
+					//当某个关键字对应多个文档且有 lable 关键字存在时，若直接 break,
+					// 将会丢失相当一部分搜索结果
 					continue
 				}
 
@@ -449,14 +450,14 @@ func (indexer *Indexer) Lookup(
 				indexedDoc.TokenProximity = int32(tokenProximity)
 				indexedDoc.TokenSnippetLocs = TokenLocs
 
-				// 添加TokenLocs
+				// 添加 TokenLocs
 				indexedDoc.TokenLocs = make([][]int, len(tokens))
 				for i, t := range table[:len(tokens)] {
 					indexedDoc.TokenLocs[i] = t.locations[indexPointers[i]]
 				}
 			}
 
-			// 当为LocsIndex或者FrequenciesIndex时计算BM25
+			// 当为 LocsIndex 或者 FrequenciesIndex 时计算BM25
 			if indexer.initOptions.IndexType == types.LocsIndex ||
 				indexer.initOptions.IndexType == types.FrequenciesIndex {
 				bm25 := float32(0)
@@ -469,9 +470,9 @@ func (indexer *Indexer) Lookup(
 						frequency = t.frequencies[indexPointers[i]]
 					}
 
-					// 计算BM25
+					// 计算 BM25
 					if len(t.docIds) > 0 && frequency > 0 && indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
-						// 带平滑的idf
+						// 带平滑的 idf
 						idf := float32(math.Log2(float64(indexer.numDocs)/float64(len(t.docIds)) + 1))
 						k1 := indexer.initOptions.BM25Parameters.K1
 						b := indexer.initOptions.BM25Parameters.B
@@ -492,7 +493,7 @@ func (indexer *Indexer) Lookup(
 	return
 }
 
-// searchIndex 二分法查找indices中某文档的索引项
+// searchIndex 二分法查找 indices 中某文档的索引项
 // 第一个返回参数为找到的位置或需要插入的位置
 // 第二个返回参数标明是否找到
 func (indexer *Indexer) searchIndex(
@@ -627,7 +628,7 @@ func (indexer *Indexer) LogicLookup(
 	// 	return
 	// }
 
-	// MustTable中的搜索键检查
+	// MustTable 中的搜索键检查
 	// 如果存在与搜索键, 则要求所有的与搜索键都有对应的反向表
 	MustTable := make([]*KeywordIndices, 0)
 
@@ -743,7 +744,8 @@ func (indexer *Indexer) LogicLookup(
 	return
 }
 
-// 在逻辑与反向表中对docid进行查找， 若每个反向表都找到， 则返回true， 有一个找不到则返回false
+// 在逻辑与反向表中对docid进行查找, 若每个反向表都找到,
+// 则返回 true, 有一个找不到则返回 false
 func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
@@ -755,8 +757,9 @@ func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) b
 	return true
 }
 
-// 在逻辑或反向表中对docid进行查找， 若有一个找到则返回true， 都找不到则返回false
-// 如果table为空， 则返回true
+// 在逻辑或反向表中对 docid 进行查找， 若有一个找到则返回 true,
+// 都找不到则返回 false
+// 如果 table 为空， 则返回 true
 func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
@@ -773,8 +776,9 @@ func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64)
 	return false
 }
 
-// findInNotInTable 在逻辑非反向表中对docid进行查找, 若有一个找到则返回true, 都找不到则返回false
-// 如果table为空, 则返回false
+// findInNotInTable 在逻辑非反向表中对 docid 进行查找,
+// 若有一个找到则返回 true, 都找不到则返回 false
+// 如果 table 为空, 则返回 false
 func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
@@ -788,7 +792,7 @@ func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) 
 
 // unionTable 如果不存在与逻辑检索， 则需要对逻辑或反向表求并集
 // 先求差集再求并集， 可以减小内存占用
-// docid要保序
+// docid 要保序
 func (indexer *Indexer) unionTable(table []*KeywordIndices, notInTable []*KeywordIndices, countDocsOnly bool) (
 	docs []types.IndexedDoc, numDocs int) {
 	docIds := make([]uint64, 0)

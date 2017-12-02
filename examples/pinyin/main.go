@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	// searcher是协程安全的
+	// searcher 是协程安全的
 	searcher = riot.Engine{}
 )
 

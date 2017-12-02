@@ -108,7 +108,7 @@ func openFile() {
 	// 记录时间
 	t0 = time.Now()
 
-	// 打开处理器profile文件
+	// 打开处理器 profile 文件
 	if *cpuprofile != "" {
 		f, err := os.Create(*cpuprofile)
 		if err != nil {
@@ -234,7 +234,7 @@ func main() {
 	time.Sleep(time.Second)
 	runtime.GC()
 
-	// 写入内存profile文件
+	// 写入内存 profile 文件
 	if *memprofile != "" {
 		f, err := os.Create(*memprofile)
 		if err != nil {

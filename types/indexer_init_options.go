@@ -17,14 +17,14 @@ package types
 
 // 这些常数定义了反向索引表存储的数据类型
 const (
-	// DocIdsIndex 仅存储文档的docId
+	// DocIdsIndex 仅存储文档的 docId
 	DocIdsIndex = 0
 
 	// FrequenciesIndex 存储关键词的词频，用于计算BM25
 	FrequenciesIndex = 1
 
 	// LocsIndex 存储关键词在文档中出现的具体字节位置（可能有多个）
-	// 如果你希望得到关键词紧邻度数据，必须使用LocsIndex类型的索引
+	// 如果你希望得到关键词紧邻度数据，必须使用 LocsIndex 类型的索引
 	LocsIndex = 2
 
 	// 默认插入索引表文档 CACHE SIZE
@@ -39,12 +39,12 @@ type IndexerOpts struct {
 	// 待插入索引表文档 CACHE SIZE
 	DocCacheSize int
 
-	// BM25参数
+	// BM25 参数
 	BM25Parameters *BM25Parameters
 }
 
 // BM25Parameters 见http://en.wikipedia.org/wiki/Okapi_BM25
-// 默认值见engine_init_options.go
+// 默认值见 engine_init_options.go
 type BM25Parameters struct {
 	K1 float32
 	B  float32

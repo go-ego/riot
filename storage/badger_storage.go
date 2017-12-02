@@ -50,7 +50,7 @@ func OpenBadgerStorage(dbPath string) (Storage, error) {
 
 // WALName is useless for this kv database
 func (s *Badger) WALName() string {
-	return "" //对于此数据库，本函数没用~
+	return "" // 对于此数据库，本函数没用~
 }
 
 // Set sets the provided value for a given key.

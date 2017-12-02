@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	// DocInfoGroup 文档信息[shard][id]info
+	// DocInfoGroup 文档信息 [shard][id]info
 	DocInfoGroup         = make(map[int]*types.DocInfosShard)
 	docInfosGroupRWMutex sync.RWMutex
 )

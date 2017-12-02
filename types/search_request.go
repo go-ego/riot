@@ -17,15 +17,16 @@ package types
 
 // SearchReq search request options
 type SearchReq struct {
-	// 搜索的短语（必须是UTF-8格式），会被分词
-	// 当值为空字符串时关键词会从下面的Tokens读入
+	// 搜索的短语（必须是 UTF-8 格式），会被分词
+	// 当值为空字符串时关键词会从下面的 Tokens 读入
 	Text string
 
-	// 关键词（必须是UTF-8格式），当Text不为空时优先使用Text
+	// 关键词（必须是 UTF-8 格式），当 Text 不为空时优先使用 Text
 	// 通常你不需要自己指定关键词，除非你运行自己的分词程序
 	Tokens []string
 
-	// 文档标签（必须是UTF-8格式），标签不存在文档文本中，但也属于搜索键的一种
+	// 文档标签（必须是 UTF-8 格式），标签不存在文档文本中，
+	// 但也属于搜索键的一种
 	Labels []string
 
 	// 类别
@@ -34,7 +35,7 @@ type SearchReq struct {
 	// 逻辑检索表达式
 	Logic Logic
 
-	// 当不为nil时，仅从这些DocIds包含的键中搜索（忽略值）
+	// 当不为 nil 时，仅从这些 DocIds 包含的键中搜索（忽略值）
 	DocIds map[uint64]bool
 
 	// 排序选项
@@ -44,7 +45,7 @@ type SearchReq struct {
 	// 搜索超时的情况下仍有可能返回部分排序结果。
 	Timeout int
 
-	// 设为true时仅统计搜索到的文档个数，不返回具体的文档
+	// 设为 true 时仅统计搜索到的文档个数，不返回具体的文档
 	CountDocsOnly bool
 
 	// 不排序，对于可在引擎外部（比如客户端）排序情况适用
