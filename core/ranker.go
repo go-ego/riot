@@ -26,7 +26,7 @@ import (
 )
 
 var (
-	gOnlyID bool
+	gIDOnly bool
 )
 
 // Ranker ranker
@@ -53,10 +53,10 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 	ranker.lock.docs = make(map[uint64]bool)
 
 	if len(onlyID) > 0 {
-		gOnlyID = onlyID[0]
+		gIDOnly = onlyID[0]
 	}
 
-	if !gOnlyID {
+	if !gIDOnly {
 		// new
 		ranker.lock.content = make(map[uint64]string)
 		ranker.lock.attri = make(map[uint64]interface{})
@@ -75,7 +75,7 @@ func (ranker *Ranker) AddDoc(
 	ranker.lock.Lock()
 	ranker.lock.fields[docId] = fields
 	ranker.lock.docs[docId] = true
-	if !gOnlyID {
+	if !gIDOnly {
 		// new
 		if len(content) > 0 {
 			ranker.lock.content[docId] = content[0].(string)
@@ -100,7 +100,7 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	delete(ranker.lock.fields, docId)
 	delete(ranker.lock.docs, docId)
 
-	if !gOnlyID {
+	if !gIDOnly {
 		// new
 		delete(ranker.lock.content, docId)
 		delete(ranker.lock.attri, docId)
@@ -136,7 +136,7 @@ func (ranker *Ranker) Rank(
 			scores := options.ScoringCriteria.Score(d, fs)
 			if len(scores) > 0 {
 				if !countDocsOnly {
-					if !gOnlyID {
+					if !gIDOnly {
 						outputDocs = append(outputDocs, types.ScoredDoc{
 							DocId: d.DocId,
 							// new
@@ -144,13 +144,13 @@ func (ranker *Ranker) Rank(
 							Content: content,
 							Attri:   attri,
 							//
-							Scores:                scores,
+							Scores:           scores,
 							TokenSnippetLocs: d.TokenSnippetLocs,
 							TokenLocs:        d.TokenLocs})
 					} else {
 						outputDocs = append(outputDocs, types.ScoredDoc{
-							DocId:                 d.DocId,
-							Scores:                scores,
+							DocId:            d.DocId,
+							Scores:           scores,
 							TokenSnippetLocs: d.TokenSnippetLocs,
 							TokenLocs:        d.TokenLocs})
 					}

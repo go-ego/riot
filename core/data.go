@@ -20,9 +20,11 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-// DocInfoGroup 文档信息[shard][id]info
-var DocInfoGroup = make(map[int]*types.DocInfosShard)
-var docInfosGroupRWMutex sync.RWMutex
+var (
+	// DocInfoGroup 文档信息[shard][id]info
+	DocInfoGroup         = make(map[int]*types.DocInfosShard)
+	docInfosGroupRWMutex sync.RWMutex
+)
 
 // AddDocInfosShard add document infos shard
 func AddDocInfosShard(shard int) {
@@ -61,9 +63,11 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 // 	return false
 // }
 
-// InvertedIndexGroup 反向索引表([shard][关键词]反向索引表)
-var InvertedIndexGroup = make(map[int]*types.InvertedIndexShard)
-var invertedIndexGroupRWMutex sync.RWMutex
+var (
+	// InvertedIndexGroup 反向索引表([shard][关键词]反向索引表)
+	InvertedIndexGroup        = make(map[int]*types.InvertedIndexShard)
+	invertedIndexGroupRWMutex sync.RWMutex
+)
 
 // AddInvertedIndexShard add inverted index shard
 func AddInvertedIndexShard(shard int) {
