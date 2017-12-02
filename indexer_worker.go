@@ -21,12 +21,12 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type indexerAddDocRequest struct {
+type indexerAddDocReq struct {
 	doc         *types.DocIndex
 	forceUpdate bool
 }
 
-type indexerLookupRequest struct {
+type indexerLookupReq struct {
 	countDocsOnly       bool
 	tokens              []string
 	labels              []string
@@ -37,7 +37,7 @@ type indexerLookupRequest struct {
 	logic               types.Logic
 }
 
-type indexerRemoveDocRequest struct {
+type indexerRemoveDocReq struct {
 	docId       uint64
 	forceUpdate bool
 }

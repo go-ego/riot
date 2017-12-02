@@ -79,12 +79,12 @@ type Engine struct {
 
 	// 建立索引器使用的通信通道
 	segmenterChannel      chan segmenterRequest
-	indexerAddDocChans    []chan indexerAddDocRequest
-	indexerRemoveDocChans []chan indexerRemoveDocRequest
+	indexerAddDocChans    []chan indexerAddDocReq
+	indexerRemoveDocChans []chan indexerRemoveDocReq
 	rankerAddDocChans     []chan rankerAddDocRequest
 
 	// 建立排序器使用的通信通道
-	indexerLookupChans   []chan indexerLookupRequest
+	indexerLookupChans   []chan indexerLookupReq
 	rankerRankChans      []chan rankerRankRequest
 	rankerRemoveDocChans []chan rankerRemoveDocRequest
 
@@ -96,20 +96,20 @@ type Engine struct {
 // Indexer initialize the indexer channel
 func (engine *Engine) Indexer(options types.EngineOpts) {
 	engine.indexerAddDocChans = make(
-		[]chan indexerAddDocRequest, options.NumShards)
+		[]chan indexerAddDocReq, options.NumShards)
 	engine.indexerRemoveDocChans = make(
-		[]chan indexerRemoveDocRequest, options.NumShards)
+		[]chan indexerRemoveDocReq, options.NumShards)
 	engine.indexerLookupChans = make(
-		[]chan indexerLookupRequest, options.NumShards)
+		[]chan indexerLookupReq, options.NumShards)
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexerAddDocChans[shard] = make(
-			chan indexerAddDocRequest,
+			chan indexerAddDocReq,
 			options.IndexerBufLen)
 		engine.indexerRemoveDocChans[shard] = make(
-			chan indexerRemoveDocRequest,
+			chan indexerRemoveDocReq,
 			options.IndexerBufLen)
 		engine.indexerLookupChans[shard] = make(
-			chan indexerLookupRequest,
+			chan indexerLookupReq,
 			options.IndexerBufLen)
 	}
 }
@@ -362,7 +362,7 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: force}
+		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocReq{docId: docId, forceUpdate: force}
 		if docId == 0 {
 			continue
 		}
@@ -462,7 +462,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 		chan rankerReturnRequest, engine.initOptions.NumShards)
 
 	// 生成查找请求
-	lookupRequest := indexerLookupRequest{
+	lookupRequest := indexerLookupReq{
 		countDocsOnly:       request.CountDocsOnly,
 		tokens:              tokens,
 		labels:              request.Labels,
