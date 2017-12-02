@@ -135,7 +135,7 @@ type WeiboScoringCriteria struct {
 }
 
 func (criteria WeiboScoringCriteria) Score {
-        doc types.IndexedDocument, fields interface{}) []float32 {
+        doc types.IndexedDoc, fields interface{}) []float32 {
         if reflect.TypeOf(fields) != reflect.TypeOf(WeiboScoringFields{}) {
                 return []float32{}
         }
@@ -153,7 +153,7 @@ func (criteria WeiboScoringCriteria) Score {
 ```
 WeiboScoringCriteria actually inherits the types.ScoringCriteria interface, which implements the Score function. This function takes two parameters:
 
-1. types.IndexedDocument parameter passes data from the indexer, such as word frequency, the exact location of the word, the BM25 value, the nearest neighbor, and more, as specified in [types/index.go] (/types/index.go).
+1. types.IndexedDoc parameter passes data from the indexer, such as word frequency, the exact location of the word, the BM25 value, the nearest neighbor, and more, as specified in [types/index.go] (/types/index.go).
 2. The second parameter is `interface {}` type, you can understand this type C language void pointer, it can point to any data type. In our case we point to the WeiboScoringFields structure and check if it is the correct type by the reflection mechanism.
 
 With custom rating data and custom rating rules, we can search, see the code below:

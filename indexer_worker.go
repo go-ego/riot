@@ -75,7 +75,7 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 		request := <-engine.indexerLookupChans[shard]
 
 		var (
-			docs    []types.IndexedDocument
+			docs    []types.IndexedDoc
 			numDocs int
 		)
 		if request.docIds == nil {

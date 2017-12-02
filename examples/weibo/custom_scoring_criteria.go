@@ -79,7 +79,7 @@ type WeiboScoringCriteria struct {
 
 // Score score and sort
 func (criteria WeiboScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	if doc.TokenProximity > MaxTokenProximity { // 评分第一步
 		return []float32{}
 	}

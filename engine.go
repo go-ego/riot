@@ -303,9 +303,13 @@ func (engine *Engine) Init(options types.EngineOpts) {
 //      1. 这个函数是线程安全的，请尽可能并发调用以提高索引速度
 //      2. 这个函数调用是非同步的，也就是说在函数返回时有可能文档还没有加入索引中，因此
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
-func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdate bool) {
+func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdate ...bool) {
+	var force bool
+	if len(forceUpdate) > 0 {
+		force = forceUpdate[0]
+	}
 	// data.Tokens
-	engine.internalIndexDoc(docId, data, forceUpdate)
+	engine.internalIndexDoc(docId, data, force)
 
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
 	if engine.initOptions.UseStorage && docId != 0 {
@@ -341,7 +345,12 @@ func (engine *Engine) internalIndexDoc(
 //      1. 这个函数是线程安全的，请尽可能并发调用以提高索引速度
 //      2. 这个函数调用是非同步的，也就是说在函数返回时有可能文档还没有加入索引中，因此
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
-func (engine *Engine) RemoveDoc(docId uint64, forceUpdate bool) {
+func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
+	var force bool
+	if len(forceUpdate) > 0 {
+		force = forceUpdate[0]
+	}
+
 	if !engine.initialized {
 		log.Fatal("The engine must be initialized first")
 	}
@@ -349,11 +358,11 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate bool) {
 	if docId != 0 {
 		atomic.AddUint64(&engine.numRemovingRequests, 1)
 	}
-	if forceUpdate {
+	if force {
 		atomic.AddUint64(&engine.numForceUpdatingRequests, 1)
 	}
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: forceUpdate}
+		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: force}
 		if docId == 0 {
 			continue
 		}

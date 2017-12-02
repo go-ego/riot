@@ -16,7 +16,7 @@ type MyScoringFields struct {
 type MyScoringCriteria struct {
 }
 func (criteria MyScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	// 首先检查评分字段是否为 MyScoringFields 类型的，如果不是则返回空切片，此文档将从结果中剔除
 	if reflect.TypeOf(fields) != reflect.TypeOf(MySearchFields{}) {
 		return []float32{}

@@ -16,7 +16,7 @@ func indicesToString(indexer *Indexer, token string) (output string) {
 	return
 }
 
-func indexedDocsToString(docs []types.IndexedDocument, numDocs int) (output string) {
+func indexedDocsToString(docs []types.IndexedDoc, numDocs int) (output string) {
 	for _, doc := range docs {
 		output += fmt.Sprintf("[%d %d %v] ",
 			doc.DocId, doc.TokenProximity, doc.TokenSnippetLocations)
@@ -35,7 +35,7 @@ func scoredDocsToString(docs []types.ScoredDoc) (output string) {
 	return
 }
 
-func indexedDocIdsToString(docs []types.IndexedDocument, numDocs int) (output string) {
+func indexedDocIdsToString(docs []types.IndexedDoc, numDocs int) (output string) {
 	for _, doc := range docs {
 		output += fmt.Sprintf("[%d] ",
 			doc.DocId)

@@ -29,7 +29,7 @@ type rankerAddDocRequest struct {
 }
 
 type rankerRankRequest struct {
-	docs                []types.IndexedDocument
+	docs                []types.IndexedDoc
 	options             types.RankOpts
 	rankerReturnChannel chan rankerReturnRequest
 	countDocsOnly       bool

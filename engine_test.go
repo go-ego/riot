@@ -77,7 +77,7 @@ type RankByTokenProximity struct {
 }
 
 func (rule RankByTokenProximity) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	if doc.TokenProximity < 0 {
 		return []float32{}
 	}
@@ -176,7 +176,7 @@ type TestScoringCriteria struct {
 }
 
 func (criteria TestScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	if reflect.TypeOf(fields) != reflect.TypeOf(ScoringFields{}) {
 		return []float32{}
 	}
@@ -236,7 +236,7 @@ type BM25ScoringCriteria struct {
 }
 
 func (criteria BM25ScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	if reflect.TypeOf(fields) != reflect.TypeOf(ScoringFields{}) {
 		return []float32{}
 	}

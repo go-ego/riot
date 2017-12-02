@@ -43,8 +43,8 @@ type KeywordIndex struct {
 	Starts []int
 }
 
-// IndexedDocument 索引器返回结果
-type IndexedDocument struct {
+// IndexedDoc 索引器返回结果
+type IndexedDoc struct {
 	// DocId document id
 	DocId uint64
 
@@ -79,17 +79,17 @@ func (docs DocsIndex) Less(i, j int) bool {
 	return docs[i].DocId < docs[j].DocId
 }
 
-// DocumentsId 方便批量删除文档索引
-type DocumentsId []uint64
+// DocsId 方便批量删除文档索引
+type DocsId []uint64
 
-func (docs DocumentsId) Len() int {
+func (docs DocsId) Len() int {
 	return len(docs)
 }
 
-func (docs DocumentsId) Swap(i, j int) {
+func (docs DocsId) Swap(i, j int) {
 	docs[i], docs[j] = docs[j], docs[i]
 }
 
-func (docs DocumentsId) Less(i, j int) bool {
+func (docs DocsId) Less(i, j int) bool {
 	return docs[i] < docs[j]
 }

@@ -19,7 +19,7 @@ type DummyScoringCriteria struct {
 }
 
 func (criteria DummyScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	if reflect.TypeOf(fields) == reflect.TypeOf(DummyScoringFields{}) {
 		dsf := fields.(DummyScoringFields)
 		value := float32(dsf.counter) + dsf.amount
@@ -45,14 +45,14 @@ func TestRankDocument(t *testing.T) {
 	ranker.AddDoc(3, DummyScoringFields{}, "content", attri)
 	ranker.AddDoc(4, DummyScoringFields{}, "content", attri)
 
-	scoredDocs, _ := ranker.Rank([]types.IndexedDocument{
+	scoredDocs, _ := ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, BM25: 6},
 		{DocId: 3, BM25: 24},
 		{DocId: 4, BM25: 18},
 	}, types.RankOpts{ScoringCriteria: types.RankByBM25{}}, false)
 	utils.Expect(t, "[3 [24000 ]] [4 [18000 ]] [1 [6000 ]] ", scoredDocsToString(scoredDocs))
 
-	scoredDocs, _ = ranker.Rank([]types.IndexedDocument{
+	scoredDocs, _ = ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, BM25: 6},
 		{DocId: 3, BM25: 24},
 		{DocId: 2, BM25: 0},
@@ -89,7 +89,7 @@ func TestRankWithCriteria(t *testing.T) {
 	}, "content", attri)
 
 	criteria := DummyScoringCriteria{}
-	scoredDocs, _ := ranker.Rank([]types.IndexedDocument{
+	scoredDocs, _ := ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, TokenProximity: 6},
 		{DocId: 2, TokenProximity: -1},
 		{DocId: 3, TokenProximity: 24},
@@ -98,7 +98,7 @@ func TestRankWithCriteria(t *testing.T) {
 	utils.Expect(t, "[1 [25300 ]] [3 [17300 ]] [2 [3000 ]] [4 [1300 ]] ", scoredDocsToString(scoredDocs))
 
 	criteria.Threshold = 4
-	scoredDocs, _ = ranker.Rank([]types.IndexedDocument{
+	scoredDocs, _ = ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, TokenProximity: 6},
 		{DocId: 2, TokenProximity: -1},
 		{DocId: 3, TokenProximity: 24},
@@ -130,7 +130,7 @@ func TestRemoveDoc(t *testing.T) {
 	ranker.RemoveDoc(3)
 
 	criteria := DummyScoringCriteria{}
-	scoredDocs, _ := ranker.Rank([]types.IndexedDocument{
+	scoredDocs, _ := ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, TokenProximity: 6},
 		{DocId: 2, TokenProximity: -1},
 		{DocId: 3, TokenProximity: 24},

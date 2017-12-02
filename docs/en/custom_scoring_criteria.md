@@ -16,7 +16,7 @@ type MyScoringFields struct {
 type MyScoringCriteria struct {
 }
 func (criteria MyScoringCriteria) Score(
-	doc types.IndexedDocument, fields interface{}) []float32 {
+	doc types.IndexedDoc, fields interface{}) []float32 {
 	// First check if the scoring field is of type MyScoringFields, if not, an empty slice is returned and the document is removed from the result
 	if reflect.TypeOf(fields) != reflect.TypeOf(MySearchFields{}) {
 		return []float32{}

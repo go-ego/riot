@@ -112,7 +112,7 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 // Rank rank
 // 给文档评分并排序
 func (ranker *Ranker) Rank(
-	docs []types.IndexedDocument, options types.RankOpts,
+	docs []types.IndexedDoc, options types.RankOpts,
 	countDocsOnly bool) (types.ScoredDocs, int) {
 
 	if ranker.initialized == false {
