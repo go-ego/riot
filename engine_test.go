@@ -20,27 +20,27 @@ func AddDocs(engine *Engine) {
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国有十三亿人口人口",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国人口",
 		Fields:  nil,
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "有人口",
 		Fields:  ScoringFields{2, 3, 1},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "有十三亿人口",
 		Fields:  ScoringFields{2, 3, 3},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
-	}, false)
+	})
 	engine.FlushIndex()
 }
 
@@ -49,27 +49,27 @@ func addDocsWithLabels(engine *Engine) {
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "此次百度收购将成中国互联网最大并购",
 		Labels:  []string{"百度", "中国"},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "百度宣布拟全资收购91无线业务",
 		Labels:  []string{"百度"},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "百度是中国最大的搜索引擎",
 		Labels:  []string{"百度"},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "百度在研制无人汽车",
 		Labels:  []string{"百度"},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "BAT是中国互联网三巨头",
 		Labels:  []string{"百度"},
-	}, false)
+	})
 	engine.FlushIndex()
 }
 
@@ -279,13 +279,13 @@ func TestRemoveDoc(t *testing.T) {
 	})
 
 	AddDocs(&engine)
-	engine.RemoveDoc(5, false)
-	engine.RemoveDoc(6, false)
+	engine.RemoveDoc(5)
+	engine.RemoveDoc(6)
 	engine.FlushIndex()
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "中国人口有十三亿",
 		Fields:  ScoringFields{0, 9, 1},
-	}, false)
+	})
 	engine.FlushIndex()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
@@ -320,7 +320,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 			{"人口", []int{18, 24}},
 		},
 		Fields: ScoringFields{1, 2, 3},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "",
@@ -329,12 +329,12 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 			{"人口", []int{6}},
 		},
 		Fields: ScoringFields{1, 2, 3},
-	}, false)
+	})
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
-	}, false)
+	})
 	engine.FlushIndex()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
@@ -492,7 +492,7 @@ func TestCountDocsOnly(t *testing.T) {
 	})
 
 	AddDocs(&engine)
-	engine.RemoveDoc(5, false)
+	engine.RemoveDoc(5)
 	engine.FlushIndex()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口", CountDocsOnly: true})
@@ -561,7 +561,7 @@ func TestSearchJp(t *testing.T) {
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 	engine.FlushIndex()
 
 	docIds := make(map[uint64]bool)
@@ -605,7 +605,7 @@ func TestSearchGse(t *testing.T) {
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 
 	tokenData := types.TokenData{Text: "こんにちは"}
 	tokenDatas := []types.TokenData{tokenData}
@@ -613,7 +613,7 @@ func TestSearchGse(t *testing.T) {
 		Content: "你好世界, hello world!",
 		Tokens:  tokenDatas,
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 	engine.FlushIndex()
 
 	docIds := make(map[uint64]bool)
@@ -661,7 +661,7 @@ func TestSearchLogic(t *testing.T) {
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 
 	tokenData := types.TokenData{Text: "こんにちは"}
 	tokenDatas := []types.TokenData{tokenData}
@@ -669,17 +669,17 @@ func TestSearchLogic(t *testing.T) {
 		Content: "你好世界, hello world!",
 		Tokens:  tokenDatas,
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 
 	engine.IndexDoc(8, types.DocIndexData{
 		Content: "你好世界, hello world!",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 
 	engine.IndexDoc(9, types.DocIndexData{
 		Content: "你好世界, hello!",
 		Fields:  ScoringFields{1, 2, 3},
-	}, false)
+	})
 
 	engine.FlushIndex()
 

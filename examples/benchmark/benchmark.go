@@ -125,8 +125,9 @@ func openFile() {
 	docIdx := 0
 	for i := 0; i < *numRepeatText; i++ {
 		for _, line := range lines {
-			searcher.IndexDoc(uint64(docIds[docIdx]+1), types.DocIndexData{
-				Content: line}, false)
+			searcher.IndexDoc(
+				uint64(docIds[docIdx]+1), types.DocIndexData{
+					Content: line})
 			docIdx++
 			if docIdx-docIdx/1000000*1000000 == 0 {
 				log.Printf("已索引%d百万文档", docIdx/1000000)
@@ -146,7 +147,7 @@ func deleteDoc() {
 	// 记录时间并计算删除索引时间
 	t2 := time.Now()
 	for i := 1; i <= *numDeleteDocs; i++ {
-		searcher.RemoveDoc(uint64(i), false)
+		searcher.RemoveDoc(uint64(i))
 	}
 	searcher.FlushIndex()
 
