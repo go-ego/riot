@@ -22,7 +22,7 @@ import (
 // Dictionary 结构体实现了一个字串前缀树，一个分词可能出现在叶子节点也有可能出现在非叶节点
 type Dictionary struct {
 	trie           *cedar.Cedar // Cedar 前缀树
-	maxTokenLength int          // 词典中最长的分词
+	maxTokenLen    int          // 词典中最长的分词
 	tokens         []Token      // 词典中所有的分词，方便遍历
 	totalFrequency int64        // 词典中所有分词的频率之和
 }
@@ -32,9 +32,9 @@ func NewDictionary() *Dictionary {
 	return &Dictionary{trie: cedar.New()}
 }
 
-// MaxTokenLength 词典中最长的分词
-func (dict *Dictionary) MaxTokenLength() int {
-	return dict.maxTokenLength
+// MaxTokenLen 词典中最长的分词
+func (dict *Dictionary) MaxTokenLen() int {
+	return dict.maxTokenLen
 }
 
 // NumTokens 词典中分词数目
@@ -58,8 +58,8 @@ func (dict *Dictionary) addToken(token Token) {
 	dict.trie.Insert(bytes, dict.NumTokens())
 	dict.tokens = append(dict.tokens, token)
 	dict.totalFrequency += int64(token.frequency)
-	if len(token.text) > dict.maxTokenLength {
-		dict.maxTokenLength = len(token.text)
+	if len(token.text) > dict.maxTokenLen {
+		dict.maxTokenLen = len(token.text)
 	}
 }
 

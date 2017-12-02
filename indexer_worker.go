@@ -22,7 +22,7 @@ import (
 )
 
 type indexerAddDocRequest struct {
-	document    *types.DocIndex
+	doc         *types.DocIndex
 	forceUpdate bool
 }
 
@@ -45,10 +45,10 @@ type indexerRemoveDocRequest struct {
 func (engine *Engine) indexerAddDocWorker(shard int) {
 	for {
 		request := <-engine.indexerAddDocChans[shard]
-		engine.indexers[shard].AddDocToCache(request.document, request.forceUpdate)
-		if request.document != nil {
+		engine.indexers[shard].AddDocToCache(request.doc, request.forceUpdate)
+		if request.doc != nil {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
-				uint64(len(request.document.Keywords)))
+				uint64(len(request.doc.Keywords)))
 			atomic.AddUint64(&engine.numDocsIndexed, 1)
 		}
 		if request.forceUpdate {
@@ -101,8 +101,8 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 			for _, d := range docs {
 				outputDocs = append(outputDocs, types.ScoredDoc{
 					DocId: d.DocId,
-					TokenSnippetLocations: d.TokenSnippetLocations,
-					TokenLocations:        d.TokenLocations})
+					TokenSnippetLocs: d.TokenSnippetLocs,
+					TokenLocs:        d.TokenLocs})
 			}
 			request.rankerReturnChannel <- rankerReturnRequest{
 				docs:    outputDocs,

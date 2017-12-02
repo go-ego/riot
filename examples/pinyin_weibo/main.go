@@ -147,7 +147,7 @@ func main() {
 		SegmenterDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
-			//IndexType: types.LocationsIndex,
+			//IndexType: types.LocsIndex,
 			IndexType: types.DocIdsIndex,
 		},
 		// 如果你希望使用持久存储，启用下面的选项

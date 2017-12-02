@@ -84,7 +84,7 @@ func textSliceToString(text []Text) string {
 }
 
 // 返回多个字元的字节总长度
-func textSliceByteLength(text []Text) (length int) {
+func textSliceByteLen(text []Text) (length int) {
 	for _, word := range text {
 		length += len(word)
 	}

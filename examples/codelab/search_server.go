@@ -170,7 +170,7 @@ func main() {
 		SegmenterDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用leveldb持久化，如果你希望修改数据库类型

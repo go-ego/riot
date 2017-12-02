@@ -13,4 +13,4 @@ The specific calculation process is to take a P_1 first, calculate the smallest 
 
 See the computeTokenProximity function in [core / indexer.go] (/ core / indexer.go) for implementation.
 
-Close distance calculation need to save each word position in the indexer, which requires additional memory consumption, it is off by default, open this function, please set EngineOpts.IndexerOpts.IndexType LocationsIndex initialization engine.
+Close distance calculation need to save each word position in the indexer, which requires additional memory consumption, it is off by default, open this function, please set EngineOpts.IndexerOpts.IndexType LocsIndex initialization engine.

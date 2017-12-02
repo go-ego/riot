@@ -25,9 +25,9 @@ var (
 	defaultNumSegmenterThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
 	defaultNumShards                 = 8
-	defaultIndexerBufLength          = runtime.NumCPU()
+	defaultIndexerBufLen          = runtime.NumCPU()
 	defaultNumIndexerThreadsPerShard = runtime.NumCPU()
-	defaultRankerBufLength           = runtime.NumCPU()
+	defaultRankerBufLen           = runtime.NumCPU()
 	defaultNumRankerThreadsPerShard  = runtime.NumCPU()
 	defaultDefaultRankOpts           = RankOpts{
 		ScoringCriteria: RankByBM25{},
@@ -70,13 +70,13 @@ type EngineOpts struct {
 	NumShards int
 
 	// 索引器的信道缓冲长度
-	IndexerBufLength int
+	IndexerBufLen int
 
 	// 索引器每个shard分配的线程数
 	NumIndexerThreadsPerShard int
 
 	// 排序器的信道缓冲长度
-	RankerBufLength int
+	RankerBufLen int
 
 	// 排序器每个shard分配的线程数
 	NumRankerThreadsPerShard int
@@ -116,16 +116,16 @@ func (options *EngineOpts) Init() {
 		options.NumShards = defaultNumShards
 	}
 
-	if options.IndexerBufLength == 0 {
-		options.IndexerBufLength = defaultIndexerBufLength
+	if options.IndexerBufLen == 0 {
+		options.IndexerBufLen = defaultIndexerBufLen
 	}
 
 	if options.NumIndexerThreadsPerShard == 0 {
 		options.NumIndexerThreadsPerShard = defaultNumIndexerThreadsPerShard
 	}
 
-	if options.RankerBufLength == 0 {
-		options.RankerBufLength = defaultRankerBufLength
+	if options.RankerBufLen == 0 {
+		options.RankerBufLen = defaultRankerBufLen
 	}
 
 	if options.NumRankerThreadsPerShard == 0 {

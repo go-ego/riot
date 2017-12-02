@@ -246,7 +246,7 @@ func (seg *Segmenter) segmentWords(text []Text, searchMode bool) []Segment {
 	// 以及从文本段开始到该字元的最短路径值
 	jumpers := make([]jumper, len(text))
 
-	tokens := make([]*Token, seg.dict.maxTokenLength)
+	tokens := make([]*Token, seg.dict.maxTokenLen)
 	for current := 0; current < len(text); current++ {
 		// 找到前一个字元处的最短路径，以便计算后续路径值
 		var baseDistance float32
@@ -259,7 +259,7 @@ func (seg *Segmenter) segmentWords(text []Text, searchMode bool) []Segment {
 
 		// 寻找所有以当前字元开头的分词
 		numTokens := seg.dict.lookupTokens(
-			text[current:minInt(current+seg.dict.maxTokenLength, len(text))], tokens)
+			text[current:minInt(current+seg.dict.maxTokenLen, len(text))], tokens)
 
 		// 对所有可能的分词，更新分词结束字元处的跳转信息
 		for iToken := 0; iToken < numTokens; iToken++ {
@@ -297,7 +297,7 @@ func (seg *Segmenter) segmentWords(text []Text, searchMode bool) []Segment {
 	bytePosition := 0
 	for iSeg := 0; iSeg < len(outputSegments); iSeg++ {
 		outputSegments[iSeg].start = bytePosition
-		bytePosition += textSliceByteLength(outputSegments[iSeg].token.text)
+		bytePosition += textSliceByteLen(outputSegments[iSeg].token.text)
 		outputSegments[iSeg].end = bytePosition
 	}
 	return outputSegments

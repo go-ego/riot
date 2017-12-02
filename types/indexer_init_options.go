@@ -23,9 +23,9 @@ const (
 	// FrequenciesIndex 存储关键词的词频，用于计算BM25
 	FrequenciesIndex = 1
 
-	// LocationsIndex 存储关键词在文档中出现的具体字节位置（可能有多个）
-	// 如果你希望得到关键词紧邻度数据，必须使用LocationsIndex类型的索引
-	LocationsIndex = 2
+	// LocsIndex 存储关键词在文档中出现的具体字节位置（可能有多个）
+	// 如果你希望得到关键词紧邻度数据，必须使用LocsIndex类型的索引
+	LocsIndex = 2
 
 	// 默认插入索引表文档 CACHE SIZE
 	defaultDocCacheSize = 300000

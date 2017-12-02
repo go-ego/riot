@@ -19,7 +19,7 @@ func indicesToString(indexer *Indexer, token string) (output string) {
 func indexedDocsToString(docs []types.IndexedDoc, numDocs int) (output string) {
 	for _, doc := range docs {
 		output += fmt.Sprintf("[%d %d %v] ",
-			doc.DocId, doc.TokenProximity, doc.TokenSnippetLocations)
+			doc.DocId, doc.TokenProximity, doc.TokenSnippetLocs)
 	}
 	return
 }

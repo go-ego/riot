@@ -68,7 +68,7 @@ searcher.Init(types.EngineOpts{
 	SegmenterDict: "../../data/dict/dictionary.txt",
 	StopTokenFile:         "../../data/dict/stop_tokens.txt",
 	IndexerOpts: &types.IndexerOpts{
-		IndexType: types.LocationsIndex,
+		IndexType: types.LocsIndex,
 	},
 })
 ```
@@ -78,9 +78,9 @@ In particular, it should be emphasized that please carefully choose IndexerOpts.
 
 1. DocIdsIndex, provides the most basic index, only record the document key docid appears.
 2. FrequenciesIndex, in addition to record docid, but also save the search key appear in each document frequency, if you need BM25 then FrequenciesIndex is what you need.
-3. LocationsIndex,  This includes not only the contents of the two indexes, but also an extra storage of the specific location of the keywords in the document, which is used [Calculate the immediate distance](/docs/en/token_proximity.md)。
+3. LocsIndex,  This includes not only the contents of the two indexes, but also an extra storage of the specific location of the keywords in the document, which is used [Calculate the immediate distance](/docs/en/token_proximity.md)。
 
-These three indexes consume more memory from top to bottom while providing more computing power, especially LocationsIndex, which consumes a lot of memory when the document is long. Please choose the right balance.
+These three indexes consume more memory from top to bottom while providing more computing power, especially LocsIndex, which consumes a lot of memory when the document is long. Please choose the right balance.
 
 Initialization can be added after the index, the following example will be a microblogging engine:
 

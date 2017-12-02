@@ -107,7 +107,7 @@ func main() {
 		SegmenterDict: *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 		DefaultRankOpts: &options,
 	})

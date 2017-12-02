@@ -145,14 +145,14 @@ func (ranker *Ranker) Rank(
 							Attri:   attri,
 							//
 							Scores:                scores,
-							TokenSnippetLocations: d.TokenSnippetLocations,
-							TokenLocations:        d.TokenLocations})
+							TokenSnippetLocs: d.TokenSnippetLocs,
+							TokenLocs:        d.TokenLocs})
 					} else {
 						outputDocs = append(outputDocs, types.ScoredDoc{
 							DocId:                 d.DocId,
 							Scores:                scores,
-							TokenSnippetLocations: d.TokenSnippetLocations,
-							TokenLocations:        d.TokenLocations})
+							TokenSnippetLocs: d.TokenSnippetLocs,
+							TokenLocs:        d.TokenLocs})
 					}
 				}
 				numDocs++

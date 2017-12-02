@@ -9,8 +9,8 @@
 - EngineInitOptions     ->	EngineOpts
 - IndexerInitOptions  	->	IndexerOpts
 - NotUsingSegmenter    	->  NotUsingGse
-- IndexerBufferLength	->  IndexerBufLength
-- RankerBufferLength  	->  RankerBufLength
+- IndexerBufferLength	->  IndexerBufLen
+- RankerBufferLength  	->  RankerBufLen
 - LogicExpression       ->  LogicExpr
 
 ## riot v0.10.0, Danube River

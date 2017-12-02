@@ -58,14 +58,14 @@ func GetVersion() string {
 // Engine initialize the engine
 type Engine struct {
 	// 计数器，用来统计有多少文档被索引等信息
-	numDocsIndexed           uint64
-	numDocsRemoved           uint64
-	numDocsForceUpdated      uint64
-	numIndexingRequests      uint64
-	numRemovingRequests      uint64
-	numForceUpdatingRequests uint64
-	numTokenIndexAdded       uint64
-	numDocsStored            uint64
+	numDocsIndexed       uint64
+	numDocsRemoved       uint64
+	numDocsForceUpdated  uint64
+	numIndexingReqs      uint64
+	numRemovingReqs      uint64
+	numForceUpdatingReqs uint64
+	numTokenIndexAdded   uint64
+	numDocsStored        uint64
 
 	// 记录初始化参数
 	initOptions types.EngineOpts
@@ -104,13 +104,13 @@ func (engine *Engine) Indexer(options types.EngineOpts) {
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexerAddDocChans[shard] = make(
 			chan indexerAddDocRequest,
-			options.IndexerBufLength)
+			options.IndexerBufLen)
 		engine.indexerRemoveDocChans[shard] = make(
 			chan indexerRemoveDocRequest,
-			options.IndexerBufLength)
+			options.IndexerBufLen)
 		engine.indexerLookupChans[shard] = make(
 			chan indexerLookupRequest,
-			options.IndexerBufLength)
+			options.IndexerBufLen)
 	}
 }
 
@@ -125,13 +125,13 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.rankerAddDocChans[shard] = make(
 			chan rankerAddDocRequest,
-			options.RankerBufLength)
+			options.RankerBufLen)
 		engine.rankerRankChans[shard] = make(
 			chan rankerRankRequest,
-			options.RankerBufLength)
+			options.RankerBufLen)
 		engine.rankerRemoveDocChans[shard] = make(
 			chan rankerRemoveDocRequest,
-			options.RankerBufLength)
+			options.RankerBufLen)
 	}
 }
 
@@ -196,7 +196,7 @@ func (engine *Engine) Storage() {
 		}
 		for {
 			runtime.Gosched()
-			if engine.numIndexingRequests == engine.numDocsIndexed {
+			if engine.numIndexingReqs == engine.numDocsIndexed {
 				break
 			}
 		}
@@ -288,7 +288,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	// 启动持久化存储工作协程
 	engine.Storage()
 
-	atomic.AddUint64(&engine.numDocsStored, engine.numIndexingRequests)
+	atomic.AddUint64(&engine.numDocsStored, engine.numIndexingReqs)
 }
 
 // IndexDoc add the document to the index
@@ -324,10 +324,10 @@ func (engine *Engine) internalIndexDoc(
 	}
 
 	if docId != 0 {
-		atomic.AddUint64(&engine.numIndexingRequests, 1)
+		atomic.AddUint64(&engine.numIndexingReqs, 1)
 	}
 	if forceUpdate {
-		atomic.AddUint64(&engine.numForceUpdatingRequests, 1)
+		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d%s", docId, data.Content)))
 	engine.segmenterChannel <- segmenterRequest{
@@ -356,10 +356,10 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 	}
 
 	if docId != 0 {
-		atomic.AddUint64(&engine.numRemovingRequests, 1)
+		atomic.AddUint64(&engine.numRemovingReqs, 1)
 	}
 	if force {
-		atomic.AddUint64(&engine.numForceUpdatingRequests, 1)
+		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: force}
@@ -555,9 +555,9 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 func (engine *Engine) FlushIndex() {
 	for {
 		runtime.Gosched()
-		if engine.numIndexingRequests == engine.numDocsIndexed &&
-			engine.numRemovingRequests*uint64(engine.initOptions.NumShards) == engine.numDocsRemoved &&
-			(!engine.initOptions.UseStorage || engine.numIndexingRequests == engine.numDocsStored) {
+		if engine.numIndexingReqs == engine.numDocsIndexed &&
+			engine.numRemovingReqs*uint64(engine.initOptions.NumShards) == engine.numDocsRemoved &&
+			(!engine.initOptions.UseStorage || engine.numIndexingReqs == engine.numDocsStored) {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
 			break
 		}
@@ -566,7 +566,7 @@ func (engine *Engine) FlushIndex() {
 	engine.IndexDoc(0, types.DocIndexData{}, true)
 	for {
 		runtime.Gosched()
-		if engine.numForceUpdatingRequests*uint64(engine.initOptions.NumShards) == engine.numDocsForceUpdated {
+		if engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) == engine.numDocsForceUpdated {
 			return
 		}
 	}

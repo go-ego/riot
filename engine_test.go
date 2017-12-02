@@ -95,7 +95,7 @@ func TestEngineIndexDoc(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -110,15 +110,15 @@ func TestEngineIndexDoc(t *testing.T) {
 	log.Println("TestEngineIndexDoc:", outputs.Docs)
 	utils.Expect(t, "2", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "5", outputs.Docs[1].DocId)
 	utils.Expect(t, "100", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocs)
 
 	utils.Expect(t, "1", outputs.Docs[2].DocId)
 	utils.Expect(t, "76", int(outputs.Docs[2].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outputs.Docs[2].TokenSnippetLocations)
+	utils.Expect(t, "[0 18]", outputs.Docs[2].TokenSnippetLocs)
 }
 
 func TestReverseOrder(t *testing.T) {
@@ -133,7 +133,7 @@ func TestReverseOrder(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -159,7 +159,7 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -193,7 +193,7 @@ func TestSearchWithCriteria(t *testing.T) {
 			ScoringCriteria: TestScoringCriteria{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -308,7 +308,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -346,15 +346,15 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 
 	utils.Expect(t, "2", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "3", outputs.Docs[1].DocId)
 	utils.Expect(t, "100", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocs)
 
 	utils.Expect(t, "1", outputs.Docs[2].DocId)
 	utils.Expect(t, "76", int(outputs.Docs[2].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outputs.Docs[2].TokenSnippetLocations)
+	utils.Expect(t, "[0 18]", outputs.Docs[2].TokenSnippetLocs)
 }
 
 func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
@@ -362,7 +362,7 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	engine1.Init(types.EngineOpts{
 		SegmenterDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 	engine2.Init(types.EngineOpts{
@@ -397,7 +397,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 		UseStorage:    true,
 		StorageFolder: "riot.persistent",
@@ -417,7 +417,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 		UseStorage:    true,
 		StorageFolder: "riot.persistent",
@@ -433,11 +433,11 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 
 	utils.Expect(t, "2", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[0 6]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "1", outputs.Docs[1].DocId)
 	utils.Expect(t, "76", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[0 18]", outputs.Docs[1].TokenSnippetLocs)
 
 	engine1.Close()
 	os.RemoveAll("riot.persistent")
@@ -466,11 +466,11 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 
 	utils.Expect(t, "2", outputs.Docs[0].DocId)
 	utils.Expect(t, "0", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "1", outputs.Docs[1].DocId)
 	utils.Expect(t, "0", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocs)
 
 	engine1.Close()
 	os.RemoveAll("riot-index")
@@ -487,7 +487,7 @@ func TestCountDocsOnly(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -513,7 +513,7 @@ func TestSearchWithin(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -533,11 +533,11 @@ func TestSearchWithin(t *testing.T) {
 
 	utils.Expect(t, "1", outputs.Docs[0].DocId)
 	utils.Expect(t, "76", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[0 18]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "5", outputs.Docs[1].DocId)
 	utils.Expect(t, "100", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocs)
 }
 
 func TestSearchJp(t *testing.T) {
@@ -552,7 +552,7 @@ func TestSearchJp(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -581,7 +581,7 @@ func TestSearchJp(t *testing.T) {
 
 	utils.Expect(t, "6", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[0 15]", outputs.Docs[0].TokenSnippetLocs)
 }
 
 func TestSearchGse(t *testing.T) {
@@ -596,7 +596,7 @@ func TestSearchGse(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -634,11 +634,11 @@ func TestSearchGse(t *testing.T) {
 
 	utils.Expect(t, "7", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "6", outputs.Docs[1].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[0 15]", outputs.Docs[1].TokenSnippetLocs)
 }
 
 func TestSearchLogic(t *testing.T) {
@@ -652,7 +652,7 @@ func TestSearchLogic(t *testing.T) {
 			ScoringCriteria: &RankByTokenProximity{},
 		},
 		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocationsIndex,
+			IndexType: types.LocsIndex,
 		},
 	})
 
@@ -708,9 +708,9 @@ func TestSearchLogic(t *testing.T) {
 
 	utils.Expect(t, "9", outputs.Docs[0].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocations)
+	utils.Expect(t, "[]", outputs.Docs[0].TokenSnippetLocs)
 
 	utils.Expect(t, "8", outputs.Docs[1].DocId)
 	utils.Expect(t, "1000", int(outputs.Docs[1].Scores[0]*1000))
-	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocations)
+	utils.Expect(t, "[]", outputs.Docs[1].TokenSnippetLocs)
 }

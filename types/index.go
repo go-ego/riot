@@ -24,8 +24,8 @@ type DocIndex struct {
 	// DocId 文本的 DocId
 	DocId uint64
 
-	// TokenLength 文本的关键词长
-	TokenLength float32
+	// TokenLen 文本的关键词长
+	TokenLen float32
 
 	// Keywords 加入的索引键
 	Keywords []KeywordIndex
@@ -48,20 +48,20 @@ type IndexedDoc struct {
 	// DocId document id
 	DocId uint64
 
-	// BM25，仅当索引类型为FrequenciesIndex或者LocationsIndex时返回有效值
+	// BM25，仅当索引类型为FrequenciesIndex或者LocsIndex时返回有效值
 	BM25 float32
 
 	// TokenProximity 关键词在文档中的紧邻距离，紧邻距离的含义见computeTokenProximity的注释。
-	// 仅当索引类型为LocationsIndex时返回有效值。
+	// 仅当索引类型为LocsIndex时返回有效值。
 	TokenProximity int32
 
-	// TokenSnippetLocations 紧邻距离计算得到的关键词位置，和Lookup函数输入tokens的长度一样且一一对应。
-	// 仅当索引类型为LocationsIndex时返回有效值。
-	TokenSnippetLocations []int
+	// TokenSnippetLocs 紧邻距离计算得到的关键词位置，和Lookup函数输入tokens的长度一样且一一对应。
+	// 仅当索引类型为LocsIndex时返回有效值。
+	TokenSnippetLocs []int
 
-	// TokenLocations 关键词在文本中的具体位置。
-	// 仅当索引类型为LocationsIndex时返回有效值。
-	TokenLocations [][]int
+	// TokenLocs 关键词在文本中的具体位置。
+	// 仅当索引类型为LocsIndex时返回有效值。
+	TokenLocs [][]int
 }
 
 // DocsIndex 方便批量加入文档索引

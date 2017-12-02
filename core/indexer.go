@@ -56,10 +56,10 @@ type Indexer struct {
 	numDocs uint64
 
 	// 所有被索引文本的总关键词数
-	totalTokenLength float32
+	totalTokenLen float32
 
 	// 每个文档的关键词长度
-	docTokenLengths map[uint64]float32
+	docTokenLens map[uint64]float32
 }
 
 // KeywordIndices 反向索引表的一行，收集了一个搜索键出现的所有文档，按照DocId从小到大排序。
@@ -67,7 +67,7 @@ type KeywordIndices struct {
 	// 下面的切片是否为空，取决于初始化时IndexType的值
 	docIds      []uint64  // 全部类型都有
 	frequencies []float32 // IndexType == FrequenciesIndex
-	locations   [][]int   // IndexType == LocationsIndex
+	locations   [][]int   // IndexType == LocsIndex
 }
 
 // Init 初始化索引器
@@ -83,7 +83,7 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 	indexer.tableLock.docsState = make(map[uint64]int)
 	indexer.addCacheLock.addCache = make([]*types.DocIndex, indexer.initOptions.DocCacheSize)
 	indexer.removeCacheLock.removeCache = make([]uint64, indexer.initOptions.DocCacheSize*2)
-	indexer.docTokenLengths = make(map[uint64]float32)
+	indexer.docTokenLens = make(map[uint64]float32)
 }
 
 // getDocId 从 KeywordIndices 中得到第i个文档的 DocId
@@ -173,9 +173,9 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 		}
 
 		// 更新文档关键词总长度
-		if doc.TokenLength != 0 {
-			indexer.docTokenLengths[doc.DocId] = float32(doc.TokenLength)
-			indexer.totalTokenLength += doc.TokenLength
+		if doc.TokenLen != 0 {
+			indexer.docTokenLens[doc.DocId] = float32(doc.TokenLen)
+			indexer.totalTokenLen += doc.TokenLen
 		}
 
 		docIdIsNew := true
@@ -185,7 +185,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 				// 如果没找到该搜索键则加入
 				ti := KeywordIndices{}
 				switch indexer.initOptions.IndexType {
-				case types.LocationsIndex:
+				case types.LocsIndex:
 					ti.locations = [][]int{keyword.Starts}
 				case types.FrequenciesIndex:
 					ti.frequencies = []float32{keyword.Frequency}
@@ -200,7 +200,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 				indices, indexPointers[keyword.Text], indexer.getIndexLength(indices)-1, doc.DocId)
 			indexPointers[keyword.Text] = position
 			switch indexer.initOptions.IndexType {
-			case types.LocationsIndex:
+			case types.LocsIndex:
 				indices.locations = append(indices.locations, []int{})
 				copy(indices.locations[position+1:], indices.locations[position:])
 				indices.locations[position] = keyword.Starts
@@ -271,8 +271,8 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 
 	// 更新文档关键词总长度，删除文档状态
 	for _, docId := range *docs {
-		indexer.totalTokenLength -= indexer.docTokenLengths[docId]
-		delete(indexer.docTokenLengths, docId)
+		indexer.totalTokenLen -= indexer.docTokenLens[docId]
+		delete(indexer.docTokenLens, docId)
 		delete(indexer.tableLock.docsState, docId)
 	}
 
@@ -285,7 +285,7 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 			if indices.docIds[indicesPointer] < (*docs)[docsPointer] {
 				if indicesTop != indicesPointer {
 					switch indexer.initOptions.IndexType {
-					case types.LocationsIndex:
+					case types.LocsIndex:
 						indices.locations[indicesTop] = indices.locations[indicesPointer]
 					case types.FrequenciesIndex:
 						indices.frequencies[indicesTop] = indices.frequencies[indicesPointer]
@@ -303,7 +303,7 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 		}
 		if indicesTop != indicesPointer {
 			switch indexer.initOptions.IndexType {
-			case types.LocationsIndex:
+			case types.LocsIndex:
 				indices.locations = append(
 					indices.locations[:indicesTop], indices.locations[indicesPointer:]...)
 			case types.FrequenciesIndex:
@@ -383,7 +383,7 @@ func (indexer *Indexer) Lookup(
 	}
 
 	// 平均文本关键词长度，用于计算BM25
-	avgDocLength := indexer.totalTokenLength / float32(indexer.numDocs)
+	avgDocLength := indexer.totalTokenLen / float32(indexer.numDocs)
 	for ; indexPointers[0] >= 0; indexPointers[0]-- {
 		// 以第一个搜索键出现的文档作为基准，并遍历其他搜索键搜索同一文档
 		baseDocId := indexer.getDocId(table[0], indexPointers[0])
@@ -424,8 +424,8 @@ func (indexer *Indexer) Lookup(
 			}
 			indexedDoc := types.IndexedDoc{}
 
-			// 当为LocationsIndex时计算关键词紧邻距离
-			if indexer.initOptions.IndexType == types.LocationsIndex {
+			// 当为LocsIndex时计算关键词紧邻距离
+			if indexer.initOptions.IndexType == types.LocsIndex {
 				// 计算有多少关键词是带有距离信息的
 				numTokensWithLocations := 0
 				for i, t := range table[:len(tokens)] {
@@ -445,25 +445,25 @@ func (indexer *Indexer) Lookup(
 				}
 
 				// 计算搜索键在文档中的紧邻距离
-				tokenProximity, tokenLocations := computeTokenProximity(table[:len(tokens)], indexPointers, tokens)
+				tokenProximity, TokenLocs := computeTokenProximity(table[:len(tokens)], indexPointers, tokens)
 				indexedDoc.TokenProximity = int32(tokenProximity)
-				indexedDoc.TokenSnippetLocations = tokenLocations
+				indexedDoc.TokenSnippetLocs = TokenLocs
 
-				// 添加TokenLocations
-				indexedDoc.TokenLocations = make([][]int, len(tokens))
+				// 添加TokenLocs
+				indexedDoc.TokenLocs = make([][]int, len(tokens))
 				for i, t := range table[:len(tokens)] {
-					indexedDoc.TokenLocations[i] = t.locations[indexPointers[i]]
+					indexedDoc.TokenLocs[i] = t.locations[indexPointers[i]]
 				}
 			}
 
-			// 当为LocationsIndex或者FrequenciesIndex时计算BM25
-			if indexer.initOptions.IndexType == types.LocationsIndex ||
+			// 当为LocsIndex或者FrequenciesIndex时计算BM25
+			if indexer.initOptions.IndexType == types.LocsIndex ||
 				indexer.initOptions.IndexType == types.FrequenciesIndex {
 				bm25 := float32(0)
-				d := indexer.docTokenLengths[baseDocId]
+				d := indexer.docTokenLens[baseDocId]
 				for i, t := range table[:len(tokens)] {
 					var frequency float32
-					if indexer.initOptions.IndexType == types.LocationsIndex {
+					if indexer.initOptions.IndexType == types.LocsIndex {
 						frequency = float32(len(t.locations[indexPointers[i]]))
 					} else {
 						frequency = t.frequencies[indexPointers[i]]
@@ -535,11 +535,11 @@ func (indexer *Indexer) searchIndex(
 // 	ArgMin(Sum(Abs(P_(i+1) - P_i - L_i)))
 //
 // 具体由动态规划实现，依次计算前 i 个 token 在每个出现位置的最优值。
-// 选定的 P_i 通过 tokenLocations 参数传回。
+// 选定的 P_i 通过 TokenLocs 参数传回。
 func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens []string) (
-	minTokenProximity int, tokenLocations []int) {
+	minTokenProximity int, TokenLocs []int) {
 	minTokenProximity = -1
-	tokenLocations = make([]int, len(tokens))
+	TokenLocs = make([]int, len(tokens))
 
 	var (
 		currentLocations, nextLocations []int
@@ -609,7 +609,7 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 		if i != len(tokens)-1 {
 			cursor = path[i+1][cursor]
 		}
-		tokenLocations[i] = table[i].locations[indexPointers[i]][cursor]
+		TokenLocs[i] = table[i].locations[indexPointers[i]][cursor]
 	}
 	return
 }

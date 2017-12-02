@@ -220,16 +220,16 @@ func (engine *Engine) segmenterWorker() {
 		}
 
 		indexerRequest := indexerAddDocRequest{
-			document: &types.DocIndex{
-				DocId:       request.docId,
-				TokenLength: float32(numTokens),
-				Keywords:    make([]types.KeywordIndex, len(tokensMap)),
+			doc: &types.DocIndex{
+				DocId:    request.docId,
+				TokenLen: float32(numTokens),
+				Keywords: make([]types.KeywordIndex, len(tokensMap)),
 			},
 			forceUpdate: request.forceUpdate,
 		}
 		iTokens := 0
 		for k, v := range tokensMap {
-			indexerRequest.document.Keywords[iTokens] = types.KeywordIndex{
+			indexerRequest.doc.Keywords[iTokens] = types.KeywordIndex{
 				Text: k,
 				// 非分词标注的词频设置为0，不参与tf-idf计算
 				Frequency: float32(len(v)),
@@ -257,7 +257,7 @@ func (engine *Engine) segmenterWorker() {
 func (engine *Engine) PinYin(hans string) []string {
 	var (
 		str      string
-		pystr    string
+		pyStr    string
 		strArr   []string
 		splitStr string
 		// splitArr []string
@@ -293,9 +293,9 @@ func (engine *Engine) PinYin(hans string) []string {
 	// log.Println("py...", py)
 	for i := 0; i < len(py); i++ {
 		// log.Println("py[i]...", py[i])
-		pystr += py[i]
-		if !engine.stopTokens.IsStopToken(pystr) {
-			strArr = append(strArr, pystr)
+		pyStr += py[i]
+		if !engine.stopTokens.IsStopToken(pyStr) {
+			strArr = append(strArr, pyStr)
 		}
 
 		if len(py[i]) > 0 {

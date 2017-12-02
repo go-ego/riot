@@ -86,5 +86,5 @@ func AddKeywordIndices(shard int, keyword string, keywordIndices *types.KeywordI
 		}
 	}
 	InvertedIndexGroup[shard].InvertedIndex[keyword] = keywordIndices
-	InvertedIndexGroup[shard].TotalTokenLength++
+	InvertedIndexGroup[shard].TotalTokenLen++
 }

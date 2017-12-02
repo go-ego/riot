@@ -9,7 +9,7 @@ import (
 
 func TestAddKeywords(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId:    1,
 		Keywords: []types.KeywordIndex{{"token1", 0, []int{}}},
@@ -44,7 +44,7 @@ func TestAddKeywords(t *testing.T) {
 
 func TestRemoveDocToCache(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 
 	// doc1 = "token2 token3"
 	indexer.AddDocToCache(&types.DocIndex{
@@ -126,9 +126,9 @@ func TestRemoveDocToCache(t *testing.T) {
 	utils.Expect(t, "1 2 ", indicesToString(&indexer, "token3"))
 }
 
-func TestLookupLocationsIndex(t *testing.T) {
+func TestLookupLocsIndex(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 	// doc1 = "token2 token3"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId: 1,
@@ -288,7 +288,7 @@ func TestLookupDocIdsIndex(t *testing.T) {
 
 func TestLookupWithProximity(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 
 	// doc1 = "token2 token4 token4 token2 token3 token4"
 	indexer.AddDocToCache(&types.DocIndex{
@@ -329,7 +329,7 @@ func TestLookupWithProximity(t *testing.T) {
 
 func TestLookupWithPartialLocations(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 	// doc1 = "token2 token4 token4 token2 token3 token4" + "label1"(不在文本中)
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId: 1,
@@ -368,7 +368,7 @@ func TestLookupWithBM25(t *testing.T) {
 	// doc1 = "token2 token4 token4 token2 token3 token4"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId:       1,
-		TokenLength: 6,
+		TokenLen: 6,
 		Keywords: []types.KeywordIndex{
 			{"token2", 3, []int{0, 21}},
 			{"token3", 7, []int{28}},
@@ -378,7 +378,7 @@ func TestLookupWithBM25(t *testing.T) {
 	// doc2 = "token6 token7"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId:       2,
-		TokenLength: 2,
+		TokenLen: 2,
 		Keywords: []types.KeywordIndex{
 			{"token6", 3, []int{0}},
 			{"token7", 15, []int{7}},
@@ -393,7 +393,7 @@ func TestLookupWithBM25(t *testing.T) {
 
 func TestLookupWithinDocIds(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 	// doc1 = "token2 token3"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId: 1,
@@ -436,7 +436,7 @@ func TestLookupWithinDocIds(t *testing.T) {
 
 func TestLookupWithLocations(t *testing.T) {
 	var indexer Indexer
-	indexer.Init(types.IndexerOpts{IndexType: types.LocationsIndex})
+	indexer.Init(types.IndexerOpts{IndexType: types.LocsIndex})
 	// doc1 = "token2 token4 token4 token2 token3 token4"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId: 1,
@@ -459,5 +459,5 @@ func TestLookupWithLocations(t *testing.T) {
 
 	indexer.RemoveDocToCache(2, true)
 	docs, _ := indexer.Lookup([]string{"token2", "token3"}, []string{}, nil, false)
-	utils.Expect(t, "[[0 21] [28]]", docs[0].TokenLocations)
+	utils.Expect(t, "[[0 21] [28]]", docs[0].TokenLocs)
 }
