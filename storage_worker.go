@@ -32,7 +32,7 @@ type storageIndexDocRequest struct {
 
 func (engine *Engine) storageIndexDocWorker(shard int) {
 	for {
-		request := <-engine.storageIndexDocChannels[shard]
+		request := <-engine.storageIndexDocChans[shard]
 
 		// 得到key
 		b := make([]byte, 10)
@@ -80,5 +80,5 @@ func (engine *Engine) storageInitWorker(shard int) {
 		}
 		return nil
 	})
-	engine.persistentStorageInitChannel <- true
+	engine.storageInitChannel <- true
 }

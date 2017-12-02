@@ -46,8 +46,8 @@ const (
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
-	// PersistentStorageFilePrefix persistent storage file prefix
-	PersistentStorageFilePrefix = "riot"
+	// StorageFilePrefix persistent storage file prefix
+	StorageFilePrefix = "riot"
 )
 
 // GetVersion get version
@@ -79,36 +79,36 @@ type Engine struct {
 
 	// 建立索引器使用的通信通道
 	segmenterChannel         chan segmenterRequest
-	indexerAddDocChannels    []chan indexerAddDocRequest
-	indexerRemoveDocChannels []chan indexerRemoveDocRequest
-	rankerAddDocChannels     []chan rankerAddDocRequest
+	indexerAddDocChans    []chan indexerAddDocRequest
+	indexerRemoveDocChans []chan indexerRemoveDocRequest
+	rankerAddDocChans     []chan rankerAddDocRequest
 
 	// 建立排序器使用的通信通道
-	indexerLookupChannels   []chan indexerLookupRequest
-	rankerRankChannels      []chan rankerRankRequest
-	rankerRemoveDocChannels []chan rankerRemoveDocRequest
+	indexerLookupChans   []chan indexerLookupRequest
+	rankerRankChans      []chan rankerRankRequest
+	rankerRemoveDocChans []chan rankerRemoveDocRequest
 
 	// 建立持久存储使用的通信通道
-	storageIndexDocChannels      []chan storageIndexDocRequest
-	persistentStorageInitChannel chan bool
+	storageIndexDocChans []chan storageIndexDocRequest
+	storageInitChannel      chan bool
 }
 
 // Indexer initialize the indexer channel
 func (engine *Engine) Indexer(options types.EngineOpts) {
-	engine.indexerAddDocChannels = make(
+	engine.indexerAddDocChans = make(
 		[]chan indexerAddDocRequest, options.NumShards)
-	engine.indexerRemoveDocChannels = make(
+	engine.indexerRemoveDocChans = make(
 		[]chan indexerRemoveDocRequest, options.NumShards)
-	engine.indexerLookupChannels = make(
+	engine.indexerLookupChans = make(
 		[]chan indexerLookupRequest, options.NumShards)
 	for shard := 0; shard < options.NumShards; shard++ {
-		engine.indexerAddDocChannels[shard] = make(
+		engine.indexerAddDocChans[shard] = make(
 			chan indexerAddDocRequest,
 			options.IndexerBufLength)
-		engine.indexerRemoveDocChannels[shard] = make(
+		engine.indexerRemoveDocChans[shard] = make(
 			chan indexerRemoveDocRequest,
 			options.IndexerBufLength)
-		engine.indexerLookupChannels[shard] = make(
+		engine.indexerLookupChans[shard] = make(
 			chan indexerLookupRequest,
 			options.IndexerBufLength)
 	}
@@ -116,20 +116,20 @@ func (engine *Engine) Indexer(options types.EngineOpts) {
 
 // Ranker initialize the ranker channel
 func (engine *Engine) Ranker(options types.EngineOpts) {
-	engine.rankerAddDocChannels = make(
+	engine.rankerAddDocChans = make(
 		[]chan rankerAddDocRequest, options.NumShards)
-	engine.rankerRankChannels = make(
+	engine.rankerRankChans = make(
 		[]chan rankerRankRequest, options.NumShards)
-	engine.rankerRemoveDocChannels = make(
+	engine.rankerRemoveDocChans = make(
 		[]chan rankerRemoveDocRequest, options.NumShards)
 	for shard := 0; shard < options.NumShards; shard++ {
-		engine.rankerAddDocChannels[shard] = make(
+		engine.rankerAddDocChans[shard] = make(
 			chan rankerAddDocRequest,
 			options.RankerBufLength)
-		engine.rankerRankChannels[shard] = make(
+		engine.rankerRankChans[shard] = make(
 			chan rankerRankRequest,
 			options.RankerBufLength)
-		engine.rankerRemoveDocChannels[shard] = make(
+		engine.rankerRemoveDocChans[shard] = make(
 			chan rankerRemoveDocRequest,
 			options.RankerBufLength)
 	}
@@ -138,14 +138,14 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 // InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
 	if engine.initOptions.UseStorage {
-		engine.storageIndexDocChannels =
+		engine.storageIndexDocChans =
 			make([]chan storageIndexDocRequest,
 				engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			engine.storageIndexDocChannels[shard] = make(
+			engine.storageIndexDocChans[shard] = make(
 				chan storageIndexDocRequest)
 		}
-		engine.persistentStorageInitChannel = make(
+		engine.storageInitChannel = make(
 			chan bool, engine.initOptions.StorageShards)
 	}
 }
@@ -177,7 +177,7 @@ func (engine *Engine) Storage() {
 		// 打开或者创建数据库
 		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" + StorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("Unable to open database", dbPath, ": ", err)
@@ -192,7 +192,7 @@ func (engine *Engine) Storage() {
 
 		// 等待恢复完成
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			<-engine.persistentStorageInitChannel
+			<-engine.storageInitChannel
 		}
 		for {
 			runtime.Gosched()
@@ -204,7 +204,7 @@ func (engine *Engine) Storage() {
 		// 关闭并重新打开数据库
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.dbs[shard].Close()
-			dbPath := engine.initOptions.StorageFolder + "/" + PersistentStorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" + StorageFilePrefix + "." + strconv.Itoa(shard)
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("Unable to open database", dbPath, ": ", err)
@@ -309,7 +309,7 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdat
 
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
 	if engine.initOptions.UseStorage && docId != 0 {
-		engine.storageIndexDocChannels[hash] <- storageIndexDocRequest{docId: docId, data: data}
+		engine.storageIndexDocChans[hash] <- storageIndexDocRequest{docId: docId, data: data}
 	}
 }
 
@@ -353,11 +353,11 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate bool) {
 		atomic.AddUint64(&engine.numForceUpdatingRequests, 1)
 	}
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerRemoveDocChannels[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: forceUpdate}
+		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocRequest{docId: docId, forceUpdate: forceUpdate}
 		if docId == 0 {
 			continue
 		}
-		engine.rankerRemoveDocChannels[shard] <- rankerRemoveDocRequest{docId: docId}
+		engine.rankerRemoveDocChans[shard] <- rankerRemoveDocRequest{docId: docId}
 	}
 
 	if engine.initOptions.UseStorage && docId != 0 {
@@ -466,7 +466,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 
 	// 向索引器发送查找请求
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerLookupChannels[shard] <- lookupRequest
+		engine.indexerLookupChans[shard] <- lookupRequest
 	}
 
 	// 从通信通道读取排序器的输出

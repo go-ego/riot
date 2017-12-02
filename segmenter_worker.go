@@ -193,7 +193,7 @@ func (engine *Engine) segmenterWorker() {
 		if request.docId == 0 {
 			if request.forceUpdate {
 				for i := 0; i < engine.initOptions.NumShards; i++ {
-					engine.indexerAddDocChannels[i] <- indexerAddDocRequest{forceUpdate: true}
+					engine.indexerAddDocChans[i] <- indexerAddDocRequest{forceUpdate: true}
 				}
 			}
 			continue
@@ -237,19 +237,19 @@ func (engine *Engine) segmenterWorker() {
 			iTokens++
 		}
 
-		engine.indexerAddDocChannels[shard] <- indexerRequest
+		engine.indexerAddDocChans[shard] <- indexerRequest
 		if request.forceUpdate {
 			for i := 0; i < engine.initOptions.NumShards; i++ {
 				if i == shard {
 					continue
 				}
-				engine.indexerAddDocChannels[i] <- indexerAddDocRequest{forceUpdate: true}
+				engine.indexerAddDocChans[i] <- indexerAddDocRequest{forceUpdate: true}
 			}
 		}
 		rankerRequest := rankerAddDocRequest{
 			// docId: request.docId, fields: request.data.Fields}
 			docId: request.docId, fields: request.data.Fields, content: request.data.Content, attri: request.data.Attri}
-		engine.rankerAddDocChannels[shard] <- rankerRequest
+		engine.rankerAddDocChans[shard] <- rankerRequest
 	}
 }
 

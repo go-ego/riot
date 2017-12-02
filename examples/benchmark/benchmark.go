@@ -69,11 +69,11 @@ func initEngine() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
-		NumShards:          NumShards,
+		NumShards:       NumShards,
 		DefaultRankOpts: &options,
-		UseStorage:         *usePersistent,
-		StorageFolder:      *persistentStorageFolder,
-		StorageShards:      *persistentStorageShards,
+		UseStorage:      *usePersistent,
+		StorageFolder:   *persistentStorageFolder,
+		StorageShards:   *persistentStorageShards,
 	})
 }
 
@@ -192,12 +192,12 @@ func useStore(tBeginInit, tEndInit time.Time) {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
-		NumShards:          NumShards,
+		NumShards:       NumShards,
 		DefaultRankOpts: &options,
-		UseStorage:         *usePersistent,
-		StorageFolder:      *persistentStorageFolder,
-		StorageEngine:      *storageEngine,
-		StorageShards:      *persistentStorageShards,
+		UseStorage:      *usePersistent,
+		StorageFolder:   *persistentStorageFolder,
+		StorageEngine:   *storageEngine,
+		StorageShards:   *persistentStorageShards,
 	})
 	defer searcher1.Close()
 	t7 := time.Now()

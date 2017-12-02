@@ -44,7 +44,7 @@ type indexerRemoveDocRequest struct {
 
 func (engine *Engine) indexerAddDocWorker(shard int) {
 	for {
-		request := <-engine.indexerAddDocChannels[shard]
+		request := <-engine.indexerAddDocChans[shard]
 		engine.indexers[shard].AddDocToCache(request.document, request.forceUpdate)
 		if request.document != nil {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
@@ -59,7 +59,7 @@ func (engine *Engine) indexerAddDocWorker(shard int) {
 
 func (engine *Engine) indexerRemoveDocWorker(shard int) {
 	for {
-		request := <-engine.indexerRemoveDocChannels[shard]
+		request := <-engine.indexerRemoveDocChans[shard]
 		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
 		if request.docId != 0 {
 			atomic.AddUint64(&engine.numDocumentsRemoved, 1)
@@ -72,7 +72,7 @@ func (engine *Engine) indexerRemoveDocWorker(shard int) {
 
 func (engine *Engine) indexerLookupWorker(shard int) {
 	for {
-		request := <-engine.indexerLookupChannels[shard]
+		request := <-engine.indexerLookupChans[shard]
 
 		var (
 			docs    []types.IndexedDocument
@@ -117,6 +117,6 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 			options:             request.options,
 			rankerReturnChannel: request.rankerReturnChannel,
 		}
-		engine.rankerRankChannels[shard] <- rankerRequest
+		engine.rankerRankChans[shard] <- rankerRequest
 	}
 }
