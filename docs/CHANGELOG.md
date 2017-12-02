@@ -12,6 +12,13 @@
 - IndexerBufferLength	->  IndexerBufLen
 - RankerBufferLength  	->  RankerBufLen
 - LogicExpression       ->  LogicExpr
+- SearchRequest    		->  SearchReq
+- SearchResponse		->  SearchResp
+- ScoredDocument  		->  ScoredDoc
+- NumDocumentsIndexed   ->	NumDocsIndexed
+- NumDocumentsRemoved	->  NumDocsRemoved
+- TokenLengths			->	TokenLens
+- TokenLocations		->	TokenLocs
 
 ## riot v0.10.0, Danube River
 
