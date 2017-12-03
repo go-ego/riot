@@ -16,6 +16,8 @@ examples/benchmark/benchmark
 examples/codelab/codelab
 examples/dict/dict
 examples/logic/logic
+examples/new/new
+examples/new/riot-index
 examples/pinyin/pinyin
 examples/pinyin/riot-index
 examples/pinyin_weibo/pinyin_weibo

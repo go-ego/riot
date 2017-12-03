@@ -107,6 +107,33 @@ func main() {
 
 然后看看一个[入门教程](/docs/zh/codelab.md)，教你用不到200行 Go 代码实现一个微博搜索网站。
 
+### 使用默认引擎:
+
+```Go
+	package main
+
+	import (
+		"log"
+
+		"github.com/go-ego/riot"
+		"github.com/go-ego/riot/types"
+	)
+
+	var (
+		searcher = riot.New("zh")
+	)
+
+	func main() {
+		data := types.DocIndexData{Content: "留给真爱你的人"}
+		searcher.IndexDoc(1, data)
+		searcher.FlushIndex()
+
+		req := types.SearchReq{Text: "真爱"}
+		search := searcher.Search(req)
+		log.Println("search...", search)
+	}
+```
+
 #### [查看更多例子](https://github.com/go-ego/riot/tree/master/examples)
 
 #### [持久化的例子](https://github.com/go-ego/riot/blob/master/examples/store/main.go)

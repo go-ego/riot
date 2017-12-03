@@ -105,6 +105,33 @@ func main() {
 
 It is very simple!
 
+### Use default engine:
+
+```Go
+	package main
+
+	import (
+		"log"
+
+		"github.com/go-ego/riot"
+		"github.com/go-ego/riot/types"
+	)
+
+	var (
+		searcher = riot.New("zh")
+	)
+
+	func main() {
+		data := types.DocIndexData{Content: "留给真爱你的人"}
+		searcher.IndexDoc(1, data)
+		searcher.FlushIndex()
+
+		req := types.SearchReq{Text: "真爱"}
+		search := searcher.Search(req)
+		log.Println("search...", search)
+	}
+```
+
 #### [Look at more Examples](https://github.com/go-ego/riot/tree/master/examples)
 
 #### [Look at Store example](https://github.com/go-ego/riot/blob/master/examples/store/main.go)
