@@ -108,28 +108,30 @@ It is very simple!
 ### Use default engine:
 
 ```Go
-	package main
+package main
 
-	import (
-		"log"
+import (
+	"log"
 
-		"github.com/go-ego/riot"
-		"github.com/go-ego/riot/types"
-	)
+	"github.com/go-ego/riot"
+	"github.com/go-ego/riot/types"
+)
 
-	var (
-		searcher = riot.New("zh")
-	)
+var (
+	searcher = riot.New("zh")
+)
 
-	func main() {
-		data := types.DocIndexData{Content: "留给真爱你的人"}
-		searcher.IndexDoc(1, data)
-		searcher.FlushIndex()
+func main() {
+	data := types.DocIndexData{Content: "留给真爱你的人"}
+	data1 := types.DocIndexData{Content: "也没有理由"}
+	searcher.IndexDoc(1, data)
+	searcher.IndexDoc(2, data1)
+	searcher.FlushIndex()
 
-		req := types.SearchReq{Text: "真爱"}
-		search := searcher.Search(req)
-		log.Println("search...", search)
-	}
+	req := types.SearchReq{Text: "真爱"}
+	search := searcher.Search(req)
+	log.Println("search...", search)
+}
 ```
 
 #### [Look at more Examples](https://github.com/go-ego/riot/tree/master/examples)
