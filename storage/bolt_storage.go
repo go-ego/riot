@@ -27,8 +27,8 @@ type boltStorage struct {
 	db *bolt.DB
 }
 
-// OpenBoltStorage open Bolt storage
-func OpenBoltStorage(dbPath string) (Storage, error) {
+// OpenBolt open Bolt storage
+func OpenBolt(dbPath string) (Storage, error) {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 3600 * time.Second})
 	// db, err := bolt.Open(dbPath, 0600, &bolt.Options{})
 	if err != nil {

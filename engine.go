@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.234, Danube River!"
+	version string = "v0.10.0.235, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -78,7 +78,7 @@ type Engine struct {
 	dbs        []storage.Storage
 
 	// 建立索引器使用的通信通道
-	segmenterChannel      chan segmenterRequest
+	segmenterChannel      chan segmenterReq
 	indexerAddDocChans    []chan indexerAddDocReq
 	indexerRemoveDocChans []chan indexerRemoveDocReq
 	rankerAddDocChans     []chan rankerAddDocReq
@@ -251,7 +251,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 
 	// 初始化分词器通道
 	engine.segmenterChannel = make(
-		chan segmenterRequest, options.NumSegmenterThreads)
+		chan segmenterReq, options.NumSegmenterThreads)
 
 	// 初始化索引器通道
 	engine.Indexer(options)
@@ -330,7 +330,7 @@ func (engine *Engine) internalIndexDoc(
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d%s", docId, data.Content)))
-	engine.segmenterChannel <- segmenterRequest{
+	engine.segmenterChannel <- segmenterReq{
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }
 

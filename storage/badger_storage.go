@@ -26,8 +26,8 @@ type Badger struct {
 	db *badger.DB
 }
 
-// OpenBadgerStorage open Badger storage
-func OpenBadgerStorage(dbPath string) (Storage, error) {
+// OpenBadger open Badger storage
+func OpenBadger(dbPath string) (Storage, error) {
 
 	err := os.MkdirAll(dbPath, 0777)
 	if err != nil {

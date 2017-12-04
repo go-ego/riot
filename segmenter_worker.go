@@ -24,7 +24,7 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type segmenterRequest struct {
+type segmenterReq struct {
 	docId uint64
 	hash  uint32
 	data  types.DocIndexData
@@ -75,7 +75,7 @@ func (engine *Engine) ForSplitData(splData []string, num int) (Map, int) {
 	return tokensMap, numTokens
 }
 
-func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
+func (engine *Engine) splitData(request segmenterReq) (Map, int) {
 	var (
 		num       int
 		numTokens int
@@ -129,7 +129,7 @@ func (engine *Engine) splitData(request segmenterRequest) (Map, int) {
 	return tokensMap, numTokens
 }
 
-func (engine *Engine) segmenterData(request segmenterRequest) (Map, int) {
+func (engine *Engine) segmenterData(request segmenterReq) (Map, int) {
 	tokensMap := make(map[string][]int)
 	numTokens := 0
 
