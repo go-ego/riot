@@ -91,8 +91,8 @@ func (indexer *Indexer) getDocId(ti *KeywordIndices, i int) uint64 {
 	return ti.docIds[i]
 }
 
-// getIndexLength 得到 KeywordIndices 中文档总数
-func (indexer *Indexer) getIndexLength(ti *KeywordIndices) int {
+// getIndexLen 得到 KeywordIndices 中文档总数
+func (indexer *Indexer) getIndexLen(ti *KeywordIndices) int {
 	return len(ti.docIds)
 }
 
@@ -197,7 +197,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 
 			// 查找应该插入的位置，且索引一定不存在
 			position, _ := indexer.searchIndex(
-				indices, indexPointers[keyword.Text], indexer.getIndexLength(indices)-1, doc.DocId)
+				indices, indexPointers[keyword.Text], indexer.getIndexLen(indices)-1, doc.DocId)
 			indexPointers[keyword.Text] = position
 			switch indexer.initOptions.IndexType {
 			case types.LocsIndex:
@@ -281,7 +281,7 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 		docsPointer := sort.Search(
 			len(*docs), func(i int) bool { return (*docs)[i] >= indices.docIds[0] })
 		// 双指针扫描，进行批量删除操作
-		for docsPointer < len(*docs) && indicesPointer < indexer.getIndexLength(indices) {
+		for docsPointer < len(*docs) && indicesPointer < indexer.getIndexLen(indices) {
 			if indices.docIds[indicesPointer] < (*docs)[docsPointer] {
 				if indicesTop != indicesPointer {
 					switch indexer.initOptions.IndexType {
@@ -379,7 +379,7 @@ func (indexer *Indexer) Lookup(
 	// 从后向前查保证先输出 DocId 较大文档
 	indexPointers := make([]int, len(table))
 	for iTable := 0; iTable < len(table); iTable++ {
-		indexPointers[iTable] = indexer.getIndexLength(table[iTable]) - 1
+		indexPointers[iTable] = indexer.getIndexLen(table[iTable]) - 1
 	}
 
 	// 平均文本关键词长度，用于计算BM25
@@ -499,7 +499,7 @@ func (indexer *Indexer) Lookup(
 func (indexer *Indexer) searchIndex(
 	indices *KeywordIndices, start int, end int, docId uint64) (int, bool) {
 	// 特殊情况
-	if indexer.getIndexLength(indices) == start {
+	if indexer.getIndexLen(indices) == start {
 		return start, false
 	}
 	if docId < indexer.getDocId(indices, start) {
@@ -688,7 +688,7 @@ func (indexer *Indexer) LogicLookup(
 	numDocs = 0
 	if logic.Must == true || len(logic.LogicExpr.MustLabels) > 0 {
 		// 如果存在逻辑与检索
-		for idx := indexer.getIndexLength(MustTable[0]) - 1; idx >= 0; idx-- {
+		for idx := indexer.getIndexLen(MustTable[0]) - 1; idx >= 0; idx-- {
 			baseDocId := indexer.getDocId(MustTable[0], idx)
 			if docIds != nil {
 				_, found := docIds[baseDocId]
@@ -749,7 +749,7 @@ func (indexer *Indexer) LogicLookup(
 func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
-			0, indexer.getIndexLength(table[i])-1, docId)
+			0, indexer.getIndexLen(table[i])-1, docId)
 		if !foundDocId {
 			return false
 		}
@@ -763,7 +763,7 @@ func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) b
 func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
-			0, indexer.getIndexLength(table[i])-1, docId)
+			0, indexer.getIndexLen(table[i])-1, docId)
 		if foundDocId {
 			return true
 		}
@@ -782,7 +782,7 @@ func (indexer *Indexer) findInShouldTable(table []*KeywordIndices, docId uint64)
 func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) bool {
 	for i := 0; i < len(table); i++ {
 		_, foundDocId := indexer.searchIndex(table[i],
-			0, indexer.getIndexLength(table[i])-1, docId)
+			0, indexer.getIndexLen(table[i])-1, docId)
 		if foundDocId {
 			return true
 		}

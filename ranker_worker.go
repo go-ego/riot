@@ -19,7 +19,7 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type rankerAddDocRequest struct {
+type rankerAddDocReq struct {
 	docId  uint64
 	fields interface{}
 	// new
@@ -28,19 +28,19 @@ type rankerAddDocRequest struct {
 	attri interface{}
 }
 
-type rankerRankRequest struct {
+type rankerRankReq struct {
 	docs                []types.IndexedDoc
 	options             types.RankOpts
-	rankerReturnChannel chan rankerReturnRequest
+	rankerReturnChannel chan rankerReturnReq
 	countDocsOnly       bool
 }
 
-type rankerReturnRequest struct {
+type rankerReturnReq struct {
 	docs    types.ScoredDocs
 	numDocs int
 }
 
-type rankerRemoveDocRequest struct {
+type rankerRemoveDocReq struct {
 	docId uint64
 }
 
@@ -65,7 +65,7 @@ func (engine *Engine) rankerRankWorker(shard int) {
 		}
 		request.options.OutputOffset = 0
 		outputDocs, numDocs := engine.rankers[shard].Rank(request.docs, request.options, request.countDocsOnly)
-		request.rankerReturnChannel <- rankerReturnRequest{docs: outputDocs, numDocs: numDocs}
+		request.rankerReturnChannel <- rankerReturnReq{docs: outputDocs, numDocs: numDocs}
 	}
 }
 

@@ -8,7 +8,7 @@ import (
 
 func indicesToString(indexer *Indexer, token string) (output string) {
 	if indices, ok := indexer.tableLock.table[token]; ok {
-		for i := 0; i < indexer.getIndexLength(indices); i++ {
+		for i := 0; i < indexer.getIndexLen(indices); i++ {
 			output += fmt.Sprintf("%d ",
 				indexer.getDocId(indices, i))
 		}

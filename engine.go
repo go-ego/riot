@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.233, Danube River!"
+	version string = "v0.10.0.234, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -81,15 +81,15 @@ type Engine struct {
 	segmenterChannel      chan segmenterRequest
 	indexerAddDocChans    []chan indexerAddDocReq
 	indexerRemoveDocChans []chan indexerRemoveDocReq
-	rankerAddDocChans     []chan rankerAddDocRequest
+	rankerAddDocChans     []chan rankerAddDocReq
 
 	// 建立排序器使用的通信通道
 	indexerLookupChans   []chan indexerLookupReq
-	rankerRankChans      []chan rankerRankRequest
-	rankerRemoveDocChans []chan rankerRemoveDocRequest
+	rankerRankChans      []chan rankerRankReq
+	rankerRemoveDocChans []chan rankerRemoveDocReq
 
 	// 建立持久存储使用的通信通道
-	storageIndexDocChans []chan storageIndexDocRequest
+	storageIndexDocChans []chan storageIndexDocReq
 	storageInitChannel   chan bool
 }
 
@@ -117,20 +117,20 @@ func (engine *Engine) Indexer(options types.EngineOpts) {
 // Ranker initialize the ranker channel
 func (engine *Engine) Ranker(options types.EngineOpts) {
 	engine.rankerAddDocChans = make(
-		[]chan rankerAddDocRequest, options.NumShards)
+		[]chan rankerAddDocReq, options.NumShards)
 	engine.rankerRankChans = make(
-		[]chan rankerRankRequest, options.NumShards)
+		[]chan rankerRankReq, options.NumShards)
 	engine.rankerRemoveDocChans = make(
-		[]chan rankerRemoveDocRequest, options.NumShards)
+		[]chan rankerRemoveDocReq, options.NumShards)
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.rankerAddDocChans[shard] = make(
-			chan rankerAddDocRequest,
+			chan rankerAddDocReq,
 			options.RankerBufLen)
 		engine.rankerRankChans[shard] = make(
-			chan rankerRankRequest,
+			chan rankerRankReq,
 			options.RankerBufLen)
 		engine.rankerRemoveDocChans[shard] = make(
-			chan rankerRemoveDocRequest,
+			chan rankerRemoveDocReq,
 			options.RankerBufLen)
 	}
 }
@@ -139,11 +139,11 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 func (engine *Engine) InitStorage() {
 	if engine.initOptions.UseStorage {
 		engine.storageIndexDocChans =
-			make([]chan storageIndexDocRequest,
+			make([]chan storageIndexDocReq,
 				engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.storageIndexDocChans[shard] = make(
-				chan storageIndexDocRequest)
+				chan storageIndexDocReq)
 		}
 		engine.storageInitChannel = make(
 			chan bool, engine.initOptions.StorageShards)
@@ -313,7 +313,7 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdat
 
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
 	if engine.initOptions.UseStorage && docId != 0 {
-		engine.storageIndexDocChans[hash] <- storageIndexDocRequest{docId: docId, data: data}
+		engine.storageIndexDocChans[hash] <- storageIndexDocReq{docId: docId, data: data}
 	}
 }
 
@@ -366,7 +366,7 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 		if docId == 0 {
 			continue
 		}
-		engine.rankerRemoveDocChans[shard] <- rankerRemoveDocRequest{docId: docId}
+		engine.rankerRemoveDocChans[shard] <- rankerRemoveDocReq{docId: docId}
 	}
 
 	if engine.initOptions.UseStorage && docId != 0 {
@@ -459,7 +459,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 
 	// 建立排序器返回的通信通道
 	rankerReturnChannel := make(
-		chan rankerReturnRequest, engine.initOptions.NumShards)
+		chan rankerReturnReq, engine.initOptions.NumShards)
 
 	// 生成查找请求
 	lookupRequest := indexerLookupReq{

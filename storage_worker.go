@@ -24,7 +24,7 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type storageIndexDocRequest struct {
+type storageIndexDocReq struct {
 	docId uint64
 	data  types.DocIndexData
 	// data        types.DocumentIndexData

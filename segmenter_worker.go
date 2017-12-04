@@ -246,7 +246,7 @@ func (engine *Engine) segmenterWorker() {
 				engine.indexerAddDocChans[i] <- indexerAddDocReq{forceUpdate: true}
 			}
 		}
-		rankerRequest := rankerAddDocRequest{
+		rankerRequest := rankerAddDocReq{
 			// docId: request.docId, fields: request.data.Fields}
 			docId: request.docId, fields: request.data.Fields, content: request.data.Content, attri: request.data.Attri}
 		engine.rankerAddDocChans[shard] <- rankerRequest
