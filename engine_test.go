@@ -475,6 +475,7 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	engine1.Close()
 	os.RemoveAll("riot-index")
 }
+
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
