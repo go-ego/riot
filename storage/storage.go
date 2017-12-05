@@ -20,12 +20,12 @@ import (
 )
 
 const (
-	// DefaultStorageEngine default storage engine
-	DefaultStorageEngine = "ldb"
+	// DefaultStorage default storage engine
+	DefaultStorage = "ldb"
 
-	// DefaultStorageEngine = "bad"
+	// DefaultStorage = "bad"
 
-	// DefaultStorageEngine = "bolt"
+	// DefaultStorage = "bolt"
 )
 
 var supportedStorage = map[string]func(path string) (Storage, error){
@@ -36,8 +36,8 @@ var supportedStorage = map[string]func(path string) (Storage, error){
 	// "ledisdb"
 }
 
-// RegisterStorageEngine register Storage engine
-func RegisterStorageEngine(name string, fn func(path string) (Storage, error)) {
+// RegisterStorage register Storage engine
+func RegisterStorage(name string, fn func(path string) (Storage, error)) {
 	supportedStorage[name] = fn
 }
 
@@ -54,7 +54,7 @@ type Storage interface {
 
 // OpenStorage open Storage engine
 func OpenStorage(path string, args ...string) (Storage, error) {
-	wse := DefaultStorageEngine
+	wse := DefaultStorage
 
 	if len(args) > 0 {
 		if args[0] != "" {
