@@ -23,7 +23,8 @@ import (
 
 var gdocs = []byte("gdocs")
 
-type boltStorage struct {
+// Bolt bolt storage
+type Bolt struct {
 	db *bolt.DB
 }
 
@@ -42,11 +43,11 @@ func OpenBolt(dbPath string) (Storage, error) {
 		db.Close()
 		return nil, err
 	}
-	return &boltStorage{db}, nil
+	return &Bolt{db}, nil
 }
 
 // WALName returns the path to currently open database file.
-func (s *boltStorage) WALName() string {
+func (s *Bolt) WALName() string {
 	return s.db.Path()
 }
 
@@ -55,7 +56,7 @@ func (s *boltStorage) WALName() string {
 // is committed. If an error is returned then the entire transaction is rolled back.
 // Any error that is returned from the function or returned from the commit is returned
 // from the Update() method.
-func (s *boltStorage) Set(k []byte, v []byte) error {
+func (s *Bolt) Set(k []byte, v []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		return tx.Bucket(gdocs).Put(k, v)
 	})
@@ -63,7 +64,7 @@ func (s *boltStorage) Set(k []byte, v []byte) error {
 
 // Get executes a function within the context of a managed read-only transaction.
 // Any error that is returned from the function is returned from the View() method.
-func (s *boltStorage) Get(k []byte) (b []byte, err error) {
+func (s *Bolt) Get(k []byte) (b []byte, err error) {
 	err = s.db.View(func(tx *bolt.Tx) error {
 		b = tx.Bucket(gdocs).Get(k)
 		return nil
@@ -73,14 +74,14 @@ func (s *boltStorage) Get(k []byte) (b []byte, err error) {
 
 // Delete deletes a key. Exposing this so that user does not
 // have to specify the Entry directly.
-func (s *boltStorage) Delete(k []byte) error {
+func (s *Bolt) Delete(k []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		return tx.Bucket(gdocs).Delete(k)
 	})
 }
 
 // Has returns true if the DB does contains the given key.
-func (s *boltStorage) Has(k []byte) (bool, error) {
+func (s *Bolt) Has(k []byte) (bool, error) {
 	// return s.db.Exists(k)
 	var b []byte
 	err := s.db.View(func(tx *bolt.Tx) error {
@@ -97,7 +98,7 @@ func (s *boltStorage) Has(k []byte) (bool, error) {
 }
 
 // ForEach get all key and value
-func (s *boltStorage) ForEach(fn func(k, v []byte) error) error {
+func (s *Bolt) ForEach(fn func(k, v []byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(gdocs)
 		c := b.Cursor()
@@ -112,6 +113,6 @@ func (s *boltStorage) ForEach(fn func(k, v []byte) error) error {
 
 // Close releases all database resources. All transactions
 // must be closed before closing the database.
-func (s *boltStorage) Close() error {
+func (s *Bolt) Close() error {
 	return s.db.Close()
 }

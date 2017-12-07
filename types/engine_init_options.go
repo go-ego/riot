@@ -106,7 +106,7 @@ func (options *EngineOpts) Init() {
 		// if len(options.SegmenterDict) == 0 {
 		if options.SegmenterDict == "" {
 			// log.Fatal("字典文件不能为空")
-			log.Printf("Dictionary file is empty, load the default and empty dictionary.")
+			log.Printf("Dictionary file is empty, load the default empty dictionary.")
 		}
 	}
 
@@ -153,14 +153,4 @@ func (options *EngineOpts) Init() {
 	if options.StorageShards == 0 {
 		options.StorageShards = defaultStorageShards
 	}
-}
-
-// Try handler(err)
-func Try(fun func(), handler func(interface{})) {
-	defer func() {
-		if err := recover(); err != nil {
-			handler(err)
-		}
-	}()
-	fun()
 }

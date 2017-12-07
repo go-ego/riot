@@ -21,7 +21,7 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
-// Badger is badger.KV
+// Badger badger.KV db storage
 type Badger struct {
 	db *badger.DB
 }
@@ -102,6 +102,12 @@ func (s *Badger) Has(k []byte) (bool, error) {
 	}
 
 	return true, err
+}
+
+// Len returns the size of lsm and value log files in bytes.
+// It can be used to decide how often to call RunValueLogGC.
+func (s *Badger) Len() (int64, int64) {
+	return s.db.Size()
 }
 
 // ForEach get all key and value

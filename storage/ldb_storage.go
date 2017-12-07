@@ -18,7 +18,8 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-type leveldbStorage struct {
+// Leveldb leveldb storage
+type Leveldb struct {
 	db *leveldb.DB
 }
 
@@ -32,18 +33,18 @@ func OpenLeveldb(dbPath string) (Storage, error) {
 		return nil, err
 	}
 
-	return &leveldbStorage{db}, nil
+	return &Leveldb{db}, nil
 }
 
 // WALName is useless for this kv database
-func (s *leveldbStorage) WALName() string {
+func (s *Leveldb) WALName() string {
 	return "" // 对于此数据库，本函数没用~
 }
 
 // Set sets the provided value for a given key.
 // If key is not present, it is created. If it is present,
 // the existing value is overwritten with the one provided.
-func (s *leveldbStorage) Set(k, v []byte) error {
+func (s *Leveldb) Set(k, v []byte) error {
 	return s.db.Put(k, v, nil)
 }
 
@@ -53,7 +54,7 @@ func (s *leveldbStorage) Set(k, v []byte) error {
 // The returned slice is its own copy, it is safe to modify
 // the contents of the returned slice. It is safe to modify the contents
 // of the argument after Get returns.
-func (s *leveldbStorage) Get(k []byte) ([]byte, error) {
+func (s *Leveldb) Get(k []byte) ([]byte, error) {
 	return s.db.Get(k, nil)
 }
 
@@ -63,28 +64,28 @@ func (s *leveldbStorage) Get(k []byte) ([]byte, error) {
 //
 // It is safe to modify the contents of the arguments after Delete
 // returns but not before.
-func (s *leveldbStorage) Delete(k []byte) error {
+func (s *Leveldb) Delete(k []byte) error {
 	return s.db.Delete(k, nil)
 }
 
 // Has returns true if the DB does contains the given key.
 // It is safe to modify the contents of the argument after Has returns.
-func (s *leveldbStorage) Has(k []byte) (bool, error) {
+func (s *Leveldb) Has(k []byte) (bool, error) {
 	return s.db.Has(k, nil)
 }
 
-// Length calculates approximate sizes of the given key ranges.
+// Len calculates approximate sizes of the given key ranges.
 // The length of the returned sizes are equal with the length of
 // the given ranges. The returned sizes measure storage space usage,
 // so if the user data compresses by a factor of ten, the returned
 // sizes will be one-tenth the size of the corresponding user data size.
 // The results may not include the sizes of recently written data.
-func (s *leveldbStorage) Length() (leveldb.Sizes, error) {
+func (s *Leveldb) Len() (leveldb.Sizes, error) {
 	return s.db.SizeOf(nil)
 }
 
 // ForEach get all key and value
-func (s *leveldbStorage) ForEach(fn func(k, v []byte) error) error {
+func (s *Leveldb) ForEach(fn func(k, v []byte) error) error {
 	iter := s.db.NewIterator(nil, nil)
 	for iter.Next() {
 		// Remember that the contents of the returned slice should not be modified, and
@@ -101,6 +102,6 @@ func (s *leveldbStorage) ForEach(fn func(k, v []byte) error) error {
 
 // Close closes the DB. This will also releases any outstanding snapshot,
 // abort any in-flight compaction and discard open transaction.
-func (s *leveldbStorage) Close() error {
+func (s *Leveldb) Close() error {
 	return s.db.Close()
 }
