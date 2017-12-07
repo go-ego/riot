@@ -99,13 +99,14 @@ type EngineOpts struct {
 	IDOnly bool
 }
 
-// Init 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
+// Init init engine options
+// 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
 func (options *EngineOpts) Init() {
 	if !options.NotUsingGse {
 		// if len(options.SegmenterDict) == 0 {
 		if options.SegmenterDict == "" {
 			// log.Fatal("字典文件不能为空")
-			log.Printf("Dictionary file is empty, start the default dictionary.")
+			log.Printf("Dictionary file is empty, load the default and empty dictionary.")
 		}
 	}
 
