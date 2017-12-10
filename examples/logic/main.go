@@ -54,6 +54,8 @@ func main() {
 	// The search output format is found in the types.SearchResp structure
 	docs := searcher.Search(types.SearchReq{
 		Text: query,
+		// Search "google testing" segmentation `or relation`
+		// and not the result of "accidentally"
 		Logic: types.Logic{
 			Should: true,
 			LogicExpr: types.LogicExpr{
