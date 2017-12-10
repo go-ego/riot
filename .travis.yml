@@ -6,15 +6,15 @@ go:
   # - 1.7.x
   # - 1.8.x
   - 1.9.x
-  - tip
+  # - tip
 
 install:
   - export PATH=$PATH:$HOME/gopath/bin
-  - go get -u github.com/go-ego/gse  
-  - go get -u github.com/go-ego/gpy 
-  - go get -u github.com/go-ego/murmur 
-  - go get -u golang.org/x/sys/unix
-  - go get -u github.com/shirou/gopsutil
+  # - go get -u github.com/go-ego/gse  
+  # - go get -u github.com/go-ego/gpy 
+  # - go get -u github.com/go-ego/murmur 
+  # - go get -u golang.org/x/sys/unix
+  # - go get -u github.com/shirou/gopsutil
   - go get -v -t ./...
 
 # after_success:
