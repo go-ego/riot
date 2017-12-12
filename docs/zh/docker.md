@@ -13,7 +13,7 @@ docker 支持
 
 4、运行 docker container
 
-	docker run -d -p 8080:8080 unmerged/riot-codelab
+	docker run -d -p 8080:8080 goriot/riot-codelab
 
 在浏览器中打开 `localhost:8080` 即可打开搜索页面
 
@@ -21,6 +21,6 @@ docker 支持
 
 我已经建好了一个 repo 并上传到了 docker hub，用下面的命令 pull 镜像
 
-	docker pull unmerged/riot-codelab
+	docker pull goriot/riot-codelab
 
 下载后运行镜像的方法和上面的相同。

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# !/usr/bin/env bash
 
 set -x
 
@@ -11,4 +11,4 @@ cp ../../data/dict/dictionary.txt docker/
 cp ../../data/dict/stop_tokens.txt docker/
 cp ../../testdata/weibo_data.txt docker/
 
-docker build -t unmerged/riot-codelab -f docker/Dockerfile docker/
+docker build -t goriot/riot-codelab -f docker/Dockerfile docker/

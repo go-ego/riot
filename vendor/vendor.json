@@ -27,10 +27,10 @@
 			"revisionTime": "2017-11-20T01:03:07Z"
 		},
 		{
-			"checksumSHA1": "XDcrGBf1nb0ip4f4OSo49zL23i0=",
+			"checksumSHA1": "mLtuNi3Fn0c1A/i7QJeBl1ML4nk=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "a9ee745cab4986fd4511c3882f9797501ed45dd6",
-			"revisionTime": "2017-12-06T03:56:37Z"
+			"revision": "92997f47c61a3f4674cf270a84e6faf21803ac16",
+			"revisionTime": "2017-12-12T06:31:22Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
@@ -137,14 +137,14 @@
 		{
 			"checksumSHA1": "UuwHornIODuEq7fYnsZwdVgERLk=",
 			"path": "github.com/shirou/gopsutil/mem",
-			"revision": "5c46042e0db59cd67a946f07245ad3afa6a3c755",
-			"revisionTime": "2017-11-30T13:50:17Z"
+			"revision": "b8c456e53432efdbba4ee9e55d27f69cb2dcf1ee",
+			"revisionTime": "2017-12-09T07:50:03Z"
 		},
 		{
 			"checksumSHA1": "spMeORRgS1azN91KYqJgoxBmhMw=",
 			"path": "github.com/syndtr/goleveldb/leveldb",
-			"revision": "adf24ef3f94bd13ec4163060b21a5678f22b429b",
-			"revisionTime": "2017-11-20T00:00:13Z"
+			"revision": "3d8f4155ffd9029d32e5cf03853b58759b6e3710",
+			"revisionTime": "2017-12-09T15:37:43Z"
 		},
 		{
 			"checksumSHA1": "EKIow7XkgNdWvR/982ffIZxKG8Y=",

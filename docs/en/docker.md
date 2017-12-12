@@ -13,7 +13,7 @@ Docker support
 
 4、Run docker container
 
-	docker run -d -p 8080:8080 unmerged/riot-codelab
+	docker run -d -p 8080:8080 goriot/riot-codelab
 
 Open `localhost: 8080` in your browser to open the search page
 
@@ -21,6 +21,6 @@ Open `localhost: 8080` in your browser to open the search page
 
 I've built a repo and uploaded it to the docker hub, using the command pull image:
 
-	docker pull unmerged/riot-codelab
+	docker pull goriot/riot-codelab
 
 The method of running the image after downloading is the same as above.
