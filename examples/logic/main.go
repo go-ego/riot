@@ -26,10 +26,11 @@ var (
 	searcher = riot.Engine{}
 )
 
-func main() {
+func logic1() {
 	// Init engine
 	searcher.Init(types.EngineOpts{
 		Using:       4,
+		IDOnly:      true,
 		NotUsingGse: true})
 	defer searcher.Close()
 
@@ -38,17 +39,20 @@ func main() {
 	speaker early`
 	text2 := `Google is testing another Search results layout with 
 	rounded cards, new colors, and the 4 mysterious colored dots again`
+	text3 := "Google testing text search"
 
 	// Add the document to the index, docId starts at 1
 	searcher.IndexDoc(1, types.DocIndexData{Content: text})
 	searcher.IndexDoc(2, types.DocIndexData{Content: text1})
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
+	searcher.IndexDoc(4, types.DocIndexData{Content: text3})
 
 	// Wait for the index to refresh
 	searcher.FlushIndex()
 
 	// var strArr []string
 	strArr := []string{"accidentally"}
+	// strArr := []string{"text"}
 	query := "google testing"
 
 	// The search output format is found in the types.SearchResp structure
@@ -67,5 +71,58 @@ func main() {
 			MaxOutputs:   100,
 		}})
 
-	log.Println("search...", docs)
+	log.Println("search...", len(docs.Docs), docs)
+}
+
+func logic2() {
+	// Init engine
+	var searcher1 = riot.New()
+
+	text := "Google Is Experimenting With Virtual Reality Advertising"
+	text1 := `Google accidentally pushed Bluetooth update for Home
+	speaker early`
+	text2 := `Google is testing another Search results layout with 
+	rounded cards, new colors, and the 4 mysterious colored dots again`
+	text3 := "Google testing text search"
+	text4 := "Google testing search"
+
+	// Add the document to the index, docId starts at 1
+	searcher1.IndexDoc(1, types.DocIndexData{Content: text})
+	searcher1.IndexDoc(2, types.DocIndexData{Content: text1})
+	searcher1.IndexDoc(3, types.DocIndexData{Content: text2})
+	searcher1.IndexDoc(4, types.DocIndexData{Content: text3})
+	searcher1.IndexDoc(5, types.DocIndexData{Content: text4})
+
+	// Wait for the index to refresh
+	searcher1.FlushIndex()
+
+	// var strArr []string
+	strArr := []string{"accidentally"}
+	notArr := []string{"text"}
+	query := "google testing"
+
+	// The search output format is found in the types.SearchResp structure
+	docs := searcher1.Search(types.SearchReq{
+		Text: query,
+		// Search "google testing" segmentation `must relation`
+		// and the result of "or accidentally"
+		Logic: types.Logic{
+			Should: true,
+			LogicExpr: types.LogicExpr{
+				// ShouldLabels: strArr,
+				MustLabels:  strArr,
+				NotInLabels: notArr,
+			},
+		},
+		RankOpts: &types.RankOpts{
+			OutputOffset: 0,
+			MaxOutputs:   100,
+		}})
+
+	log.Println("search...", docs.NumDocs, docs)
+}
+
+func main() {
+	logic1()
+	logic2()
 }
