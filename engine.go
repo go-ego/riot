@@ -156,7 +156,7 @@ func (engine *Engine) CheckMem() {
 	if !engine.initOptions.UseStorage {
 		log.Println("Check virtualMemory...")
 		vmem, _ := mem.VirtualMemory()
-		fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", vmem.Total, vmem.Free, vmem.UsedPercent)
+		log.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", vmem.Total, vmem.Free, vmem.UsedPercent)
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
