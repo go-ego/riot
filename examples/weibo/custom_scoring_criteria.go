@@ -159,7 +159,7 @@ func main() {
 
 	// 显示
 	fmt.Println("output...")
-	for _, doc := range output.Docs {
+	for _, doc := range output.Docs.(types.ScoredDocs) {
 		fmt.Printf("%v %s\n\n", doc.Scores, lines[doc.DocId])
 	}
 	log.Printf("查询完毕")

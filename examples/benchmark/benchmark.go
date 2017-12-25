@@ -267,7 +267,7 @@ func search(ch chan bool, record *recordResponseLock) {
 			if _, found := record.count[query]; !found {
 				record.RUnlock()
 				record.Lock()
-				record.count[query] = len(output.Docs)
+				record.count[query] = len(output.Docs.(types.ScoredDocs))
 				record.Unlock()
 			} else {
 				record.RUnlock()
