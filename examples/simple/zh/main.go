@@ -21,7 +21,8 @@ var (
 func main() {
 	// 初始化
 	searcher.Init(types.EngineOpts{
-		Using:         3,
+		Using: 3,
+		// IDOnly:        true,
 		SegmenterDict: "../../../data/dict/dictionary.txt"})
 	defer searcher.Close()
 

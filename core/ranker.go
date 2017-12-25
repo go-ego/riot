@@ -109,51 +109,29 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	ranker.lock.Unlock()
 }
 
-// Rank rank
-// 给文档评分并排序
-func (ranker *Ranker) Rank(
-	docs []types.IndexedDoc, options types.RankOpts,
-	countDocsOnly bool) (types.ScoredDocs, int) {
-
-	if ranker.initialized == false {
-		log.Fatal("The Ranker has not been initialized.")
-	}
-
-	// 对每个文档评分
-	var outputDocs types.ScoredDocs
+// RankDoc rank docs by types.ScoredIDs
+func (ranker *Ranker) RankDoc(docs []types.IndexedDoc,
+	options types.RankOpts, countDocsOnly bool) (types.ScoredIDs, int) {
+	var outputDocs types.ScoredIDs
 	numDocs := 0
+
 	for _, d := range docs {
 		ranker.lock.RLock()
 		// 判断 doc 是否存在
 		if _, ok := ranker.lock.docs[d.DocId]; ok {
 
 			fs := ranker.lock.fields[d.DocId]
-			content := ranker.lock.content[d.DocId]
-			attri := ranker.lock.attri[d.DocId]
 
 			ranker.lock.RUnlock()
 			// 计算评分并剔除没有分值的文档
 			scores := options.ScoringCriteria.Score(d, fs)
 			if len(scores) > 0 {
 				if !countDocsOnly {
-					if !gIDOnly {
-						outputDocs = append(outputDocs, types.ScoredDoc{
-							DocId: d.DocId,
-							// new
-							Fields:  fs,
-							Content: content,
-							Attri:   attri,
-							//
-							Scores:           scores,
-							TokenSnippetLocs: d.TokenSnippetLocs,
-							TokenLocs:        d.TokenLocs})
-					} else {
-						outputDocs = append(outputDocs, types.ScoredDoc{
-							DocId:            d.DocId,
-							Scores:           scores,
-							TokenSnippetLocs: d.TokenSnippetLocs,
-							TokenLocs:        d.TokenLocs})
-					}
+					outputDocs = append(outputDocs, types.ScoredID{
+						DocId:            d.DocId,
+						Scores:           scores,
+						TokenSnippetLocs: d.TokenSnippetLocs,
+						TokenLocs:        d.TokenLocs})
 				}
 				numDocs++
 			}
@@ -180,5 +158,86 @@ func (ranker *Ranker) Rank(
 		}
 		return outputDocs[start:end], numDocs
 	}
+
+	return outputDocs, numDocs
+}
+
+// RankDocs rank docs by types.ScoredDocs
+func (ranker *Ranker) RankDocs(docs []types.IndexedDoc,
+	options types.RankOpts, countDocsOnly bool) (types.ScoredDocs, int) {
+	var outputDocs types.ScoredDocs
+	numDocs := 0
+
+	for _, d := range docs {
+		ranker.lock.RLock()
+		// 判断 doc 是否存在
+		if _, ok := ranker.lock.docs[d.DocId]; ok {
+
+			fs := ranker.lock.fields[d.DocId]
+			content := ranker.lock.content[d.DocId]
+			attri := ranker.lock.attri[d.DocId]
+
+			ranker.lock.RUnlock()
+			// 计算评分并剔除没有分值的文档
+			scores := options.ScoringCriteria.Score(d, fs)
+			if len(scores) > 0 {
+				if !countDocsOnly {
+					outputDocs = append(outputDocs, types.ScoredDoc{
+						DocId: d.DocId,
+						// new
+						Fields:  fs,
+						Content: content,
+						Attri:   attri,
+						//
+						Scores:           scores,
+						TokenSnippetLocs: d.TokenSnippetLocs,
+						TokenLocs:        d.TokenLocs})
+				}
+				numDocs++
+			}
+		} else {
+			ranker.lock.RUnlock()
+		}
+	}
+
+	// 排序
+	if !countDocsOnly {
+		if options.ReverseOrder {
+			sort.Sort(sort.Reverse(outputDocs))
+		} else {
+			sort.Sort(outputDocs)
+		}
+		// 当用户要求只返回部分结果时返回部分结果
+		var start, end int
+		if options.MaxOutputs != 0 {
+			start = utils.MinInt(options.OutputOffset, len(outputDocs))
+			end = utils.MinInt(options.OutputOffset+options.MaxOutputs, len(outputDocs))
+		} else {
+			start = utils.MinInt(options.OutputOffset, len(outputDocs))
+			end = len(outputDocs)
+		}
+		return outputDocs[start:end], numDocs
+	}
+
+	return outputDocs, numDocs
+}
+
+// Rank rank docs
+// 给文档评分并排序
+func (ranker *Ranker) Rank(docs []types.IndexedDoc,
+	options types.RankOpts, countDocsOnly bool) (
+	interface{}, int) {
+
+	if ranker.initialized == false {
+		log.Fatal("The Ranker has not been initialized.")
+	}
+
+	// 对每个文档评分
+	if gIDOnly {
+		outputDocs, numDocs := ranker.RankDoc(docs, options, countDocsOnly)
+		return outputDocs, numDocs
+	}
+
+	outputDocs, numDocs := ranker.RankDocs(docs, options, countDocsOnly)
 	return outputDocs, numDocs
 }
