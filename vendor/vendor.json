@@ -27,10 +27,10 @@
 			"revisionTime": "2017-11-20T01:03:07Z"
 		},
 		{
-			"checksumSHA1": "O6sh2dykfMn/aTNbfs6eH8YHPh4=",
+			"checksumSHA1": "ugikQ+2VqIJw1b+nhN766I3XJjw=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "26b52060e97a40899258ababac2b9fe1a5f1992d",
-			"revisionTime": "2017-12-15T07:48:18Z"
+			"revision": "9e707c0f2074afbd43bcd11d058fed6ca7609105",
+			"revisionTime": "2017-12-19T08:10:56Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
@@ -81,10 +81,10 @@
 			"revisionTime": "2017-11-29T08:51:34Z"
 		},
 		{
-			"checksumSHA1": "hJRUjFuPeYkA5veDjWQ8J3kkYTs=",
+			"checksumSHA1": "snxtYoqa02zPucBpXhmg7/WPjHU=",
 			"path": "github.com/go-ego/gse",
-			"revision": "32fea789154e56751608037d714b2ffd5bcd99d8",
-			"revisionTime": "2017-12-05T12:51:51Z"
+			"revision": "241fc77ce22b770c5db0ce32081fd420eb39bc8b",
+			"revisionTime": "2017-12-17T18:15:26Z"
 		},
 		{
 			"checksumSHA1": "Jw4ClEG6yYBx/dsKT27jhJmZdBU=",
@@ -131,14 +131,14 @@
 		{
 			"checksumSHA1": "jWpwWWcywJPNhKTYxi4RXds+amQ=",
 			"path": "github.com/shirou/gopsutil/internal/common",
-			"revision": "27389f01ec9364f60d6dba4fbe9751d3b7058d46",
-			"revisionTime": "2017-12-14T06:29:47Z"
+			"revision": "7ec06ec280df1dd1f08befc535049d49d63ae18a",
+			"revisionTime": "2017-12-20T19:14:05Z"
 		},
 		{
 			"checksumSHA1": "UuwHornIODuEq7fYnsZwdVgERLk=",
 			"path": "github.com/shirou/gopsutil/mem",
-			"revision": "27389f01ec9364f60d6dba4fbe9751d3b7058d46",
-			"revisionTime": "2017-12-14T06:29:47Z"
+			"revision": "7ec06ec280df1dd1f08befc535049d49d63ae18a",
+			"revisionTime": "2017-12-20T19:14:05Z"
 		},
 		{
 			"checksumSHA1": "l9hsW4atYllqlNjJUwHb6lyLn+I=",
