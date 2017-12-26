@@ -38,6 +38,7 @@ type SearchResp struct {
 	NumDocs int
 }
 
+// Content search content
 type Content struct {
 	// new Content
 	Content string
