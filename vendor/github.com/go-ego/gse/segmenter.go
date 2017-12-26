@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.58, Mount Qomolangma!"
+	version string = "v0.10.0.59, Mount Qomolangma!"
 
 	minTokenFrequency = 2 // 仅从字典文件中读取大于等于此频率的分词
 )
@@ -51,7 +51,7 @@ type Segmenter struct {
 	dict *Dictionary
 }
 
-// jumper 该结构体用于记录Viterbi算法中某字元处的向前分词跳转信息
+// jumper 该结构体用于记录 Viterbi 算法中某字元处的向前分词跳转信息
 type jumper struct {
 	minDistance float32
 	token       *Token
@@ -181,14 +181,15 @@ func DictPaths(dictDir, filePath string) (files []string) {
 
 // SegToken seg token
 func (seg *Segmenter) SegToken() {
-	// 计算每个分词的路径值，路径值含义见Token结构体的注释
+	// 计算每个分词的路径值，路径值含义见 Token 结构体的注释
 	logTotalFrequency := float32(math.Log2(float64(seg.dict.totalFrequency)))
 	for i := range seg.dict.tokens {
 		token := &seg.dict.tokens[i]
 		token.distance = logTotalFrequency - float32(math.Log2(float64(token.frequency)))
 	}
 
-	// 对每个分词进行细致划分，用于搜索引擎模式，该模式用法见Token结构体的注释。
+	// 对每个分词进行细致划分，用于搜索引擎模式，
+	// 该模式用法见 Token 结构体的注释。
 	for i := range seg.dict.tokens {
 		token := &seg.dict.tokens[i]
 		segments := seg.segmentWords(token.text, true)
@@ -229,8 +230,8 @@ func (seg *Segmenter) SegToken() {
 //
 // 从文件中载入词典
 //
-// 可以载入多个词典文件，文件名用","分隔，排在前面的词典优先载入分词，比如
-// 	"用户词典.txt,通用词典.txt"
+// 可以载入多个词典文件，文件名用 "," 分隔，排在前面的词典优先载入分词，比如
+// 	"用户词典.txt, 通用词典.txt"
 // 当一个分词既出现在用户词典也出现在通用词典中，则优先使用用户词典。
 //
 // 词典的格式为（每个分词一行）：
@@ -283,7 +284,7 @@ func (seg *Segmenter) LoadDict(files ...string) error {
 // Segment 对文本分词
 //
 // 输入参数：
-//	bytes	UTF8文本的字节数组
+//	bytes	UTF8 文本的字节数组
 //
 // 输出：
 //	[]Segment	划分的分词
@@ -309,7 +310,8 @@ func (seg *Segmenter) segmentWords(text []Text, searchMode bool) []Segment {
 		return []Segment{}
 	}
 
-	// jumpers定义了每个字元处的向前跳转信息，包括这个跳转对应的分词，
+	// jumpers 定义了每个字元处的向前跳转信息，
+	// 包括这个跳转对应的分词，
 	// 以及从文本段开始到该字元的最短路径值
 	jumpers := make([]jumper, len(text))
 
@@ -371,9 +373,9 @@ func (seg *Segmenter) segmentWords(text []Text, searchMode bool) []Segment {
 }
 
 // updateJumper 更新跳转信息:
-// 	1. 当该位置从未被访问过时(jumper.minDistance为零的情况)，或者
+// 	1. 当该位置从未被访问过时 (jumper.minDistance 为零的情况)，或者
 //	2. 当该位置的当前最短路径大于新的最短路径时
-// 将当前位置的最短路径值更新为baseDistance加上新分词的概率
+// 将当前位置的最短路径值更新为 baseDistance 加上新分词的概率
 func updateJumper(jumper *jumper, baseDistance float32, token *Token) {
 	newDistance := baseDistance + token.distance
 	if jumper.minDistance == 0 || jumper.minDistance > newDistance {

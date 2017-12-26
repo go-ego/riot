@@ -50,7 +50,8 @@ func TestRankDocument(t *testing.T) {
 		{DocId: 3, BM25: 24},
 		{DocId: 4, BM25: 18},
 	}, types.RankOpts{ScoringCriteria: types.RankByBM25{}}, false)
-	utils.Expect(t, "[3 [24000 ]] [4 [18000 ]] [1 [6000 ]] ", scoredDocsToString(scoredDocs))
+	utils.Expect(t, "[3 [24000 ]] [4 [18000 ]] [1 [6000 ]] ",
+		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 
 	scoredDocs, _ = ranker.Rank([]types.IndexedDoc{
 		{DocId: 1, BM25: 6},
@@ -59,7 +60,8 @@ func TestRankDocument(t *testing.T) {
 		{DocId: 4, BM25: 18},
 	}, types.RankOpts{ScoringCriteria: types.RankByBM25{}, ReverseOrder: true}, false)
 	// doc0因为没有AddDoc所以没有添加进来
-	utils.Expect(t, "[1 [6000 ]] [4 [18000 ]] [3 [24000 ]] ", scoredDocsToString(scoredDocs))
+	utils.Expect(t, "[1 [6000 ]] [4 [18000 ]] [3 [24000 ]] ",
+		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 }
 
 func TestRankWithCriteria(t *testing.T) {
@@ -95,7 +97,8 @@ func TestRankWithCriteria(t *testing.T) {
 		{DocId: 3, TokenProximity: 24},
 		{DocId: 4, TokenProximity: 18},
 	}, types.RankOpts{ScoringCriteria: criteria}, false)
-	utils.Expect(t, "[1 [25300 ]] [3 [17300 ]] [2 [3000 ]] [4 [1300 ]] ", scoredDocsToString(scoredDocs))
+	utils.Expect(t, "[1 [25300 ]] [3 [17300 ]] [2 [3000 ]] [4 [1300 ]] ",
+		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 
 	criteria.Threshold = 4
 	scoredDocs, _ = ranker.Rank([]types.IndexedDoc{
@@ -104,7 +107,8 @@ func TestRankWithCriteria(t *testing.T) {
 		{DocId: 3, TokenProximity: 24},
 		{DocId: 4, TokenProximity: 18},
 	}, types.RankOpts{ScoringCriteria: criteria}, false)
-	utils.Expect(t, "[1 [25300 ]] [3 [17300 ]] ", scoredDocsToString(scoredDocs))
+	utils.Expect(t, "[1 [25300 ]] [3 [17300 ]] ",
+		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 }
 
 func TestRemoveDoc(t *testing.T) {
@@ -136,5 +140,6 @@ func TestRemoveDoc(t *testing.T) {
 		{DocId: 3, TokenProximity: 24},
 		{DocId: 4, TokenProximity: 18},
 	}, types.RankOpts{ScoringCriteria: criteria}, false)
-	utils.Expect(t, "[1 [25300 ]] [2 [3000 ]] ", scoredDocsToString(scoredDocs))
+	utils.Expect(t, "[1 [25300 ]] [2 [3000 ]] ",
+		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 }

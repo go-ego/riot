@@ -19,7 +19,8 @@ import (
 	"github.com/go-ego/cedar"
 )
 
-// Dictionary 结构体实现了一个字串前缀树，一个分词可能出现在叶子节点也有可能出现在非叶节点
+// Dictionary 结构体实现了一个字串前缀树，
+// 一个分词可能出现在叶子节点也有可能出现在非叶节点
 type Dictionary struct {
 	trie           *cedar.Cedar // Cedar 前缀树
 	maxTokenLen    int          // 词典中最长的分词
@@ -65,7 +66,8 @@ func (dict *Dictionary) addToken(token Token) {
 
 // lookupTokens 在词典中查找和字元组words可以前缀匹配的所有分词
 // 返回值为找到的分词数
-func (dict *Dictionary) lookupTokens(words []Text, tokens []*Token) (numOfTokens int) {
+func (dict *Dictionary) lookupTokens(words []Text,
+	tokens []*Token) (numOfTokens int) {
 	var (
 		id, value int
 		err       error

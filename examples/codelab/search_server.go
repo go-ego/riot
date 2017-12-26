@@ -139,7 +139,7 @@ func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 
 	// 整理为输出格式
 	docs := []*Weibo{}
-	for _, doc := range output.Docs {
+	for _, doc := range output.Docs.(types.ScoredDocs) {
 		wb := wbs[doc.DocId]
 		wb.Text = doc.Content
 		// for _, t := range output.Tokens {

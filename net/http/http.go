@@ -99,13 +99,14 @@ func Search(w http.ResponseWriter, req *http.Request) {
 	}
 	docs := com.Search(sea)
 
+	scoDocs := docs.Docs.(types.ScoredDocs)
 	var textArr []Text
-	for i := 0; i < len(docs.Docs); i++ {
+	for i := 0; i < len(scoDocs); i++ {
 		text := Text{
-			Id:      docs.Docs[i].DocId,
-			Content: docs.Docs[i].Content,
-			Score:   docs.Docs[i].Scores,
-			Attri:   docs.Docs[i].Attri.(types.Attri),
+			Id:      scoDocs[i].DocId,
+			Content: scoDocs[i].Content,
+			Score:   scoDocs[i].Scores,
+			Attri:   scoDocs[i].Attri.(types.Attri),
 		}
 		textArr = append(textArr, text)
 	}

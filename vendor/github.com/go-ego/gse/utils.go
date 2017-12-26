@@ -7,13 +7,13 @@ import (
 
 // ToString segments to string  输出分词结果为字符串
 //
-// 有两种输出模式，以"中华人民共和国"为例
+// 有两种输出模式，以 "中华人民共和国" 为例
 //
-//  普通模式（searchMode=false）输出一个分词"中华人民共和国/ns "
+//  普通模式（searchMode=false）输出一个分词 "中华人民共和国/ns "
 //  搜索模式（searchMode=true） 输出普通模式的再细致切分：
 //      "中华/nz 人民/n 共和/nz 共和国/ns 人民共和国/nt 中华人民共和国/ns "
 //
-// 搜索模式主要用于给搜索引擎提供尽可能多的关键字，详情请见Token结构体的注释。
+// 搜索模式主要用于给搜索引擎提供尽可能多的关键字，详情请见 Token 结构体的注释。
 func ToString(segs []Segment, searchMode bool) (output string) {
 	if searchMode {
 		for _, seg := range segs {
@@ -44,9 +44,9 @@ func tokenToString(token *Token) (output string) {
 	return
 }
 
-// ToSlice segments to slice 输出分词结果到一个字符串slice
+// ToSlice segments to slice 输出分词结果到一个字符串 slice
 //
-// 有两种输出模式，以"中华人民共和国"为例
+// 有两种输出模式，以 "中华人民共和国" 为例
 //
 //  普通模式（searchMode=false）输出一个分词"[中华人民共和国]"
 //  搜索模式（searchMode=true） 输出普通模式的再细致切分：

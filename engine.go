@@ -437,50 +437,14 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	return
 }
 
-// Search find the document that satisfies the search criteria.
-// This function is thread safe
-// 查找满足搜索条件的文档，此函数线程安全
-func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) {
-	if !engine.initialized {
-		log.Fatal("The engine must be initialized first")
-	}
-
-	tokens := engine.Tokens(request)
-
-	var RankOpts types.RankOpts
-	if request.RankOpts == nil {
-		RankOpts = *engine.initOptions.DefaultRankOpts
-	} else {
-		RankOpts = *request.RankOpts
-	}
-	if RankOpts.ScoringCriteria == nil {
-		RankOpts.ScoringCriteria = engine.initOptions.DefaultRankOpts.ScoringCriteria
-	}
-
-	// 建立排序器返回的通信通道
-	rankerReturnChannel := make(
-		chan rankerReturnReq, engine.initOptions.NumShards)
-
-	// 生成查找请求
-	lookupRequest := indexerLookupReq{
-		countDocsOnly:       request.CountDocsOnly,
-		tokens:              tokens,
-		labels:              request.Labels,
-		docIds:              request.DocIds,
-		options:             RankOpts,
-		rankerReturnChannel: rankerReturnChannel,
-		orderless:           request.Orderless,
-		logic:               request.Logic,
-	}
-
-	// 向索引器发送查找请求
-	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerLookupChans[shard] <- lookupRequest
-	}
-
+// Rank rank docs by types.ScoredIDs
+func (engine *Engine) Rank(request types.SearchReq,
+	RankOpts types.RankOpts, tokens []string,
+	rankerReturnChannel chan rankerReturnReq) (output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
-	rankOutput := types.ScoredDocs{}
+	var rankOutput types.ScoredIDs
+	// var rankOutput interface{}
 
 	//**********/ begin
 	timeout := request.Timeout
@@ -490,8 +454,10 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 			rankerOutput := <-rankerReturnChannel
 			if !request.CountDocsOnly {
-				for _, doc := range rankerOutput.docs {
-					rankOutput = append(rankOutput, doc)
+				if rankerOutput.docs != nil {
+					for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
+						rankOutput = append(rankOutput, doc)
+					}
 				}
 			}
 			numDocs += rankerOutput.numDocs
@@ -503,8 +469,10 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 			select {
 			case rankerOutput := <-rankerReturnChannel:
 				if !request.CountDocsOnly {
-					for _, doc := range rankerOutput.docs {
-						rankOutput = append(rankOutput, doc)
+					if rankerOutput.docs != nil {
+						for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
+							rankOutput = append(rankOutput, doc)
+						}
 					}
 				}
 				numDocs += rankerOutput.numDocs
@@ -547,6 +515,136 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	output.NumDocs = numDocs
 	output.Timeout = isTimeout
 
+	return
+}
+
+// Ranks rank docs by types.ScoredDocs
+func (engine *Engine) Ranks(request types.SearchReq,
+	RankOpts types.RankOpts, tokens []string,
+	rankerReturnChannel chan rankerReturnReq) (output types.SearchResp) {
+	// 从通信通道读取排序器的输出
+	numDocs := 0
+	rankOutput := types.ScoredDocs{}
+
+	//**********/ begin
+	timeout := request.Timeout
+	isTimeout := false
+	if timeout <= 0 {
+		// 不设置超时
+		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+			rankerOutput := <-rankerReturnChannel
+			if !request.CountDocsOnly {
+				if rankerOutput.docs != nil {
+					for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
+						rankOutput = append(rankOutput, doc)
+					}
+				}
+			}
+			numDocs += rankerOutput.numDocs
+		}
+	} else {
+		// 设置超时
+		deadline := time.Now().Add(time.Nanosecond * time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+			select {
+			case rankerOutput := <-rankerReturnChannel:
+				if !request.CountDocsOnly {
+					if rankerOutput.docs != nil {
+						for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
+							rankOutput = append(rankOutput, doc)
+						}
+					}
+				}
+				numDocs += rankerOutput.numDocs
+			case <-time.After(deadline.Sub(time.Now())):
+				isTimeout = true
+				break
+			}
+		}
+	}
+
+	// 再排序
+	if !request.CountDocsOnly && !request.Orderless {
+		if RankOpts.ReverseOrder {
+			sort.Sort(sort.Reverse(rankOutput))
+		} else {
+			sort.Sort(rankOutput)
+		}
+	}
+
+	// 准备输出
+	output.Tokens = tokens
+	// 仅当 CountDocsOnly 为 false 时才充填 output.Docs
+	if !request.CountDocsOnly {
+		if request.Orderless {
+			// 无序状态无需对 Offset 截断
+			output.Docs = rankOutput
+		} else {
+			var start, end int
+			if RankOpts.MaxOutputs == 0 {
+				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
+				end = len(rankOutput)
+			} else {
+				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
+				end = utils.MinInt(start+RankOpts.MaxOutputs, len(rankOutput))
+			}
+			output.Docs = rankOutput[start:end]
+		}
+	}
+
+	output.NumDocs = numDocs
+	output.Timeout = isTimeout
+
+	return
+}
+
+// Search find the document that satisfies the search criteria.
+// This function is thread safe
+// 查找满足搜索条件的文档，此函数线程安全
+func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) {
+	if !engine.initialized {
+		log.Fatal("The engine must be initialized first")
+	}
+
+	tokens := engine.Tokens(request)
+
+	var RankOpts types.RankOpts
+	if request.RankOpts == nil {
+		RankOpts = *engine.initOptions.DefaultRankOpts
+	} else {
+		RankOpts = *request.RankOpts
+	}
+	if RankOpts.ScoringCriteria == nil {
+		RankOpts.ScoringCriteria = engine.initOptions.DefaultRankOpts.ScoringCriteria
+	}
+
+	// 建立排序器返回的通信通道
+	rankerReturnChannel := make(
+		chan rankerReturnReq, engine.initOptions.NumShards)
+
+	// 生成查找请求
+	lookupRequest := indexerLookupReq{
+		countDocsOnly:       request.CountDocsOnly,
+		tokens:              tokens,
+		labels:              request.Labels,
+		docIds:              request.DocIds,
+		options:             RankOpts,
+		rankerReturnChannel: rankerReturnChannel,
+		orderless:           request.Orderless,
+		logic:               request.Logic,
+	}
+
+	// 向索引器发送查找请求
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		engine.indexerLookupChans[shard] <- lookupRequest
+	}
+
+	if engine.initOptions.IDOnly {
+		output = engine.Rank(request, RankOpts, tokens, rankerReturnChannel)
+		return
+	}
+
+	output = engine.Ranks(request, RankOpts, tokens, rankerReturnChannel)
 	return
 }
 

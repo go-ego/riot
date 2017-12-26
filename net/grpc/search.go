@@ -77,15 +77,17 @@ func rpcSearch(sea com.SearchArgs) *pb.SearchReply {
 
 	docs := com.Search(sea)
 	var textArr []*pb.Text
-	for i := 0; i < len(docs.Docs); i++ {
+
+	scoDocs := docs.Docs.(types.ScoredDocs)
+	for i := 0; i < len(scoDocs); i++ {
 		attri := &pb.Attri{
-			Time: docs.Docs[i].Attri.(types.Attri).Time,
-			Ts:   docs.Docs[i].Attri.(types.Attri).Ts,
+			Time: scoDocs[i].Attri.(types.Attri).Time,
+			Ts:   scoDocs[i].Attri.(types.Attri).Ts,
 		}
 
 		text := &pb.Text{
-			Id:      docs.Docs[i].DocId,
-			Content: docs.Docs[i].Content,
+			Id:      scoDocs[i].DocId,
+			Content: scoDocs[i].Content,
 			Attri:   attri,
 		}
 		textArr = append(textArr, text)

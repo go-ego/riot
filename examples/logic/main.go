@@ -71,7 +71,7 @@ func logic1() {
 			MaxOutputs:   100,
 		}})
 
-	log.Println("search...", len(docs.Docs), docs)
+	log.Println("search...", len(docs.Docs.(types.ScoredIDs)), docs)
 }
 
 func logic2() {

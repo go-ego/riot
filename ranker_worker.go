@@ -36,7 +36,8 @@ type rankerRankReq struct {
 }
 
 type rankerReturnReq struct {
-	docs    types.ScoredDocs
+	// docs    types.ScoredDocs
+	docs    interface{}
 	numDocs int
 }
 
