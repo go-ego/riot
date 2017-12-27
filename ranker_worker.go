@@ -29,10 +29,10 @@ type rankerAddDocReq struct {
 }
 
 type rankerRankReq struct {
-	docs                []types.IndexedDoc
-	options             types.RankOpts
-	rankerReturnChannel chan rankerReturnReq
-	countDocsOnly       bool
+	docs             []types.IndexedDoc
+	options          types.RankOpts
+	rankerReturnChan chan rankerReturnReq
+	countDocsOnly    bool
 }
 
 type rankerReturnReq struct {
@@ -66,7 +66,7 @@ func (engine *Engine) rankerRankWorker(shard int) {
 		}
 		request.options.OutputOffset = 0
 		outputDocs, numDocs := engine.rankers[shard].Rank(request.docs, request.options, request.countDocsOnly)
-		request.rankerReturnChannel <- rankerReturnReq{docs: outputDocs, numDocs: numDocs}
+		request.rankerReturnChan <- rankerReturnReq{docs: outputDocs, numDocs: numDocs}
 	}
 }
 

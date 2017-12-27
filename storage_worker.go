@@ -80,5 +80,5 @@ func (engine *Engine) storageInitWorker(shard int) {
 		}
 		return nil
 	})
-	engine.storageInitChannel <- true
+	engine.storageInitChan <- true
 }
