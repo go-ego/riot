@@ -563,6 +563,131 @@ func TestDocOnlyID(t *testing.T) {
 	utils.Expect(t, "1", outputs.NumDocs)
 }
 
+func TestDocRank(t *testing.T) {
+	var engine Engine
+
+	rankOpts := types.RankOpts{
+		ReverseOrder:    true,
+		OutputOffset:    0,
+		MaxOutputs:      1,
+		ScoringCriteria: &RankByTokenProximity{},
+	}
+	engine.Init(types.EngineOpts{
+		Using:           1,
+		IDOnly:          true,
+		SegmenterDict:   "./testdata/test_dict.txt",
+		DefaultRankOpts: &rankOpts,
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+
+	AddDocs(&engine)
+	engine.RemoveDoc(5)
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+
+	request := types.SearchReq{
+		Text:   "中国人口",
+		DocIds: docIds}
+
+	tokens := engine.Tokens(request)
+	// 建立排序器返回的通信通道
+	rankerReturnChan := make(
+		chan rankerReturnReq, engine.initOptions.NumShards)
+
+	// 生成查找请求
+	lookupRequest := indexerLookupReq{
+		countDocsOnly:    request.CountDocsOnly,
+		tokens:           tokens,
+		labels:           request.Labels,
+		docIds:           request.DocIds,
+		options:          rankOpts,
+		rankerReturnChan: rankerReturnChan,
+		orderless:        request.Orderless,
+		logic:            request.Logic,
+	}
+
+	// 向索引器发送查找请求
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		engine.indexerLookupChans[shard] <- lookupRequest
+	}
+
+	outputs := engine.Rank(request, rankOpts, tokens, rankerReturnChan)
+
+	if outputs.Docs != nil {
+		outDocs := outputs.Docs.(types.ScoredIDs)
+		utils.Expect(t, "1", len(outDocs))
+	}
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "1", outputs.NumDocs)
+}
+
+func TestDocRanks(t *testing.T) {
+	var engine Engine
+
+	rankOpts := types.RankOpts{
+		ReverseOrder:    true,
+		OutputOffset:    0,
+		MaxOutputs:      1,
+		ScoringCriteria: &RankByTokenProximity{},
+	}
+	engine.Init(types.EngineOpts{
+		Using:           1,
+		SegmenterDict:   "./testdata/test_dict.txt",
+		DefaultRankOpts: &rankOpts,
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+
+	AddDocs(&engine)
+	engine.RemoveDoc(5)
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+
+	request := types.SearchReq{
+		Text:   "中国人口",
+		DocIds: docIds}
+
+	tokens := engine.Tokens(request)
+	// 建立排序器返回的通信通道
+	rankerReturnChan := make(
+		chan rankerReturnReq, engine.initOptions.NumShards)
+
+	// 生成查找请求
+	lookupRequest := indexerLookupReq{
+		countDocsOnly:    request.CountDocsOnly,
+		tokens:           tokens,
+		labels:           request.Labels,
+		docIds:           request.DocIds,
+		options:          rankOpts,
+		rankerReturnChan: rankerReturnChan,
+		orderless:        request.Orderless,
+		logic:            request.Logic,
+	}
+
+	// 向索引器发送查找请求
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		engine.indexerLookupChans[shard] <- lookupRequest
+	}
+
+	outputs := engine.Ranks(request, rankOpts, tokens, rankerReturnChan)
+
+	if outputs.Docs != nil {
+		outDocs := outputs.Docs.(types.ScoredDocs)
+		utils.Expect(t, "1", len(outDocs))
+	}
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "1", outputs.NumDocs)
+}
+
 func TestSearchWithin(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
