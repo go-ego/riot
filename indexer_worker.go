@@ -27,14 +27,14 @@ type indexerAddDocReq struct {
 }
 
 type indexerLookupReq struct {
-	countDocsOnly       bool
-	tokens              []string
-	labels              []string
-	docIds              map[uint64]bool
-	options             types.RankOpts
-	rankerReturnChannel chan rankerReturnReq
-	orderless           bool
-	logic               types.Logic
+	countDocsOnly    bool
+	tokens           []string
+	labels           []string
+	docIds           map[uint64]bool
+	options          types.RankOpts
+	rankerReturnChan chan rankerReturnReq
+	orderless        bool
+	logic            types.Logic
 }
 
 type indexerRemoveDocReq struct {
@@ -87,12 +87,12 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 		}
 
 		if request.countDocsOnly {
-			request.rankerReturnChannel <- rankerReturnReq{numDocs: numDocs}
+			request.rankerReturnChan <- rankerReturnReq{numDocs: numDocs}
 			continue
 		}
 
 		if len(docs) == 0 {
-			request.rankerReturnChannel <- rankerReturnReq{}
+			request.rankerReturnChan <- rankerReturnReq{}
 			continue
 		}
 
@@ -104,7 +104,7 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 					TokenSnippetLocs: d.TokenSnippetLocs,
 					TokenLocs:        d.TokenLocs})
 			}
-			request.rankerReturnChannel <- rankerReturnReq{
+			request.rankerReturnChan <- rankerReturnReq{
 				docs:    outputDocs,
 				numDocs: len(outputDocs),
 			}
@@ -112,10 +112,10 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 		}
 
 		rankerRequest := rankerRankReq{
-			countDocsOnly:       request.countDocsOnly,
-			docs:                docs,
-			options:             request.options,
-			rankerReturnChannel: request.rankerReturnChannel,
+			countDocsOnly:    request.countDocsOnly,
+			docs:             docs,
+			options:          request.options,
+			rankerReturnChan: request.rankerReturnChan,
 		}
 		engine.rankerRankChans[shard] <- rankerRequest
 	}

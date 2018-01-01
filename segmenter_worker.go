@@ -189,7 +189,7 @@ func (engine *Engine) segmenterData(request segmenterReq) (Map, int) {
 
 func (engine *Engine) segmenterWorker() {
 	for {
-		request := <-engine.segmenterChannel
+		request := <-engine.segmenterChan
 		if request.docId == 0 {
 			if request.forceUpdate {
 				for i := 0; i < engine.initOptions.NumShards; i++ {

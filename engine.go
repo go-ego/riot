@@ -78,7 +78,7 @@ type Engine struct {
 	dbs        []storage.Storage
 
 	// 建立索引器使用的通信通道
-	segmenterChannel      chan segmenterReq
+	segmenterChan         chan segmenterReq
 	indexerAddDocChans    []chan indexerAddDocReq
 	indexerRemoveDocChans []chan indexerRemoveDocReq
 	rankerAddDocChans     []chan rankerAddDocReq
@@ -90,7 +90,7 @@ type Engine struct {
 
 	// 建立持久存储使用的通信通道
 	storageIndexDocChans []chan storageIndexDocReq
-	storageInitChannel   chan bool
+	storageInitChan      chan bool
 }
 
 // Indexer initialize the indexer channel
@@ -145,7 +145,7 @@ func (engine *Engine) InitStorage() {
 			engine.storageIndexDocChans[shard] = make(
 				chan storageIndexDocReq)
 		}
-		engine.storageInitChannel = make(
+		engine.storageInitChan = make(
 			chan bool, engine.initOptions.StorageShards)
 	}
 }
@@ -192,7 +192,7 @@ func (engine *Engine) Storage() {
 
 		// 等待恢复完成
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			<-engine.storageInitChannel
+			<-engine.storageInitChan
 		}
 		for {
 			runtime.Gosched()
@@ -250,7 +250,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	}
 
 	// 初始化分词器通道
-	engine.segmenterChannel = make(
+	engine.segmenterChan = make(
 		chan segmenterReq, options.NumSegmenterThreads)
 
 	// 初始化索引器通道
@@ -330,7 +330,7 @@ func (engine *Engine) internalIndexDoc(
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d%s", docId, data.Content)))
-	engine.segmenterChannel <- segmenterReq{
+	engine.segmenterChan <- segmenterReq{
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }
 
@@ -440,7 +440,7 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 // Rank rank docs by types.ScoredIDs
 func (engine *Engine) Rank(request types.SearchReq,
 	RankOpts types.RankOpts, tokens []string,
-	rankerReturnChannel chan rankerReturnReq) (output types.SearchResp) {
+	rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	var rankOutput types.ScoredIDs
@@ -452,7 +452,7 @@ func (engine *Engine) Rank(request types.SearchReq,
 	if timeout <= 0 {
 		// 不设置超时
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			rankerOutput := <-rankerReturnChannel
+			rankerOutput := <-rankerReturnChan
 			if !request.CountDocsOnly {
 				if rankerOutput.docs != nil {
 					for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
@@ -467,7 +467,7 @@ func (engine *Engine) Rank(request types.SearchReq,
 		deadline := time.Now().Add(time.Nanosecond * time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 			select {
-			case rankerOutput := <-rankerReturnChannel:
+			case rankerOutput := <-rankerReturnChan:
 				if !request.CountDocsOnly {
 					if rankerOutput.docs != nil {
 						for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
@@ -521,7 +521,7 @@ func (engine *Engine) Rank(request types.SearchReq,
 // Ranks rank docs by types.ScoredDocs
 func (engine *Engine) Ranks(request types.SearchReq,
 	RankOpts types.RankOpts, tokens []string,
-	rankerReturnChannel chan rankerReturnReq) (output types.SearchResp) {
+	rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredDocs{}
@@ -532,7 +532,7 @@ func (engine *Engine) Ranks(request types.SearchReq,
 	if timeout <= 0 {
 		// 不设置超时
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			rankerOutput := <-rankerReturnChannel
+			rankerOutput := <-rankerReturnChan
 			if !request.CountDocsOnly {
 				if rankerOutput.docs != nil {
 					for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
@@ -547,7 +547,7 @@ func (engine *Engine) Ranks(request types.SearchReq,
 		deadline := time.Now().Add(time.Nanosecond * time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 			select {
-			case rankerOutput := <-rankerReturnChannel:
+			case rankerOutput := <-rankerReturnChan:
 				if !request.CountDocsOnly {
 					if rankerOutput.docs != nil {
 						for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
@@ -619,19 +619,19 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	}
 
 	// 建立排序器返回的通信通道
-	rankerReturnChannel := make(
+	rankerReturnChan := make(
 		chan rankerReturnReq, engine.initOptions.NumShards)
 
 	// 生成查找请求
 	lookupRequest := indexerLookupReq{
-		countDocsOnly:       request.CountDocsOnly,
-		tokens:              tokens,
-		labels:              request.Labels,
-		docIds:              request.DocIds,
-		options:             RankOpts,
-		rankerReturnChannel: rankerReturnChannel,
-		orderless:           request.Orderless,
-		logic:               request.Logic,
+		countDocsOnly:    request.CountDocsOnly,
+		tokens:           tokens,
+		labels:           request.Labels,
+		docIds:           request.DocIds,
+		options:          RankOpts,
+		rankerReturnChan: rankerReturnChan,
+		orderless:        request.Orderless,
+		logic:            request.Logic,
 	}
 
 	// 向索引器发送查找请求
@@ -640,11 +640,11 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	}
 
 	if engine.initOptions.IDOnly {
-		output = engine.Rank(request, RankOpts, tokens, rankerReturnChannel)
+		output = engine.Rank(request, RankOpts, tokens, rankerReturnChan)
 		return
 	}
 
-	output = engine.Ranks(request, RankOpts, tokens, rankerReturnChannel)
+	output = engine.Ranks(request, RankOpts, tokens, rankerReturnChan)
 	return
 }
 
