@@ -2,6 +2,7 @@ package riot
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"os"
 	"reflect"
@@ -908,4 +909,49 @@ func TestSearchLogic(t *testing.T) {
 	utils.Expect(t, "8", outDocs[1].DocId)
 	utils.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	utils.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
+}
+
+func TestDocGetAllID(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineOpts{
+		Using:         1,
+		UseStorage:    true,
+		StorageFolder: "riot.id",
+		IDOnly:        true,
+		SegmenterDict: "./testdata/test_dict.txt",
+		DefaultRankOpts: &types.RankOpts{
+			ReverseOrder:    true,
+			OutputOffset:    0,
+			MaxOutputs:      1,
+			ScoringCriteria: &RankByTokenProximity{},
+		},
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+
+	AddDocs(&engine)
+	engine.RemoveDoc(5)
+	engine.FlushIndex()
+
+	allIds := engine.GetAllDocIds()
+	fmt.Println("all id", allIds)
+	utils.Expect(t, "4", len(allIds))
+	utils.Expect(t, "[3 4 1 2]", allIds)
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+	outputs := engine.Search(types.SearchReq{
+		Text:   "中国人口",
+		DocIds: docIds})
+
+	if outputs.Docs != nil {
+		outDocs := outputs.Docs.(types.ScoredIDs)
+		utils.Expect(t, "1", len(outDocs))
+	}
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "1", outputs.NumDocs)
+
+	os.RemoveAll("riot.id")
 }

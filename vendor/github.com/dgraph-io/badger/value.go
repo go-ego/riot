@@ -667,6 +667,14 @@ type request struct {
 	Err  error
 }
 
+func (req *request) Wait() error {
+	req.Wg.Wait()
+	req.Entries = nil
+	err := req.Err
+	requestPool.Put(req)
+	return err
+}
+
 // sync is thread-unsafe and should not be called concurrently with write.
 func (vlog *valueLog) sync() error {
 	if vlog.opt.SyncWrites {
@@ -725,7 +733,7 @@ func (vlog *valueLog) write(reqs []*request) error {
 			}
 
 			newid := atomic.AddUint32(&vlog.maxFid, 1)
-			y.AssertTruef(newid < 1<<16, "newid will overflow uint16: %v", newid)
+			y.AssertTruef(newid <= math.MaxUint32, "newid will overflow uint32: %v", newid)
 			newlf, err := vlog.createVlogFile(newid)
 			if err != nil {
 				return err
