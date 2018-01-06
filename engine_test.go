@@ -939,6 +939,11 @@ func TestDocGetAllID(t *testing.T) {
 	utils.Expect(t, "4", len(allIds))
 	utils.Expect(t, "[3 4 1 2]", allIds)
 
+	allIds = engine.GetAllIds()
+	fmt.Println("all id", allIds)
+	utils.Expect(t, "4", len(allIds))
+	utils.Expect(t, "[3 4 1 2]", allIds)
+
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true

@@ -727,6 +727,21 @@ func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*uint32(engine.initOptions.NumShards))
 }
 
+// GetAllIds get all the DocId from the storage database and return
+// 从数据库遍历所有的 DocId, 并返回
+func (engine *Engine) GetAllIds() []uint64 {
+	docsId := make([]uint64, 0)
+	for i := range engine.dbs {
+		engine.dbs[i].ForEach(func(k, v []byte) error {
+			// fmt.Println(k, v)
+			docsId = append(docsId, uint64(k[0]))
+			return nil
+		})
+	}
+
+	return docsId
+}
+
 // GetAllDocIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
@@ -738,6 +753,7 @@ func (engine *Engine) GetAllDocIds() []uint64 {
 			return nil
 		})
 	}
+
 	return docsId
 }
 
