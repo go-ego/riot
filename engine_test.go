@@ -85,6 +85,11 @@ func (rule RankByTokenProximity) Score(
 	return []float32{1.0 / (float32(doc.TokenProximity) + 1)}
 }
 
+func TestGetVer(t *testing.T) {
+	ver := GetVersion()
+	utils.Expect(t, version, ver)
+}
+
 func TestEngineIndexDoc(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{

@@ -28,8 +28,8 @@ type Dictionary struct {
 	totalFrequency int64        // 词典中所有分词的频率之和
 }
 
-// NewDictionary new dictionary
-func NewDictionary() *Dictionary {
+// NewDict new dictionary
+func NewDict() *Dictionary {
 	return &Dictionary{trie: cedar.New()}
 }
 

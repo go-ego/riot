@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.59, Mount Qomolangma!"
+	version string = "v0.10.0.60, Mount Qomolangma!"
 
 	minTokenFrequency = 2 // 仅从字典文件中读取大于等于此频率的分词
 )
@@ -68,7 +68,7 @@ func getCurrentFilePath() string {
 	return filePath
 }
 
-// Read read flie
+// Read read the flie
 func (seg *Segmenter) Read(file string) error {
 	log.Printf("Load the gse dictionary %s", file)
 	dictFile, err := os.Open(file)
@@ -179,7 +179,7 @@ func DictPaths(dictDir, filePath string) (files []string) {
 	return
 }
 
-// SegToken seg token
+// SegToken segmenter token
 func (seg *Segmenter) SegToken() {
 	// 计算每个分词的路径值，路径值含义见 Token 结构体的注释
 	logTotalFrequency := float32(math.Log2(float64(seg.dict.totalFrequency)))
@@ -237,7 +237,8 @@ func (seg *Segmenter) SegToken() {
 // 词典的格式为（每个分词一行）：
 //	分词文本 频率 词性
 func (seg *Segmenter) LoadDict(files ...string) error {
-	seg.dict = NewDictionary()
+	seg.dict = NewDict()
+
 	var (
 		dictDir  = path.Join(path.Dir(getCurrentFilePath()), "data")
 		dictPath string
