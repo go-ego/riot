@@ -965,3 +965,58 @@ func TestDocGetAllID(t *testing.T) {
 
 	os.RemoveAll("riot.id")
 }
+
+func TestDocPinYin(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineOpts{
+		// Using:         1,
+		UseStorage:    true,
+		StorageFolder: "riot.py",
+		IDOnly:        true,
+		SegmenterDict: "./testdata/test_dict.txt",
+	})
+
+	// AddDocs(&engine)
+	// engine.RemoveDoc(5)
+
+	tokens := engine.PinYin("在路上, in the way")
+
+	fmt.Println("tokens...", tokens)
+	utils.Expect(t, "52", len(tokens))
+
+	var tokenDatas []types.TokenData
+	// tokens := []string{"z", "zl"}
+	for i := 0; i < len(tokens); i++ {
+		tokenData := types.TokenData{Text: tokens[i]}
+		tokenDatas = append(tokenDatas, tokenData)
+	}
+
+	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
+	index2 := types.DocIndexData{Content: "在路上, in the way", Tokens: tokenDatas}
+
+	engine.IndexDoc(10, index1)
+	engine.IndexDoc(11, index2)
+
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[10] = true
+	docIds[11] = true
+	outputs := engine.Search(types.SearchReq{
+		Text:   "zl",
+		DocIds: docIds,
+	})
+
+	fmt.Println("outputs", outputs.Docs)
+	if outputs.Docs != nil {
+		outDocs := outputs.Docs.(types.ScoredIDs)
+		utils.Expect(t, "2", len(outDocs))
+		// utils.Expect(t, "11", outDocs[0].DocId)
+		// utils.Expect(t, "10", outDocs[1].DocId)
+	}
+	utils.Expect(t, "1", len(outputs.Tokens))
+	utils.Expect(t, "2", outputs.NumDocs)
+
+	os.RemoveAll("riot.py")
+}
