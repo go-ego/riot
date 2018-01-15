@@ -1021,6 +1021,42 @@ func TestDocPinYin(t *testing.T) {
 	os.RemoveAll("riot.py")
 }
 
+func TestForSplitData(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineOpts{
+		Using:         4,
+		UseStorage:    true,
+		StorageFolder: "riot.id",
+		IDOnly:        true,
+		SegmenterDict: "./testdata/test_dict.txt",
+	})
+
+	AddDocs(&engine)
+	engine.RemoveDoc(5)
+	engine.FlushIndex()
+
+	tokenDatas := engine.PinYin("在路上, in the way")
+	tokens, num := engine.ForSplitData(tokenDatas, 52)
+	utils.Expect(t, "93", len(tokens))
+	utils.Expect(t, "104", num)
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+	outputs := engine.Search(types.SearchReq{
+		Text:   "中国人口",
+		DocIds: docIds})
+
+	if outputs.Docs != nil {
+		outDocs := outputs.Docs.(types.ScoredIDs)
+		utils.Expect(t, "0", len(outDocs))
+	}
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "0", outputs.NumDocs)
+
+	os.RemoveAll("riot.id")
+}
+
 func TestDocCounters(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
