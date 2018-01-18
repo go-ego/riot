@@ -409,6 +409,27 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	utils.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
 }
 
+func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
+	var engine1 Engine
+
+	engine1.Init(types.EngineOpts{
+		SegmenterDict: "./data/dict/dictionary.txt",
+		StopTokenFile: "./testdata/test_stop_dict.txt",
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+
+	addDocsWithLabels(&engine1)
+
+	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
+	utils.Expect(t, "0", len(outputs1.Tokens))
+	// utils.Expect(t, "百度", outputs1.Tokens[0])
+
+	outDocs := outputs1.Docs.(types.ScoredDocs)
+	utils.Expect(t, "0", len(outDocs))
+}
+
 func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine Engine
