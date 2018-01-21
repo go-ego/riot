@@ -70,6 +70,42 @@ func (engine *Engine) indexerRemoveDocWorker(shard int) {
 	}
 }
 
+func (engine *Engine) orderLess(
+	request indexerLookupReq, docs []types.IndexedDoc) {
+
+	if engine.initOptions.IDOnly {
+		var outputDocs []types.ScoredID
+		// var outputDocs types.ScoredIDs
+		for _, d := range docs {
+			outputDocs = append(outputDocs, types.ScoredID{
+				DocId:            d.DocId,
+				TokenSnippetLocs: d.TokenSnippetLocs,
+				TokenLocs:        d.TokenLocs})
+		}
+
+		request.rankerReturnChan <- rankerReturnReq{
+			docs:    types.ScoredIDs(outputDocs),
+			numDocs: len(outputDocs),
+		}
+
+		return
+	}
+
+	var outputDocs []types.ScoredDoc
+	// var outputDocs types.ScoredDocs
+	for _, d := range docs {
+		outputDocs = append(outputDocs, types.ScoredDoc{
+			DocId:            d.DocId,
+			TokenSnippetLocs: d.TokenSnippetLocs,
+			TokenLocs:        d.TokenLocs})
+	}
+
+	request.rankerReturnChan <- rankerReturnReq{
+		docs:    types.ScoredDocs(outputDocs),
+		numDocs: len(outputDocs),
+	}
+}
+
 func (engine *Engine) indexerLookupWorker(shard int) {
 	for {
 		request := <-engine.indexerLookupChans[shard]
@@ -79,11 +115,17 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 			numDocs int
 		)
 		if request.docIds == nil {
-			docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, nil, request.countDocsOnly, request.logic)
-			// docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, nil, request.countDocsOnly)
+			docs, numDocs = engine.indexers[shard].Lookup(
+				request.tokens, request.labels,
+				nil, request.countDocsOnly, request.logic)
+			// docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels,
+			//  nil, request.countDocsOnly)
 		} else {
-			docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, request.docIds, request.countDocsOnly, request.logic)
-			// docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels, request.docIds, request.countDocsOnly)
+			docs, numDocs = engine.indexers[shard].Lookup(
+				request.tokens, request.labels,
+				request.docIds, request.countDocsOnly, request.logic)
+			// docs, numDocs = engine.indexers[shard].Lookup(request.tokens, request.labels,
+			//  request.docIds, request.countDocsOnly)
 		}
 
 		if request.countDocsOnly {
@@ -97,17 +139,9 @@ func (engine *Engine) indexerLookupWorker(shard int) {
 		}
 
 		if request.orderless {
-			var outputDocs []types.ScoredDoc
-			for _, d := range docs {
-				outputDocs = append(outputDocs, types.ScoredDoc{
-					DocId:            d.DocId,
-					TokenSnippetLocs: d.TokenSnippetLocs,
-					TokenLocs:        d.TokenLocs})
-			}
-			request.rankerReturnChan <- rankerReturnReq{
-				docs:    outputDocs,
-				numDocs: len(outputDocs),
-			}
+			// var outputDocs interface{}
+			engine.orderLess(request, docs)
+
 			continue
 		}
 

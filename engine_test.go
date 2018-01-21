@@ -545,13 +545,54 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.FlushIndex()
 
-	outputs := engine.Search(types.SearchReq{Text: "中国人口", CountDocsOnly: true})
+	outputs := engine.Search(types.SearchReq{Text: "中国人口",
+		CountDocsOnly: true})
 	// utils.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
 		utils.Expect(t, "0", 0)
 	}
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "2", outputs.NumDocs)
+}
+
+func TestDocOrderless(t *testing.T) {
+	var engine, engine1 Engine
+	engine.Init(types.EngineOpts{
+		Using:         1,
+		SegmenterDict: "./testdata/test_dict.txt",
+	})
+
+	AddDocs(&engine)
+	engine.RemoveDoc(5)
+	engine.FlushIndex()
+
+	outputs := engine.Search(types.SearchReq{Text: "中国人口",
+		Orderless: true})
+	// utils.Expect(t, "0", len(outputs.Docs))
+	if outputs.Docs == nil {
+		utils.Expect(t, "0", 0)
+	}
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "2", outputs.NumDocs)
+
+	engine1.Init(types.EngineOpts{
+		Using:         1,
+		IDOnly:        true,
+		SegmenterDict: "./testdata/test_dict.txt",
+	})
+
+	AddDocs(&engine1)
+	engine1.RemoveDoc(5)
+	engine1.FlushIndex()
+
+	outputs1 := engine1.Search(types.SearchReq{Text: "中国人口",
+		Orderless: true})
+	if outputs1.Docs == nil {
+		utils.Expect(t, "0", 0)
+	}
+
+	utils.Expect(t, "2", len(outputs1.Tokens))
+	utils.Expect(t, "2", outputs1.NumDocs)
 }
 
 func TestDocOnlyID(t *testing.T) {
@@ -1013,7 +1054,8 @@ func TestDocPinYin(t *testing.T) {
 	}
 
 	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocIndexData{Content: "在路上, in the way", Tokens: tokenDatas}
+	index2 := types.DocIndexData{Content: "在路上, in the way",
+		Tokens: tokenDatas}
 
 	engine.IndexDoc(10, index1)
 	engine.IndexDoc(11, index2)
