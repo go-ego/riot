@@ -1,4 +1,4 @@
-package riot
+﻿package riot
 
 import (
 	"encoding/gob"
@@ -902,6 +902,45 @@ func TestSearchGse(t *testing.T) {
 	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
 }
 
+func TestSearchNotUseGse(t *testing.T) {
+	var engine Engine
+	engine.Init(types.EngineOpts{
+		Using:       4,
+		NotUsingGse: true,
+	})
+
+	AddDocs(&engine)
+
+	engine.IndexDoc(6, types.DocIndexData{
+		Content: "Google Is Experimenting With Virtual Reality Advertising",
+		Fields:  ScoringFields{1, 2, 3},
+	})
+
+	engine.FlushIndex()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+	docIds[6] = true
+	outputs := engine.Search(types.SearchReq{
+		Text:   "google is",
+		DocIds: docIds,
+	})
+
+	utils.Expect(t, "2", len(outputs.Tokens))
+	utils.Expect(t, "google", outputs.Tokens[0])
+	utils.Expect(t, "is", outputs.Tokens[1])
+
+	outDocs := outputs.Docs.(types.ScoredDocs)
+	log.Println("outputs docs...", outDocs)
+	utils.Expect(t, "1", len(outDocs))
+
+	utils.Expect(t, "6", outDocs[0].DocId)
+	utils.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
+	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+
+}
+
 func TestSearchLogic(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
@@ -1102,6 +1141,9 @@ func TestForSplitData(t *testing.T) {
 	tokens, num := engine.ForSplitData(tokenDatas, 52)
 	utils.Expect(t, "93", len(tokens))
 	utils.Expect(t, "104", num)
+
+	index1 := types.DocIndexData{Content: "在路上"}
+	engine.IndexDoc(10, index1, true)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
