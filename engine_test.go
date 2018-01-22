@@ -1,4 +1,4 @@
-﻿package riot
+package riot
 
 import (
 	"encoding/gob"
@@ -88,6 +88,17 @@ func (rule RankByTokenProximity) Score(
 func TestGetVer(t *testing.T) {
 	ver := GetVersion()
 	utils.Expect(t, version, ver)
+}
+
+func TestTry(t *testing.T) {
+	var arr []int
+
+	Try(func() {
+		fmt.Println(arr[2])
+	}, func(err interface{}) {
+		log.Println("err", err)
+		utils.Expect(t, "runtime error: index out of range", err)
+	})
 }
 
 func TestEngineIndexDoc(t *testing.T) {
