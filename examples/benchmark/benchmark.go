@@ -149,7 +149,7 @@ func deleteDoc() {
 	for i := 1; i <= *numDeleteDocs; i++ {
 		searcher.RemoveDoc(uint64(i))
 	}
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	t3 := time.Now()
 	log.Printf("删除 %d 条索引花费时间 %v", *numDeleteDocs, t3.Sub(t2))
@@ -225,7 +225,7 @@ func main() {
 
 	openFile()
 
-	searcher.FlushIndex()
+	searcher.Flush()
 	log.Print("加入的索引总数", searcher.NumTokenIndexAdded())
 
 	deleteDoc()

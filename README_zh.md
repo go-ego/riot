@@ -96,7 +96,8 @@ func main() {
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2}, true)
 
 	// 等待索引刷新完毕
-	searcher.FlushIndex()
+	searcher.Flush()
+	// engine.FlushIndex()
 
 	// 搜索输出格式见 types.SearchResp 结构体
 	log.Print(searcher.Search(types.SearchReq{Text:"百度中国"}))
@@ -131,7 +132,7 @@ func main() {
 	searcher.IndexDoc(1, data)
 	searcher.IndexDoc(2, data1)
 	searcher.IndexDoc(3, data2)
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	req := types.SearchReq{Text: "你好"}
 	search := searcher.Search(req)

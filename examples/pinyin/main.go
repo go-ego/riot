@@ -60,7 +60,7 @@ func initEngine() {
 	searcher.IndexDoc(11, index2)
 
 	// 等待索引刷新完毕
-	searcher.FlushIndex()
+	searcher.Flush()
 
 }
 

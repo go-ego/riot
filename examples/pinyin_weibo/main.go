@@ -87,7 +87,7 @@ func indexWeibo() {
 		index++
 	}
 
-	searcher.FlushIndex()
+	searcher.Flush()
 	fmt.Println("index done")
 }
 

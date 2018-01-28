@@ -88,7 +88,7 @@ func Search(w http.ResponseWriter, req *http.Request) {
 		maxOutputs = config.Engine.MaxOutputs
 	}
 
-	// searcher.FlushIndex() /// todo
+	// searcher.Flush() /// todo
 
 	sea := com.SearchArgs{
 		Id:           userid,

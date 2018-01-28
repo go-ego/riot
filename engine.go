@@ -648,9 +648,9 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	return
 }
 
-// FlushIndex block wait until all indexes are added
+// Flush block wait until all indexes are added
 // 阻塞等待直到所有索引添加完毕
-func (engine *Engine) FlushIndex() {
+func (engine *Engine) Flush() {
 	for {
 		runtime.Gosched()
 		if engine.numIndexingReqs == engine.numDocsIndexed &&
@@ -670,10 +670,16 @@ func (engine *Engine) FlushIndex() {
 	}
 }
 
+// FlushIndex block wait until all indexes are added
+// 阻塞等待直到所有索引添加完毕
+func (engine *Engine) FlushIndex() {
+	engine.Flush()
+}
+
 // Close close the engine
 // 关闭引擎
 func (engine *Engine) Close() {
-	engine.FlushIndex()
+	engine.Flush()
 	if engine.initOptions.UseStorage {
 		for _, db := range engine.dbs {
 			db.Close()
@@ -716,7 +722,7 @@ func New(dict ...string) *Engine {
 	os.MkdirAll(path, 0777)
 
 	// 等待索引刷新完毕
-	// searcher.FlushIndex()
+	// searcher.Flush()
 	// log.Println("recover index number:", searcher.NumDocsIndexed())
 
 	return searcher

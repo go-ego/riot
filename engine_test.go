@@ -42,7 +42,7 @@ func AddDocs(engine *Engine) {
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
 	})
-	engine.FlushIndex()
+	engine.Flush()
 }
 
 func addDocsWithLabels(engine *Engine) {
@@ -71,7 +71,7 @@ func addDocsWithLabels(engine *Engine) {
 		Content: "BAT是中国互联网三巨头",
 		Labels:  []string{"百度"},
 	})
-	engine.FlushIndex()
+	engine.Flush()
 }
 
 type RankByTokenProximity struct {
@@ -310,12 +310,12 @@ func TestRemoveDoc(t *testing.T) {
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
 	engine.RemoveDoc(6)
-	engine.FlushIndex()
+	engine.Flush()
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "中国人口有十三亿",
 		Fields:  ScoringFields{0, 9, 1},
 	})
-	engine.FlushIndex()
+	engine.Flush()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
@@ -479,7 +479,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 		StorageFolder: "riot.persistent",
 		StorageShards: 2,
 	})
-	engine1.FlushIndex()
+	engine1.Flush()
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
 	utils.Expect(t, "2", len(outputs.Tokens))
@@ -513,7 +513,7 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	var engine1 = New("./testdata/test_dict.txt")
 	// engine1 = engine1.New()
 	log.Println("test")
-	engine1.FlushIndex()
+	engine1.Flush()
 	log.Println("engine1.............")
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
@@ -554,7 +554,7 @@ func TestCountDocsOnly(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口",
 		CountDocsOnly: true})
@@ -575,7 +575,7 @@ func TestDocOrderless(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口",
 		Orderless: true})
@@ -594,7 +594,7 @@ func TestDocOrderless(t *testing.T) {
 
 	AddDocs(&engine1)
 	engine1.RemoveDoc(5)
-	engine1.FlushIndex()
+	engine1.Flush()
 
 	outputs1 := engine1.Search(types.SearchReq{Text: "中国人口",
 		Orderless: true})
@@ -625,7 +625,7 @@ func TestDocOnlyID(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -663,7 +663,7 @@ func TestDocRank(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -725,7 +725,7 @@ func TestDocRanks(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -830,7 +830,7 @@ func TestSearchJp(t *testing.T) {
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -884,7 +884,7 @@ func TestSearchGse(t *testing.T) {
 		Tokens:  tokenDatas,
 		Fields:  ScoringFields{1, 2, 3},
 	})
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -927,7 +927,7 @@ func TestSearchNotUseGse(t *testing.T) {
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -970,7 +970,7 @@ func TestSearchLogic(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.IndexDoc(6, types.DocIndexData{
-		Content: "こんにちは世界, こんにちは",
+		Content: "�����んにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
@@ -992,7 +992,7 @@ func TestSearchLogic(t *testing.T) {
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	for index := 0; index < 10; index++ {
@@ -1049,7 +1049,7 @@ func TestDocGetAllID(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	allIds := engine.GetAllDocIds()
 	fmt.Println("all id", allIds)
@@ -1110,7 +1110,7 @@ func TestDocPinYin(t *testing.T) {
 	engine.IndexDoc(10, index1)
 	engine.IndexDoc(11, index2)
 
-	engine.FlushIndex()
+	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -1146,7 +1146,7 @@ func TestForSplitData(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	tokenDatas := engine.PinYin("在路上, in the way")
 	tokens, num := engine.ForSplitData(tokenDatas, 52)
@@ -1185,7 +1185,7 @@ func TestDocCounters(t *testing.T) {
 
 	AddDocs(&engine)
 	engine.RemoveDoc(5)
-	engine.FlushIndex()
+	engine.Flush()
 
 	numAdd := engine.NumTokenIndexAdded()
 	utils.Expect(t, "14", numAdd)

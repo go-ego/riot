@@ -106,7 +106,7 @@ Document docId must be greater than 0 and unique, for Weibo can use Weibo ID. ri
 The engine uses asynchronous indexing, which means that the index may not have been added to the indexed table when IndexDoc returns, which makes it easy for you to iterate through the index. If you need to wait for the index is added after the follow-up operation, please call the following function:
 
 ```go
-searcher.FlushIndex()
+searcher.Flush()
 ```
 
 ## Search

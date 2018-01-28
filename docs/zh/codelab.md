@@ -106,7 +106,7 @@ searcher.IndexDoc(docId, types.DocIndexData{
 引擎采用了非同步的索引方式，也就是说当 IndexDoc 返回时索引可能还没有加入索引表中，这方便你循环并发地加入索引。如果你需要等待索引添加完毕后再进行后续操作，请调用下面的函数
 
 ```go
-searcher.FlushIndex()
+searcher.Flush()
 ```
 
 ## 搜索

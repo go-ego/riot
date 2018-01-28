@@ -80,7 +80,7 @@ func indexWeibo() {
 		})
 	}
 
-	searcher.FlushIndex()
+	searcher.Flush()
 	log.Printf("索引了%d条微博\n", len(wbs))
 }
 

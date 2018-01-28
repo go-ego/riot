@@ -84,7 +84,7 @@ func InitEngine(conf Config) {
 	os.MkdirAll(path, 0777)
 
 	// 等待索引刷新完毕
-	Searcher.FlushIndex()
+	Searcher.Flush()
 
 	log.Println("recover index number:", Searcher.NumDocsIndexed())
 
@@ -94,7 +94,7 @@ func InitEngine(conf Config) {
 func AddDocInx(docId uint64, data types.DocIndexData, forceUpdate bool) {
 	Searcher.IndexDoc(docId, data, forceUpdate)
 
-	Searcher.FlushIndex()
+	Searcher.Flush()
 }
 
 // SearchArgs search args

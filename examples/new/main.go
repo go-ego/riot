@@ -19,7 +19,7 @@ func main() {
 	searcher.IndexDoc(1, data)
 	searcher.IndexDoc(2, data1)
 	searcher.IndexDoc(3, data2)
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	req := types.SearchReq{Text: "你好"}
 	search := searcher.Search(req)

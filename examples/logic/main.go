@@ -48,7 +48,7 @@ func logic1() {
 	searcher.IndexDoc(4, types.DocIndexData{Content: text3})
 
 	// Wait for the index to refresh
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	// var strArr []string
 	strArr := []string{"accidentally"}
@@ -94,7 +94,7 @@ func logic2() {
 	searcher1.IndexDoc(5, types.DocIndexData{Content: text4})
 
 	// Wait for the index to refresh
-	searcher1.FlushIndex()
+	searcher1.Flush()
 
 	// var strArr []string
 	strArr := []string{"accidentally"}

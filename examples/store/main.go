@@ -57,7 +57,7 @@ func initEngine() {
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
 
 	// Wait for the index to refresh
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	log.Println("recover index number:", searcher.NumDocsIndexed())
 }
@@ -80,7 +80,7 @@ func restoreIndex() {
 	os.MkdirAll(path, 0777)
 
 	// Wait for the index to refresh
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	log.Println("recover index number:", searcher.NumDocsIndexed())
 }

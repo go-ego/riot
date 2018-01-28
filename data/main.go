@@ -45,7 +45,7 @@ func main() {
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
 
 	// Wait for the index to refresh
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	// The search output format is found in the types.SearchResp structure
 	log.Print(searcher.Search(types.SearchReq{Text: "google testing"}))

@@ -96,7 +96,8 @@ func main() {
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2}, true)
 
 	// Wait for the index to refresh
-	searcher.FlushIndex()
+	searcher.Flush()
+	// engine.FlushIndex()
 
 	// The search output format is found in the types.SearchResp structure
 	log.Print(searcher.Search(types.SearchReq{Text:"google testing"}))
@@ -129,7 +130,7 @@ func main() {
 	searcher.IndexDoc(1, data)
 	searcher.IndexDoc(2, data1)
 	searcher.IndexDoc(3, data2)
-	searcher.FlushIndex()
+	searcher.Flush()
 
 	req := types.SearchReq{Text: "你好"}
 	search := searcher.Search(req)

@@ -150,7 +150,7 @@ func main() {
 			uint64(i),
 			types.DocIndexData{Content: text, Fields: fieldsSlice[i]})
 	}
-	searcher.FlushIndex()
+	searcher.Flush()
 	log.Print("索引建立完毕")
 
 	// 搜索
