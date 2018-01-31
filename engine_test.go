@@ -640,6 +640,18 @@ func TestDocOnlyID(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
+
+	outputs1 := engine.Search(types.SearchReq{
+		Text:    "中国人口",
+		Timeout: 10,
+		DocIds:  docIds})
+
+	if outputs1.Docs != nil {
+		outDocs1 := outputs.Docs.(types.ScoredIDs)
+		utils.Expect(t, "1", len(outDocs1))
+	}
+	utils.Expect(t, "2", len(outputs1.Tokens))
+	utils.Expect(t, "1", outputs1.NumDocs)
 }
 
 func TestDocRank(t *testing.T) {
@@ -765,6 +777,18 @@ func TestDocRanks(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
+
+	outputs1 := engine.Search(types.SearchReq{
+		Text:    "中国人口",
+		Timeout: 10,
+		DocIds:  docIds})
+
+	if outputs1.Docs != nil {
+		outDocs1 := outputs.Docs.(types.ScoredDocs)
+		utils.Expect(t, "1", len(outDocs1))
+	}
+	utils.Expect(t, "2", len(outputs1.Tokens))
+	utils.Expect(t, "1", outputs1.NumDocs)
 }
 
 func TestSearchWithin(t *testing.T) {
@@ -970,7 +994,7 @@ func TestSearchLogic(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.IndexDoc(6, types.DocIndexData{
-		Content: "�����んにちは世界, こんにちは",
+		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
