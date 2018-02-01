@@ -41,7 +41,7 @@ To make sure every PR is checked, we got team maintainers. A maintainer should b
 
 ## Owners
 
-Since Ego is a pure community organization without any company support, Copyright 2016-2017 The go-ego Project Developers.
+Since Ego is a pure community organization without any company support, Copyright 2016 The go-ego Project Developers.
 
 
 ## Versions
@@ -55,7 +55,7 @@ Since the `master` branch is a tip version, if you wish to use Ego in production
 Code that you contribute should use the standard copyright header:
 
 ```
-// Copyright 2016-2017 The go-ego Project Developers. 
+// Copyright 2016 The go-ego Project Developers. 
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain

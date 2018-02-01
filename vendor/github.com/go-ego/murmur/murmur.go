@@ -23,7 +23,9 @@ func Murmur3(key []byte) (hash uint32) {
 	hash = Seed
 	iByte := 0
 	for ; iByte+4 <= len(key); iByte += 4 {
-		k := uint32(key[iByte]) | uint32(key[iByte+1])<<8 | uint32(key[iByte+2])<<16 | uint32(key[iByte+3])<<24
+		k := uint32(key[iByte]) | uint32(key[iByte+1])<<8 |
+			uint32(key[iByte+2])<<16 | uint32(key[iByte+3])<<24
+
 		k *= c1
 		k = (k << r1) | (k >> (32 - r1))
 		k *= c2

@@ -1,6 +1,7 @@
 # cedar 
 [![Build Status](https://travis-ci.org/go-ego/cedar.svg)](https://travis-ci.org/go-ego/cedar)
 [![CircleCI Status](https://circleci.com/gh/go-ego/cedar.svg?style=shield)](https://circleci.com/gh/go-ego/cedar)
+[![codecov](https://codecov.io/gh/go-ego/cedar/branch/master/graph/badge.svg)](https://codecov.io/gh/go-ego/cedar)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-ego/cedar)](https://goreportcard.com/report/github.com/go-ego/cedar)
 [![GoDoc](https://godoc.org/github.com/go-ego/cedar?status.svg)](https://godoc.org/github.com/go-ego/cedar)
 [![Release](https://github-release-version.herokuapp.com/github/go-ego/cedar/release.svg?style=flat)](https://github.com/go-ego/cedar/releases/latest)

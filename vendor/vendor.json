@@ -27,70 +27,70 @@
 			"revisionTime": "2017-11-20T01:03:07Z"
 		},
 		{
-			"checksumSHA1": "0pjRfIGXaFU7oYXa8yntlbnFZxg=",
+			"checksumSHA1": "1AGj3AI3dLLmBrOYb9EE2EjqIdc=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
 			"path": "github.com/dgraph-io/badger/options",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
 			"checksumSHA1": "gGTDnTVVw5kcT2P5NXZV1YSckOU=",
 			"path": "github.com/dgraph-io/badger/protos",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
 			"checksumSHA1": "xBLLiAouTGA/lCAcQ5qjxQiuPCc=",
 			"path": "github.com/dgraph-io/badger/skl",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
 			"checksumSHA1": "I33KkP2lnYqJDasvvsAlebzkeko=",
 			"path": "github.com/dgraph-io/badger/table",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
 			"checksumSHA1": "TM2sCnfWGuyvslqA3fohqksqocA=",
 			"path": "github.com/dgraph-io/badger/y",
-			"revision": "39bfb9cbbe922c50a53aa839476d052b19eaa519",
-			"revisionTime": "2018-01-22T04:09:19Z"
+			"revision": "ddb34c8b7684f74d3dfdcbac72165cb65e4e3f90",
+			"revisionTime": "2018-01-31T04:10:19Z"
 		},
 		{
-			"checksumSHA1": "mX9RBu3vRiJO6ROLiqWYARdf/4c=",
+			"checksumSHA1": "+MUIij/Y6vqAkx0P5GjHeqnU9ZU=",
 			"path": "github.com/dgryski/go-farm",
-			"revision": "ac7624ea8da311f2fbbd94401d8c1cf66089f9fb",
-			"revisionTime": "2017-11-19T14:13:06Z"
+			"revision": "2de33835d10275975374b37b2dcfd22c9020a1f5",
+			"revisionTime": "2018-01-09T07:02:41Z"
 		},
 		{
-			"checksumSHA1": "PFL/DjxC68DvAUkGhNwyZroXzMY=",
+			"checksumSHA1": "HJj9xvieKJAKx7j9f/UZmwH5G4I=",
 			"path": "github.com/go-ego/cedar",
-			"revision": "9282d612ae50d377c6e071784af7768c95c498f1",
-			"revisionTime": "2017-11-29T09:21:30Z"
+			"revision": "63a9578da11fb26bbec0e25fdb76f43d7783dcab",
+			"revisionTime": "2018-02-01T13:55:59Z"
 		},
 		{
-			"checksumSHA1": "SUBP+NvM6E6LxMZzrx+Z4xyfAnU=",
+			"checksumSHA1": "vyjBBuiGOwod9PijR1iMjUoe43A=",
 			"path": "github.com/go-ego/gpy",
-			"revision": "725ca444e4a75069571c50e7cd8401a85b427010",
-			"revisionTime": "2017-11-29T08:51:34Z"
+			"revision": "08e408b9deb264f8f537835dc779587cc148b910",
+			"revisionTime": "2018-02-01T16:16:37Z"
 		},
 		{
-			"checksumSHA1": "RDcqAF/sC3Nz2rtoMOATfRnYCYQ=",
+			"checksumSHA1": "uTVtZYQE+N4b9+s1U5C/SU9abCo=",
 			"path": "github.com/go-ego/gse",
-			"revision": "6b64e428441e0ab57de87950e4c3dc5d6dc06f72",
-			"revisionTime": "2018-01-28T15:21:15Z"
+			"revision": "87a2aa1bdb013695c4379f7cd753928a7bea4edc",
+			"revisionTime": "2018-02-01T16:13:01Z"
 		},
 		{
-			"checksumSHA1": "Jw4ClEG6yYBx/dsKT27jhJmZdBU=",
+			"checksumSHA1": "NXIZurnH2cICdLCwUP0LmQ5J1Bk=",
 			"path": "github.com/go-ego/murmur",
-			"revision": "429a0267f70e6d0a90718211576bf10084eb0ac7",
-			"revisionTime": "2017-11-29T10:23:56Z"
+			"revision": "54add3c5d3b69661bae23dc8c5004f198f7853a2",
+			"revisionTime": "2018-02-01T14:00:21Z"
 		},
 		{
 			"checksumSHA1": "gxV/cPPLkByTdY8y172t7v4qcZA=",

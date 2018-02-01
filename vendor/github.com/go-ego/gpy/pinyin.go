@@ -9,7 +9,7 @@ import (
 
 // Meta
 const (
-	version = "0.10.0.29"
+	version = "0.10.0.34"
 	// License   = "MIT"
 )
 

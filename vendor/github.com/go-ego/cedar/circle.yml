@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: golang:1.9.2
+      - image: golang:1.9.3
     working_directory: /go/src/github.com/go-ego/cedar
     steps:
       - checkout
@@ -12,4 +12,7 @@ jobs:
       #     command: make dev
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
-      - run: go test -v ./...    
+      - run: go test -v ./...  
+      # codecov.io
+      - run: go test -v -covermode=count -coverprofile=coverage.out
+      - run: bash <(curl -s https://codecov.io/bash)    

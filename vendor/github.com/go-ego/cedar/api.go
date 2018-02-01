@@ -18,7 +18,8 @@ func (da *Cedar) Status() (keys, nodes, size, capacity int) {
 	return keys, nodes, da.Size, da.Capacity
 }
 
-// Jump travels from a node `from` to another node `to` by following the path `path`.
+// Jump travels from a node `from` to another node
+// `to` by following the path `path`.
 // For example, if the following keys were inserted:
 //	id	key
 //	19	abc
@@ -112,7 +113,8 @@ func (da *Cedar) Update(key []byte, value int) error {
 // Delete removes a key-value pair from the cedar.
 // It will return ErrNoPath, if the key has not been added.
 func (da *Cedar) Delete(key []byte) error {
-	// if the path does not exist, or the end is not a leaf, nothing to delete
+	// if the path does not exist, or the end is not a leaf,
+	// nothing to delete
 	to, err := da.Jump(key, 0)
 	if err != nil {
 		return ErrNoPath
@@ -159,7 +161,8 @@ func (da *Cedar) Get(key []byte) (value int, err error) {
 	return da.Value(to)
 }
 
-// PrefixMatch returns a list of at most `num` nodes which match the prefix of the key.
+// PrefixMatch returns a list of at most `num` nodes
+// which match the prefix of the key.
 // If `num` is 0, it returns all matches.
 // For example, if the following keys were inserted:
 //	id	key
@@ -168,7 +171,8 @@ func (da *Cedar) Get(key []byte) (value int, err error) {
 //	37	abcd
 // then
 //	PrefixMatch([]byte("abc"), 1) = [ 23 ]				// match ["ab"]
-//	PrefixMatch([]byte("abcd"), 0) = [ 23, 19, 37]		// match ["ab", "abc", "abcd"]
+//	PrefixMatch([]byte("abcd"), 0) = [ 23, 19, 37]
+// match ["ab", "abc", "abcd"]
 func (da *Cedar) PrefixMatch(key []byte, num int) (ids []int) {
 	for from, i := 0, 0; i < len(key); i++ {
 		to, err := da.Jump(key[i:i+1], from)
@@ -187,7 +191,8 @@ func (da *Cedar) PrefixMatch(key []byte, num int) (ids []int) {
 	return
 }
 
-// PrefixPredict returns a list of at most `num` nodes which has the key as their prefix.
+// PrefixPredict returns a list of at most `num` nodes
+// which has the key as their prefix.
 // These nodes are ordered by their keys.
 // If `num` is 0, it returns all matches.
 // For example, if the following keys were inserted:
@@ -197,7 +202,8 @@ func (da *Cedar) PrefixMatch(key []byte, num int) (ids []int) {
 //	37	abcd
 // then
 //	PrefixPredict([]byte("ab"), 2) = [ 23, 19 ]			// predict ["ab", "abc"]
-//	PrefixPredict([]byte("ab"), 0) = [ 23, 19, 37 ]		// predict ["ab", "abc", "abcd"]
+//	PrefixPredict([]byte("ab"), 0) = [ 23, 19, 37 ]
+// predict ["ab", "abc", "abcd"]
 func (da *Cedar) PrefixPredict(key []byte, num int) (ids []int) {
 	root, err := da.Jump(key, 0)
 	if err != nil {
