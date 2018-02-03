@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.272, Danube River!"
+	version string = "v0.10.0.273, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -311,7 +311,9 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdat
 	// data.Tokens
 	engine.internalIndexDoc(docId, data, force)
 
-	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
+	hash := murmur.Sum32(fmt.Sprintf("%d", docId)) %
+		uint32(engine.initOptions.StorageShards)
+
 	if engine.initOptions.UseStorage && docId != 0 {
 		engine.storageIndexDocChans[hash] <- storageIndexDocReq{docId: docId, data: data}
 	}
@@ -329,7 +331,8 @@ func (engine *Engine) internalIndexDoc(
 	if forceUpdate {
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
-	hash := murmur.Murmur3([]byte(fmt.Sprintf("%d%s", docId, data.Content)))
+
+	hash := murmur.Sum32(fmt.Sprintf("%d%s", docId, data.Content))
 	engine.segmenterChan <- segmenterReq{
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }

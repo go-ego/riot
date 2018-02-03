@@ -62,6 +62,7 @@ import (
 func main() {
 	// 载入词典
 	var segmenter gse.Segmenter
+	// 加载默认字典
 	segmenter.LoadDict()
 	// segmenter.LoadDict("your gopath"+"/src/github.com/go-ego/gse/data/dict/dictionary.txt")
 
@@ -85,4 +86,4 @@ func main() {
 
 ## License
 
-Gse is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [sego](https://github.com/huichen/sego)
+Gse is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0), base on [sego](https://github.com/huichen/sego).

@@ -81,16 +81,16 @@
 			"revisionTime": "2018-02-01T16:16:37Z"
 		},
 		{
-			"checksumSHA1": "uTVtZYQE+N4b9+s1U5C/SU9abCo=",
+			"checksumSHA1": "WBStqOwUUQ/9oe/CX5SqmTT8LSs=",
 			"path": "github.com/go-ego/gse",
-			"revision": "87a2aa1bdb013695c4379f7cd753928a7bea4edc",
-			"revisionTime": "2018-02-01T16:13:01Z"
+			"revision": "606c4a9795b7bcad6b3b0f74a59bc61f56ffce2d",
+			"revisionTime": "2018-02-03T10:24:52Z"
 		},
 		{
-			"checksumSHA1": "NXIZurnH2cICdLCwUP0LmQ5J1Bk=",
+			"checksumSHA1": "zEgc8d4umxcFh4hYvtwDjWM8Aic=",
 			"path": "github.com/go-ego/murmur",
-			"revision": "54add3c5d3b69661bae23dc8c5004f198f7853a2",
-			"revisionTime": "2018-02-01T14:00:21Z"
+			"revision": "e5d23dc135b49ee60264e66f09d8730bfb7f8a8d",
+			"revisionTime": "2018-02-03T08:09:41Z"
 		},
 		{
 			"checksumSHA1": "gxV/cPPLkByTdY8y172t7v4qcZA=",
