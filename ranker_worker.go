@@ -53,7 +53,8 @@ func (engine *Engine) rankerAddDocWorker(shard int) {
 			return
 		}
 		// } else {
-		engine.rankers[shard].AddDoc(request.docId, request.fields, request.content, request.attri)
+		engine.rankers[shard].AddDoc(request.docId, request.fields,
+			request.content, request.attri)
 		// }
 	}
 }
@@ -65,8 +66,11 @@ func (engine *Engine) rankerRankWorker(shard int) {
 			request.options.MaxOutputs += request.options.OutputOffset
 		}
 		request.options.OutputOffset = 0
-		outputDocs, numDocs := engine.rankers[shard].Rank(request.docs, request.options, request.countDocsOnly)
-		request.rankerReturnChan <- rankerReturnReq{docs: outputDocs, numDocs: numDocs}
+		outputDocs, numDocs := engine.rankers[shard].Rank(request.docs,
+			request.options, request.countDocsOnly)
+
+		request.rankerReturnChan <- rankerReturnReq{
+			docs: outputDocs, numDocs: numDocs}
 	}
 }
 

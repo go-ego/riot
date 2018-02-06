@@ -193,7 +193,8 @@ func (engine *Engine) segmenterWorker() {
 		if request.docId == 0 {
 			if request.forceUpdate {
 				for i := 0; i < engine.initOptions.NumShards; i++ {
-					engine.indexerAddDocChans[i] <- indexerAddDocReq{forceUpdate: true}
+					engine.indexerAddDocChans[i] <- indexerAddDocReq{
+						forceUpdate: true}
 				}
 			}
 			continue
@@ -248,7 +249,8 @@ func (engine *Engine) segmenterWorker() {
 		}
 		rankerRequest := rankerAddDocReq{
 			// docId: request.docId, fields: request.data.Fields}
-			docId: request.docId, fields: request.data.Fields, content: request.data.Content, attri: request.data.Attri}
+			docId: request.docId, fields: request.data.Fields,
+			content: request.data.Content, attri: request.data.Attri}
 		engine.rankerAddDocChans[shard] <- rankerRequest
 	}
 }

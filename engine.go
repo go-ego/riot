@@ -42,7 +42,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.273, Danube River!"
+	version string = "v0.10.0.274, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -150,13 +150,16 @@ func (engine *Engine) InitStorage() {
 	}
 }
 
-// CheckMem check the memory when the memory is larger than 99.99% using the storage
+// CheckMem check the memory when the memory is larger
+// than 99.99% using the storage
 func (engine *Engine) CheckMem() {
 	// Todo test
 	if !engine.initOptions.UseStorage {
 		log.Println("Check virtualMemory...")
 		vmem, _ := mem.VirtualMemory()
-		log.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", vmem.Total, vmem.Free, vmem.UsedPercent)
+		log.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n",
+			vmem.Total, vmem.Free, vmem.UsedPercent)
+
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
@@ -177,7 +180,9 @@ func (engine *Engine) Storage() {
 		// 打开或者创建数据库
 		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			dbPath := engine.initOptions.StorageFolder + "/" + StorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" +
+				StorageFilePrefix + "." + strconv.Itoa(shard)
+
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("Unable to open database", dbPath, ": ", err)
@@ -204,7 +209,9 @@ func (engine *Engine) Storage() {
 		// 关闭并重新打开数据库
 		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 			engine.dbs[shard].Close()
-			dbPath := engine.initOptions.StorageFolder + "/" + StorageFilePrefix + "." + strconv.Itoa(shard)
+			dbPath := engine.initOptions.StorageFolder + "/" +
+				StorageFilePrefix + "." + strconv.Itoa(shard)
+
 			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 			if db == nil || err != nil {
 				log.Fatal("Unable to open database", dbPath, ": ", err)
@@ -303,7 +310,9 @@ func (engine *Engine) Init(options types.EngineOpts) {
 //      1. 这个函数是线程安全的，请尽可能并发调用以提高索引速度
 //      2. 这个函数调用是非同步的，也就是说在函数返回时有可能文档还没有加入索引中，因此
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
-func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdate ...bool) {
+func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
+	forceUpdate ...bool) {
+
 	var force bool
 	if len(forceUpdate) > 0 {
 		force = forceUpdate[0]
@@ -315,12 +324,14 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData, forceUpdat
 		uint32(engine.initOptions.StorageShards)
 
 	if engine.initOptions.UseStorage && docId != 0 {
-		engine.storageIndexDocChans[hash] <- storageIndexDocReq{docId: docId, data: data}
+		engine.storageIndexDocChans[hash] <- storageIndexDocReq{
+			docId: docId, data: data}
 	}
 }
 
-func (engine *Engine) internalIndexDoc(
-	docId uint64, data types.DocIndexData, forceUpdate bool) {
+func (engine *Engine) internalIndexDoc(docId uint64, data types.DocIndexData,
+	forceUpdate bool) {
+
 	if !engine.initialized {
 		log.Fatal("The engine must be initialized first")
 	}
@@ -365,7 +376,9 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocReq{docId: docId, forceUpdate: force}
+		engine.indexerRemoveDocChans[shard] <- indexerRemoveDocReq{
+			docId: docId, forceUpdate: force}
+
 		if docId == 0 {
 			continue
 		}
@@ -374,7 +387,9 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 
 	if engine.initOptions.UseStorage && docId != 0 {
 		// 从数据库中删除
-		hash := murmur.Murmur3([]byte(fmt.Sprintf("%d", docId))) % uint32(engine.initOptions.StorageShards)
+		hash := murmur.Sum32(fmt.Sprintf("%d", docId)) %
+			uint32(engine.initOptions.StorageShards)
+
 		go engine.storageRemoveDocWorker(docId, hash)
 	}
 }
@@ -467,7 +482,9 @@ func (engine *Engine) Rank(request types.SearchReq,
 		}
 	} else {
 		// 设置超时
-		deadline := time.Now().Add(time.Nanosecond * time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+		deadline := time.Now().Add(time.Nanosecond *
+			time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 			select {
 			case rankerOutput := <-rankerReturnChan:
@@ -547,7 +564,9 @@ func (engine *Engine) Ranks(request types.SearchReq,
 		}
 	} else {
 		// 设置超时
-		deadline := time.Now().Add(time.Nanosecond * time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+		deadline := time.Now().Add(time.Nanosecond *
+			time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+
 		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 			select {
 			case rankerOutput := <-rankerReturnChan:
@@ -656,18 +675,24 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 func (engine *Engine) Flush() {
 	for {
 		runtime.Gosched()
-		if engine.numIndexingReqs == engine.numDocsIndexed &&
-			engine.numRemovingReqs*uint64(engine.initOptions.NumShards) == engine.numDocsRemoved &&
-			(!engine.initOptions.UseStorage || engine.numIndexingReqs == engine.numDocsStored) {
+		inxd := engine.numIndexingReqs == engine.numDocsIndexed
+		rmd := engine.numRemovingReqs*uint64(engine.initOptions.NumShards) ==
+			engine.numDocsRemoved
+		stored := !engine.initOptions.UseStorage || engine.numIndexingReqs ==
+			engine.numDocsStored
+
+		if inxd && rmd && stored {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
 			break
 		}
 	}
+
 	// 强制更新，保证其为最后的请求
 	engine.IndexDoc(0, types.DocIndexData{}, true)
 	for {
 		runtime.Gosched()
-		if engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) == engine.numDocsForceUpdated {
+		if engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) ==
+			engine.numDocsForceUpdated {
 			return
 		}
 	}
@@ -733,7 +758,8 @@ func New(dict ...string) *Engine {
 
 // 从文本hash得到要分配到的 shard
 func (engine *Engine) getShard(hash uint32) int {
-	return int(hash - hash/uint32(engine.initOptions.NumShards)*uint32(engine.initOptions.NumShards))
+	return int(hash - hash/uint32(engine.initOptions.NumShards)*
+		uint32(engine.initOptions.NumShards))
 }
 
 // GetAllIds get all the DocId from the storage database and return
