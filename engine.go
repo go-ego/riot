@@ -137,17 +137,15 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 
 // InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
-	if engine.initOptions.UseStorage {
-		engine.storageIndexDocChans =
-			make([]chan storageIndexDocReq,
-				engine.initOptions.StorageShards)
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			engine.storageIndexDocChans[shard] = make(
-				chan storageIndexDocReq)
-		}
-		engine.storageInitChan = make(
-			chan bool, engine.initOptions.StorageShards)
+	engine.storageIndexDocChans =
+		make([]chan storageIndexDocReq,
+			engine.initOptions.StorageShards)
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		engine.storageIndexDocChans[shard] = make(
+			chan storageIndexDocReq)
 	}
+	engine.storageInitChan = make(
+		chan bool, engine.initOptions.StorageShards)
 }
 
 // CheckMem check the memory when the memory is larger
@@ -171,58 +169,58 @@ func (engine *Engine) CheckMem() {
 
 // Storage start the persistent storage work connection
 func (engine *Engine) Storage() {
-	if engine.initOptions.UseStorage {
-		err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
-		if err != nil {
-			log.Fatal("Can not create directory", engine.initOptions.StorageFolder)
+	// if engine.initOptions.UseStorage {
+	err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
+	if err != nil {
+		log.Fatal("Can not create directory", engine.initOptions.StorageFolder)
+	}
+
+	// 打开或者创建数据库
+	engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		dbPath := engine.initOptions.StorageFolder + "/" +
+			StorageFilePrefix + "." + strconv.Itoa(shard)
+
+		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
+		if db == nil || err != nil {
+			log.Fatal("Unable to open database", dbPath, ": ", err)
 		}
+		engine.dbs[shard] = db
+	}
 
-		// 打开或者创建数据库
-		engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			dbPath := engine.initOptions.StorageFolder + "/" +
-				StorageFilePrefix + "." + strconv.Itoa(shard)
+	// 从数据库中恢复
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		go engine.storageInitWorker(shard)
+	}
 
-			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
-			if db == nil || err != nil {
-				log.Fatal("Unable to open database", dbPath, ": ", err)
-			}
-			engine.dbs[shard] = db
-		}
-
-		// 从数据库中恢复
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			go engine.storageInitWorker(shard)
-		}
-
-		// 等待恢复完成
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			<-engine.storageInitChan
-		}
-		for {
-			runtime.Gosched()
-			if engine.numIndexingReqs == engine.numDocsIndexed {
-				break
-			}
-		}
-
-		// 关闭并重新打开数据库
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			engine.dbs[shard].Close()
-			dbPath := engine.initOptions.StorageFolder + "/" +
-				StorageFilePrefix + "." + strconv.Itoa(shard)
-
-			db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
-			if db == nil || err != nil {
-				log.Fatal("Unable to open database", dbPath, ": ", err)
-			}
-			engine.dbs[shard] = db
-		}
-
-		for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-			go engine.storageIndexDocWorker(shard)
+	// 等待恢复完成
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		<-engine.storageInitChan
+	}
+	for {
+		runtime.Gosched()
+		if engine.numIndexingReqs == engine.numDocsIndexed {
+			break
 		}
 	}
+
+	// 关闭并重新打开数据库
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		engine.dbs[shard].Close()
+		dbPath := engine.initOptions.StorageFolder + "/" +
+			StorageFilePrefix + "." + strconv.Itoa(shard)
+
+		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
+		if db == nil || err != nil {
+			log.Fatal("Unable to open database", dbPath, ": ", err)
+		}
+		engine.dbs[shard] = db
+	}
+
+	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+		go engine.storageIndexDocWorker(shard)
+	}
+	// }
 }
 
 // Init initialize the engine
@@ -270,7 +268,9 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	engine.CheckMem()
 
 	// 初始化持久化存储通道
-	engine.InitStorage()
+	if engine.initOptions.UseStorage {
+		engine.InitStorage()
+	}
 
 	// 启动分词器
 	for iThread := 0; iThread < options.NumSegmenterThreads; iThread++ {
@@ -293,7 +293,9 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	}
 
 	// 启动持久化存储工作协程
-	engine.Storage()
+	if engine.initOptions.UseStorage {
+		engine.Storage()
+	}
 
 	atomic.AddUint64(&engine.numDocsStored, engine.numIndexingReqs)
 }

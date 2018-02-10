@@ -108,8 +108,10 @@ func rpcSearch(sea com.SearchArgs) *pb.SearchReply {
 	return rep
 }
 
-var rpcdata []*pb.SearchReply
-var rpcwg sync.WaitGroup
+var (
+	rpcdata []*pb.SearchReply
+	rpcwg   sync.WaitGroup
+)
 
 // WgRpc rpc
 func WgRpc(address string, sea com.SearchArgs) {

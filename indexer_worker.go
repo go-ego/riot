@@ -49,6 +49,7 @@ func (engine *Engine) indexerAddDocWorker(shard int) {
 		if request.doc != nil {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
 				uint64(len(request.doc.Keywords)))
+
 			atomic.AddUint64(&engine.numDocsIndexed, 1)
 		}
 		if request.forceUpdate {
