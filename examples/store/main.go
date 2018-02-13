@@ -96,4 +96,6 @@ func main() {
 		}})
 
 	fmt.Println("search---------", sea, "; docs=", sea.Docs)
+
+	// os.RemoveAll("riot-index")
 }
