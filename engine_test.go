@@ -12,6 +12,8 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
+
+
 type ScoringFields struct {
 	A, B, C float32
 }
@@ -1053,6 +1055,7 @@ func TestSearchLogic(t *testing.T) {
 }
 
 func TestDocGetAllID(t *testing.T) {
+	gob.Register(new(ScoringFields))
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
