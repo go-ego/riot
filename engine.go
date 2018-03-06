@@ -784,17 +784,7 @@ func (engine *Engine) GetAllIds() []uint64 {
 // GetAllDocIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
-	docsId := make([]uint64, 0)
-	for i := range engine.dbs {
-		engine.dbs[i].ForEach(func(k, v []byte) error {
-			// fmt.Println(k, v)
-			docId, _ := binary.Uvarint(k)
-			docsId = append(docsId, docId)
-			return nil
-		})
-	}
-
-	return docsId
+	return engine.GetAllIds()
 }
 
 // Try handler(err)
