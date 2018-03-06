@@ -20,6 +20,7 @@ Package riot is riot engine
 package riot
 
 import (
+	"encoding/binary"
 	"fmt"
 	"log"
 	"os"
@@ -771,7 +772,8 @@ func (engine *Engine) GetAllIds() []uint64 {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(k, v []byte) error {
 			// fmt.Println(k, v)
-			docsId = append(docsId, uint64(k[0]))
+			docId, _ := binary.Uvarint(k)
+			docsId = append(docsId, docId)
 			return nil
 		})
 	}
@@ -786,7 +788,8 @@ func (engine *Engine) GetAllDocIds() []uint64 {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(k, v []byte) error {
 			// fmt.Println(k, v)
-			docsId = append(docsId, uint64(k[0]))
+			docId, _ := binary.Uvarint(k)
+			docsId = append(docsId, docId)
 			return nil
 		})
 	}
