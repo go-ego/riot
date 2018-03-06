@@ -1053,6 +1053,7 @@ func TestSearchLogic(t *testing.T) {
 }
 
 func TestDocGetAllID(t *testing.T) {
+	gob.Register(ScoringFields{})
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
