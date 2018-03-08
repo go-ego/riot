@@ -21,10 +21,10 @@
 			"revisionTime": "2016-09-24T22:28:19Z"
 		},
 		{
-			"checksumSHA1": "lbE4q2dpUgue10EEx8eutP36vzo=",
+			"checksumSHA1": "20Pind5XCrfZL/F0oibWfd9gotA=",
 			"path": "github.com/boltdb/bolt",
-			"revision": "9da31745363232bc1e27dbab3569e77383a51585",
-			"revisionTime": "2017-11-20T01:03:07Z"
+			"revision": "fd01fc79c553a8e99d512a07e8e0c63d4a3ccfc5",
+			"revisionTime": "2018-03-02T18:00:52Z"
 		},
 		{
 			"checksumSHA1": "FssQXVSLDcT2gC2/7aYaZcc+91Q=",
@@ -69,28 +69,28 @@
 			"revisionTime": "2018-01-09T07:02:41Z"
 		},
 		{
-			"checksumSHA1": "HJj9xvieKJAKx7j9f/UZmwH5G4I=",
+			"checksumSHA1": "mlp5BTvNR0amojt51XwxPXcfY5I=",
 			"path": "github.com/go-ego/cedar",
-			"revision": "63a9578da11fb26bbec0e25fdb76f43d7783dcab",
-			"revisionTime": "2018-02-01T13:55:59Z"
+			"revision": "552f8c6b42816440d588853b379e93e52c1b9876",
+			"revisionTime": "2018-02-14T10:54:18Z"
 		},
 		{
-			"checksumSHA1": "vyjBBuiGOwod9PijR1iMjUoe43A=",
+			"checksumSHA1": "Mtjb+bOr0z8SqF+3X8uX+tn5y9U=",
 			"path": "github.com/go-ego/gpy",
-			"revision": "08e408b9deb264f8f537835dc779587cc148b910",
-			"revisionTime": "2018-02-01T16:16:37Z"
+			"revision": "d5e0205b6e9ec6a8175e09dc05f54944421e7751",
+			"revisionTime": "2018-02-27T13:55:37Z"
 		},
 		{
-			"checksumSHA1": "WBStqOwUUQ/9oe/CX5SqmTT8LSs=",
+			"checksumSHA1": "tY2n197TOjqhhUOJpTOuRyn157E=",
 			"path": "github.com/go-ego/gse",
-			"revision": "606c4a9795b7bcad6b3b0f74a59bc61f56ffce2d",
-			"revisionTime": "2018-02-03T10:24:52Z"
+			"revision": "d7ead8ab2706dab9d4fba81b6362c58a6c98fe8d",
+			"revisionTime": "2018-02-25T15:18:42Z"
 		},
 		{
-			"checksumSHA1": "zEgc8d4umxcFh4hYvtwDjWM8Aic=",
+			"checksumSHA1": "tjncHW0ponY2tAhjltEieA24rMM=",
 			"path": "github.com/go-ego/murmur",
-			"revision": "e5d23dc135b49ee60264e66f09d8730bfb7f8a8d",
-			"revisionTime": "2018-02-03T08:09:41Z"
+			"revision": "adc4279b0e41218d714b4f0b7f9d0e68bcb9cbea",
+			"revisionTime": "2018-02-14T10:57:34Z"
 		},
 		{
 			"checksumSHA1": "gxV/cPPLkByTdY8y172t7v4qcZA=",
