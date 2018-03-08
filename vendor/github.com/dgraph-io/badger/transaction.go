@@ -387,6 +387,13 @@ func (txn *Txn) Get(key []byte) (item *Item, rerr error) {
 	return item, nil
 }
 
+func (txn *Txn) runCallbacks() {
+	for _, cb := range txn.callbacks {
+		cb()
+	}
+	txn.callbacks = nil
+}
+
 // Discard discards a created transaction. This method is very important and must be called. Commit
 // method calls this internally, however, calling this multiple times doesn't cause any issues. So,
 // this can safely be called via a defer right when transaction is created.
@@ -397,10 +404,8 @@ func (txn *Txn) Discard() {
 		return
 	}
 	txn.discarded = true
+	txn.runCallbacks()
 
-	for _, cb := range txn.callbacks {
-		cb()
-	}
 	if txn.update {
 		txn.db.orc.decrRef()
 	}
@@ -465,6 +470,9 @@ func (txn *Txn) Commit(callback func(error)) error {
 		return err
 	}
 
+	// Need to release all locks or writes can get deadlocked.
+	txn.runCallbacks()
+
 	if callback == nil {
 		// If batchSet failed, LSM would not have been updated. So, no need to rollback anything.
 
@@ -503,6 +511,11 @@ func (txn *Txn) Commit(callback func(error)) error {
 //  defer txn.Discard()
 //  // Call various APIs.
 func (db *DB) NewTransaction(update bool) *Txn {
+	if db.opt.ReadOnly && update {
+		// DB is read-only, force read-only transaction.
+		update = false
+	}
+
 	txn := &Txn{
 		update: update,
 		db:     db,

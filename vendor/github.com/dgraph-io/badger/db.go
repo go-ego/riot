@@ -173,6 +173,9 @@ func Open(opt Options) (db *DB, err error) {
 			return nil, y.Wrapf(err, "Invalid Dir: %q", path)
 		}
 		if !dirExists {
+			if opt.ReadOnly {
+				return nil, y.Wrapf(err, "Cannot find Dir for read-only open: %q", path)
+			}
 			// Try to create the directory
 			err = os.Mkdir(path, 0700)
 			if err != nil {
@@ -188,8 +191,8 @@ func Open(opt Options) (db *DB, err error) {
 	if err != nil {
 		return nil, err
 	}
-
-	dirLockGuard, err := acquireDirectoryLock(opt.Dir, lockFile)
+	var dirLockGuard, valueDirLockGuard *directoryLockGuard
+	dirLockGuard, err = acquireDirectoryLock(opt.Dir, lockFile, opt.ReadOnly)
 	if err != nil {
 		return nil, err
 	}
@@ -198,9 +201,8 @@ func Open(opt Options) (db *DB, err error) {
 			_ = dirLockGuard.release()
 		}
 	}()
-	var valueDirLockGuard *directoryLockGuard
 	if absValueDir != absDir {
-		valueDirLockGuard, err = acquireDirectoryLock(opt.ValueDir, lockFile)
+		valueDirLockGuard, err = acquireDirectoryLock(opt.ValueDir, lockFile, opt.ReadOnly)
 		if err != nil {
 			return nil, err
 		}
@@ -217,7 +219,7 @@ func Open(opt Options) (db *DB, err error) {
 		opt.ValueLogLoadingMode == options.MemoryMap) {
 		return nil, ErrInvalidLoadingMode
 	}
-	manifestFile, manifest, err := openOrCreateManifestFile(opt.Dir)
+	manifestFile, manifest, err := openOrCreateManifestFile(opt.Dir, opt.ReadOnly)
 	if err != nil {
 		return nil, err
 	}
@@ -256,11 +258,13 @@ func Open(opt Options) (db *DB, err error) {
 		return nil, err
 	}
 
-	db.closers.compactors = y.NewCloser(1)
-	db.lc.startCompact(db.closers.compactors)
+	if !opt.ReadOnly {
+		db.closers.compactors = y.NewCloser(1)
+		db.lc.startCompact(db.closers.compactors)
 
-	db.closers.memtable = y.NewCloser(1)
-	go db.flushMemtable(db.closers.memtable) // Need levels controller to be up.
+		db.closers.memtable = y.NewCloser(1)
+		go db.flushMemtable(db.closers.memtable) // Need levels controller to be up.
+	}
 
 	if err = db.vlog.Open(db, opt); err != nil {
 		return nil, err
@@ -363,11 +367,14 @@ func (db *DB) Close() (err error) {
 	}
 	db.flushChan <- flushTask{nil, valuePointer{}} // Tell flusher to quit.
 
-	db.closers.memtable.Wait()
-	db.elog.Printf("Memtable flushed")
-
-	db.closers.compactors.SignalAndWait()
-	db.elog.Printf("Compaction finished")
+	if db.closers.memtable != nil {
+		db.closers.memtable.Wait()
+		db.elog.Printf("Memtable flushed")
+	}
+	if db.closers.compactors != nil {
+		db.closers.compactors.SignalAndWait()
+		db.elog.Printf("Compaction finished")
+	}
 
 	if lcErr := db.lc.close(); err == nil {
 		err = errors.Wrap(lcErr, "DB.Close")
@@ -377,8 +384,10 @@ func (db *DB) Close() (err error) {
 
 	db.elog.Finish()
 
-	if guardErr := db.dirLockGuard.release(); err == nil {
-		err = errors.Wrap(guardErr, "DB.Close")
+	if db.dirLockGuard != nil {
+		if guardErr := db.dirLockGuard.release(); err == nil {
+			err = errors.Wrap(guardErr, "DB.Close")
+		}
 	}
 	if db.valueDirGuard != nil {
 		if guardErr := db.valueDirGuard.release(); err == nil {
@@ -565,8 +574,12 @@ func (db *DB) writeRequests(reqs []*request) error {
 			continue
 		}
 		count += len(b.Entries)
+		var i uint64
 		for err := db.ensureRoomForWrite(); err != nil; err = db.ensureRoomForWrite() {
-			db.elog.Printf("Making room for writes")
+			i++
+			if i%100 == 0 {
+				db.elog.Printf("Making room for writes")
+			}
 			// We need to poll a bit because both hasRoomForWrite and the flusher need access to s.imm.
 			// When flushChan is full and you are blocked there, and the flusher is trying to update s.imm,
 			// you will get a deadlock.
@@ -758,6 +771,8 @@ type flushTask struct {
 	vptr valuePointer
 }
 
+// TODO: Ensure that this function doesn't return, or is handled by another wrapper function.
+// Otherwise, we would have no goroutine which can flush memtables.
 func (db *DB) flushMemtable(lc *y.Closer) error {
 	defer lc.Done()
 
