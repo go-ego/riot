@@ -28,6 +28,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 	// "reflect"
@@ -58,6 +59,8 @@ func GetVersion() string {
 
 // Engine initialize the engine
 type Engine struct {
+	loc sync.RWMutex
+
 	// 计数器，用来统计有多少文档被索引等信息
 	numDocsIndexed       uint64
 	numDocsRemoved       uint64
@@ -198,11 +201,18 @@ func (engine *Engine) Storage() {
 	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 		<-engine.storageInitChan
 	}
+
 	for {
 		runtime.Gosched()
-		if engine.numIndexingReqs == engine.numDocsIndexed {
+
+		engine.loc.RLock()
+		numDoced := engine.numIndexingReqs == engine.numDocsIndexed
+		engine.loc.RUnlock()
+
+		if numDoced {
 			break
 		}
+
 	}
 
 	// 关闭并重新打开数据库
@@ -678,11 +688,14 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 func (engine *Engine) Flush() {
 	for {
 		runtime.Gosched()
+
+		engine.loc.RLock()
 		inxd := engine.numIndexingReqs == engine.numDocsIndexed
 		rmd := engine.numRemovingReqs*uint64(engine.initOptions.NumShards) ==
 			engine.numDocsRemoved
 		stored := !engine.initOptions.UseStorage || engine.numIndexingReqs ==
 			engine.numDocsStored
+		engine.loc.RUnlock()
 
 		if inxd && rmd && stored {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
@@ -694,10 +707,16 @@ func (engine *Engine) Flush() {
 	engine.IndexDoc(0, types.DocIndexData{}, true)
 	for {
 		runtime.Gosched()
-		if engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) ==
-			engine.numDocsForceUpdated {
+
+		engine.loc.RLock()
+		forced := engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) ==
+			engine.numDocsForceUpdated
+		engine.loc.RUnlock()
+
+		if forced {
 			return
 		}
+
 	}
 }
 
