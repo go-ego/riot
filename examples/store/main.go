@@ -39,7 +39,8 @@ func initEngine() {
 		UseStorage:    true,
 		StorageFolder: path,
 		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
-		SegmenterDict: "../../data/dict/dictionary.txt",
+		// SegmenterDict: "../../data/dict/dictionary.txt",
+		SegmenterDict: "../../testdata/test_dict.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()

@@ -50,10 +50,15 @@ func (engine *Engine) indexerAddDocWorker(shard int) {
 			atomic.AddUint64(&engine.numTokenIndexAdded,
 				uint64(len(request.doc.Keywords)))
 
+			engine.loc.Lock()
 			atomic.AddUint64(&engine.numDocsIndexed, 1)
+			// engine.numDocsIndexed++
+			engine.loc.Unlock()
 		}
 		if request.forceUpdate {
+			engine.loc.Lock()
 			atomic.AddUint64(&engine.numDocsForceUpdated, 1)
+			engine.loc.Unlock()
 		}
 	}
 }
