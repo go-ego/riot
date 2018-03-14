@@ -1054,6 +1054,7 @@ func TestSearchLogic(t *testing.T) {
 
 func TestDocGetAllID(t *testing.T) {
 	gob.Register(ScoringFields{})
+
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
@@ -1100,6 +1101,7 @@ func TestDocGetAllID(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.id")
 }
 
@@ -1156,6 +1158,7 @@ func TestDocPinYin(t *testing.T) {
 	utils.Expect(t, "1", len(outputs.Tokens))
 	utils.Expect(t, "2", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.py")
 }
 
@@ -1164,7 +1167,7 @@ func TestForSplitData(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         4,
 		UseStorage:    true,
-		StorageFolder: "riot.id",
+		StorageFolder: "riot.data",
 		IDOnly:        true,
 		SegmenterDict: "./testdata/test_dict.txt",
 	})
@@ -1195,7 +1198,8 @@ func TestForSplitData(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "0", outputs.NumDocs)
 
-	os.RemoveAll("riot.id")
+	engine.Close()
+	os.RemoveAll("riot.data")
 }
 
 func TestDocCounters(t *testing.T) {
@@ -1203,7 +1207,7 @@ func TestDocCounters(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:         1,
 		UseStorage:    true,
-		StorageFolder: "riot.id",
+		StorageFolder: "riot.doc",
 		IDOnly:        true,
 		SegmenterDict: "./testdata/test_dict.txt",
 	})
@@ -1233,5 +1237,6 @@ func TestDocCounters(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
 
-	os.RemoveAll("riot.id")
+	engine.Close()
+	os.RemoveAll("riot.doc")
 }
