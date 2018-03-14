@@ -44,7 +44,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.274, Danube River!"
+	version string = "v0.10.0.294, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -176,7 +176,7 @@ func (engine *Engine) Storage() {
 	// if engine.initOptions.UseStorage {
 	err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
 	if err != nil {
-		log.Fatal("Can not create directory", engine.initOptions.StorageFolder)
+		log.Fatal("Can not create directory ", engine.initOptions.StorageFolder)
 	}
 
 	// 打开或者创建数据库
@@ -187,7 +187,7 @@ func (engine *Engine) Storage() {
 
 		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 		if db == nil || err != nil {
-			log.Fatal("Unable to open database", dbPath, ": ", err)
+			log.Fatal("Unable to open database ", dbPath, ": ", err)
 		}
 		engine.dbs[shard] = db
 	}
@@ -223,7 +223,7 @@ func (engine *Engine) Storage() {
 
 		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
 		if db == nil || err != nil {
-			log.Fatal("Unable to open database", dbPath, ": ", err)
+			log.Fatal("Unable to open database ", dbPath, ": ", err)
 		}
 		engine.dbs[shard] = db
 	}
@@ -242,7 +242,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 
 	// 初始化初始参数
 	if engine.initialized {
-		log.Fatal("Do not re-initialize the engine")
+		log.Fatal("Do not re-initialize the engine.")
 	}
 	options.Init()
 	engine.initOptions = options
@@ -346,7 +346,7 @@ func (engine *Engine) internalIndexDoc(docId uint64, data types.DocIndexData,
 	forceUpdate bool) {
 
 	if !engine.initialized {
-		log.Fatal("The engine must be initialized first")
+		log.Fatal("The engine must be initialized first.")
 	}
 
 	if docId != 0 {
@@ -379,7 +379,7 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 	}
 
 	if !engine.initialized {
-		log.Fatal("The engine must be initialized first")
+		log.Fatal("The engine must be initialized first.")
 	}
 
 	if docId != 0 {
@@ -638,7 +638,7 @@ func (engine *Engine) Ranks(request types.SearchReq,
 // 查找满足搜索条件的文档，此函数线程安全
 func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) {
 	if !engine.initialized {
-		log.Fatal("The engine must be initialized first")
+		log.Fatal("The engine must be initialized first.")
 	}
 
 	tokens := engine.Tokens(request)
