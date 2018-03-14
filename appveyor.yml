@@ -11,7 +11,7 @@ environment:
     # CC: gcc.exe
   matrix:
     - GOARCH: amd64
-    - GOARCH: 386
+    # - GOARCH: 386
   GOVERSION: 1.9.4
   # GOPATH: c:\gopath
 

@@ -1054,6 +1054,7 @@ func TestSearchLogic(t *testing.T) {
 
 func TestDocGetAllID(t *testing.T) {
 	gob.Register(ScoringFields{})
+
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
@@ -1100,6 +1101,7 @@ func TestDocGetAllID(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.id")
 }
 
@@ -1156,6 +1158,7 @@ func TestDocPinYin(t *testing.T) {
 	utils.Expect(t, "1", len(outputs.Tokens))
 	utils.Expect(t, "2", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.py")
 }
 
@@ -1195,6 +1198,7 @@ func TestForSplitData(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "0", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.data")
 }
 
@@ -1233,5 +1237,6 @@ func TestDocCounters(t *testing.T) {
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
 
+	engine.Close()
 	os.RemoveAll("riot.doc")
 }
