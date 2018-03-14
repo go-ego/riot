@@ -37,5 +37,5 @@ build_script:
 test_script:
   # Unit tests
   - ps: Add-AppveyorTest "Unit Tests" -Outcome Running
-  - go test -u github.com/go-ego/riot/...
+  - go test -v github.com/go-ego/riot/...
   - ps: Update-AppveyorTest "Unit Tests" -Outcome Passed
