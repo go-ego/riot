@@ -2,7 +2,7 @@ version: "{build}"
 image: 'Visual Studio 2017'
 # platform: x64
 
-clone_folder: c:\go\src\github.com\go-ego\riot
+clone_folder: c:\gopath\src\github.com\go-ego\riot
 # max_jobs: 1
 
 environment:
