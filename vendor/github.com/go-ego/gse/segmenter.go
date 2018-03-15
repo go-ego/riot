@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.65, Mount Qomolangma!"
+	version string = "v0.10.0.69, Mount Qomolangma!"
 
 	minTokenFrequency = 2 // 仅从字典文件中读取大于等于此频率的分词
 )
@@ -291,6 +291,11 @@ func (seg *Segmenter) LoadDict(files ...string) error {
 //	[]Segment	划分的分词
 func (seg *Segmenter) Segment(bytes []byte) []Segment {
 	return seg.internalSegment(bytes, false)
+}
+
+// ModeSegment use segment with search mode
+func (seg *Segmenter) ModeSegment(bytes []byte, searchMode bool) []Segment {
+	return seg.internalSegment(bytes, searchMode)
 }
 
 func (seg *Segmenter) internalSegment(bytes []byte, searchMode bool) []Segment {

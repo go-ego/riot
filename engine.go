@@ -20,7 +20,6 @@ Package riot is riot engine
 package riot
 
 import (
-	"encoding/binary"
 	"fmt"
 	"log"
 	"os"
@@ -29,9 +28,11 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
 	// "reflect"
+
+	"encoding/binary"
+	"sync/atomic"
 
 	"github.com/go-ego/riot/core"
 	"github.com/go-ego/riot/storage"
@@ -44,7 +45,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.294, Danube River!"
+	version string = "v0.10.0.297, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
