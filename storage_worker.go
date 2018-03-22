@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/gob"
+	"log"
 	"sync/atomic"
 
 	"github.com/go-ego/riot/types"
@@ -45,6 +46,15 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 		if err != nil {
 			atomic.AddUint64(&engine.numDocsStored, 1)
 			continue
+		}
+
+		has, err := engine.dbs[shard].Has(b[0:length])
+		if err != nil {
+			log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
+		}
+
+		if has {
+			engine.dbs[shard].Delete(b[0:length])
 		}
 
 		// 将 key-value 写入数据库

@@ -50,18 +50,18 @@ func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
 	DocInfoGroup[shard].NumDocs++
 }
 
-// // IsDocExist doc is exist
-// func IsDocExist(docId uint64) bool {
-// 	docInfosGroupRWMutex.RLock()
-// 	defer docInfosGroupRWMutex.RUnlock()
-// 	for _, docInfosShard := range DocInfoGroup {
-// 		_, found := docInfosShard.DocInfos[docId]
-// 		if found {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
+// IsDocExist doc is exist
+func IsDocExist(docId uint64) bool {
+	docInfosGroupRWMutex.RLock()
+	defer docInfosGroupRWMutex.RUnlock()
+	for _, docInfosShard := range DocInfoGroup {
+		_, found := docInfosShard.DocInfos[docId]
+		if found {
+			return true
+		}
+	}
+	return false
+}
 
 var (
 	// InvertedIndexGroup 反向索引表([shard][关键词]反向索引表)

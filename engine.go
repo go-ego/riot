@@ -331,6 +331,11 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 	if len(forceUpdate) > 0 {
 		force = forceUpdate[0]
 	}
+
+	if engine.HasDoc(docId) {
+		engine.RemoveDoc(docId)
+	}
+
 	// data.Tokens
 	engine.internalIndexDoc(docId, data, force)
 
@@ -341,6 +346,10 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 		engine.storageIndexDocChans[hash] <- storageIndexDocReq{
 			docId: docId, data: data}
 	}
+}
+
+func (enine *Engine) HasDoc(docId uint64) bool {
+	return core.IsDocExist(docId)
 }
 
 func (engine *Engine) internalIndexDoc(docId uint64, data types.DocIndexData,
