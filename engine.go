@@ -350,6 +350,7 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 	}
 }
 
+// HasDoc doc is exist return true
 func (enine *Engine) HasDoc(docId uint64) bool {
 	return core.IsDocExist(docId)
 }
@@ -796,9 +797,9 @@ func (engine *Engine) getShard(hash uint32) int {
 		uint32(engine.initOptions.NumShards))
 }
 
-// GetAllIds get all the DocId from the storage database and return
+// GetDBAllIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetAllDBIds() []uint64 {
+func (engine *Engine) GetDBAllIds() []uint64 {
 	docsId := make([]uint64, 0)
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(k, v []byte) error {
@@ -812,7 +813,9 @@ func (engine *Engine) GetAllDBIds() []uint64 {
 	return docsId
 }
 
-func (engine *Engine) GetAllDBDocs() (docsId []uint64, docData []types.DocIndexData) {
+// GetDBAllDocs get the db all docs
+func (engine *Engine) GetDBAllDocs() (
+	docsId []uint64, docData []types.DocIndexData) {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(key, val []byte) error {
 			// fmt.Println(k, v)
@@ -839,7 +842,7 @@ func (engine *Engine) GetAllDBDocs() (docsId []uint64, docData []types.DocIndexD
 // GetAllDocIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
-	return engine.GetAllDBIds()
+	return engine.GetDBAllIds()
 }
 
 // Try handler(err)

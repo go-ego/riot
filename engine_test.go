@@ -1077,7 +1077,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	allIds := engine.GetAllDBIds()
+	allIds := engine.GetDBAllIds()
 	fmt.Println("all id", allIds)
 	utils.Expect(t, "4", len(allIds))
 	utils.Expect(t, "[3 4 1 2]", allIds)
@@ -1087,7 +1087,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	utils.Expect(t, "4", len(allIds))
 	utils.Expect(t, "[3 4 1 2]", allIds)
 
-	ids, docs := engine.GetAllDBDocs()
+	ids, docs := engine.GetDBAllDocs()
 	fmt.Println("all id and doc", allIds, docs)
 	utils.Expect(t, "4", len(ids))
 	utils.Expect(t, "4", len(docs))
