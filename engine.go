@@ -20,6 +20,7 @@ Package riot is riot engine
 package riot
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -32,6 +33,7 @@ import (
 	// "reflect"
 
 	"encoding/binary"
+	"encoding/gob"
 	"sync/atomic"
 
 	"github.com/go-ego/riot/core"
@@ -796,7 +798,7 @@ func (engine *Engine) getShard(hash uint32) int {
 
 // GetAllIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetAllIds() []uint64 {
+func (engine *Engine) GetAllDBIds() []uint64 {
 	docsId := make([]uint64, 0)
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(k, v []byte) error {
@@ -810,10 +812,34 @@ func (engine *Engine) GetAllIds() []uint64 {
 	return docsId
 }
 
+func (engine *Engine) GetAllDBDocs() (docsId []uint64, docData []types.DocIndexData) {
+	for i := range engine.dbs {
+		engine.dbs[i].ForEach(func(key, val []byte) error {
+			// fmt.Println(k, v)
+			docId, _ := binary.Uvarint(key)
+			docsId = append(docsId, docId)
+
+			buf := bytes.NewReader(val)
+			dec := gob.NewDecoder(buf)
+			var data types.DocIndexData
+			err := dec.Decode(&data)
+			if err != nil {
+				log.Println("dec decode ", err)
+			}
+
+			docData = append(docData, data)
+
+			return nil
+		})
+	}
+
+	return docsId, docData
+}
+
 // GetAllDocIds get all the DocId from the storage database and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
-	return engine.GetAllIds()
+	return engine.GetAllDBIds()
 }
 
 // Try handler(err)

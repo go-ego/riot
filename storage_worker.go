@@ -17,9 +17,10 @@ package riot
 
 import (
 	"bytes"
+	"log"
+
 	"encoding/binary"
 	"encoding/gob"
-	"log"
 	"sync/atomic"
 
 	"github.com/go-ego/riot/types"

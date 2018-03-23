@@ -1052,7 +1052,7 @@ func TestSearchLogic(t *testing.T) {
 	utils.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 }
 
-func TestDocGetAllID(t *testing.T) {
+func TestDocGetAllDocAndID(t *testing.T) {
 	gob.Register(ScoringFields{})
 
 	var engine Engine
@@ -1077,7 +1077,7 @@ func TestDocGetAllID(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	allIds := engine.GetAllIds()
+	allIds := engine.GetAllDBIds()
 	fmt.Println("all id", allIds)
 	utils.Expect(t, "4", len(allIds))
 	utils.Expect(t, "[3 4 1 2]", allIds)
@@ -1086,6 +1086,14 @@ func TestDocGetAllID(t *testing.T) {
 	fmt.Println("all doc id", allIds)
 	utils.Expect(t, "4", len(allIds))
 	utils.Expect(t, "[3 4 1 2]", allIds)
+
+	ids, docs := engine.GetAllDBDocs()
+	fmt.Println("all id and doc", allIds, docs)
+	utils.Expect(t, "4", len(ids))
+	utils.Expect(t, "4", len(docs))
+	utils.Expect(t, "[3 4 1 2]", ids)
+	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有十三亿人口 <nil> [] [] {2 3 3}} {中国有十三亿人口人口 <nil> [] [] {1 2 3}} {中国人口 <nil> [] [] <nil>}]`
+	utils.Expect(t, allDoc, docs)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
