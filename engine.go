@@ -350,11 +350,6 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 	}
 }
 
-// HasDoc doc is exist return true
-func (enine *Engine) HasDoc(docId uint64) bool {
-	return core.IsDocExist(docId)
-}
-
 func (engine *Engine) internalIndexDoc(docId uint64, data types.DocIndexData,
 	forceUpdate bool) {
 
@@ -795,6 +790,29 @@ func New(dict ...string) *Engine {
 func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*
 		uint32(engine.initOptions.NumShards))
+}
+
+// HasDoc doc is exist return true
+func (engine *Engine) HasDoc(docId uint64) bool {
+	return core.IsDocExist(docId)
+}
+
+// DBHasDoc doc is exist return true
+func (engine *Engine) DBHasDoc(docId uint64) bool {
+	b := make([]byte, 10)
+	length := binary.PutUvarint(b, docId)
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		has, err := engine.dbs[shard].Has(b[0:length])
+		if err != nil {
+			log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
+		}
+
+		if has {
+			return true
+		}
+	}
+
+	return false
 }
 
 // GetDBAllIds get all the DocId from the storage database and return
