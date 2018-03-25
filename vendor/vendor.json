@@ -27,40 +27,40 @@
 			"revisionTime": "2018-03-02T18:00:52Z"
 		},
 		{
-			"checksumSHA1": "iuTNroTBIWWRSPMQ3fUPOLevGmY=",
+			"checksumSHA1": "JSbppm0XOgbYiUXlM+rkOGByw6o=",
 			"path": "github.com/dgraph-io/badger",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "oOuT7ebEiZ1ViHLKdFxKFOvobAQ=",
 			"path": "github.com/dgraph-io/badger/options",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "gGTDnTVVw5kcT2P5NXZV1YSckOU=",
 			"path": "github.com/dgraph-io/badger/protos",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "xBLLiAouTGA/lCAcQ5qjxQiuPCc=",
 			"path": "github.com/dgraph-io/badger/skl",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "I33KkP2lnYqJDasvvsAlebzkeko=",
 			"path": "github.com/dgraph-io/badger/table",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "gIZmO4zSlwCmPC99HpuBL8H6kjM=",
 			"path": "github.com/dgraph-io/badger/y",
-			"revision": "8b89769ed71e56cf7f80abdcfd3576efc97bd412",
-			"revisionTime": "2018-03-13T05:23:53Z"
+			"revision": "a39f9e06de643cd1edbc85492b18fec552fc7c7e",
+			"revisionTime": "2018-03-20T19:34:03Z"
 		},
 		{
 			"checksumSHA1": "+MUIij/Y6vqAkx0P5GjHeqnU9ZU=",
@@ -131,14 +131,14 @@
 		{
 			"checksumSHA1": "xPMr7RbEnFd1XxOFpLOSdX4cEO0=",
 			"path": "github.com/shirou/gopsutil/internal/common",
-			"revision": "6b5767f15eb041f7260435c544a2af72f2f8a422",
-			"revisionTime": "2018-03-13T07:06:27Z"
+			"revision": "b99342a9ceb013854c12cfb0b55c2adc57837a29",
+			"revisionTime": "2018-03-24T06:57:29Z"
 		},
 		{
-			"checksumSHA1": "UkY97iaDGySlQk1kfuH7DShTX2I=",
+			"checksumSHA1": "s/McZHJfB9Kt5lyI2VccZ8yUaW0=",
 			"path": "github.com/shirou/gopsutil/mem",
-			"revision": "6b5767f15eb041f7260435c544a2af72f2f8a422",
-			"revisionTime": "2018-03-13T07:06:27Z"
+			"revision": "b99342a9ceb013854c12cfb0b55c2adc57837a29",
+			"revisionTime": "2018-03-24T06:57:29Z"
 		},
 		{
 			"checksumSHA1": "3QsnhPTXGytTbW3uDvQLgSo9s9M=",

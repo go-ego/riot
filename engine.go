@@ -801,6 +801,7 @@ func (engine *Engine) HasDoc(docId uint64) bool {
 func (engine *Engine) DBHasDoc(docId uint64) bool {
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
+
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 		has, err := engine.dbs[shard].Has(b[0:length])
 		if err != nil {
