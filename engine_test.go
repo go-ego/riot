@@ -1095,6 +1095,9 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有十三亿人口 <nil> [] [] {2 3 3}} {中国有十三亿人口人口 <nil> [] [] {1 2 3}} {中国人口 <nil> [] [] <nil>}]`
 	utils.Expect(t, allDoc, docs)
 
+	has := engine.DBHasDoc(5)
+	utils.Expect(t, "false", has)
+
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
