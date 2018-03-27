@@ -38,11 +38,13 @@ type Indexer struct {
 		table     map[string]*KeywordIndices
 		docsState map[uint64]int // nil: 表示无状态记录，0: 存在于索引中，1: 等待删除，2: 等待加入
 	}
+
 	addCacheLock struct {
 		sync.RWMutex
 		addCachePointer int
 		addCache        types.DocsIndex
 	}
+
 	removeCacheLock struct {
 		sync.RWMutex
 		removeCachePointer int
@@ -81,8 +83,10 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 
 	indexer.tableLock.table = make(map[string]*KeywordIndices)
 	indexer.tableLock.docsState = make(map[uint64]int)
-	indexer.addCacheLock.addCache = make([]*types.DocIndex, indexer.initOptions.DocCacheSize)
-	indexer.removeCacheLock.removeCache = make([]uint64, indexer.initOptions.DocCacheSize*2)
+	indexer.addCacheLock.addCache = make(
+		[]*types.DocIndex, indexer.initOptions.DocCacheSize)
+	indexer.removeCacheLock.removeCache = make(
+		[]uint64, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLens = make(map[uint64]float32)
 }
 
@@ -341,17 +345,21 @@ func (indexer *Indexer) Lookup(
 	copy(keywords[len(tokens):], labels)
 
 	if len(logic) > 0 {
-		if logic != nil && len(keywords) > 0 && logic[0].Must == true || logic[0].Should == true ||
-			logic[0].NotIn == true {
+		if logic != nil && len(keywords) > 0 && logic[0].Must == true ||
+			logic[0].Should == true || logic[0].NotIn == true {
 
-			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
+			docs, numDocs = indexer.LogicLookup(
+				docIds, countDocsOnly, keywords, logic[0])
+
 			return
 		}
 
-		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 || len(logic[0].LogicExpr.ShouldLabels) > 0) &&
+		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 ||
+			len(logic[0].LogicExpr.ShouldLabels) > 0) &&
 			len(logic[0].LogicExpr.NotInLabels) >= 0 {
 
-			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
+			docs, numDocs = indexer.LogicLookup(
+				docIds, countDocsOnly, keywords, logic[0])
 
 			return
 		}
@@ -446,7 +454,9 @@ func (indexer *Indexer) Lookup(
 				}
 
 				// 计算搜索键在文档中的紧邻距离
-				tokenProximity, TokenLocs := computeTokenProximity(table[:len(tokens)], indexPointers, tokens)
+				tokenProximity, TokenLocs := computeTokenProximity(
+					table[:len(tokens)], indexPointers, tokens)
+
 				indexedDoc.TokenProximity = int32(tokenProximity)
 				indexedDoc.TokenSnippetLocs = TokenLocs
 
@@ -471,7 +481,8 @@ func (indexer *Indexer) Lookup(
 					}
 
 					// 计算 BM25
-					if len(t.docIds) > 0 && frequency > 0 && indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
+					if len(t.docIds) > 0 && frequency > 0 &&
+						indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
 						// 带平滑的 idf
 						idf := float32(math.Log2(float64(indexer.numDocs)/float64(len(t.docIds)) + 1))
 						k1 := indexer.initOptions.BM25Parameters.K1
@@ -496,8 +507,8 @@ func (indexer *Indexer) Lookup(
 // searchIndex 二分法查找 indices 中某文档的索引项
 // 第一个返回参数为找到的位置或需要插入的位置
 // 第二个返回参数标明是否找到
-func (indexer *Indexer) searchIndex(
-	indices *KeywordIndices, start int, end int, docId uint64) (int, bool) {
+func (indexer *Indexer) searchIndex(indices *KeywordIndices,
+	start int, end int, docId uint64) (int, bool) {
 	// 特殊情况
 	if indexer.getIndexLen(indices) == start {
 		return start, false
@@ -537,7 +548,8 @@ func (indexer *Indexer) searchIndex(
 //
 // 具体由动态规划实现，依次计算前 i 个 token 在每个出现位置的最优值。
 // 选定的 P_i 通过 TokenLocs 参数传回。
-func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens []string) (
+func computeTokenProximity(table []*KeywordIndices,
+	indexPointers []int, tokens []string) (
 	minTokenProximity int, TokenLocs []int) {
 	minTokenProximity = -1
 	TokenLocs = make([]int, len(tokens))
@@ -569,7 +581,8 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 			if currentMinValues[iCurrent] == -1 {
 				continue
 			}
-			for iNext+1 < len(nextLocations) && nextLocations[iNext+1] < currentLocation {
+			for iNext+1 < len(nextLocations) &&
+				nextLocations[iNext+1] < currentLocation {
 				iNext++
 			}
 
@@ -577,7 +590,9 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 				if to >= len(nextLocations) {
 					return
 				}
-				value := currentMinValues[from] + utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
+				value := currentMinValues[from] +
+					utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
+
 				if nextMinValues[to] == -1 || value < nextMinValues[to] {
 					nextMinValues[to] = value
 					path[i][to] = from
@@ -793,7 +808,8 @@ func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) 
 // unionTable 如果不存在与逻辑检索， 则需要对逻辑或反向表求并集
 // 先求差集再求并集， 可以减小内存占用
 // docid 要保序
-func (indexer *Indexer) unionTable(table []*KeywordIndices, notInTable []*KeywordIndices, countDocsOnly bool) (
+func (indexer *Indexer) unionTable(table []*KeywordIndices,
+	notInTable []*KeywordIndices, countDocsOnly bool) (
 	docs []types.IndexedDoc, numDocs int) {
 	docIds := make([]uint64, 0)
 	// 求并集

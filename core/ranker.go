@@ -39,6 +39,7 @@ type Ranker struct {
 		content map[uint64]string
 		attri   map[uint64]interface{}
 	}
+
 	initialized bool
 }
 
