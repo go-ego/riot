@@ -138,6 +138,8 @@ func TestEngineIndexDoc(t *testing.T) {
 	utils.Expect(t, "1", outDocs[2].DocId)
 	utils.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
 	utils.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestReverseOrder(t *testing.T) {
@@ -166,6 +168,8 @@ func TestReverseOrder(t *testing.T) {
 	utils.Expect(t, "1", outDocs[0].DocId)
 	utils.Expect(t, "5", outDocs[1].DocId)
 	utils.Expect(t, "2", outDocs[2].DocId)
+
+	engine.Close()
 }
 
 func TestOffsetAndMaxOutputs(t *testing.T) {
@@ -193,6 +197,8 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 
 	utils.Expect(t, "5", outDocs[0].DocId)
 	utils.Expect(t, "2", outDocs[1].DocId)
+
+	engine.Close()
 }
 
 type TestScoringCriteria struct {
@@ -233,6 +239,8 @@ func TestSearchWithCriteria(t *testing.T) {
 
 	utils.Expect(t, "5", outDocs[1].DocId)
 	utils.Expect(t, "9000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestCompactIndex(t *testing.T) {
@@ -257,6 +265,8 @@ func TestCompactIndex(t *testing.T) {
 
 	utils.Expect(t, "1", outDocs[1].DocId)
 	utils.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 type BM25ScoringCriteria struct {
@@ -295,6 +305,8 @@ func TestFrequenciesIndex(t *testing.T) {
 
 	utils.Expect(t, "5", outDocs[1].DocId)
 	utils.Expect(t, "1818", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestRemoveDoc(t *testing.T) {
@@ -326,6 +338,8 @@ func TestRemoveDoc(t *testing.T) {
 	utils.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
 	utils.Expect(t, "1", outDocs[1].DocId)
 	utils.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestEngineIndexDocWithTokens(t *testing.T) {
@@ -388,6 +402,8 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	utils.Expect(t, "1", outDocs[2].DocId)
 	utils.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
 	utils.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
@@ -564,6 +580,8 @@ func TestCountDocsOnly(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "2", outputs.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocOrderless(t *testing.T) {
@@ -604,6 +622,8 @@ func TestDocOrderless(t *testing.T) {
 
 	utils.Expect(t, "2", len(outputs1.Tokens))
 	utils.Expect(t, "2", outputs1.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocOnlyID(t *testing.T) {
@@ -652,6 +672,8 @@ func TestDocOnlyID(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs1.Tokens))
 	utils.Expect(t, "1", outputs1.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocRank(t *testing.T) {
@@ -715,6 +737,8 @@ func TestDocRank(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs.Tokens))
 	utils.Expect(t, "1", outputs.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocRanks(t *testing.T) {
@@ -789,6 +813,8 @@ func TestDocRanks(t *testing.T) {
 	}
 	utils.Expect(t, "2", len(outputs1.Tokens))
 	utils.Expect(t, "1", outputs1.NumDocs)
+
+	engine.Close()
 }
 
 func TestSearchWithin(t *testing.T) {
@@ -830,6 +856,8 @@ func TestSearchWithin(t *testing.T) {
 	utils.Expect(t, "5", outDocs[1].DocId)
 	utils.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
 	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchJp(t *testing.T) {
@@ -876,6 +904,8 @@ func TestSearchJp(t *testing.T) {
 	utils.Expect(t, "6", outDocs[0].DocId)
 	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
 	utils.Expect(t, "[0 15]", outDocs[0].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchGse(t *testing.T) {
@@ -935,6 +965,8 @@ func TestSearchGse(t *testing.T) {
 	utils.Expect(t, "6", outDocs[1].DocId)
 	utils.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchNotUseGse(t *testing.T) {
@@ -974,6 +1006,7 @@ func TestSearchNotUseGse(t *testing.T) {
 	utils.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
 	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
+	engine.Close()
 }
 
 func TestSearchLogic(t *testing.T) {
@@ -1050,6 +1083,8 @@ func TestSearchLogic(t *testing.T) {
 	utils.Expect(t, "8", outDocs[1].DocId)
 	utils.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	utils.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestDocGetAllDocAndID(t *testing.T) {
@@ -1058,6 +1093,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
+		NumShards:     2,
 		UseStorage:    true,
 		StorageFolder: "riot.id",
 		IDOnly:        true,
@@ -1095,8 +1131,10 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有十三亿人口 <nil> [] [] {2 3 3}} {中国有十三亿人口人口 <nil> [] [] {1 2 3}} {中国人口 <nil> [] [] <nil>}]`
 	utils.Expect(t, allDoc, docs)
 
-	has := engine.DBHasDoc(5)
-	utils.Expect(t, "false", has)
+	dbhas := engine.DBHasDoc(5)
+	utils.Expect(t, "false", dbhas)
+	// dbhas = engine.DBHasDoc(4)
+	// utils.Expect(t, "true", dbhas)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
