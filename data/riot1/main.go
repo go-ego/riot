@@ -37,7 +37,7 @@ var (
 func init() {
 	zlog.Init("../conf/log.toml")
 	conf.Init("../conf/riot.toml", &config)
-	go conf.NewWatcher("../conf/riot.toml", &config)
+	go conf.Watch("../conf/riot.toml", &config)
 	// go
 	rpc.InitEngine(config)
 
