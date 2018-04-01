@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"runtime"
 	"testing"
 
 	"github.com/go-ego/riot/types"
@@ -14,6 +15,12 @@ import (
 
 type ScoringFields struct {
 	A, B, C float32
+}
+
+func TestGetVer(t *testing.T) {
+	fmt.Println(runtime.Version())
+	ver := GetVersion()
+	utils.Expect(t, version, ver)
 }
 
 func AddDocs(engine *Engine) {
@@ -84,11 +91,6 @@ func (rule RankByTokenProximity) Score(
 		return []float32{}
 	}
 	return []float32{1.0 / (float32(doc.TokenProximity) + 1)}
-}
-
-func TestGetVer(t *testing.T) {
-	ver := GetVersion()
-	utils.Expect(t, version, ver)
 }
 
 func TestTry(t *testing.T) {
