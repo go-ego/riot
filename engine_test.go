@@ -488,6 +488,8 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.RemoveDoc(5, true)
+	engine.Flush()
+
 	engine.Close()
 
 	var engine1 Engine
@@ -536,6 +538,8 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	AddDocs(engine)
 
 	engine.RemoveDoc(5, true)
+	engine.Flush()
+
 	engine.Close()
 
 	var engine1 = New("./testdata/test_dict.txt")
