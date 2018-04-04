@@ -1,4 +1,4 @@
-// Copyright 2018 ego authors
+// Copyright 2017 ego authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain
@@ -69,9 +69,23 @@ func New(dict ...string) *Engine {
 	return searcher
 }
 
+// func (engine *Engine) IsDocExist(docId uint64) bool {
+// 	return core.IsDocExist(docId)
+// }
+
 // HasDoc doc is exist return true
 func (engine *Engine) HasDoc(docId uint64) bool {
-	return core.IsDocExist(docId)
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		engine.indexers = append(engine.indexers, core.Indexer{})
+
+		has := engine.indexers[shard].HasDoc(docId)
+
+		if has {
+			return true
+		}
+	}
+
+	return false
 }
 
 // DBHasDoc doc is exist return true

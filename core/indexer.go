@@ -95,6 +95,17 @@ func (indexer *Indexer) getDocId(ti *KeywordIndices, i int) uint64 {
 	return ti.docIds[i]
 }
 
+// HasDoc doc is exist return true
+func (indexer *Indexer) HasDoc(docId uint64) bool {
+	docState, ok := indexer.tableLock.docsState[docId]
+
+	if ok && docState == 0 {
+		return true
+	}
+
+	return false
+}
+
 // getIndexLen 得到 KeywordIndices 中文档总数
 func (indexer *Indexer) getIndexLen(ti *KeywordIndices) int {
 	return len(ti.docIds)

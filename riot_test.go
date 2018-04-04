@@ -201,8 +201,13 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	has := engine.HasDoc(5)
 	tt.Expect(t, "false", has)
-	// has = engine.HasDoc(4)
-	// tt.Expect(t, "true", has)
+
+	has = engine.HasDoc(2)
+	tt.Equal(t, true, has)
+	has = engine.HasDoc(3)
+	tt.Equal(t, true, has)
+	has = engine.HasDoc(4)
+	tt.Expect(t, "true", has)
 
 	dbhas := engine.DBHasDoc(5)
 	tt.Expect(t, "false", dbhas)
