@@ -324,9 +324,11 @@ func TestRemoveDoc(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.RemoveDoc(6)
 	engine.Flush()
+
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "中国人口有十三亿",
 		Fields:  ScoringFields{0, 9, 1},
@@ -370,6 +372,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 		},
 		Fields: ScoringFields{1, 2, 3},
 	})
+
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "",
@@ -379,6 +382,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 		},
 		Fields: ScoringFields{1, 2, 3},
 	})
+
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国十三亿人口",
@@ -463,6 +467,7 @@ func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
 
 func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
+
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
@@ -479,7 +484,9 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 		StorageFolder: "riot.persistent",
 		StorageShards: 2,
 	})
+
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5, true)
 	engine.Close()
 
@@ -527,12 +534,13 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	log.Println("engine.............")
 	// engine = engine.New()
 	AddDocs(engine)
+
 	engine.RemoveDoc(5, true)
 	engine.Close()
 
 	var engine1 = New("./testdata/test_dict.txt")
 	// engine1 = engine1.New()
-	log.Println("test")
+	log.Println("test...")
 	engine1.Flush()
 	log.Println("engine1.............")
 
@@ -573,6 +581,7 @@ func TestCountDocsOnly(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -596,6 +605,7 @@ func TestDocOrderless(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -615,6 +625,7 @@ func TestDocOrderless(t *testing.T) {
 	})
 
 	AddDocs(&engine1)
+
 	engine1.RemoveDoc(5)
 	engine1.Flush()
 
@@ -648,12 +659,14 @@ func TestDocOnlyID(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds})
@@ -701,6 +714,7 @@ func TestSearchWithin(t *testing.T) {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds,
@@ -808,6 +822,7 @@ func TestSearchGse(t *testing.T) {
 	docIds[1] = true
 	docIds[6] = true
 	docIds[7] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
@@ -852,6 +867,7 @@ func TestSearchNotUseGse(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	docIds[6] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "google is",
 		DocIds: docIds,

@@ -30,6 +30,7 @@ func TestDocRank(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -94,6 +95,7 @@ func TestDocRanks(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -175,6 +177,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -207,6 +210,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds})
@@ -260,6 +264,7 @@ func TestDocPinYin(t *testing.T) {
 	docIds[5] = true
 	docIds[10] = true
 	docIds[11] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "zl",
 		DocIds: docIds,
@@ -290,6 +295,7 @@ func TestForSplitData(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
@@ -343,6 +349,7 @@ func TestDocCounters(t *testing.T) {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds})
