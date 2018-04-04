@@ -159,7 +159,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:      1,
-		NumShards:  2,
+		NumShards:  5,
 		UseStorage: true,
 		// StorageEngine: "bg",
 		StorageFolder: "riot.id",
@@ -201,11 +201,18 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	has := engine.HasDoc(5)
 	tt.Expect(t, "false", has)
+	// has = engine.HasDoc(4)
+	// tt.Expect(t, "true", has)
 
 	dbhas := engine.DBHasDoc(5)
 	tt.Expect(t, "false", dbhas)
-	// dbhas = engine.DBHasDoc(4)
-	// tt.Expect(t, "true", dbhas)
+
+	dbhas = engine.DBHasDoc(2)
+	tt.Equal(t, true, dbhas)
+	dbhas = engine.DBHasDoc(3)
+	tt.Equal(t, true, dbhas)
+	dbhas = engine.DBHasDoc(4)
+	tt.Expect(t, "true", dbhas)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -217,6 +224,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
+		fmt.Println("output docs...", outputs)
 		tt.Expect(t, "1", len(outDocs))
 	}
 	tt.Expect(t, "2", len(outputs.Tokens))

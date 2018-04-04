@@ -16,12 +16,14 @@ package riot
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"os"
 
 	"encoding/binary"
 	"encoding/gob"
 
+	"github.com/go-ego/murmur"
 	"github.com/go-ego/riot/core"
 	"github.com/go-ego/riot/types"
 )
@@ -77,18 +79,15 @@ func (engine *Engine) DBHasDoc(docId uint64) bool {
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
 
-	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		has, err := engine.dbs[shard].Has(b[0:length])
-		if err != nil {
-			log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
-		}
+	shard := murmur.Sum32(fmt.Sprintf("%d", docId)) %
+		uint32(engine.initOptions.StorageShards)
 
-		if has {
-			return true
-		}
+	has, err := engine.dbs[shard].Has(b[0:length])
+	if err != nil {
+		log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
 	}
 
-	return false
+	return has
 }
 
 // GetDBAllIds get all the DocId from the storage database and return

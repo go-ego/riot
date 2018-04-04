@@ -765,6 +765,7 @@ func TestSearchJp(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	docIds[6] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,

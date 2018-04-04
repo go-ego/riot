@@ -31,6 +31,12 @@ func TestOpenOrCreateBad(t *testing.T) {
 	err = db.Set([]byte("key1"), []byte("value1"))
 	tt.Expect(t, "<nil>", err)
 
+	has, err := db.Has([]byte("key1"))
+	tt.Equal(t, nil, err)
+	if err == nil {
+		tt.Equal(t, true, has)
+	}
+
 	buffer := make([]byte, 100)
 	buffer, err = db.Get([]byte("key1"))
 	tt.Expect(t, "<nil>", err)
