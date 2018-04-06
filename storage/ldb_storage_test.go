@@ -18,23 +18,29 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-ego/riot/utils"
+	"github.com/vcaesar/tt"
 )
 
 func TestOpenOrCreateLdb(t *testing.T) {
 	db, err := OpenLeveldb("ldb_test")
-	utils.Expect(t, "<nil>", err)
+	tt.Expect(t, "<nil>", err)
 	db.Close()
 
 	db, err = OpenLeveldb("ldb_test")
-	utils.Expect(t, "<nil>", err)
+	tt.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
-	utils.Expect(t, "<nil>", err)
+	tt.Expect(t, "<nil>", err)
+
+	has, err := db.Has([]byte("key1"))
+	tt.Equal(t, nil, err)
+	if err == nil {
+		tt.Equal(t, true, has)
+	}
 
 	buffer := make([]byte, 100)
 	buffer, err = db.Get([]byte("key1"))
-	utils.Expect(t, "<nil>", err)
-	utils.Expect(t, "value1", string(buffer))
+	tt.Expect(t, "<nil>", err)
+	tt.Expect(t, "value1", string(buffer))
 
 	walFile := db.WALName()
 	db.Close()

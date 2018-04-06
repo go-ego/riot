@@ -68,10 +68,14 @@ func (engine *Engine) indexerRemoveDocWorker(shard int) {
 		request := <-engine.indexerRemoveDocChans[shard]
 		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
 		if request.docId != 0 {
+			engine.loc.Lock()
 			atomic.AddUint64(&engine.numDocsRemoved, 1)
+			engine.loc.Unlock()
 		}
 		if request.forceUpdate {
+			engine.loc.Lock()
 			atomic.AddUint64(&engine.numDocsForceUpdated, 1)
+			engine.loc.Unlock()
 		}
 	}
 }

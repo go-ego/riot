@@ -38,11 +38,13 @@ type Indexer struct {
 		table     map[string]*KeywordIndices
 		docsState map[uint64]int // nil: 表示无状态记录，0: 存在于索引中，1: 等待删除，2: 等待加入
 	}
+
 	addCacheLock struct {
 		sync.RWMutex
 		addCachePointer int
 		addCache        types.DocsIndex
 	}
+
 	removeCacheLock struct {
 		sync.RWMutex
 		removeCachePointer int
@@ -81,14 +83,28 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 
 	indexer.tableLock.table = make(map[string]*KeywordIndices)
 	indexer.tableLock.docsState = make(map[uint64]int)
-	indexer.addCacheLock.addCache = make([]*types.DocIndex, indexer.initOptions.DocCacheSize)
-	indexer.removeCacheLock.removeCache = make([]uint64, indexer.initOptions.DocCacheSize*2)
+	indexer.addCacheLock.addCache = make(
+		[]*types.DocIndex, indexer.initOptions.DocCacheSize)
+
+	indexer.removeCacheLock.removeCache = make(
+		[]uint64, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLens = make(map[uint64]float32)
 }
 
 // getDocId 从 KeywordIndices 中得到第i个文档的 DocId
 func (indexer *Indexer) getDocId(ti *KeywordIndices, i int) uint64 {
 	return ti.docIds[i]
+}
+
+// HasDoc doc is exist return true
+func (indexer *Indexer) HasDoc(docId uint64) bool {
+	docState, ok := indexer.tableLock.docsState[docId]
+
+	if ok && docState == 0 {
+		return true
+	}
+
+	return false
 }
 
 // getIndexLen 得到 KeywordIndices 中文档总数
@@ -107,12 +123,17 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 		indexer.addCacheLock.addCache[indexer.addCacheLock.addCachePointer] = doc
 		indexer.addCacheLock.addCachePointer++
 	}
-	if indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize || forceUpdate {
+
+	if indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize ||
+		forceUpdate {
 		indexer.tableLock.Lock()
+
 		position := 0
 		for i := 0; i < indexer.addCacheLock.addCachePointer; i++ {
 			docIndex := indexer.addCacheLock.addCache[i]
-			if docState, ok := indexer.tableLock.docsState[docIndex.DocId]; ok && docState <= 1 {
+
+			docState, ok := indexer.tableLock.docsState[docIndex.DocId]
+			if ok && docState <= 1 {
 				// ok && docState == 0 表示存在于索引中，需先删除再添加
 				// ok && docState == 1 表示不一定存在于索引中，等待删除，需先删除再添加
 				if position != i {
@@ -125,6 +146,7 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 						docIndex.DocId
 					indexer.removeCacheLock.removeCachePointer++
 					indexer.removeCacheLock.Unlock()
+
 					indexer.tableLock.docsState[docIndex.DocId] = 1
 					indexer.numDocs--
 				}
@@ -142,6 +164,7 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 
 		addCachedDocs := indexer.addCacheLock.addCache[position:indexer.addCacheLock.addCachePointer]
 		indexer.addCacheLock.addCachePointer = position
+
 		indexer.addCacheLock.Unlock()
 		sort.Sort(addCachedDocs)
 		indexer.AddDocs(&addCachedDocs)
@@ -166,7 +189,9 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 			// 如果有重复文档加入，因为稳定排序，只加入最后一个
 			continue
 		}
-		if docState, ok := indexer.tableLock.docsState[doc.DocId]; ok && docState == 1 {
+
+		docState, ok := indexer.tableLock.docsState[doc.DocId]
+		if ok && docState == 1 {
 			// 如果此时 docState 仍为 1，说明该文档需被删除
 			// docState 合法状态为 nil & 2，保证一定不会插入已经在索引表中的文档
 			continue
@@ -199,6 +224,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 			position, _ := indexer.searchIndex(
 				indices, indexPointers[keyword.Text], indexer.getIndexLen(indices)-1, doc.DocId)
 			indexPointers[keyword.Text] = position
+
 			switch indexer.initOptions.IndexType {
 			case types.LocsIndex:
 				indices.locations = append(indices.locations, []int{})
@@ -209,6 +235,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 				copy(indices.frequencies[position+1:], indices.frequencies[position:])
 				indices.frequencies[position] = keyword.Frequency
 			}
+
 			indices.docIds = append(indices.docIds, 0)
 			copy(indices.docIds[position+1:], indices.docIds[position:])
 			indices.docIds[position] = doc.DocId
@@ -256,6 +283,7 @@ func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 		indexer.RemoveDocs(&removeCacheddocs)
 		return true
 	}
+
 	indexer.removeCacheLock.Unlock()
 	return false
 }
@@ -290,8 +318,10 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 					case types.FrequenciesIndex:
 						indices.frequencies[indicesTop] = indices.frequencies[indicesPointer]
 					}
+
 					indices.docIds[indicesTop] = indices.docIds[indicesPointer]
 				}
+
 				indicesTop++
 				indicesPointer++
 			} else if indices.docIds[indicesPointer] == (*docs)[docsPointer] {
@@ -310,9 +340,11 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 				indices.frequencies = append(
 					indices.frequencies[:indicesTop], indices.frequencies[indicesPointer:]...)
 			}
+
 			indices.docIds = append(
 				indices.docIds[:indicesTop], indices.docIds[indicesPointer:]...)
 		}
+
 		if len(indices.docIds) == 0 {
 			delete(indexer.tableLock.table, keyword)
 		}
@@ -341,17 +373,21 @@ func (indexer *Indexer) Lookup(
 	copy(keywords[len(tokens):], labels)
 
 	if len(logic) > 0 {
-		if logic != nil && len(keywords) > 0 && logic[0].Must == true || logic[0].Should == true ||
-			logic[0].NotIn == true {
+		if logic != nil && len(keywords) > 0 && logic[0].Must == true ||
+			logic[0].Should == true || logic[0].NotIn == true {
 
-			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
+			docs, numDocs = indexer.LogicLookup(
+				docIds, countDocsOnly, keywords, logic[0])
+
 			return
 		}
 
-		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 || len(logic[0].LogicExpr.ShouldLabels) > 0) &&
+		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 ||
+			len(logic[0].LogicExpr.ShouldLabels) > 0) &&
 			len(logic[0].LogicExpr.NotInLabels) >= 0 {
 
-			docs, numDocs = indexer.LogicLookup(docIds, countDocsOnly, keywords, logic[0])
+			docs, numDocs = indexer.LogicLookup(
+				docIds, countDocsOnly, keywords, logic[0])
 
 			return
 		}
@@ -359,6 +395,7 @@ func (indexer *Indexer) Lookup(
 
 	indexer.tableLock.RLock()
 	defer indexer.tableLock.RUnlock()
+
 	table := make([]*KeywordIndices, len(keywords))
 	for i, keyword := range keywords {
 		indices, found := indexer.tableLock.table[keyword]
@@ -392,6 +429,7 @@ func (indexer *Indexer) Lookup(
 				continue
 			}
 		}
+
 		iTable := 1
 		found := true
 		for ; iTable < len(table); iTable++ {
@@ -446,7 +484,9 @@ func (indexer *Indexer) Lookup(
 				}
 
 				// 计算搜索键在文档中的紧邻距离
-				tokenProximity, TokenLocs := computeTokenProximity(table[:len(tokens)], indexPointers, tokens)
+				tokenProximity, TokenLocs := computeTokenProximity(
+					table[:len(tokens)], indexPointers, tokens)
+
 				indexedDoc.TokenProximity = int32(tokenProximity)
 				indexedDoc.TokenSnippetLocs = TokenLocs
 
@@ -471,7 +511,8 @@ func (indexer *Indexer) Lookup(
 					}
 
 					// 计算 BM25
-					if len(t.docIds) > 0 && frequency > 0 && indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
+					if len(t.docIds) > 0 && frequency > 0 &&
+						indexer.initOptions.BM25Parameters != nil && avgDocLength != 0 {
 						// 带平滑的 idf
 						idf := float32(math.Log2(float64(indexer.numDocs)/float64(len(t.docIds)) + 1))
 						k1 := indexer.initOptions.BM25Parameters.K1
@@ -496,8 +537,8 @@ func (indexer *Indexer) Lookup(
 // searchIndex 二分法查找 indices 中某文档的索引项
 // 第一个返回参数为找到的位置或需要插入的位置
 // 第二个返回参数标明是否找到
-func (indexer *Indexer) searchIndex(
-	indices *KeywordIndices, start int, end int, docId uint64) (int, bool) {
+func (indexer *Indexer) searchIndex(indices *KeywordIndices,
+	start int, end int, docId uint64) (int, bool) {
 	// 特殊情况
 	if indexer.getIndexLen(indices) == start {
 		return start, false
@@ -525,6 +566,7 @@ func (indexer *Indexer) searchIndex(
 			end = middle
 		}
 	}
+
 	return end, false
 }
 
@@ -537,7 +579,8 @@ func (indexer *Indexer) searchIndex(
 //
 // 具体由动态规划实现，依次计算前 i 个 token 在每个出现位置的最优值。
 // 选定的 P_i 通过 TokenLocs 参数传回。
-func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens []string) (
+func computeTokenProximity(table []*KeywordIndices,
+	indexPointers []int, tokens []string) (
 	minTokenProximity int, TokenLocs []int) {
 	minTokenProximity = -1
 	TokenLocs = make([]int, len(tokens))
@@ -569,7 +612,8 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 			if currentMinValues[iCurrent] == -1 {
 				continue
 			}
-			for iNext+1 < len(nextLocations) && nextLocations[iNext+1] < currentLocation {
+			for iNext+1 < len(nextLocations) &&
+				nextLocations[iNext+1] < currentLocation {
 				iNext++
 			}
 
@@ -577,7 +621,9 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 				if to >= len(nextLocations) {
 					return
 				}
-				value := currentMinValues[from] + utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
+				value := currentMinValues[from] +
+					utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
+
 				if nextMinValues[to] == -1 || value < nextMinValues[to] {
 					nextMinValues[to] = value
 					path[i][to] = from
@@ -612,6 +658,7 @@ func computeTokenProximity(table []*KeywordIndices, indexPointers []int, tokens 
 		}
 		TokenLocs[i] = table[i].locations[indexPointers[i]][cursor]
 	}
+
 	return
 }
 
@@ -741,6 +788,7 @@ func (indexer *Indexer) LogicLookup(
 
 		// fmt.Println(docs, numDocs)
 	}
+
 	return
 }
 
@@ -754,6 +802,7 @@ func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) b
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -787,13 +836,15 @@ func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) 
 			return true
 		}
 	}
+
 	return false
 }
 
 // unionTable 如果不存在与逻辑检索， 则需要对逻辑或反向表求并集
 // 先求差集再求并集， 可以减小内存占用
 // docid 要保序
-func (indexer *Indexer) unionTable(table []*KeywordIndices, notInTable []*KeywordIndices, countDocsOnly bool) (
+func (indexer *Indexer) unionTable(table []*KeywordIndices,
+	notInTable []*KeywordIndices, countDocsOnly bool) (
 	docs []types.IndexedDoc, numDocs int) {
 	docIds := make([]uint64, 0)
 	// 求并集

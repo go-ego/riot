@@ -6,14 +6,22 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"runtime"
 	"testing"
 
 	"github.com/go-ego/riot/types"
-	"github.com/go-ego/riot/utils"
+	"github.com/vcaesar/tt"
 )
 
 type ScoringFields struct {
 	A, B, C float32
+}
+
+func TestGetVer(t *testing.T) {
+	fmt.Println("go version: ", runtime.Version())
+	ver := GetVersion()
+	tt.Expect(t, version, ver)
+	tt.Equal(t, version, ver)
 }
 
 func AddDocs(engine *Engine) {
@@ -42,6 +50,7 @@ func AddDocs(engine *Engine) {
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
 	})
+
 	engine.Flush()
 }
 
@@ -85,11 +94,6 @@ func (rule RankByTokenProximity) Score(
 	return []float32{1.0 / (float32(doc.TokenProximity) + 1)}
 }
 
-func TestGetVer(t *testing.T) {
-	ver := GetVersion()
-	utils.Expect(t, version, ver)
-}
-
 func TestTry(t *testing.T) {
 	var arr []int
 
@@ -97,7 +101,7 @@ func TestTry(t *testing.T) {
 		fmt.Println(arr[2])
 	}, func(err interface{}) {
 		log.Println("err", err)
-		utils.Expect(t, "runtime error: index out of range", err)
+		tt.Expect(t, "runtime error: index out of range", err)
 	})
 }
 
@@ -119,25 +123,27 @@ func TestEngineIndexDoc(t *testing.T) {
 	AddDocs(&engine)
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "中国", outputs.Tokens[0])
-	utils.Expect(t, "人口", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "3", len(outDocs))
+	tt.Expect(t, "3", len(outDocs))
 
 	log.Println("TestEngineIndexDoc:", outDocs)
-	utils.Expect(t, "2", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "2", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "5", outDocs[1].DocId)
-	utils.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
 
-	utils.Expect(t, "1", outDocs[2].DocId)
-	utils.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+	tt.Expect(t, "1", outDocs[2].DocId)
+	tt.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
+	tt.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestReverseOrder(t *testing.T) {
@@ -161,11 +167,13 @@ func TestReverseOrder(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "3", len(outDocs))
+	tt.Expect(t, "3", len(outDocs))
 
-	utils.Expect(t, "1", outDocs[0].DocId)
-	utils.Expect(t, "5", outDocs[1].DocId)
-	utils.Expect(t, "2", outDocs[2].DocId)
+	tt.Expect(t, "1", outDocs[0].DocId)
+	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "2", outDocs[2].DocId)
+
+	engine.Close()
 }
 
 func TestOffsetAndMaxOutputs(t *testing.T) {
@@ -189,10 +197,12 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "5", outDocs[0].DocId)
-	utils.Expect(t, "2", outDocs[1].DocId)
+	tt.Expect(t, "5", outDocs[0].DocId)
+	tt.Expect(t, "2", outDocs[1].DocId)
+
+	engine.Close()
 }
 
 type TestScoringCriteria struct {
@@ -225,14 +235,16 @@ func TestSearchWithCriteria(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
 	log.Println(outDocs)
-	utils.Expect(t, "1", outDocs[0].DocId)
-	utils.Expect(t, "18000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "1", outDocs[0].DocId)
+	tt.Expect(t, "18000", int(outDocs[0].Scores[0]*1000))
 
-	utils.Expect(t, "5", outDocs[1].DocId)
-	utils.Expect(t, "9000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "9000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestCompactIndex(t *testing.T) {
@@ -250,13 +262,15 @@ func TestCompactIndex(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "5", outDocs[0].DocId)
-	utils.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "5", outDocs[0].DocId)
+	tt.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
 
-	utils.Expect(t, "1", outDocs[1].DocId)
-	utils.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "1", outDocs[1].DocId)
+	tt.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 type BM25ScoringCriteria struct {
@@ -288,13 +302,15 @@ func TestFrequenciesIndex(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "1", outDocs[0].DocId)
-	utils.Expect(t, "2500", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "1", outDocs[0].DocId)
+	tt.Expect(t, "2500", int(outDocs[0].Scores[0]*1000))
 
-	utils.Expect(t, "5", outDocs[1].DocId)
-	utils.Expect(t, "1818", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "1818", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestRemoveDoc(t *testing.T) {
@@ -308,9 +324,11 @@ func TestRemoveDoc(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.RemoveDoc(6)
 	engine.Flush()
+
 	engine.IndexDoc(6, types.DocIndexData{
 		Content: "中国人口有十三亿",
 		Fields:  ScoringFields{0, 9, 1},
@@ -320,12 +338,14 @@ func TestRemoveDoc(t *testing.T) {
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "6", outDocs[0].DocId)
-	utils.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "1", outDocs[1].DocId)
-	utils.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "6", outDocs[0].DocId)
+	tt.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "1", outDocs[1].DocId)
+	tt.Expect(t, "6000", int(outDocs[1].Scores[0]*1000))
+
+	engine.Close()
 }
 
 func TestEngineIndexDocWithTokens(t *testing.T) {
@@ -352,6 +372,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 		},
 		Fields: ScoringFields{1, 2, 3},
 	})
+
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "",
@@ -361,6 +382,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 		},
 		Fields: ScoringFields{1, 2, 3},
 	})
+
 	docId++
 	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国十三亿人口",
@@ -370,24 +392,26 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
 	log.Println("TestEngineIndexDocWithTokens", outputs)
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "中国", outputs.Tokens[0])
-	utils.Expect(t, "人口", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "3", len(outDocs))
+	tt.Expect(t, "3", len(outDocs))
 
-	utils.Expect(t, "2", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "2", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "3", outDocs[1].DocId)
-	utils.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+	tt.Expect(t, "3", outDocs[1].DocId)
+	tt.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
 
-	utils.Expect(t, "1", outDocs[2].DocId)
-	utils.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+	tt.Expect(t, "1", outDocs[2].DocId)
+	tt.Expect(t, "76", int(outDocs[2].Scores[0]*1000))
+	tt.Expect(t, "[0 18]", outDocs[2].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
@@ -410,14 +434,14 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 
 	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
 	outputs2 := engine2.Search(types.SearchReq{Text: "百度"})
-	utils.Expect(t, "1", len(outputs1.Tokens))
-	utils.Expect(t, "1", len(outputs2.Tokens))
-	utils.Expect(t, "百度", outputs1.Tokens[0])
-	utils.Expect(t, "百度", outputs2.Tokens[0])
+	tt.Expect(t, "1", len(outputs1.Tokens))
+	tt.Expect(t, "1", len(outputs2.Tokens))
+	tt.Expect(t, "百度", outputs1.Tokens[0])
+	tt.Expect(t, "百度", outputs2.Tokens[0])
 
 	outDocs := outputs1.Docs.(types.ScoredDocs)
-	utils.Expect(t, "5", len(outDocs))
-	utils.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
+	tt.Expect(t, "5", len(outDocs))
+	tt.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
 }
 
 func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
@@ -434,15 +458,16 @@ func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
 	addDocsWithLabels(&engine1)
 
 	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
-	utils.Expect(t, "0", len(outputs1.Tokens))
-	// utils.Expect(t, "百度", outputs1.Tokens[0])
+	tt.Expect(t, "0", len(outputs1.Tokens))
+	// tt.Expect(t, "百度", outputs1.Tokens[0])
 
 	outDocs := outputs1.Docs.(types.ScoredDocs)
-	utils.Expect(t, "0", len(outDocs))
+	tt.Expect(t, "0", len(outDocs))
 }
 
 func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
+
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:         1,
@@ -459,8 +484,12 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 		StorageFolder: "riot.persistent",
 		StorageShards: 2,
 	})
+
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5, true)
+	engine.Flush()
+
 	engine.Close()
 
 	var engine1 Engine
@@ -482,20 +511,20 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	engine1.Flush()
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "中国", outputs.Tokens[0])
-	utils.Expect(t, "人口", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "2", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "2", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[0 6]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "1", outDocs[1].DocId)
-	utils.Expect(t, "76", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outDocs[1].TokenSnippetLocs)
+	tt.Expect(t, "1", outDocs[1].DocId)
+	tt.Expect(t, "76", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 18]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
 	os.RemoveAll("riot.persistent")
@@ -507,30 +536,33 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	log.Println("engine.............")
 	// engine = engine.New()
 	AddDocs(engine)
+
 	engine.RemoveDoc(5, true)
+	engine.Flush()
+
 	engine.Close()
 
 	var engine1 = New("./testdata/test_dict.txt")
 	// engine1 = engine1.New()
-	log.Println("test")
+	log.Println("test...")
 	engine1.Flush()
 	log.Println("engine1.............")
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "中国", outputs.Tokens[0])
-	utils.Expect(t, "人口", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	// utils.Expect(t, "2", outDocs[0].DocId)
-	utils.Expect(t, "0", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+	// tt.Expect(t, "2", outDocs[0].DocId)
+	tt.Expect(t, "0", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
-	// utils.Expect(t, "1", outDocs[1].DocId)
-	utils.Expect(t, "0", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
+	// tt.Expect(t, "1", outDocs[1].DocId)
+	tt.Expect(t, "0", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
 	os.RemoveAll("riot-index")
@@ -553,17 +585,20 @@ func TestCountDocsOnly(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口",
 		CountDocsOnly: true})
-	// utils.Expect(t, "0", len(outputs.Docs))
+	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
-		utils.Expect(t, "0", 0)
+		tt.Expect(t, "0", 0)
 	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "2", outputs.NumDocs)
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "2", outputs.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocOrderless(t *testing.T) {
@@ -574,17 +609,18 @@ func TestDocOrderless(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口",
 		Orderless: true})
-	// utils.Expect(t, "0", len(outputs.Docs))
+	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
-		utils.Expect(t, "0", 0)
+		tt.Expect(t, "0", 0)
 	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "2", outputs.NumDocs)
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "2", outputs.NumDocs)
 
 	engine1.Init(types.EngineOpts{
 		Using:         1,
@@ -593,17 +629,20 @@ func TestDocOrderless(t *testing.T) {
 	})
 
 	AddDocs(&engine1)
+
 	engine1.RemoveDoc(5)
 	engine1.Flush()
 
 	outputs1 := engine1.Search(types.SearchReq{Text: "中国人口",
 		Orderless: true})
 	if outputs1.Docs == nil {
-		utils.Expect(t, "0", 0)
+		tt.Expect(t, "0", 0)
 	}
 
-	utils.Expect(t, "2", len(outputs1.Tokens))
-	utils.Expect(t, "2", outputs1.NumDocs)
+	tt.Expect(t, "2", len(outputs1.Tokens))
+	tt.Expect(t, "2", outputs1.NumDocs)
+
+	engine.Close()
 }
 
 func TestDocOnlyID(t *testing.T) {
@@ -624,22 +663,24 @@ func TestDocOnlyID(t *testing.T) {
 	})
 
 	AddDocs(&engine)
+
 	engine.RemoveDoc(5)
 	engine.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "1", len(outDocs))
+		tt.Expect(t, "1", len(outDocs))
 	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "1", outputs.NumDocs)
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "1", outputs.NumDocs)
 
 	outputs1 := engine.Search(types.SearchReq{
 		Text:    "中国人口",
@@ -648,147 +689,12 @@ func TestDocOnlyID(t *testing.T) {
 
 	if outputs1.Docs != nil {
 		outDocs1 := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "1", len(outDocs1))
+		tt.Expect(t, "1", len(outDocs1))
 	}
-	utils.Expect(t, "2", len(outputs1.Tokens))
-	utils.Expect(t, "1", outputs1.NumDocs)
-}
+	tt.Expect(t, "2", len(outputs1.Tokens))
+	tt.Expect(t, "1", outputs1.NumDocs)
 
-func TestDocRank(t *testing.T) {
-	var engine Engine
-
-	rankOpts := types.RankOpts{
-		ReverseOrder:    true,
-		OutputOffset:    0,
-		MaxOutputs:      1,
-		ScoringCriteria: &RankByTokenProximity{},
-	}
-	engine.Init(types.EngineOpts{
-		Using:           1,
-		IDOnly:          true,
-		SegmenterDict:   "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOpts,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
-	})
-
-	AddDocs(&engine)
-	engine.RemoveDoc(5)
-	engine.Flush()
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
-
-	request := types.SearchReq{
-		Text:   "中国人口",
-		DocIds: docIds}
-
-	tokens := engine.Tokens(request)
-	// 建立排序器返回的通信通道
-	rankerReturnChan := make(
-		chan rankerReturnReq, engine.initOptions.NumShards)
-
-	// 生成查找请求
-	lookupRequest := indexerLookupReq{
-		countDocsOnly:    request.CountDocsOnly,
-		tokens:           tokens,
-		labels:           request.Labels,
-		docIds:           request.DocIds,
-		options:          rankOpts,
-		rankerReturnChan: rankerReturnChan,
-		orderless:        request.Orderless,
-		logic:            request.Logic,
-	}
-
-	// 向索引器发送查找请求
-	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerLookupChans[shard] <- lookupRequest
-	}
-
-	outputs := engine.Rank(request, rankOpts, tokens, rankerReturnChan)
-
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "1", len(outDocs))
-	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "1", outputs.NumDocs)
-}
-
-func TestDocRanks(t *testing.T) {
-	var engine Engine
-
-	rankOpts := types.RankOpts{
-		ReverseOrder:    true,
-		OutputOffset:    0,
-		MaxOutputs:      1,
-		ScoringCriteria: &RankByTokenProximity{},
-	}
-	engine.Init(types.EngineOpts{
-		Using:           1,
-		SegmenterDict:   "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOpts,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
-	})
-
-	AddDocs(&engine)
-	engine.RemoveDoc(5)
-	engine.Flush()
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
-
-	request := types.SearchReq{
-		Text:   "中国人口",
-		DocIds: docIds}
-
-	tokens := engine.Tokens(request)
-	// 建立排序器返回的通信通道
-	rankerReturnChan := make(
-		chan rankerReturnReq, engine.initOptions.NumShards)
-
-	// 生成查找请求
-	lookupRequest := indexerLookupReq{
-		countDocsOnly:    request.CountDocsOnly,
-		tokens:           tokens,
-		labels:           request.Labels,
-		docIds:           request.DocIds,
-		options:          rankOpts,
-		rankerReturnChan: rankerReturnChan,
-		orderless:        request.Orderless,
-		logic:            request.Logic,
-	}
-
-	// 向索引器发送查找请求
-	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerLookupChans[shard] <- lookupRequest
-	}
-
-	outputs := engine.Ranks(request, rankOpts, tokens, rankerReturnChan)
-
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredDocs)
-		utils.Expect(t, "1", len(outDocs))
-	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "1", outputs.NumDocs)
-
-	outputs1 := engine.Search(types.SearchReq{
-		Text:    "中国人口",
-		Timeout: 10,
-		DocIds:  docIds})
-
-	if outputs1.Docs != nil {
-		outDocs1 := outputs.Docs.(types.ScoredDocs)
-		utils.Expect(t, "1", len(outDocs1))
-	}
-	utils.Expect(t, "2", len(outputs1.Tokens))
-	utils.Expect(t, "1", outputs1.NumDocs)
+	engine.Close()
 }
 
 func TestSearchWithin(t *testing.T) {
@@ -812,24 +718,27 @@ func TestSearchWithin(t *testing.T) {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[1] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "中国人口",
 		DocIds: docIds,
 	})
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "中国", outputs.Tokens[0])
-	utils.Expect(t, "人口", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "1", outDocs[0].DocId)
-	utils.Expect(t, "76", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 18]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "1", outDocs[0].DocId)
+	tt.Expect(t, "76", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[0 18]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "5", outDocs[1].DocId)
-	utils.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "100", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchJp(t *testing.T) {
@@ -860,22 +769,25 @@ func TestSearchJp(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	docIds[6] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
 	})
 
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "こんにちは", outputs.Tokens[0])
-	utils.Expect(t, "世界", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "こんにちは", outputs.Tokens[0])
+	tt.Expect(t, "世界", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	log.Println("outputs docs...", outDocs)
-	utils.Expect(t, "1", len(outDocs))
+	tt.Expect(t, "1", len(outDocs))
 
-	utils.Expect(t, "6", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "6", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[0].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchGse(t *testing.T) {
@@ -915,26 +827,29 @@ func TestSearchGse(t *testing.T) {
 	docIds[1] = true
 	docIds[6] = true
 	docIds[7] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
 	})
 
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "こんにちは", outputs.Tokens[0])
-	utils.Expect(t, "世界", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "こんにちは", outputs.Tokens[0])
+	tt.Expect(t, "世界", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	log.Println("outputs docs...", outDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "7", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "7", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "6", outDocs[1].DocId)
-	utils.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+	tt.Expect(t, "6", outDocs[1].DocId)
+	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
 }
 
 func TestSearchNotUseGse(t *testing.T) {
@@ -957,23 +872,25 @@ func TestSearchNotUseGse(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	docIds[6] = true
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "google is",
 		DocIds: docIds,
 	})
 
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "google", outputs.Tokens[0])
-	utils.Expect(t, "is", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "google", outputs.Tokens[0])
+	tt.Expect(t, "is", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	log.Println("outputs docs...", outDocs)
-	utils.Expect(t, "1", len(outDocs))
+	tt.Expect(t, "1", len(outDocs))
 
-	utils.Expect(t, "6", outDocs[0].DocId)
-	utils.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "6", outDocs[0].DocId)
+	tt.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
+	engine.Close()
 }
 
 func TestSearchLogic(t *testing.T) {
@@ -1035,208 +952,21 @@ func TestSearchLogic(t *testing.T) {
 		},
 	})
 
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "こんにちは", outputs.Tokens[0])
-	utils.Expect(t, "世界", outputs.Tokens[1])
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "こんにちは", outputs.Tokens[0])
+	tt.Expect(t, "世界", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	log.Println("outputs docs...", outDocs)
-	utils.Expect(t, "2", len(outDocs))
+	tt.Expect(t, "2", len(outDocs))
 
-	utils.Expect(t, "9", outDocs[0].DocId)
-	utils.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "9", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
-	utils.Expect(t, "8", outDocs[1].DocId)
-	utils.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
-	utils.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
-}
-
-func TestDocGetAllID(t *testing.T) {
-	gob.Register(ScoringFields{})
-
-	var engine Engine
-	engine.Init(types.EngineOpts{
-		Using:         1,
-		UseStorage:    true,
-		StorageFolder: "riot.id",
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
-		DefaultRankOpts: &types.RankOpts{
-			ReverseOrder:    true,
-			OutputOffset:    0,
-			MaxOutputs:      1,
-			ScoringCriteria: &RankByTokenProximity{},
-		},
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
-	})
-
-	AddDocs(&engine)
-	engine.RemoveDoc(5)
-	engine.Flush()
-
-	allIds := engine.GetAllIds()
-	fmt.Println("all id", allIds)
-	utils.Expect(t, "4", len(allIds))
-	utils.Expect(t, "[3 4 1 2]", allIds)
-
-	allIds = engine.GetAllDocIds()
-	fmt.Println("all doc id", allIds)
-	utils.Expect(t, "4", len(allIds))
-	utils.Expect(t, "[3 4 1 2]", allIds)
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
-	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
-		DocIds: docIds})
-
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "1", len(outDocs))
-	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "1", outputs.NumDocs)
+	tt.Expect(t, "8", outDocs[1].DocId)
+	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine.Close()
-	os.RemoveAll("riot.id")
-}
-
-func TestDocPinYin(t *testing.T) {
-	var engine Engine
-	engine.Init(types.EngineOpts{
-		// Using:         1,
-		UseStorage:    true,
-		StorageFolder: "riot.py",
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
-	})
-
-	// AddDocs(&engine)
-	// engine.RemoveDoc(5)
-
-	tokens := engine.PinYin("在路上, in the way")
-
-	fmt.Println("tokens...", tokens)
-	utils.Expect(t, "52", len(tokens))
-
-	var tokenDatas []types.TokenData
-	// tokens := []string{"z", "zl"}
-	for i := 0; i < len(tokens); i++ {
-		tokenData := types.TokenData{Text: tokens[i]}
-		tokenDatas = append(tokenDatas, tokenData)
-	}
-
-	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocIndexData{Content: "在路上, in the way",
-		Tokens: tokenDatas}
-
-	engine.IndexDoc(10, index1)
-	engine.IndexDoc(11, index2)
-
-	engine.Flush()
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[10] = true
-	docIds[11] = true
-	outputs := engine.Search(types.SearchReq{
-		Text:   "zl",
-		DocIds: docIds,
-	})
-
-	fmt.Println("outputs", outputs.Docs)
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "2", len(outDocs))
-		// utils.Expect(t, "11", outDocs[0].DocId)
-		// utils.Expect(t, "10", outDocs[1].DocId)
-	}
-	utils.Expect(t, "1", len(outputs.Tokens))
-	utils.Expect(t, "2", outputs.NumDocs)
-
-	engine.Close()
-	os.RemoveAll("riot.py")
-}
-
-func TestForSplitData(t *testing.T) {
-	var engine Engine
-	engine.Init(types.EngineOpts{
-		Using:         4,
-		UseStorage:    true,
-		StorageFolder: "riot.data",
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
-	})
-
-	AddDocs(&engine)
-	engine.RemoveDoc(5)
-	engine.Flush()
-
-	tokenDatas := engine.PinYin("在路上, in the way")
-	tokens, num := engine.ForSplitData(tokenDatas, 52)
-	utils.Expect(t, "93", len(tokens))
-	utils.Expect(t, "104", num)
-
-	index1 := types.DocIndexData{Content: "在路上"}
-	engine.IndexDoc(10, index1, true)
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
-	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
-		DocIds: docIds})
-
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "0", len(outDocs))
-	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "0", outputs.NumDocs)
-
-	engine.Close()
-	os.RemoveAll("riot.data")
-}
-
-func TestDocCounters(t *testing.T) {
-	var engine Engine
-	engine.Init(types.EngineOpts{
-		Using:         1,
-		UseStorage:    true,
-		StorageFolder: "riot.doc",
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
-	})
-
-	AddDocs(&engine)
-	engine.RemoveDoc(5)
-	engine.Flush()
-
-	numAdd := engine.NumTokenIndexAdded()
-	utils.Expect(t, "14", numAdd)
-	numInx := engine.NumDocsIndexed()
-	utils.Expect(t, "5", numInx)
-	numRm := engine.NumDocsRemoved()
-	utils.Expect(t, "8", numRm)
-
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
-	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
-		DocIds: docIds})
-
-	if outputs.Docs != nil {
-		outDocs := outputs.Docs.(types.ScoredIDs)
-		utils.Expect(t, "1", len(outDocs))
-	}
-	utils.Expect(t, "2", len(outputs.Tokens))
-	utils.Expect(t, "1", outputs.NumDocs)
-
-	engine.Close()
-	os.RemoveAll("riot.doc")
 }

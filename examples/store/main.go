@@ -56,8 +56,12 @@ func initEngine() {
 	searcher.IndexDoc(1, types.DocIndexData{Content: text})
 	searcher.IndexDoc(2, types.DocIndexData{Content: text1})
 	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
+	searcher.IndexDoc(5, types.DocIndexData{Content: text2})
 
 	// Wait for the index to refresh
+	// searcher.Flush()
+
+	searcher.RemoveDoc(5)
 	searcher.Flush()
 
 	log.Println("recover index number:", searcher.NumDocsIndexed())

@@ -39,6 +39,7 @@ type Ranker struct {
 		content map[uint64]string
 		attri   map[uint64]interface{}
 	}
+
 	initialized bool
 }
 
@@ -75,6 +76,7 @@ func (ranker *Ranker) AddDoc(
 	ranker.lock.Lock()
 	ranker.lock.fields[docId] = fields
 	ranker.lock.docs[docId] = true
+
 	if !gIDOnly {
 		// new
 		if len(content) > 0 {

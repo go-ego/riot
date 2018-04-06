@@ -31,7 +31,6 @@ import (
 	"time"
 	// "reflect"
 
-	"encoding/binary"
 	"sync/atomic"
 
 	"github.com/go-ego/riot/core"
@@ -331,6 +330,11 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 	if len(forceUpdate) > 0 {
 		force = forceUpdate[0]
 	}
+
+	// if engine.HasDoc(docId) {
+	// 	engine.RemoveDoc(docId)
+	// }
+
 	// data.Tokens
 	engine.internalIndexDoc(docId, data, force)
 
@@ -738,81 +742,8 @@ func (engine *Engine) Close() {
 	}
 }
 
-// New create a new engine
-func New(dict ...string) *Engine {
-	// func (engine *Engine) New(conf com.Config) *Engine{
-	var (
-		searcher = &Engine{}
-
-		path          = "./riot-index"
-		storageShards = 10
-		numShards     = 10
-
-		segmenterDict string
-	)
-
-	if len(dict) > 0 {
-		segmenterDict = dict[0]
-	}
-
-	searcher.Init(types.EngineOpts{
-		// Using:         using,
-		StorageShards: storageShards,
-		NumShards:     numShards,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.DocIdsIndex,
-		},
-		UseStorage:    true,
-		StorageFolder: path,
-		// StorageEngine: storageEngine,
-		SegmenterDict: segmenterDict,
-		// StopTokenFile: stopTokenFile,
-	})
-
-	// defer searcher.Close()
-	os.MkdirAll(path, 0777)
-
-	// 等待索引刷新完毕
-	// searcher.Flush()
-	// log.Println("recover index number:", searcher.NumDocsIndexed())
-
-	return searcher
-}
-
 // 从文本hash得到要分配到的 shard
 func (engine *Engine) getShard(hash uint32) int {
 	return int(hash - hash/uint32(engine.initOptions.NumShards)*
 		uint32(engine.initOptions.NumShards))
-}
-
-// GetAllIds get all the DocId from the storage database and return
-// 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetAllIds() []uint64 {
-	docsId := make([]uint64, 0)
-	for i := range engine.dbs {
-		engine.dbs[i].ForEach(func(k, v []byte) error {
-			// fmt.Println(k, v)
-			docId, _ := binary.Uvarint(k)
-			docsId = append(docsId, docId)
-			return nil
-		})
-	}
-
-	return docsId
-}
-
-// GetAllDocIds get all the DocId from the storage database and return
-// 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetAllDocIds() []uint64 {
-	return engine.GetAllIds()
-}
-
-// Try handler(err)
-func Try(fun func(), handler func(interface{})) {
-	defer func() {
-		if err := recover(); err != nil {
-			handler(err)
-		}
-	}()
-	fun()
 }
