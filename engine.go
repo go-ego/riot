@@ -101,20 +101,22 @@ type Engine struct {
 func (engine *Engine) Indexer(options types.EngineOpts) {
 	engine.indexerAddDocChans = make(
 		[]chan indexerAddDocReq, options.NumShards)
+
 	engine.indexerRemoveDocChans = make(
 		[]chan indexerRemoveDocReq, options.NumShards)
+
 	engine.indexerLookupChans = make(
 		[]chan indexerLookupReq, options.NumShards)
+
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexerAddDocChans[shard] = make(
-			chan indexerAddDocReq,
-			options.IndexerBufLen)
+			chan indexerAddDocReq, options.IndexerBufLen)
+
 		engine.indexerRemoveDocChans[shard] = make(
-			chan indexerRemoveDocReq,
-			options.IndexerBufLen)
+			chan indexerRemoveDocReq, options.IndexerBufLen)
+
 		engine.indexerLookupChans[shard] = make(
-			chan indexerLookupReq,
-			options.IndexerBufLen)
+			chan indexerLookupReq, options.IndexerBufLen)
 	}
 }
 
@@ -122,28 +124,30 @@ func (engine *Engine) Indexer(options types.EngineOpts) {
 func (engine *Engine) Ranker(options types.EngineOpts) {
 	engine.rankerAddDocChans = make(
 		[]chan rankerAddDocReq, options.NumShards)
+
 	engine.rankerRankChans = make(
 		[]chan rankerRankReq, options.NumShards)
+
 	engine.rankerRemoveDocChans = make(
 		[]chan rankerRemoveDocReq, options.NumShards)
+
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.rankerAddDocChans[shard] = make(
-			chan rankerAddDocReq,
-			options.RankerBufLen)
+			chan rankerAddDocReq, options.RankerBufLen)
+
 		engine.rankerRankChans[shard] = make(
-			chan rankerRankReq,
-			options.RankerBufLen)
+			chan rankerRankReq, options.RankerBufLen)
+
 		engine.rankerRemoveDocChans[shard] = make(
-			chan rankerRemoveDocReq,
-			options.RankerBufLen)
+			chan rankerRemoveDocReq, options.RankerBufLen)
 	}
 }
 
 // InitStorage initialize the persistent storage channel
 func (engine *Engine) InitStorage() {
-	engine.storageIndexDocChans =
-		make([]chan storageIndexDocReq,
-			engine.initOptions.StorageShards)
+	engine.storageIndexDocChans = make(
+		[]chan storageIndexDocReq, engine.initOptions.StorageShards)
+
 	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
 		engine.storageIndexDocChans[shard] = make(
 			chan storageIndexDocReq)
@@ -158,6 +162,7 @@ func (engine *Engine) CheckMem() {
 	// Todo test
 	if !engine.initOptions.UseStorage {
 		log.Println("Check virtualMemory...")
+
 		vmem, _ := mem.VirtualMemory()
 		log.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n",
 			vmem.Total, vmem.Free, vmem.UsedPercent)
