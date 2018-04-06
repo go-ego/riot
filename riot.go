@@ -88,8 +88,8 @@ func (engine *Engine) HasDoc(docId uint64) bool {
 	return false
 }
 
-// DBHasDoc doc is exist return true
-func (engine *Engine) DBHasDoc(docId uint64) bool {
+// HasDocDB doc is exist return true
+func (engine *Engine) HasDocDB(docId uint64) bool {
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
 

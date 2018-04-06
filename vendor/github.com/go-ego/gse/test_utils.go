@@ -5,13 +5,6 @@ import (
 	"testing"
 )
 
-func expect(t *testing.T, expect string, actual interface{}) {
-	actualString := fmt.Sprint(actual)
-	if expect != actualString {
-		t.Errorf("期待值=\"%s\", 实际=\"%s\"", expect, actualString)
-	}
-}
-
 func printTokens(tokens []*Token, numTokens int) (output string) {
 	for iToken := 0; iToken < numTokens; iToken++ {
 		for _, word := range tokens[iToken].text {
@@ -35,4 +28,11 @@ func bytesToString(bytes []Text) (output string) {
 		output += (string(b) + "/")
 	}
 	return
+}
+
+func expect(t *testing.T, expect string, actual interface{}) {
+	actualString := fmt.Sprint(actual)
+	if expect != actualString {
+		t.Errorf("期待值=\"%s\", 实际=\"%s\"", expect, actualString)
+	}
 }

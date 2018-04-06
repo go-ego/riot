@@ -209,14 +209,14 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	has = engine.HasDoc(4)
 	tt.Expect(t, "true", has)
 
-	dbhas := engine.DBHasDoc(5)
+	dbhas := engine.HasDocDB(5)
 	tt.Expect(t, "false", dbhas)
 
-	dbhas = engine.DBHasDoc(2)
+	dbhas = engine.HasDocDB(2)
 	tt.Equal(t, true, dbhas)
-	dbhas = engine.DBHasDoc(3)
+	dbhas = engine.HasDocDB(3)
 	tt.Equal(t, true, dbhas)
-	dbhas = engine.DBHasDoc(4)
+	dbhas = engine.HasDocDB(4)
 	tt.Expect(t, "true", dbhas)
 
 	docIds := make(map[uint64]bool)
