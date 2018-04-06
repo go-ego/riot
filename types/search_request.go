@@ -70,6 +70,8 @@ type RankOpts struct {
 
 // Logic logic options
 type Logic struct {
+	// return all doc
+	// All bool
 
 	// 与查询, 必须都存在
 	Must bool

@@ -17,7 +17,6 @@ package riot
 
 import (
 	"bytes"
-	"log"
 
 	"encoding/binary"
 	"encoding/gob"
@@ -49,14 +48,14 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 			continue
 		}
 
-		has, err := engine.dbs[shard].Has(b[0:length])
-		if err != nil {
-			log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
-		}
+		// has, err := engine.dbs[shard].Has(b[0:length])
+		// if err != nil {
+		// 	log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
+		// }
 
-		if has {
-			engine.dbs[shard].Delete(b[0:length])
-		}
+		// if has {
+		// 	engine.dbs[shard].Delete(b[0:length])
+		// }
 
 		// 将 key-value 写入数据库
 		engine.dbs[shard].Set(b[0:length], buf.Bytes())

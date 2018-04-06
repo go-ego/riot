@@ -331,9 +331,9 @@ func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 		force = forceUpdate[0]
 	}
 
-	if engine.HasDoc(docId) {
-		engine.RemoveDoc(docId)
-	}
+	// if engine.HasDoc(docId) {
+	// 	engine.RemoveDoc(docId)
+	// }
 
 	// data.Tokens
 	engine.internalIndexDoc(docId, data, force)

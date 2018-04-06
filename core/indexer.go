@@ -146,6 +146,7 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 						docIndex.DocId
 					indexer.removeCacheLock.removeCachePointer++
 					indexer.removeCacheLock.Unlock()
+
 					indexer.tableLock.docsState[docIndex.DocId] = 1
 					indexer.numDocs--
 				}
@@ -188,7 +189,9 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 			// 如果有重复文档加入，因为稳定排序，只加入最后一个
 			continue
 		}
-		if docState, ok := indexer.tableLock.docsState[doc.DocId]; ok && docState == 1 {
+
+		docState, ok := indexer.tableLock.docsState[doc.DocId]
+		if ok && docState == 1 {
 			// 如果此时 docState 仍为 1，说明该文档需被删除
 			// docState 合法状态为 nil & 2，保证一定不会插入已经在索引表中的文档
 			continue
@@ -221,6 +224,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 			position, _ := indexer.searchIndex(
 				indices, indexPointers[keyword.Text], indexer.getIndexLen(indices)-1, doc.DocId)
 			indexPointers[keyword.Text] = position
+
 			switch indexer.initOptions.IndexType {
 			case types.LocsIndex:
 				indices.locations = append(indices.locations, []int{})
@@ -231,6 +235,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 				copy(indices.frequencies[position+1:], indices.frequencies[position:])
 				indices.frequencies[position] = keyword.Frequency
 			}
+
 			indices.docIds = append(indices.docIds, 0)
 			copy(indices.docIds[position+1:], indices.docIds[position:])
 			indices.docIds[position] = doc.DocId
@@ -278,6 +283,7 @@ func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 		indexer.RemoveDocs(&removeCacheddocs)
 		return true
 	}
+
 	indexer.removeCacheLock.Unlock()
 	return false
 }
@@ -312,8 +318,10 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 					case types.FrequenciesIndex:
 						indices.frequencies[indicesTop] = indices.frequencies[indicesPointer]
 					}
+
 					indices.docIds[indicesTop] = indices.docIds[indicesPointer]
 				}
+
 				indicesTop++
 				indicesPointer++
 			} else if indices.docIds[indicesPointer] == (*docs)[docsPointer] {
@@ -332,9 +340,11 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 				indices.frequencies = append(
 					indices.frequencies[:indicesTop], indices.frequencies[indicesPointer:]...)
 			}
+
 			indices.docIds = append(
 				indices.docIds[:indicesTop], indices.docIds[indicesPointer:]...)
 		}
+
 		if len(indices.docIds) == 0 {
 			delete(indexer.tableLock.table, keyword)
 		}

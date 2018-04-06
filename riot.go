@@ -122,7 +122,7 @@ func (engine *Engine) GetDBAllIds() []uint64 {
 
 // GetDBAllDocs get the db all docs
 func (engine *Engine) GetDBAllDocs() (
-	docsId []uint64, docData []types.DocIndexData) {
+	docsId []uint64, docsData []types.DocIndexData) {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(key, val []byte) error {
 			// fmt.Println(k, v)
@@ -137,13 +137,13 @@ func (engine *Engine) GetDBAllDocs() (
 				log.Println("dec decode ", err)
 			}
 
-			docData = append(docData, data)
+			docsData = append(docsData, data)
 
 			return nil
 		})
 	}
 
-	return docsId, docData
+	return docsId, docsData
 }
 
 // GetAllDocIds get all the DocId from the storage database and return
