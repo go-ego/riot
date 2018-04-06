@@ -76,6 +76,7 @@ func (ranker *Ranker) AddDoc(
 	ranker.lock.Lock()
 	ranker.lock.fields[docId] = fields
 	ranker.lock.docs[docId] = true
+
 	if !gIDOnly {
 		// new
 		if len(content) > 0 {

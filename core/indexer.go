@@ -85,6 +85,7 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 	indexer.tableLock.docsState = make(map[uint64]int)
 	indexer.addCacheLock.addCache = make(
 		[]*types.DocIndex, indexer.initOptions.DocCacheSize)
+
 	indexer.removeCacheLock.removeCache = make(
 		[]uint64, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLens = make(map[uint64]float32)
@@ -122,12 +123,17 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 		indexer.addCacheLock.addCache[indexer.addCacheLock.addCachePointer] = doc
 		indexer.addCacheLock.addCachePointer++
 	}
-	if indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize || forceUpdate {
+
+	if indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize ||
+		forceUpdate {
 		indexer.tableLock.Lock()
+
 		position := 0
 		for i := 0; i < indexer.addCacheLock.addCachePointer; i++ {
 			docIndex := indexer.addCacheLock.addCache[i]
-			if docState, ok := indexer.tableLock.docsState[docIndex.DocId]; ok && docState <= 1 {
+
+			docState, ok := indexer.tableLock.docsState[docIndex.DocId]
+			if ok && docState <= 1 {
 				// ok && docState == 0 表示存在于索引中，需先删除再添加
 				// ok && docState == 1 表示不一定存在于索引中，等待删除，需先删除再添加
 				if position != i {
@@ -157,6 +163,7 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 
 		addCachedDocs := indexer.addCacheLock.addCache[position:indexer.addCacheLock.addCachePointer]
 		indexer.addCacheLock.addCachePointer = position
+
 		indexer.addCacheLock.Unlock()
 		sort.Sort(addCachedDocs)
 		indexer.AddDocs(&addCachedDocs)
@@ -378,6 +385,7 @@ func (indexer *Indexer) Lookup(
 
 	indexer.tableLock.RLock()
 	defer indexer.tableLock.RUnlock()
+
 	table := make([]*KeywordIndices, len(keywords))
 	for i, keyword := range keywords {
 		indices, found := indexer.tableLock.table[keyword]
@@ -411,6 +419,7 @@ func (indexer *Indexer) Lookup(
 				continue
 			}
 		}
+
 		iTable := 1
 		found := true
 		for ; iTable < len(table); iTable++ {
@@ -547,6 +556,7 @@ func (indexer *Indexer) searchIndex(indices *KeywordIndices,
 			end = middle
 		}
 	}
+
 	return end, false
 }
 
@@ -638,6 +648,7 @@ func computeTokenProximity(table []*KeywordIndices,
 		}
 		TokenLocs[i] = table[i].locations[indexPointers[i]][cursor]
 	}
+
 	return
 }
 
@@ -767,6 +778,7 @@ func (indexer *Indexer) LogicLookup(
 
 		// fmt.Println(docs, numDocs)
 	}
+
 	return
 }
 
@@ -780,6 +792,7 @@ func (indexer *Indexer) findInMustTable(table []*KeywordIndices, docId uint64) b
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -813,6 +826,7 @@ func (indexer *Indexer) findInNotInTable(table []*KeywordIndices, docId uint64) 
 			return true
 		}
 	}
+
 	return false
 }
 
