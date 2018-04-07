@@ -74,5 +74,5 @@ func main() {
 			MaxOutputs:   100,
 		}})
 
-	fmt.Println("search---------", sea, "; docs=", sea.Docs)
+	fmt.Println("search response: ", sea, "; docs = ", sea.Docs)
 }

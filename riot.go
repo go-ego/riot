@@ -64,7 +64,7 @@ func New(dict ...string) *Engine {
 
 	// 等待索引刷新完毕
 	// searcher.Flush()
-	// log.Println("recover index number:", searcher.NumDocsIndexed())
+	// log.Println("recover index number: ", searcher.NumDocsIndexed())
 
 	return searcher
 }
@@ -98,7 +98,7 @@ func (engine *Engine) HasDocDB(docId uint64) bool {
 
 	has, err := engine.dbs[shard].Has(b[0:length])
 	if err != nil {
-		log.Println("engine.dbs[shard].Has(b[0:length]) ", err)
+		log.Println("engine.dbs[shard].Has(b[0:length]): ", err)
 	}
 
 	return has
@@ -134,7 +134,7 @@ func (engine *Engine) GetDBAllDocs() (
 			var data types.DocIndexData
 			err := dec.Decode(&data)
 			if err != nil {
-				log.Println("dec decode ", err)
+				log.Println("dec.decode: ", err)
 			}
 
 			docsData = append(docsData, data)

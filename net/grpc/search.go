@@ -118,7 +118,7 @@ func WgRpc(address string, sea com.SearchArgs) {
 	data, err := InitSearchRpc(address, sea)
 
 	if data == nil || err != nil {
-		log.Println("data is null ---")
+		log.Println("data is null...")
 		defer rpcwg.Done()
 		return
 	}

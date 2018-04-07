@@ -64,7 +64,7 @@ func initEngine() {
 	searcher.RemoveDoc(5)
 	searcher.Flush()
 
-	log.Println("recover index number:", searcher.NumDocsIndexed())
+	log.Println("recover index number: ", searcher.NumDocsIndexed())
 }
 
 func restoreIndex() {
@@ -87,7 +87,7 @@ func restoreIndex() {
 	// Wait for the index to refresh
 	searcher.Flush()
 
-	log.Println("recover index number:", searcher.NumDocsIndexed())
+	log.Println("recover index number: ", searcher.NumDocsIndexed())
 }
 
 func main() {
@@ -100,7 +100,7 @@ func main() {
 			MaxOutputs:   100,
 		}})
 
-	fmt.Println("search---------", sea, "; docs=", sea.Docs)
+	fmt.Println("search response: ", sea, "; docs = ", sea.Docs)
 
 	// os.RemoveAll("riot-index")
 }

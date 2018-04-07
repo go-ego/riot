@@ -31,7 +31,7 @@ func OpenBadger(dbPath string) (Storage, error) {
 
 	err := os.MkdirAll(dbPath, 0777)
 	if err != nil {
-		log.Fatal("MkdirAll: ", err)
+		log.Fatal("os.MkdirAll: ", err)
 		os.Exit(1)
 	}
 	// os.MkdirAll(path.Dir(dbPath), os.ModePerm)
@@ -42,7 +42,7 @@ func OpenBadger(dbPath string) (Storage, error) {
 	opt.SyncWrites = true
 	kv, err := badger.Open(opt)
 	if err != nil {
-		log.Fatal("NewKV: ", err)
+		log.Fatal("badger NewKV: ", err)
 	}
 
 	return &Badger{kv}, err

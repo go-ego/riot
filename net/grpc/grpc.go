@@ -52,7 +52,7 @@ func addDoc(in *pb.DocReq) {
 	req := new(pb.Attri)
 	err := proto.Unmarshal(in.Attri, req)
 	if err != nil {
-		log.Println("proto.Unmarshal...", err)
+		log.Println("proto.Unmarshal: ", err)
 	}
 
 	attri := types.Attri{
@@ -130,18 +130,18 @@ func (s *server) Search(ctx context.Context, in *pb.SearchReq) (*pb.SearchReply,
 	}
 
 	rep := rpcSearch(sea)
-	log.Println("rep...", rep)
+	log.Println("search response: ", rep)
 
 	return rep, nil
 }
 
 // InitGrpc init grpc
 func InitGrpc(port string, args ...bool) {
-	log.Println("grpc.port...", port)
+	log.Println("grpc.port is: ", port)
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
-		zlog.Error("failed to listen:", err)
+		zlog.Error("failed to listen: ", err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{})
@@ -149,7 +149,7 @@ func InitGrpc(port string, args ...bool) {
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
-		zlog.Error("failed to serve:", err)
+		zlog.Error("failed to serve: ", err)
 	}
 
 	log.Printf("listen to: %s \n", port)
