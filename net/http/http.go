@@ -82,7 +82,7 @@ func Search(w http.ResponseWriter, req *http.Request) {
 	}
 
 	config = com.Conf
-	log.Println("config", config, "; com.Conf", com.Conf)
+	log.Println("config: ", config, "; com.Conf: ", com.Conf)
 	if maxOutputs == 0 {
 		outputOffset = config.Engine.OutputOffset
 		maxOutputs = config.Engine.MaxOutputs
@@ -117,7 +117,7 @@ func Search(w http.ResponseWriter, req *http.Request) {
 		textArr = textArr[0:maxOutputs]
 	}
 
-	log.Println("len...", len(textArr))
+	log.Println("docs length:", len(textArr))
 
 	timestamp := time.Now().Unix()
 	response, _ := json.Marshal(&JsonResponse{

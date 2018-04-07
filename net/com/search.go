@@ -35,7 +35,7 @@ func InitEngine(conf Config) {
 	// os.RemoveAll("./riot-index")
 	Conf = conf
 
-	log.Println("conf.config.Etcd", Conf.Etcd)
+	log.Println("conf.config.Etcd: ", Conf.Etcd)
 
 	var path = "./riot-index"
 	if conf.Engine.StorageFolder != "" {
@@ -86,7 +86,7 @@ func InitEngine(conf Config) {
 	// 等待索引刷新完毕
 	Searcher.Flush()
 
-	log.Println("recover index number:", Searcher.NumDocsIndexed())
+	log.Println("recover index number: ", Searcher.NumDocsIndexed())
 
 }
 

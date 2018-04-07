@@ -229,7 +229,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
-		fmt.Println("output docs...", outputs)
+		fmt.Println("output docs: ", outputs)
 		tt.Expect(t, "1", len(outDocs))
 	}
 	tt.Expect(t, "2", len(outputs.Tokens))

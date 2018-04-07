@@ -23,5 +23,5 @@ func main() {
 
 	req := types.SearchReq{Text: "你好"}
 	search := searcher.Search(req)
-	log.Println("search...", search)
+	log.Println("search response: ", search)
 }

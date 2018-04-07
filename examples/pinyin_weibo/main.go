@@ -42,7 +42,7 @@ type Weibo struct {
 }
 
 func indexWeibo() {
-	fmt.Println("index start")
+	log.Println("index start...")
 
 	file, err := os.Open(*weiboData)
 	if err != nil {
@@ -88,7 +88,7 @@ func indexWeibo() {
 	}
 
 	searcher.Flush()
-	fmt.Println("index done")
+	log.Println("index done...")
 }
 
 /*******************************************************************************
@@ -141,7 +141,8 @@ func main() {
 
 	// 初始化
 	//gob.Register(WeiboScoringFields{})
-	log.Print("searcher init start")
+	log.Println("searcher init start...")
+
 	searcher.Init(types.EngineOpts{
 		Using:         3,
 		SegmenterDict: *dictFile,

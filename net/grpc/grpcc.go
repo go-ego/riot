@@ -59,7 +59,7 @@ func InitGrpcc(address string, doc Doc) int32 {
 	})
 	if err != nil {
 		log.Fatalf("init docinx grpcc could not greet: %v", err)
-		zlog.Error("init docinx grpcc could not greet:", err)
+		zlog.Error("init docinx grpcc could not greet: ", err)
 		return r.Result
 	}
 	// log.Printf("Greeting: %s", r.Message)
@@ -103,7 +103,7 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 
 	if err != nil {
 		log.Fatalf("init searchRpc could not greet: %v", err)
-		zlog.Error("init searchRpc could not greet:", err)
+		zlog.Error("init searchRpc could not greet: ", err)
 		return nil, err
 	}
 	log.Printf("Greeting: %s", r)
@@ -129,7 +129,7 @@ func InitDelGrpcc(address string, docid uint64) int32 {
 
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
-		zlog.Error("could not greet:", err)
+		zlog.Error("could not greet: ", err)
 		return r.Result
 	}
 

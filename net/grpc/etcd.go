@@ -35,7 +35,7 @@ import (
 
 // InitErpc init grpc
 func InitErpc(num int) {
-	log.Println("config.Etcd", config.Etcd)
+	log.Println("config.Etcd: ", config.Etcd)
 	serv := flag.String("service", config.Etcd.SverName, "service name")
 	port := flag.Int("port", config.Etcd.Port[num], "listening port")
 	reg := flag.String("reg", config.Etcd.Addr, "register etcd address")
@@ -125,6 +125,6 @@ func (s *eserver) Search(ctx context.Context, in *pb.SearchReq) (*pb.SearchReply
 	}
 
 	rep := wgGrpc(sea)
-	log.Println("rep...", rep)
+	log.Println("search response: ", rep)
 	return rep, nil
 }

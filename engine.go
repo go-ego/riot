@@ -164,7 +164,7 @@ func (engine *Engine) CheckMem() {
 		log.Println("Check virtualMemory...")
 
 		vmem, _ := mem.VirtualMemory()
-		log.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n",
+		log.Printf("Total: %v, Free: %v, UsedPercent: %f%%\n",
 			vmem.Total, vmem.Free, vmem.UsedPercent)
 
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)

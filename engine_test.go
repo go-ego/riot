@@ -533,7 +533,7 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine = New("./testdata/test_dict.txt")
-	log.Println("engine.............")
+	log.Println("engine start...")
 	// engine = engine.New()
 	AddDocs(engine)
 
@@ -546,7 +546,7 @@ func TestEngineIndexDocWithNewStorage(t *testing.T) {
 	// engine1 = engine1.New()
 	log.Println("test...")
 	engine1.Flush()
-	log.Println("engine1.............")
+	log.Println("engine1 start...")
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
 	tt.Expect(t, "2", len(outputs.Tokens))
