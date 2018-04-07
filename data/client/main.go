@@ -39,9 +39,11 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	// defer cancel()
 
-	conn, err := grpc.DialContext(ctx, *reg, grpc.WithInsecure(), grpc.WithBalancer(b), grpc.WithBlock())
+	conn, err := grpc.DialContext(
+		ctx, *reg, grpc.WithInsecure(), grpc.WithBalancer(b), grpc.WithBlock())
+
 	if err != nil {
-		log.Println("dial...", err)
+		log.Println("dial grpc: ", err)
 		// return
 	}
 
