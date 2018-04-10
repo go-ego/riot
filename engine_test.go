@@ -530,44 +530,6 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 	os.RemoveAll("riot.persistent")
 }
 
-func TestEngineIndexDocWithNewStorage(t *testing.T) {
-	gob.Register(ScoringFields{})
-	var engine = New("./testdata/test_dict.txt")
-	log.Println("engine start...")
-	// engine = engine.New()
-	AddDocs(engine)
-
-	engine.RemoveDoc(5, true)
-	engine.Flush()
-
-	engine.Close()
-
-	var engine1 = New("./testdata/test_dict.txt")
-	// engine1 = engine1.New()
-	log.Println("test...")
-	engine1.Flush()
-	log.Println("engine1 start...")
-
-	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
-	tt.Expect(t, "2", len(outputs.Tokens))
-	tt.Expect(t, "中国", outputs.Tokens[0])
-	tt.Expect(t, "人口", outputs.Tokens[1])
-
-	outDocs := outputs.Docs.(types.ScoredDocs)
-	tt.Expect(t, "2", len(outDocs))
-
-	// tt.Expect(t, "2", outDocs[0].DocId)
-	tt.Expect(t, "0", int(outDocs[0].Scores[0]*1000))
-	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
-
-	// tt.Expect(t, "1", outDocs[1].DocId)
-	tt.Expect(t, "0", int(outDocs[1].Scores[0]*1000))
-	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
-
-	engine1.Close()
-	os.RemoveAll("riot-index")
-}
-
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
