@@ -29,7 +29,7 @@ import (
 )
 
 // New create a new engine
-func New(dict ...string) *Engine {
+func New(dict ...interface{}) *Engine {
 	// func (engine *Engine) New(conf com.Config) *Engine{
 	var (
 		searcher = &Engine{}
@@ -42,7 +42,12 @@ func New(dict ...string) *Engine {
 	)
 
 	if len(dict) > 0 {
-		segmenterDict = dict[0]
+		segmenterDict = dict[0].(string)
+	}
+
+	if len(dict) > 1 {
+		numShards = dict[1].(int)
+		storageShards = dict[1].(int)
 	}
 
 	searcher.Init(types.EngineOpts{
