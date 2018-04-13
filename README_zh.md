@@ -42,6 +42,10 @@ go get -u github.com/go-ego/riot
 
 需要 Go 版本至少 1.8
 
+### Vendored Dependencies
+
+Riot 使用 [dep](https://github.com/golang/dep) 管理 vendor 依赖, but we don't commit the vendored packages themselves to the Riot git repository. Therefore, a simple go get is not supported because the command is not vendor aware. 请用 dep 管理它.
+
 ## [Build-tools](https://github.com/go-ego/re)
 ```
 go get -u github.com/go-ego/re 
