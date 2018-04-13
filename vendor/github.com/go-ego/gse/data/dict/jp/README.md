@@ -1,1 +1,0 @@
-dict.txt 通过工具生成, Copyright 2017 ego authors. 商用和拷贝请注明来源和版权
