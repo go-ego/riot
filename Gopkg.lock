@@ -32,10 +32,11 @@
     "clientv3",
     "etcdserver/api/v3rpc/rpctypes",
     "etcdserver/etcdserverpb",
-    "internal/mvcc/mvccpb",
+    "mvcc/mvccpb",
     "pkg/types"
   ]
-  revision = "ce0ad377d21819592c3d8c29417d9d7a5ac53f2f"
+  revision = "e348b1aedd9167360c466ae98f7343d3e22281f8"
+  version = "v3.3.3"
 
 [[projects]]
   name = "github.com/dgraph-io/badger"
@@ -78,7 +79,7 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "14d9c57083d25f1f9bac6a01bad033638a014889"
+  revision = "0be08bc27569eb5910c24c57ca0e15224bba3459"
 
 [[projects]]
   branch = "master"
@@ -99,7 +100,7 @@
   branch = "master"
   name = "github.com/go-vgo/grpclb"
   packages = ["."]
-  revision = "5bfd6139ea03d61e22249230077715ad6b56f901"
+  revision = "989ecd34e49214e28c81df3f8bcaed0d496a9921"
 
 [[projects]]
   branch = "master"

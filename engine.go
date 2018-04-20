@@ -52,7 +52,7 @@ const (
 	StorageFilePrefix = "riot"
 )
 
-// GetVersion get version
+// GetVersion get the riot version
 func GetVersion() string {
 	return version
 }
