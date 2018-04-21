@@ -50,6 +50,9 @@ const (
 	NumNanosecondsInAMillisecond = 1000000
 	// StorageFilePrefix persistent storage file prefix
 	StorageFilePrefix = "riot"
+
+	// DefaultPath default db path
+	DefaultPath = "./riot-index"
 )
 
 // GetVersion get the riot version
@@ -170,8 +173,8 @@ func (engine *Engine) CheckMem() {
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
-			engine.initOptions.StorageFolder = "./riot-index"
-			os.MkdirAll("./riot-index", 0777)
+			engine.initOptions.StorageFolder = DefaultPath
+			os.MkdirAll(DefaultPath, 0777)
 		}
 	}
 }

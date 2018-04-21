@@ -34,7 +34,7 @@ func New(dict ...interface{}) *Engine {
 	var (
 		searcher = &Engine{}
 
-		path          = "./riot-index"
+		path          = DefaultPath
 		storageShards = 10
 		numShards     = 10
 
