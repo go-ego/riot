@@ -34,7 +34,7 @@ func New(dict ...interface{}) *Engine {
 	var (
 		searcher = &Engine{}
 
-		path          = "./riot-index"
+		path          = DefaultPath
 		storageShards = 10
 		numShards     = 10
 
@@ -78,7 +78,7 @@ func New(dict ...interface{}) *Engine {
 // 	return core.IsDocExist(docId)
 // }
 
-// HasDoc doc is exist return true
+// HasDoc if the document is exist return true
 func (engine *Engine) HasDoc(docId uint64) bool {
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 		engine.indexers = append(engine.indexers, core.Indexer{})
@@ -93,7 +93,8 @@ func (engine *Engine) HasDoc(docId uint64) bool {
 	return false
 }
 
-// HasDocDB doc is exist return true
+// HasDocDB if the document is exist in the database
+// return true
 func (engine *Engine) HasDocDB(docId uint64) bool {
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
@@ -109,7 +110,8 @@ func (engine *Engine) HasDocDB(docId uint64) bool {
 	return has
 }
 
-// GetDBAllIds get all the DocId from the storage database and return
+// GetDBAllIds get all the DocId from the storage database
+// and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetDBAllIds() []uint64 {
 	docsId := make([]uint64, 0)
@@ -151,7 +153,8 @@ func (engine *Engine) GetDBAllDocs() (
 	return docsId, docsData
 }
 
-// GetAllDocIds get all the DocId from the storage database and return
+// GetAllDocIds get all the DocId from the storage database
+// and return
 // 从数据库遍历所有的 DocId, 并返回
 func (engine *Engine) GetAllDocIds() []uint64 {
 	return engine.GetDBAllIds()
