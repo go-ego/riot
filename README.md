@@ -37,7 +37,9 @@ Go version >= 1.8
 
 ### Vendored Dependencies
 
-Riot uses [dep](https://github.com/golang/dep) to vendor dependencies, but we don't commit the vendored packages themselves to the Riot git repository. Therefore, a simple go get is not supported because the command is not vendor aware. Please manage it with dep.
+Riot uses [dep](https://github.com/golang/dep) to vendor dependencies, but we don't commit the vendored packages themselves to the Riot git repository. Therefore, a simple go get is not supported because the command is not vendor aware. 
+
+Please manage it with dep, run `dep ensure`, to clone dependencies.
 
 ## Installation/Update
 

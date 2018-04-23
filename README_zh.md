@@ -44,7 +44,9 @@ go get -u github.com/go-ego/riot
 
 ### Vendored Dependencies
 
-Riot 使用 [dep](https://github.com/golang/dep) 管理 vendor 依赖, but we don't commit the vendored packages themselves to the Riot git repository. Therefore, a simple go get is not supported because the command is not vendor aware. 请用 dep 管理它.
+Riot 使用 [dep](https://github.com/golang/dep) 管理 vendor 依赖, but we don't commit the vendored packages themselves to the Riot git repository. Therefore, a simple go get is not supported because the command is not vendor aware. 
+
+请用 dep 管理它, 运行 `dep ensure` 克隆依赖.
 
 ## [Build-tools](https://github.com/go-ego/re)
 ```
