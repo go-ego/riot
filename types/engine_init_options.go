@@ -107,6 +107,7 @@ func (options *EngineOpts) Init() {
 		if options.SegmenterDict == "" {
 			// log.Fatal("字典文件不能为空")
 			log.Printf("Dictionary file is empty, load the default empty dictionary.")
+			options.SegmenterDict = "zh"
 		}
 	}
 

@@ -79,7 +79,7 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "7ff5bcf7aaeccbf65c80d2139ca91ff59e483e26"
+  revision = "e159a7b2c1012937e2daf2efa845bf9b524fbca1"
 
 [[projects]]
   branch = "master"
