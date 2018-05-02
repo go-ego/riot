@@ -52,11 +52,12 @@ type EngineOpts struct {
 	// DocIndexData 中的 Content 会被忽略
 	NotUsingGse bool
 
-	// new
+	// new, 分词规则
 	Using int
 
-	// 半角逗号分隔的字典文件，具体用法见
-	// sego.Segmenter.LoadDict 函数的注释
+	// 半角逗号 "," 分隔的字典文件，具体用法见
+	// gse.Segmenter.LoadDict 函数的注释
+	// GseDict       string
 	SegmenterDict string
 	// SegmenterDict []string
 
