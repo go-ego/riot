@@ -435,7 +435,9 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 // Segment get the word segmentation result of the text
 // 获取文本的分词结果, 只分词与过滤弃用词
 func (engine *Engine) Segment(content string) (keywords []string) {
-	segments := engine.segmenter.Segment([]byte(content))
+	segments := engine.segmenter.ModeSegment([]byte(content),
+		engine.initOptions.GseMode)
+
 	for _, segment := range segments {
 		token := segment.Token().Text()
 		if !engine.stopTokens.IsStopToken(token) {
