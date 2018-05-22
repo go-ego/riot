@@ -464,7 +464,6 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 			// 		tokens = append(tokens, s.Token().Text())
 			// 	}
 			// }
-
 			// tokens = engine.Tokens([]byte(request.Text))
 			tokens = engine.Segment(request.Text)
 		}
@@ -484,9 +483,9 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 }
 
 // Rank rank docs by types.ScoredIDs
-func (engine *Engine) Rank(request types.SearchReq,
-	RankOpts types.RankOpts, tokens []string,
-	rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
+func (engine *Engine) Rank(request types.SearchReq, RankOpts types.RankOpts,
+	tokens []string, rankerReturnChan chan rankerReturnReq) (
+	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	var rankOutput types.ScoredIDs
@@ -567,9 +566,9 @@ func (engine *Engine) Rank(request types.SearchReq,
 }
 
 // Ranks rank docs by types.ScoredDocs
-func (engine *Engine) Ranks(request types.SearchReq,
-	RankOpts types.RankOpts, tokens []string,
-	rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
+func (engine *Engine) Ranks(request types.SearchReq, RankOpts types.RankOpts,
+	tokens []string, rankerReturnChan chan rankerReturnReq) (
+	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredDocs{}

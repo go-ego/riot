@@ -2,7 +2,8 @@
 
 ```Go
 types.EngineOpts{
-		Using:         4,
+	Using:         4,
+	GseMode: true,
 }
 ```
 - When Using is 0 and the content participle is not empty, the keyword is obtained from the content through the gse participle and Tokens.
