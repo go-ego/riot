@@ -15,3 +15,5 @@ types.EngineOpts{
 - When Using is 3 and the Content participle is not empty, the keyword is obtained from the content through the gse participle and through the `""` participle.
 
 - When Using is 4 and the content participle is not empty, the keyword is obtained from the content through the space participle.
+
+- When GseMode is true, the Gse participle uses a search pattern to give search engines as many keywords as possible.

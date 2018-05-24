@@ -17,4 +17,4 @@ types.EngineOpts{
 
 - 当 Using 为 4 并且 Content 分词不为空时，从内容通过空格分词中得到关键词
 
-- 当 GseMode 为 true, gse 分词采用搜索模式, 提供尽可能多的关键字
+- 当 GseMode 为 true, gse 分词采用搜索模式, 给搜索引擎提供尽可能多的关键字
