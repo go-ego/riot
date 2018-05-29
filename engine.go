@@ -80,7 +80,7 @@ type Engine struct {
 
 	indexers   []core.Indexer
 	rankers    []core.Ranker
-	segmenter  gse.Segmenter
+	segmenter  types.Segmenter
 	stopTokens StopTokens
 	dbs        []storage.Storage
 
@@ -242,6 +242,16 @@ func (engine *Engine) Storage() {
 	// }
 }
 
+// Using user defined segmenter
+// If using a not nil segmenter, the `opt.SegmenterDict` will be ignore.
+func (engine *Engine) WithSegmenter(segmenter types.Segmenter) *Engine {
+	if engine.initialized {
+		log.Fatal("WithSegmenter should call before initialize the engine.")
+	}
+	engine.segmenter = segmenter
+	return engine
+}
+
 // Init initialize the engine
 func (engine *Engine) Init(options types.EngineOpts) {
 	// 将线程数设置为CPU数
@@ -257,8 +267,13 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	engine.initialized = true
 
 	if !options.NotUsingGse {
-		// 载入分词器词典
-		engine.segmenter.LoadDict(options.SegmenterDict)
+		// 如果没有设置分词器则使用默认配置初始化分词器
+		if engine.segmenter == nil {
+			gseSegmenter := &gse.Segmenter{}
+			// 载入分词器词典
+			gseSegmenter.LoadDict(options.SegmenterDict)
+			engine.segmenter = gseSegmenter
+		}
 
 		// 初始化停用词
 		engine.stopTokens.Init(options.StopTokenFile)
