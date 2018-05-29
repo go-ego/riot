@@ -55,9 +55,9 @@ type EngineOpts struct {
 	// new, 分词规则
 	Using int
 
+	GseDict string
 	// 半角逗号 "," 分隔的字典文件，具体用法见
 	// gse.Segmenter.LoadDict 函数的注释
-	GseDict       string
 	SegmenterDict string
 	// SegmenterDict []string
 

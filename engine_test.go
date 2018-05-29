@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/go-ego/gse"
 	"github.com/go-ego/riot/types"
 	"github.com/vcaesar/tt"
 )
@@ -929,6 +930,72 @@ func TestSearchLogic(t *testing.T) {
 	tt.Expect(t, "8", outDocs[1].DocId)
 	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
+
+	engine.Close()
+}
+
+func TestSearchWithSetmenter(t *testing.T) {
+	// segmenter to inject
+	gseSegmenter := &gse.Segmenter{}
+	gseSegmenter.LoadDict("./testdata/test_dict_jp.txt")
+
+	var engine Engine
+	engine.WithSegmenter(gseSegmenter).
+		Init(types.EngineOpts{
+			// Using:         1,
+			DefaultRankOpts: &types.RankOpts{
+				ReverseOrder:    true,
+				OutputOffset:    0,
+				MaxOutputs:      10,
+				ScoringCriteria: &RankByTokenProximity{},
+			},
+			IndexerOpts: &types.IndexerOpts{
+				IndexType: types.LocsIndex,
+			},
+		})
+
+	AddDocs(&engine)
+
+	engine.IndexDoc(6, types.DocIndexData{
+		Content: "こんにちは世界, こんにちは",
+		Fields:  ScoringFields{1, 2, 3},
+	})
+
+	tokenData := types.TokenData{Text: "こんにちは"}
+	tokenDatas := []types.TokenData{tokenData}
+	engine.IndexDoc(7, types.DocIndexData{
+		Content: "你好世界, hello world!",
+		Tokens:  tokenDatas,
+		Fields:  ScoringFields{1, 2, 3},
+	})
+	engine.Flush()
+
+	docIds := make(map[uint64]bool)
+	docIds[5] = true
+	docIds[1] = true
+	docIds[6] = true
+	docIds[7] = true
+
+	outputs := engine.Search(types.SearchReq{
+		Text:   "こんにちは世界",
+		DocIds: docIds,
+	})
+
+	tt.Expect(t, "2", len(outputs.Tokens))
+	tt.Expect(t, "こんにちは", outputs.Tokens[0])
+	tt.Expect(t, "世界", outputs.Tokens[1])
+
+	outDocs := outputs.Docs.(types.ScoredDocs)
+	log.Println("outputs docs...", outDocs)
+	tt.Expect(t, "2", len(outDocs))
+
+	tt.Expect(t, "7", outDocs[0].DocId)
+	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+
+	tt.Expect(t, "6", outDocs[1].DocId)
+	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "[0 15]", outDocs[1].TokenSnippetLocs)
 
 	engine.Close()
 }
