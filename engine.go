@@ -81,7 +81,7 @@ type Engine struct {
 	indexers   []core.Indexer
 	rankers    []core.Ranker
 	segmenter  gse.Segmenter
-	load       bool
+	loaded     bool
 	stopTokens StopTokens
 	dbs        []storage.Storage
 
@@ -251,7 +251,7 @@ func (engine *Engine) WithGse(segmenter gse.Segmenter) *Engine {
 	}
 
 	engine.segmenter = segmenter
-	engine.load = true
+	engine.loaded = true
 	return engine
 }
 
@@ -270,10 +270,10 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	engine.initialized = true
 
 	if !options.NotUsingGse {
-		if !engine.load {
+		if !engine.loaded {
 			// 载入分词器词典
 			engine.segmenter.LoadDict(options.GseDict)
-			engine.load = true
+			engine.loaded = true
 		}
 
 		// 初始化停用词
