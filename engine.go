@@ -480,12 +480,6 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 			tokens = strings.Split(request.Text, " ")
 		} else {
 			// querySegments := engine.segmenter.Segment([]byte(request.Text))
-			// for _, s := range querySegments {
-			// 	token := s.Token().Text()
-			// 	if !engine.stopTokens.IsStopToken(token) {
-			// 		tokens = append(tokens, s.Token().Text())
-			// 	}
-			// }
 			// tokens = engine.Tokens([]byte(request.Text))
 			tokens = engine.Segment(request.Text)
 		}
@@ -495,12 +489,12 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 			tokens = append(tokens, t)
 		}
 
-	} else {
-		for _, t := range request.Tokens {
-			tokens = append(tokens, t)
-		}
+		return
 	}
 
+	for _, t := range request.Tokens {
+		tokens = append(tokens, t)
+	}
 	return
 }
 
