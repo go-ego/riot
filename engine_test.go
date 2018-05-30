@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/go-ego/gse"
 	"github.com/go-ego/riot/types"
 	"github.com/vcaesar/tt"
 )
@@ -853,6 +854,38 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	engine.Close()
+}
+
+func TestSearchWithGse(t *testing.T) {
+	gseSegmenter := gse.Segmenter{}
+	gseSegmenter.LoadDict("zh") // ./data/dict/dictionary.txt
+
+	var engine1, engine2 Engine
+	engine1.WithGse(gseSegmenter).Init(types.EngineOpts{
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+	engine2.WithGse(gseSegmenter).Init(types.EngineOpts{
+		// GseDict: "./data/dict/dictionary.txt",
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.DocIdsIndex,
+		},
+	})
+
+	addDocsWithLabels(&engine1)
+	addDocsWithLabels(&engine2)
+
+	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
+	outputs2 := engine2.Search(types.SearchReq{Text: "百度"})
+	tt.Expect(t, "1", len(outputs1.Tokens))
+	tt.Expect(t, "1", len(outputs2.Tokens))
+	tt.Expect(t, "百度", outputs1.Tokens[0])
+	tt.Expect(t, "百度", outputs2.Tokens[0])
+
+	outDocs := outputs1.Docs.(types.ScoredDocs)
+	tt.Expect(t, "5", len(outDocs))
+	tt.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
 }
 
 func TestSearchLogic(t *testing.T) {
