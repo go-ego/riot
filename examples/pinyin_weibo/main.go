@@ -145,7 +145,7 @@ func main() {
 
 	searcher.Init(types.EngineOpts{
 		Using:         3,
-		SegmenterDict: *dictFile,
+		GseDict: *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
 			//IndexType: types.LocsIndex,

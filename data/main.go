@@ -30,7 +30,7 @@ func main() {
 	// Init searcher
 	searcher.Init(types.EngineOpts{
 		Using:         4,
-		SegmenterDict: "./dict/dictionary.txt"})
+		GseDict: "./dict/dictionary.txt"})
 	defer searcher.Close()
 
 	text := "Google Is Experimenting With Virtual Reality Advertising"

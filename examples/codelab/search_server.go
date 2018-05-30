@@ -167,7 +167,7 @@ func main() {
 	log.Print("引擎开始初始化")
 	searcher.Init(types.EngineOpts{
 		Using:         1,
-		SegmenterDict: *dictFile,
+		GseDict:       *dictFile,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,

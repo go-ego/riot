@@ -45,7 +45,7 @@ var (
 // EngineOpts init engine options
 type EngineOpts struct {
 	// 是否使用分词器
-	// 默认使用，否则在启动阶段跳过 SegmenterDict 和 StopTokenFile 设置
+	// 默认使用，否则在启动阶段跳过 GseDict 和 StopTokenFile 设置
 	// 如果你不需要在引擎内分词，可以将这个选项设为 true
 	// 注意，如果你不用分词器，那么在调用 IndexDoc 时,
 	// DocIndexData 中的 Content 会被忽略
@@ -58,7 +58,7 @@ type EngineOpts struct {
 	// gse.Segmenter.LoadDict 函数的注释
 	GseDict       string
 	SegmenterDict string
-	// SegmenterDict []string
+	// GseDict []string
 
 	// 停用词文件
 	StopTokenFile string
@@ -104,7 +104,7 @@ type EngineOpts struct {
 // Init init engine options
 // 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
 func (options *EngineOpts) Init() {
-	// if !options.NotUsingGse && options.SegmenterDict == "" {
+	// if !options.NotUsingGse && options.GseDict == "" {
 	// 	log.Fatal("字典文件不能为空")
 	// }
 

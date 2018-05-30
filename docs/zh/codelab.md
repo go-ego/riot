@@ -65,7 +65,7 @@ import (
 ```go
 var searcher riot.Engine
 searcher.Init(types.EngineOpts{
-	SegmenterDict: "../../data/dict/dictionary.txt",
+	GseDict: "../../data/dict/dictionary.txt",
 	StopTokenFile:         "../../data/dict/stop_tokens.txt",
 	IndexerOpts: &types.IndexerOpts{
 		IndexType: types.LocsIndex,

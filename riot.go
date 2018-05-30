@@ -38,11 +38,11 @@ func New(dict ...interface{}) *Engine {
 		storageShards = 10
 		numShards     = 10
 
-		segmenterDict string
+		GseDict string
 	)
 
 	if len(dict) > 0 {
-		segmenterDict = dict[0].(string)
+		GseDict = dict[0].(string)
 	}
 
 	if len(dict) > 1 {
@@ -60,7 +60,7 @@ func New(dict ...interface{}) *Engine {
 		UseStorage:    true,
 		StorageFolder: path,
 		// StorageEngine: storageEngine,
-		SegmenterDict: segmenterDict,
+		GseDict: GseDict,
 		// StopTokenFile: stopTokenFile,
 	})
 

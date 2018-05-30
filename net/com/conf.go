@@ -36,7 +36,7 @@ type Engine struct {
 	NumShards     int    `toml:"num_shards"`
 	OutputOffset  int    `toml:"output_offset"`
 	MaxOutputs    int    `toml:"max_outputs"`
-	SegmenterDict string `toml:"segmenter_dict"`
+	GseDict string `toml:"segmenter_dict"`
 	StopTokenFile string `toml:"stop_token_file"`
 	Relation      string
 	Time          string
