@@ -56,10 +56,10 @@ func InitEngine(conf Config) {
 		numShards = conf.Engine.NumShards
 	}
 
-	// var GseDict string
-	GseDict := "../dict/dictionary.txt"
+	// var segDict string
+	segmentDict := "../dict/dictionary.txt"
 	if conf.Engine.GseDict != "" {
-		GseDict = conf.Engine.GseDict
+		segmentDict = conf.Engine.GseDict
 	}
 	using := conf.Engine.Using
 
@@ -76,7 +76,7 @@ func InitEngine(conf Config) {
 		UseStorage:    true,
 		StorageFolder: path,
 		StorageEngine: storageEngine,
-		GseDict:       GseDict,
+		GseDict:       segmentDict,
 		StopTokenFile: stopTokenFile,
 	})
 
