@@ -16,7 +16,6 @@
 package types
 
 import (
-	"log"
 	"runtime"
 )
 
@@ -105,14 +104,9 @@ type EngineOpts struct {
 // Init init engine options
 // 初始化 EngineOpts，当用户未设定某个选项的值时用默认值取代
 func (options *EngineOpts) Init() {
-	if !options.NotUsingGse {
-		// if len(options.SegmenterDict) == 0 {
-		if options.SegmenterDict == "" {
-			// log.Fatal("字典文件不能为空")
-			log.Printf("Dictionary file is empty, load the default empty dictionary.")
-			options.SegmenterDict = "zh"
-		}
-	}
+	// if !options.NotUsingGse && options.SegmenterDict == "" {
+	// 	log.Fatal("字典文件不能为空")
+	// }
 
 	if options.NumSegmenterThreads == 0 {
 		options.NumSegmenterThreads = defaultNumSegmenterThreads

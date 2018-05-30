@@ -265,6 +265,12 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	if engine.initialized {
 		log.Fatal("Do not re-initialize the engine.")
 	}
+
+	if options.GseDict == "" && !options.NotUsingGse && !engine.loaded {
+		log.Printf("Dictionary file is empty, load the default empty dictionary.")
+		options.GseDict = "zh"
+	}
+
 	options.Init()
 	engine.initOptions = options
 	engine.initialized = true
