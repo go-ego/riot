@@ -29,7 +29,7 @@ var (
 func main() {
 	// Init searcher
 	searcher.Init(types.EngineOpts{
-		Using:         4,
+		Using:   4,
 		GseDict: "./dict/dictionary.txt"})
 	defer searcher.Close()
 

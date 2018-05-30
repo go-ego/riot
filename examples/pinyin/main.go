@@ -37,7 +37,7 @@ func initEngine() {
 		},
 		UseStorage:    true,
 		StorageFolder: path,
-		GseDict: "../../data/dict/dictionary.txt",
+		GseDict:       "../../data/dict/dictionary.txt",
 		// StopTokenFile:           "../../riot/data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()

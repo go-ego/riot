@@ -76,7 +76,7 @@ func InitEngine(conf Config) {
 		UseStorage:    true,
 		StorageFolder: path,
 		StorageEngine: storageEngine,
-		GseDict: GseDict,
+		GseDict:       GseDict,
 		StopTokenFile: stopTokenFile,
 	})
 

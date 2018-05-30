@@ -40,7 +40,7 @@ func initEngine() {
 		StorageFolder: path,
 		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		// GseDict: "../../data/dict/dictionary.txt",
-		GseDict: "../../testdata/test_dict.txt",
+		GseDict:       "../../testdata/test_dict.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()
@@ -78,7 +78,7 @@ func restoreIndex() {
 		UseStorage:    true,
 		StorageFolder: path,
 		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
-		GseDict: "../../data/dict/dictionary.txt",
+		GseDict:       "../../data/dict/dictionary.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()

@@ -423,6 +423,7 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 			IndexType: types.LocsIndex,
 		},
 	})
+
 	engine2.Init(types.EngineOpts{
 		GseDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
@@ -866,6 +867,7 @@ func TestSearchWithGse(t *testing.T) {
 			IndexType: types.LocsIndex,
 		},
 	})
+
 	engine2.WithGse(gseSegmenter).Init(types.EngineOpts{
 		// GseDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
