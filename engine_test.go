@@ -444,6 +444,9 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	outDocs := outputs1.Docs.(types.ScoredDocs)
 	tt.Expect(t, "5", len(outDocs))
 	tt.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
+
+	engine1.Close()
+	engine2.Close()
 }
 
 func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
@@ -861,7 +864,12 @@ func TestSearchWithGse(t *testing.T) {
 	gseSegmenter := gse.Segmenter{}
 	gseSegmenter.LoadDict("zh") // ./data/dict/dictionary.txt
 
-	var engine1, engine2 Engine
+	var engine1, engine2, searcher2 Engine
+	searcher2.Init(types.EngineOpts{
+		Using: 1,
+	})
+	defer searcher2.Close()
+
 	engine1.WithGse(gseSegmenter).Init(types.EngineOpts{
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
@@ -888,6 +896,9 @@ func TestSearchWithGse(t *testing.T) {
 	outDocs := outputs1.Docs.(types.ScoredDocs)
 	tt.Expect(t, "5", len(outDocs))
 	tt.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
+
+	engine1.Close()
+	engine2.Close()
 }
 
 func TestSearchLogic(t *testing.T) {
