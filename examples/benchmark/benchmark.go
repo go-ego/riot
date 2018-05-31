@@ -64,7 +64,7 @@ var (
 
 func initEngine() {
 	searcher.Init(types.EngineOpts{
-		SegmenterDict: *dictionaries,
+		GseDict:       *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
@@ -188,7 +188,7 @@ func useStore(tBeginInit, tEndInit time.Time) {
 	t6 := time.Now()
 	searcher1 := riot.Engine{}
 	searcher1.Init(types.EngineOpts{
-		SegmenterDict: *dictionaries,
+		GseDict:       *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,

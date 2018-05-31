@@ -61,7 +61,7 @@ func TestDocRank(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:           1,
 		IDOnly:          true,
-		SegmenterDict:   "./testdata/test_dict.txt",
+		GseDict:         "./testdata/test_dict.txt",
 		DefaultRankOpts: &rankOpts,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
@@ -126,7 +126,7 @@ func TestDocRanks(t *testing.T) {
 	}
 	engine.Init(types.EngineOpts{
 		Using:           1,
-		SegmenterDict:   "./testdata/test_dict.txt",
+		GseDict:         "./testdata/test_dict.txt",
 		DefaultRankOpts: &rankOpts,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
@@ -203,7 +203,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 		// StorageEngine: "bg",
 		StorageFolder: "riot.id",
 		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		GseDict:       "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -285,7 +285,7 @@ func TestDocPinYin(t *testing.T) {
 		UseStorage:    true,
 		StorageFolder: "riot.py",
 		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		GseDict:       "./testdata/test_dict.txt",
 	})
 
 	// AddDocs(&engine)
@@ -343,7 +343,7 @@ func TestForSplitData(t *testing.T) {
 		UseStorage:    true,
 		StorageFolder: "riot.data",
 		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		GseDict:       "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine)
@@ -384,7 +384,7 @@ func TestDocCounters(t *testing.T) {
 		UseStorage:    true,
 		StorageFolder: "riot.doc",
 		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		GseDict:       "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine)

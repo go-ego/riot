@@ -81,6 +81,7 @@ type Engine struct {
 	indexers   []core.Indexer
 	rankers    []core.Ranker
 	segmenter  gse.Segmenter
+	loaded     bool
 	stopTokens StopTokens
 	dbs        []storage.Storage
 
@@ -242,6 +243,18 @@ func (engine *Engine) Storage() {
 	// }
 }
 
+// WithGse Using user defined segmenter
+// If using a not nil segmenter, the `opt.GseDict` will be ignore.
+func (engine *Engine) WithGse(segmenter gse.Segmenter) *Engine {
+	if engine.initialized {
+		log.Fatal("WithGse should call before initialize the engine.")
+	}
+
+	engine.segmenter = segmenter
+	engine.loaded = true
+	return engine
+}
+
 // Init initialize the engine
 func (engine *Engine) Init(options types.EngineOpts) {
 	// 将线程数设置为CPU数
@@ -252,13 +265,22 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	if engine.initialized {
 		log.Fatal("Do not re-initialize the engine.")
 	}
+
+	if options.GseDict == "" && !options.NotUsingGse && !engine.loaded {
+		log.Printf("Dictionary file is empty, load the default empty dictionary.")
+		options.GseDict = "zh"
+	}
+
 	options.Init()
 	engine.initOptions = options
 	engine.initialized = true
 
 	if !options.NotUsingGse {
-		// 载入分词器词典
-		engine.segmenter.LoadDict(options.SegmenterDict)
+		if !engine.loaded {
+			// 载入分词器词典
+			engine.segmenter.LoadDict(options.GseDict)
+			engine.loaded = true
+		}
 
 		// 初始化停用词
 		engine.stopTokens.Init(options.StopTokenFile)
@@ -458,12 +480,6 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 			tokens = strings.Split(request.Text, " ")
 		} else {
 			// querySegments := engine.segmenter.Segment([]byte(request.Text))
-			// for _, s := range querySegments {
-			// 	token := s.Token().Text()
-			// 	if !engine.stopTokens.IsStopToken(token) {
-			// 		tokens = append(tokens, s.Token().Text())
-			// 	}
-			// }
 			// tokens = engine.Tokens([]byte(request.Text))
 			tokens = engine.Segment(request.Text)
 		}
@@ -473,12 +489,12 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 			tokens = append(tokens, t)
 		}
 
-	} else {
-		for _, t := range request.Tokens {
-			tokens = append(tokens, t)
-		}
+		return
 	}
 
+	for _, t := range request.Tokens {
+		tokens = append(tokens, t)
+	}
 	return
 }
 

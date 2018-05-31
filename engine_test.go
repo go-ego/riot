@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/go-ego/gse"
 	"github.com/go-ego/riot/types"
 	"github.com/vcaesar/tt"
 )
@@ -108,8 +109,8 @@ func TestTry(t *testing.T) {
 func TestEngineIndexDoc(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -149,8 +150,8 @@ func TestEngineIndexDoc(t *testing.T) {
 func TestReverseOrder(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -179,8 +180,8 @@ func TestReverseOrder(t *testing.T) {
 func TestOffsetAndMaxOutputs(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    1,
@@ -220,8 +221,8 @@ func (criteria TestScoringCriteria) Score(
 func TestSearchWithCriteria(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
@@ -250,8 +251,8 @@ func TestSearchWithCriteria(t *testing.T) {
 func TestCompactIndex(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
@@ -287,8 +288,8 @@ func (criteria BM25ScoringCriteria) Score(
 func TestFrequenciesIndex(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: BM25ScoringCriteria{},
 		},
@@ -316,8 +317,8 @@ func TestFrequenciesIndex(t *testing.T) {
 func TestRemoveDoc(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
@@ -351,8 +352,8 @@ func TestRemoveDoc(t *testing.T) {
 func TestEngineIndexDocWithTokens(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -417,13 +418,14 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	var engine1, engine2 Engine
 	engine1.Init(types.EngineOpts{
-		SegmenterDict: "./data/dict/dictionary.txt",
+		GseDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
 	})
+
 	engine2.Init(types.EngineOpts{
-		SegmenterDict: "./data/dict/dictionary.txt",
+		GseDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
@@ -448,7 +450,7 @@ func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
 	var engine1 Engine
 
 	engine1.Init(types.EngineOpts{
-		SegmenterDict: "./data/dict/dictionary.txt",
+		GseDict:       "./data/dict/dictionary.txt",
 		StopTokenFile: "./testdata/test_stop_dict.txt",
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
@@ -470,8 +472,8 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -494,8 +496,8 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 
 	var engine1 Engine
 	engine1.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			OutputOffset:    0,
 			MaxOutputs:      10,
@@ -533,8 +535,8 @@ func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -566,8 +568,8 @@ func TestCountDocsOnly(t *testing.T) {
 func TestDocOrderless(t *testing.T) {
 	var engine, engine1 Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine)
@@ -585,9 +587,9 @@ func TestDocOrderless(t *testing.T) {
 	tt.Expect(t, "2", outputs.NumDocs)
 
 	engine1.Init(types.EngineOpts{
-		Using:         1,
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		IDOnly:  true,
+		GseDict: "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine1)
@@ -610,9 +612,9 @@ func TestDocOrderless(t *testing.T) {
 func TestDocOnlyID(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		IDOnly:        true,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		IDOnly:  true,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -662,8 +664,8 @@ func TestDocOnlyID(t *testing.T) {
 func TestSearchWithin(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -706,8 +708,8 @@ func TestSearchWithin(t *testing.T) {
 func TestSearchJp(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		SegmenterDict: "./testdata/test_dict_jp.txt",
+		Using:   1,
+		GseDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -756,7 +758,7 @@ func TestSearchGse(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		// Using:         1,
-		SegmenterDict: "./testdata/test_dict_jp.txt",
+		GseDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -855,10 +857,43 @@ func TestSearchNotUseGse(t *testing.T) {
 	engine.Close()
 }
 
+func TestSearchWithGse(t *testing.T) {
+	gseSegmenter := gse.Segmenter{}
+	gseSegmenter.LoadDict("zh") // ./data/dict/dictionary.txt
+
+	var engine1, engine2 Engine
+	engine1.WithGse(gseSegmenter).Init(types.EngineOpts{
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.LocsIndex,
+		},
+	})
+
+	engine2.WithGse(gseSegmenter).Init(types.EngineOpts{
+		// GseDict: "./data/dict/dictionary.txt",
+		IndexerOpts: &types.IndexerOpts{
+			IndexType: types.DocIdsIndex,
+		},
+	})
+
+	addDocsWithLabels(&engine1)
+	addDocsWithLabels(&engine2)
+
+	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
+	outputs2 := engine2.Search(types.SearchReq{Text: "百度"})
+	tt.Expect(t, "1", len(outputs1.Tokens))
+	tt.Expect(t, "1", len(outputs2.Tokens))
+	tt.Expect(t, "百度", outputs1.Tokens[0])
+	tt.Expect(t, "百度", outputs2.Tokens[0])
+
+	outDocs := outputs1.Docs.(types.ScoredDocs)
+	tt.Expect(t, "5", len(outDocs))
+	tt.Expect(t, "5", len(outputs2.Docs.(types.ScoredDocs)))
+}
+
 func TestSearchLogic(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		SegmenterDict: "./testdata/test_dict_jp.txt",
+		GseDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,

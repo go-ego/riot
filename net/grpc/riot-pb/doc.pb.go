@@ -856,7 +856,7 @@ func (m *SearchReq) MarshalTo(dAtA []byte) (int, error) {
 		i += copy(dAtA[i:], m.Time)
 	}
 	if len(m.DocIds) > 0 {
-		for k, _ := range m.DocIds {
+		for k := range m.DocIds {
 			dAtA[i] = 0x32
 			i++
 			v := m.DocIds[k]

@@ -16,8 +16,8 @@ func dictZh() {
 	// 初始化
 	searcher.Init(types.EngineOpts{
 		// Using:         3,
-		SegmenterDict: "zh",
-		// SegmenterDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/dictionary.txt",
+		GseDict: "zh",
+		// GseDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/dictionary.txt",
 	})
 	defer searcher.Close()
 
@@ -43,8 +43,8 @@ func dictJp() {
 	// 初始化
 	searcher2.Init(types.EngineOpts{
 		// Using:         3,
-		SegmenterDict: "jp",
-		// SegmenterDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/jp/dict.txt",
+		GseDict: "jp",
+		// GseDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/jp/dict.txt",
 	})
 	defer searcher2.Close()
 

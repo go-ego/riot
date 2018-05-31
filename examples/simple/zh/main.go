@@ -23,7 +23,7 @@ func main() {
 	searcher.Init(types.EngineOpts{
 		Using: 3,
 		// IDOnly:        true,
-		SegmenterDict: "../../../data/dict/dictionary.txt"})
+		GseDict: "../../../data/dict/dictionary.txt"})
 	defer searcher.Close()
 
 	text := "此次百度收购将成中国互联网最大并购"
