@@ -244,10 +244,12 @@ func (engine *Engine) Storage() {
 }
 
 // WithGse Using user defined segmenter
-// If using a not nil segmenter, the `opt.GseDict` will be ignore.
+// If using a not nil segmenter and the dictionary is loaded,
+// the `opt.GseDict` will be ignore.
 func (engine *Engine) WithGse(segmenter gse.Segmenter) *Engine {
 	if engine.initialized {
-		log.Fatal("WithGse should call before initialize the engine.")
+		log.Fatal(`Do not re-initialize the engine, 
+			WithGse should call before initialize the engine.`)
 	}
 
 	engine.segmenter = segmenter
