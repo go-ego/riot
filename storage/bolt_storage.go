@@ -17,8 +17,8 @@ package storage
 import (
 	"time"
 
-	"github.com/boltdb/bolt"
-	// "github.com/coreos/bbolt"
+	"github.com/coreos/bbolt"
+	// "github.com/boltdb/bolt"
 )
 
 var gdocs = []byte("gdocs")

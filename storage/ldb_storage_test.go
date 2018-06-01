@@ -21,7 +21,7 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-func TestOpenOrCreateLdb(t *testing.T) {
+func TestLdb(t *testing.T) {
 	db, err := OpenLeveldb("ldb_test")
 	tt.Expect(t, "<nil>", err)
 	db.Close()

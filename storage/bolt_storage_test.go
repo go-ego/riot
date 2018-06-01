@@ -21,7 +21,7 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-func TestOpenOrCreateBolt(t *testing.T) {
+func TestBolt(t *testing.T) {
 	db, err := OpenBolt("bolt_test")
 	tt.Expect(t, "<nil>", err)
 	db.Close()

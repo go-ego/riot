@@ -21,12 +21,12 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-func TestOpenOrCreateBad(t *testing.T) {
-	db, err := OpenBadger("bad_test")
+func TestBadger(t *testing.T) {
+	db, err := OpenBadger("bg_test")
 	tt.Expect(t, "<nil>", err)
 	db.Close()
 
-	db, err = OpenBadger("bad_test")
+	db, err = OpenBadger("bg_test")
 	tt.Expect(t, "<nil>", err)
 	err = db.Set([]byte("key1"), []byte("value1"))
 	tt.Expect(t, "<nil>", err)
@@ -46,5 +46,5 @@ func TestOpenOrCreateBad(t *testing.T) {
 	db.Close()
 	os.Remove(walFile)
 	// os.Remove("bad_test")
-	os.RemoveAll("bad_test")
+	os.RemoveAll("bg_test")
 }
