@@ -53,13 +53,17 @@ func TestRankDocument(t *testing.T) {
 	tt.Expect(t, "[3 [24000 ]] [4 [18000 ]] [1 [6000 ]] ",
 		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 
-	scoredDocs, _ = ranker.Rank([]types.IndexedDoc{
-		{DocId: 1, BM25: 6},
-		{DocId: 3, BM25: 24},
-		{DocId: 2, BM25: 0},
-		{DocId: 4, BM25: 18},
-	}, types.RankOpts{ScoringCriteria: types.RankByBM25{}, ReverseOrder: true}, false)
-	// doc0因为没有AddDoc所以没有添加进来
+	scoredDocs, _ = ranker.Rank(
+		[]types.IndexedDoc{
+			{DocId: 1, BM25: 6},
+			{DocId: 3, BM25: 24},
+			{DocId: 2, BM25: 0},
+			{DocId: 4, BM25: 18},
+		},
+		types.RankOpts{ScoringCriteria: types.RankByBM25{}, ReverseOrder: true},
+		false,
+	)
+	// doc0 因为没有 AddDoc 所以没有添加进来
 	tt.Expect(t, "[1 [6000 ]] [4 [18000 ]] [3 [24000 ]] ",
 		scoredDocsToString(scoredDocs.(types.ScoredDocs)))
 }
