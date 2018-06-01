@@ -22,9 +22,7 @@ import (
 const (
 	// DefaultStorage default storage engine
 	DefaultStorage = "ldb"
-
 	// DefaultStorage = "bad"
-
 	// DefaultStorage = "bolt"
 )
 
@@ -33,7 +31,7 @@ var supportedStorage = map[string]func(path string) (Storage, error){
 	"bg":   OpenBadger, // bad to bg
 	"bolt": OpenBolt,
 	// "kv":   OpenKV,
-	// "ledisdb"
+	// "ledisdb": Open,
 }
 
 // RegisterStorage register Storage engine
@@ -54,21 +52,20 @@ type Storage interface {
 
 // OpenStorage open Storage engine
 func OpenStorage(path string, args ...string) (Storage, error) {
-	wse := DefaultStorage
+	storeName := DefaultStorage
 
-	if len(args) > 0 {
-		if args[0] != "" {
-			wse = args[0]
-		}
+	if len(args) > 0 && args[0] != "" {
+		storeName = args[0]
 	} else {
-		wseEnv := os.Getenv("RIOT_STORAGE_ENGINE")
-		if wseEnv != "" {
-			wse = wseEnv
+		storeEnv := os.Getenv("RIOT_STORAGE_ENGINE")
+		if storeEnv != "" {
+			storeName = storeEnv
 		}
 	}
 
-	if fn, has := supportedStorage[wse]; has {
+	if fn, has := supportedStorage[storeName]; has {
 		return fn(path)
 	}
-	return nil, fmt.Errorf("unsupported storage engine %v", wse)
+
+	return nil, fmt.Errorf("unsupported storage engine: %v", storeName)
 }
