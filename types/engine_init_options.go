@@ -56,9 +56,9 @@ type EngineOpts struct {
 
 	// 半角逗号 "," 分隔的字典文件，具体用法见
 	// gse.Segmenter.LoadDict 函数的注释
-	GseDict       string
-	SegmenterDict string
+	GseDict string
 	// GseDict []string
+	SegmenterDict string
 
 	// 停用词文件
 	StopTokenFile string

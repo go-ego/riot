@@ -54,12 +54,10 @@ type Content struct {
 type ScoredDoc struct {
 	DocId uint64
 
-	// new Content
+	// new 返回文档 Content
 	Content string
-
-	// new 属性 Attri
+	// new 返回文档属性 Attri
 	Attri interface{}
-
 	// new 返回评分字段
 	Fields interface{}
 
@@ -111,7 +109,7 @@ func (docs ScoredDocs) Less(i, j int) bool {
 
 */
 
-// ScoredID scored doc onlyid
+// ScoredID scored doc only id
 type ScoredID struct {
 	DocId uint64
 
