@@ -50,7 +50,7 @@ type Content struct {
 	Fields interface{}
 }
 
-// ScoredDoc scored document
+// ScoredDoc scored the document
 type ScoredDoc struct {
 	DocId uint64
 
@@ -100,6 +100,16 @@ func (docs ScoredDocs) Less(i, j int) bool {
 	}
 	return len(docs[i].Scores) > len(docs[j].Scores)
 }
+
+/*
+  ______   .__   __.  __      ____    ____  __   _______
+ /  __  \  |  \ |  | |  |     \   \  /   / |  | |       \
+|  |  |  | |   \|  | |  |      \   \/   /  |  | |  .--.  |
+|  |  |  | |  . `  | |  |       \_    _/   |  | |  |  |  |
+|  `--'  | |  |\   | |  `----.    |  |     |  | |  '--'  |
+ \______/  |__| \__| |_______|    |__|     |__| |_______/
+
+*/
 
 // ScoredID scored doc onlyid
 type ScoredID struct {

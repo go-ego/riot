@@ -99,7 +99,6 @@ func (indexer *Indexer) getDocId(ti *KeywordIndices, i int) uint64 {
 // HasDoc doc is exist return true
 func (indexer *Indexer) HasDoc(docId uint64) bool {
 	docState, ok := indexer.tableLock.docsState[docId]
-
 	if ok && docState == 0 {
 		return true
 	}
