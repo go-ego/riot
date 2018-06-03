@@ -357,6 +357,12 @@ func (engine *Engine) Init(options types.EngineOpts) {
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
 func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
 	forceUpdate ...bool) {
+	engine.Index(docId, data, forceUpdate...)
+}
+
+// Index add the document to the index
+func (engine *Engine) Index(docId uint64, data types.DocIndexData,
+	forceUpdate ...bool) {
 
 	var force bool
 	if len(forceUpdate) > 0 {
