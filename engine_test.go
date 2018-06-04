@@ -27,12 +27,12 @@ func TestGetVer(t *testing.T) {
 
 func AddDocs(engine *Engine) {
 	docId := uint64(1)
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "中国有十三亿人口人口",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "中国人口",
 		Fields:  nil,
 	})

@@ -15,14 +15,17 @@
 
 package types
 
-// DocIndexData type DocumentIndexData struct {
-type DocIndexData struct {
+// DocIndexData type document Index Data struct
+// type DocIndexData DocData
+type DocIndexData = DocData
+
+// DocData type document Index Data struct
+type DocData struct {
 	// 文档全文（必须是 UTF-8 格式），用于生成待索引的关键词
 	Content string
 
 	// new 类别
 	// Class string
-
 	// new 属性
 	Attri interface{}
 
