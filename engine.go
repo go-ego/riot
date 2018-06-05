@@ -299,7 +299,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 
 	// 初始化分词器通道
 	engine.segmenterChan = make(
-		chan segmenterReq, options.NumSegmenterThreads)
+		chan segmenterReq, options.NumGseThreads)
 
 	// 初始化索引器通道
 	engine.Indexer(options)
@@ -316,7 +316,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	}
 
 	// 启动分词器
-	for iThread := 0; iThread < options.NumSegmenterThreads; iThread++ {
+	for iThread := 0; iThread < options.NumGseThreads; iThread++ {
 		go engine.segmenterWorker()
 	}
 
