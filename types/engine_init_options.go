@@ -21,7 +21,8 @@ import (
 
 var (
 	// EngineOpts 的默认值
-	defaultNumSegmenterThreads = runtime.NumCPU()
+	// defaultNumGseThreads default Segmenter threads num
+	defaultNumGseThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
 	defaultNumShards                 = 8
 	defaultIndexerBufLen             = runtime.NumCPU()
@@ -66,7 +67,8 @@ type EngineOpts struct {
 	GseMode bool
 
 	// 分词器线程数
-	NumSegmenterThreads int
+	// NumSegmenterThreads int
+	NumGseThreads int
 
 	// 索引器和排序器的 shard 数目
 	// 被检索/排序的文档会被均匀分配到各个 shard 中
@@ -108,8 +110,8 @@ func (options *EngineOpts) Init() {
 	// 	log.Fatal("字典文件不能为空")
 	// }
 
-	if options.NumSegmenterThreads == 0 {
-		options.NumSegmenterThreads = defaultNumSegmenterThreads
+	if options.NumGseThreads == 0 {
+		options.NumGseThreads = defaultNumGseThreads
 	}
 
 	if options.NumShards == 0 {
