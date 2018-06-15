@@ -73,19 +73,19 @@
   branch = "master"
   name = "github.com/go-ego/cedar"
   packages = ["."]
-  revision = "a5dec5bcdedc33b64df5370caa662d4a318f882a"
+  revision = "5c9b4f52f68433d3ff66bfbed192e20fdc6d315c"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/gpy"
   packages = ["."]
-  revision = "51b4664b7e23ab7f2e3f715886746003b3d4258e"
+  revision = "5e7198f4b498342cd0e29af3b199470cbbcb7c08"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "b2ce283fa57c4fcd676dd6d9493b270cae59ddf3"
+  revision = "6a212da1895109d81fbf74529a0f230d30a533c2"
 
 [[projects]]
   branch = "master"
@@ -116,7 +116,7 @@
     "info",
     "zlog"
   ]
-  revision = "5030468db65a3d8c053865764a5daa337ec31d54"
+  revision = "ea0bfdfed5361e59c76efa6680ceb4f5dc42eea0"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -189,13 +189,13 @@
     "leveldb/table",
     "leveldb/util"
   ]
-  revision = "db3ee9ee8931e51af7158114b9d02bf93d1a7811"
+  revision = "e2150783cd35f5b607daca48afd8c57ec54cc995"
 
 [[projects]]
   branch = "master"
   name = "github.com/vcaesar/tt"
   packages = ["."]
-  revision = "c51cbddb0d963279f87ae81c8f1f16e1cff2ec5d"
+  revision = "81d0e77da4930b75efc7012a81f4fd85528f6e45"
 
 [[projects]]
   name = "go.uber.org/atomic"
@@ -234,7 +234,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "1e491301e022f8f977054da4c2d852decd59571f"
+  revision = "db08ff08e8622530d9ed3a0e8ac279f6d4c02196"
 
 [[projects]]
   branch = "master"
@@ -243,7 +243,7 @@
     "unix",
     "windows"
   ]
-  revision = "9527bec2660bd847c050fda93a0f0c6dee0800bb"
+  revision = "56ede360ec1c541828fb88741b3f1049406d28f5"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -270,7 +270,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "81158efcc9f219c511e4d3c0d61a0e6e49c01a24"
+  revision = "32ee49c4dd805befd833990acba36cb75042378c"
 
 [[projects]]
   name = "google.golang.org/grpc"
