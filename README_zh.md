@@ -12,10 +12,10 @@
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
-* [高效索引和搜索](/docs/zh/benchmarking.md)（1M条微博500M数据28秒索引完，1.65毫秒搜索响应时间，19K搜索QPS）
-* 支持中文分词（使用[gse 分词包](https://github.com/go-ego/gse)并发分词，速度27MB/秒）
+* [高效索引和搜索](/docs/zh/benchmarking.md)（1M 条微博 500M 数据28秒索引完，1.65毫秒搜索响应时间，19K 搜索 QPS）
+* 支持中文分词（使用 [gse 分词包](https://github.com/go-ego/gse)并发分词，速度 27MB/秒）
 * 支持[逻辑搜索](https://github.com/go-ego/riot/blob/master/docs/zh/logic.md)
-* 支持中文转拼音搜索
+* 支持中文转拼音搜索(使用 [gpy](https://github.com/go-ego/gpy) 中文转拼音)
 * 支持计算关键词在文本中的[紧邻距离](/docs/zh/token_proximity.md)（token proximity）
 * 支持计算[BM25相关度](/docs/zh/bm25.md)
 * 支持[自定义评分字段和评分规则](/docs/zh/custom_scoring_criteria.md)
@@ -24,7 +24,7 @@
 * 支持 heartbeat
 * 支持[分布式索引和搜索](https://github.com/go-ego/riot/tree/master/data)
 * 可实现[分布式索引和搜索](/docs/zh/distributed_indexing_and_search.md)
-* 采用对商业应用友好的[Apache License v2](/license.txt)发布
+* 采用对商业应用友好的[Apache License v2](/LICENSE)发布
 
 * [查看分词规则](https://github.com/go-ego/riot/blob/master/docs/zh/segmenter.md)
 
