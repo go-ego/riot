@@ -44,7 +44,7 @@ import (
 )
 
 const (
-	version string = "v0.10.0.359, Danube River!"
+	version string = "v0.10.0.378, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
