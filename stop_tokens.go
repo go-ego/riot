@@ -36,7 +36,7 @@ func (st *StopTokens) Init(stopTokenFile string) {
 
 	file, err := os.Open(stopTokenFile)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Open stop token file error: ", err)
 	}
 	defer file.Close()
 
