@@ -110,7 +110,7 @@
     "info",
     "zlog"
   ]
-  revision = "ea0bfdfed5361e59c76efa6680ceb4f5dc42eea0"
+  revision = "b6eb99996c7112521faa1dbdc7dc74a056f5a6df"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -163,8 +163,8 @@
     "mem",
     "process"
   ]
-  revision = "eeb1d38d69593f121e060d24d17f7b1f0936b203"
-  version = "v2.18.05"
+  revision = "4a180b209f5f494e5923cfce81ea30ba23915877"
+  version = "v2.18.06"
 
 [[projects]]
   branch = "master"
@@ -228,7 +228,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "e514e69ffb8bc3c76a71ae40de0118d794855992"
+  revision = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9"
 
 [[projects]]
   branch = "master"

@@ -116,6 +116,7 @@ func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 		opts := badger.DefaultIteratorOptions
 		opts.PrefetchSize = 1000
 		it := txn.NewIterator(opts)
+		defer it.Close()
 		for it.Rewind(); it.Valid(); it.Next() {
 			item := it.Item()
 			key := item.Key()
