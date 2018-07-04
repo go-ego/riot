@@ -153,7 +153,7 @@ func AddIndex(w http.ResponseWriter, req *http.Request) {
 	}
 
 	inxid, _ := strconv.ParseUint(docid, 10, 64)
-	com.AddDocInx(inxid, types.DocIndexData{Content: query, Attri: attri}, false)
+	com.AddDocInx(inxid, types.DocData{Content: query, Attri: attri}, false)
 
 	timestamp := time.Now().Unix()
 	response, _ := json.Marshal(&JsonResponse{

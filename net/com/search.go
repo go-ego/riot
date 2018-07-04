@@ -91,8 +91,8 @@ func InitEngine(conf Config) {
 }
 
 // AddDocInx add index document
-func AddDocInx(docId uint64, data types.DocIndexData, forceUpdate bool) {
-	Searcher.IndexDoc(docId, data, forceUpdate)
+func AddDocInx(docId uint64, data types.DocData, forceUpdate bool) {
+	Searcher.Index(docId, data, forceUpdate)
 
 	Searcher.Flush()
 }

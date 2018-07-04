@@ -60,7 +60,7 @@ func addDoc(in *pb.DocReq) {
 		Ts:   req.Ts,
 	}
 
-	data := types.DocIndexData{
+	data := types.DocData{
 		Content: in.Content,
 		Attri:   attri,
 		Tokens:  tokens,
