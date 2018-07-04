@@ -85,7 +85,7 @@ searcher.Init(types.EngineOpts{
 初始化好了以后就可以添加索引了，下面的例子将一条微博加入引擎
 
 ```go
-searcher.IndexDoc(docId, types.DocIndexData{
+searcher.Index(docId, types.DocData{
 	Content: weibo.Text, // Weibo结构体见上文的定义。必须是UTF-8格式。
 	Fields: WeiboScoringFields{
 		Timestamp:    weibo.Timestamp,
@@ -103,7 +103,7 @@ searcher.IndexDoc(docId, types.DocIndexData{
 
 **特别注意的是** ，关键词（tokens）和标签（labels）组成了索引器中的搜索键（keywords），文档和代码中会反复出现这三个概念，请不要混淆。对正文的搜索就是在搜索键上的逻辑查询，比如一个文档正文中出现了“自行车”这个关键词，也有“健身”这样的分类标签，但“健身”这个词并不直接出现在正文中，当查询“自行车”+“健身”这样的搜索键组合时，这篇文章就会被查询到。设计标签的目的是为了方便从非字面意义的维度快速缩小查询范围。
 
-引擎采用了非同步的索引方式，也就是说当 IndexDoc 返回时索引可能还没有加入索引表中，这方便你循环并发地加入索引。如果你需要等待索引添加完毕后再进行后续操作，请调用下面的函数
+引擎采用了非同步的索引方式，也就是说当 Index 返回时索引可能还没有加入索引表中，这方便你循环并发地加入索引。如果你需要等待索引添加完毕后再进行后续操作，请调用下面的函数
 
 ```go
 searcher.Flush()
@@ -126,7 +126,7 @@ type WeiboScoringFields struct {
         RepostsCount uint64
 }
 ```
-你可能已经注意到了，这就是在上一节将文档加入索引时调用的 IndexDoc 函数传入的参数类型（实际上那个参数是 interface{} 类型的，因此可以传入任意类型的结构体）。这些数据保存在排序器的内存中等待调用。
+你可能已经注意到了，这就是在上一节将文档加入索引时调用的 Index 函数传入的参数类型（实际上那个参数是 interface{} 类型的，因此可以传入任意类型的结构体）。这些数据保存在排序器的内存中等待调用。
 
 有了这些数据，我们就可以评分了，代码如下：
 ```go

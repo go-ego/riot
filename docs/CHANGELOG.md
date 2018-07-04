@@ -3,7 +3,7 @@
 ## riot v0.20.0
 
 ### API
-- IndexDocument   	    ->	IndexDoc
+- IndexDocument   	    ->	IndexDoc -> Index
 - RemoveDocument  	    ->	RemoveDoc
 - AddDocument		    ->	AddDoc
 - EngineInitOptions     ->	EngineOpts

@@ -20,7 +20,7 @@ type EngineOpts struct {
 1. 在引擎启动时（engine.Init 函数），引擎从 StorageFolder 指定的目录中读取
 文档索引数据，重新计算索引表并给排序器注入排序数据。如果分词器的代码
 或者词典有变化，这些变化会体现在启动后的引擎索引表中。
-2. 在调用 engine.IndexDoc 时，引擎将索引数据写入到 StorageFolder 指定
+2. 在调用 engine.Index 时，引擎将索引数据写入到 StorageFolder 指定
 的目录中。
 3. StorageShards 定义了数据库裂分数目，默认为 8。为了得到最好的性能，请调整这个参数使得每个裂分文件小于 100M。
 4. 在调用 engine.RemoveDoc 删除一个文档后，该文档会从持久存储中剔除，下次启动
@@ -71,5 +71,5 @@ go run benchmark.go --num_repeat_text 1 --use_persistent
 可以看出，和不使用持久存储相比：
 
 - [持久存储](#%E6%8C%81%E4%B9%85%E5%AD%98%E5%82%A8)
-        - [必须注意事项](#%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9)
-        - [性能测试](#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95)
+    - [必须注意事项](#%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9)
+    - [性能测试](#%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95)

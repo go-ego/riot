@@ -18,7 +18,7 @@ type EngineOpts struct {
 Use persistent storage when UseStorage is true:
 
 1. At engine startup (engine.Init function), the engine reads the document index data from the directory specified by StorageFolder, recalculates the index table, and injects the sort data into the sequencer. If the tokenizer code or dictionary changes, these changes will be reflected in the engine index table after the start.
-2. When the engine.IndexDoc is called, the engine writes the index data to the directory specified by StorageFolder.
+2. When the engine.Index is called, the engine writes the index data to the directory specified by StorageFolder.
 3. StorageShards defines the number of database splits, the default is 8. For best performance, adjust this parameter so that each split file is less than 100M.
 4. After calling engine.RemoveDoc to delete a document, the document is removed from persistent storage and will not be loaded the next time the engine is started.
 

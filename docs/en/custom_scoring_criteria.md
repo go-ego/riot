@@ -29,7 +29,7 @@ func (criteria MyScoringCriteria) Score(
 }
 ```
 
-Document MyScoringFields data through riot.Engine IndexDoc function passed to the sequencer stored in memory. Then through the Search function parameters call MyScoringCriteria query.
+Document MyScoringFields data through riot.Engine Index function passed to the sequencer stored in memory. Then through the Search function parameters call MyScoringCriteria query.
 
 Of course, the Score function of MyScoringCriteria can also read more document data from the hard disk or database through docId for scoring, but the speed is much slower than directly reading from memory. Please choose between memory and speed.
 
