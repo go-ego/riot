@@ -32,22 +32,22 @@ func AddDocs(engine *Engine) {
 		Fields:  ScoringFields{1, 2, 3},
 	})
 	docId++
-	engine.Index(docId, types.DocData{
+	engine.IndexDoc(docId, types.DocIndexData{
 		Content: "中国人口",
 		Fields:  nil,
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "有人口",
 		Fields:  ScoringFields{2, 3, 1},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "有十三亿人口",
 		Fields:  ScoringFields{2, 3, 3},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
 	})
@@ -57,27 +57,27 @@ func AddDocs(engine *Engine) {
 
 func addDocsWithLabels(engine *Engine) {
 	docId := uint64(1)
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "此次百度收购将成中国互联网最大并购",
 		Labels:  []string{"百度", "中国"},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "百度宣布拟全资收购91无线业务",
 		Labels:  []string{"百度"},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "百度是中国最大的搜索引擎",
 		Labels:  []string{"百度"},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "百度在研制无人汽车",
 		Labels:  []string{"百度"},
 	})
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "BAT是中国互联网三巨头",
 		Labels:  []string{"百度"},
 	})
@@ -330,7 +330,7 @@ func TestRemoveDoc(t *testing.T) {
 	engine.RemoveDoc(6)
 	engine.Flush()
 
-	engine.IndexDoc(6, types.DocIndexData{
+	engine.Index(6, types.DocData{
 		Content: "中国人口有十三亿",
 		Fields:  ScoringFields{0, 9, 1},
 	})
@@ -349,7 +349,7 @@ func TestRemoveDoc(t *testing.T) {
 	engine.Close()
 }
 
-func TestEngineIndexDocWithTokens(t *testing.T) {
+func TestEngineIndexWithTokens(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		Using:   1,
@@ -365,7 +365,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	})
 
 	docId := uint64(1)
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "",
 		Tokens: []types.TokenData{
 			{"中国", []int{0}},
@@ -375,7 +375,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	})
 
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "",
 		Tokens: []types.TokenData{
 			{"中国", []int{0}},
@@ -385,14 +385,14 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	})
 
 	docId++
-	engine.IndexDoc(docId, types.DocIndexData{
+	engine.Index(docId, types.DocData{
 		Content: "中国十三亿人口",
 		Fields:  ScoringFields{0, 9, 1},
 	})
 	engine.FlushIndex()
 
 	outputs := engine.Search(types.SearchReq{Text: "中国人口"})
-	log.Println("TestEngineIndexDocWithTokens", outputs)
+	log.Println("TestEngineIndexWithTokens: ", outputs)
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "中国", outputs.Tokens[0])
 	tt.Expect(t, "人口", outputs.Tokens[1])
@@ -415,7 +415,7 @@ func TestEngineIndexDocWithTokens(t *testing.T) {
 	engine.Close()
 }
 
-func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
+func TestEngineIndexWithContentAndLabels(t *testing.T) {
 	var engine1, engine2 Engine
 	engine1.Init(types.EngineOpts{
 		GseDict: "./data/dict/dictionary.txt",
@@ -449,7 +449,7 @@ func TestEngineIndexDocWithContentAndLabels(t *testing.T) {
 	engine2.Close()
 }
 
-func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
+func TestIndexWithLabelsStopTokenFile(t *testing.T) {
 	var engine1 Engine
 
 	engine1.Init(types.EngineOpts{
@@ -470,7 +470,7 @@ func TestIndexDocWithLabelsStopTokenFile(t *testing.T) {
 	tt.Expect(t, "0", len(outDocs))
 }
 
-func TestEngineIndexDocWithPersistentStorage(t *testing.T) {
+func TestEngineIndexWithPersistentStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 
 	var engine Engine
@@ -726,7 +726,7 @@ func TestSearchJp(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.IndexDoc(6, types.DocIndexData{
+	engine.Index(6, types.DocData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
@@ -775,14 +775,14 @@ func TestSearchGse(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.IndexDoc(6, types.DocIndexData{
+	engine.Index(6, types.DocData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
 	tokenData := types.TokenData{Text: "こんにちは"}
 	tokenDatas := []types.TokenData{tokenData}
-	engine.IndexDoc(7, types.DocIndexData{
+	engine.Index(7, types.DocData{
 		Content: "你好世界, hello world!",
 		Tokens:  tokenDatas,
 		Fields:  ScoringFields{1, 2, 3},
@@ -828,7 +828,7 @@ func TestSearchNotUseGse(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.IndexDoc(6, types.DocIndexData{
+	engine.Index(6, types.DocData{
 		Content: "Google Is Experimenting With Virtual Reality Advertising",
 		Fields:  ScoringFields{1, 2, 3},
 	})
@@ -918,25 +918,25 @@ func TestSearchLogic(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.IndexDoc(6, types.DocIndexData{
+	engine.Index(6, types.DocData{
 		Content: "こんにちは世界, こんにちは",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
 	tokenData := types.TokenData{Text: "こんにちは"}
 	tokenDatas := []types.TokenData{tokenData}
-	engine.IndexDoc(7, types.DocIndexData{
+	engine.Index(7, types.DocData{
 		Content: "你好世界, hello world!",
 		Tokens:  tokenDatas,
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
-	engine.IndexDoc(8, types.DocIndexData{
+	engine.Index(8, types.DocData{
 		Content: "你好世界, hello world!",
 		Fields:  ScoringFields{1, 2, 3},
 	})
 
-	engine.IndexDoc(9, types.DocIndexData{
+	engine.Index(9, types.DocData{
 		Content: "你好世界, hello!",
 		Fields:  ScoringFields{1, 2, 3},
 	})

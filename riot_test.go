@@ -11,7 +11,7 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-func TestEngineIndexDocWithNewStorage(t *testing.T) {
+func TestEngineIndexWithNewStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine = New("./testdata/test_dict.txt", 8)
 	log.Println("engine start...")
@@ -303,12 +303,12 @@ func TestDocPinYin(t *testing.T) {
 		tokenDatas = append(tokenDatas, tokenData)
 	}
 
-	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocIndexData{Content: "在路上, in the way",
+	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
+	index2 := types.DocData{Content: "在路上, in the way",
 		Tokens: tokenDatas}
 
-	engine.IndexDoc(10, index1)
-	engine.IndexDoc(11, index2)
+	engine.Index(10, index1)
+	engine.Index(11, index2)
 
 	engine.Flush()
 
@@ -356,8 +356,8 @@ func TestForSplitData(t *testing.T) {
 	tt.Expect(t, "93", len(tokens))
 	tt.Expect(t, "104", num)
 
-	index1 := types.DocIndexData{Content: "在路上"}
-	engine.IndexDoc(10, index1, true)
+	index1 := types.DocData{Content: "在路上"}
+	engine.Index(10, index1, true)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
