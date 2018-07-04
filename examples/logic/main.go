@@ -42,10 +42,10 @@ func logic1() {
 	text3 := "Google testing text search"
 
 	// Add the document to the index, docId starts at 1
-	searcher.IndexDoc(1, types.DocIndexData{Content: text})
-	searcher.IndexDoc(2, types.DocIndexData{Content: text1})
-	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
-	searcher.IndexDoc(4, types.DocIndexData{Content: text3})
+	searcher.Index(1, types.DocData{Content: text})
+	searcher.Index(2, types.DocData{Content: text1})
+	searcher.Index(3, types.DocData{Content: text2})
+	searcher.Index(4, types.DocData{Content: text3})
 
 	// Wait for the index to refresh
 	searcher.Flush()
@@ -87,11 +87,11 @@ func logic2() {
 	text4 := "Google testing search"
 
 	// Add the document to the index, docId starts at 1
-	searcher1.IndexDoc(1, types.DocIndexData{Content: text})
-	searcher1.IndexDoc(2, types.DocIndexData{Content: text1})
-	searcher1.IndexDoc(3, types.DocIndexData{Content: text2})
-	searcher1.IndexDoc(4, types.DocIndexData{Content: text3})
-	searcher1.IndexDoc(5, types.DocIndexData{Content: text4})
+	searcher1.Index(1, types.DocData{Content: text})
+	searcher1.Index(2, types.DocData{Content: text1})
+	searcher1.Index(3, types.DocData{Content: text2})
+	searcher1.Index(4, types.DocData{Content: text3})
+	searcher1.Index(5, types.DocData{Content: text4})
 
 	// Wait for the index to refresh
 	searcher1.Flush()

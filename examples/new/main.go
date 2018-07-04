@@ -12,13 +12,13 @@ var (
 )
 
 func main() {
-	data := types.DocIndexData{Content: `I wonder how, I wonder why
+	data := types.DocData{Content: `I wonder how, I wonder why
 		, I wonder where they are`}
-	data1 := types.DocIndexData{Content: "所以, 你好, 再见"}
-	data2 := types.DocIndexData{Content: "没有理由"}
-	searcher.IndexDoc(1, data)
-	searcher.IndexDoc(2, data1)
-	searcher.IndexDoc(3, data2)
+	data1 := types.DocData{Content: "所以, 你好, 再见"}
+	data2 := types.DocData{Content: "没有理由"}
+	searcher.Index(1, data)
+	searcher.Index(2, data1)
+	searcher.Index(3, data2)
 	searcher.Flush()
 
 	req := types.SearchReq{Text: "你好"}

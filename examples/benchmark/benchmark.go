@@ -125,8 +125,8 @@ func openFile() {
 	docIdx := 0
 	for i := 0; i < *numRepeatText; i++ {
 		for _, line := range lines {
-			searcher.IndexDoc(
-				uint64(docIds[docIdx]+1), types.DocIndexData{
+			searcher.Index(
+				uint64(docIds[docIdx]+1), types.DocData{
 					Content: line})
 			docIdx++
 			if docIdx-docIdx/1000000*1000000 == 0 {

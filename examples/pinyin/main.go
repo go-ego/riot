@@ -53,11 +53,11 @@ func initEngine() {
 		tokenDatas = append(tokenDatas, tokenData)
 	}
 
-	index1 := types.DocIndexData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocIndexData{Content: "在路上, in the way", Tokens: tokenDatas}
+	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
+	index2 := types.DocData{Content: "在路上, in the way", Tokens: tokenDatas}
 
-	searcher.IndexDoc(10, index1)
-	searcher.IndexDoc(11, index2)
+	searcher.Index(10, index1)
+	searcher.Index(11, index2)
 
 	// 等待索引刷新完毕
 	searcher.Flush()

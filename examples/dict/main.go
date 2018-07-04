@@ -26,9 +26,9 @@ func dictZh() {
 	text2 := "百度是中国最大的搜索引擎"
 
 	// 将文档加入索引，docId 从1开始
-	searcher.IndexDoc(1, types.DocIndexData{Content: text})
-	searcher.IndexDoc(2, types.DocIndexData{Content: text1})
-	searcher.IndexDoc(3, types.DocIndexData{Content: text2})
+	searcher.Index(1, types.DocData{Content: text})
+	searcher.Index(2, types.DocData{Content: text1})
+	searcher.Index(3, types.DocData{Content: text2})
 
 	// 等待索引刷新完毕
 	searcher.Flush()
@@ -53,9 +53,9 @@ func dictJp() {
 	text2 := "こんにちは世界"
 
 	// 将文档加入索引，docId 从1开始
-	searcher2.IndexDoc(1, types.DocIndexData{Content: text})
-	searcher2.IndexDoc(2, types.DocIndexData{Content: text1})
-	searcher2.IndexDoc(3, types.DocIndexData{Content: text2})
+	searcher2.Index(1, types.DocData{Content: text})
+	searcher2.Index(2, types.DocData{Content: text1})
+	searcher2.Index(3, types.DocData{Content: text2})
 
 	// 等待索引刷新完毕
 	searcher2.Flush()
