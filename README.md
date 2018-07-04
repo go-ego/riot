@@ -1,3 +1,7 @@
+<h1 align=center>
+<img src="logo/256px.svg" width=15%>
+</h1>
+
 # riot full text search engine
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
