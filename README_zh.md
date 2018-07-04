@@ -98,9 +98,9 @@ func main() {
 	text2 := "百度是中国最大的搜索引擎"
 	
 	// 将文档加入索引，docId 从1开始
-	searcher.IndexDoc(1, types.DocIndexData{Content: text})
-	searcher.IndexDoc(2, types.DocIndexData{Content: text1}, false)
-	searcher.IndexDoc(3, types.DocIndexData{Content: text2}, true)
+	searcher.Index(1, types.DocData{Content: text})
+	searcher.Index(2, types.DocData{Content: text1}, false)
+	searcher.Index(3, types.DocData{Content: text2}, true)
 
 	// 等待索引刷新完毕
 	searcher.Flush()
@@ -132,12 +132,12 @@ var (
 )
 
 func main() {
-	data := types.DocIndexData{Content: `I wonder how, I wonder why
+	data := types.DocData{Content: `I wonder how, I wonder why
 		, I wonder where they are`}
-	data1 := types.DocIndexData{Content: "所以, 你好, 再见"}
-	data2 := types.DocIndexData{Content: "没有理由"}
-	searcher.IndexDoc(1, data)
-	searcher.IndexDoc(2, data1)
+	data1 := types.DocData{Content: "所以, 你好, 再见"}
+	data2 := types.DocData{Content: "没有理由"}
+	searcher.Index(1, data)
+	searcher.Index(2, data1)
 	searcher.IndexDoc(3, data2)
 	searcher.Flush()
 
