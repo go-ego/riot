@@ -1,4 +1,4 @@
-# [riot 全文搜索引擎](https://github.com/go-ego/riot)
+# [Riot 全文搜索引擎](https://github.com/go-ego/riot)
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->

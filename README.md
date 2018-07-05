@@ -1,8 +1,6 @@
-<h1 align=center>
-<img src="logo/256px.svg" width=15%>
-</h1>
+# Riot full text search engine  
 
-# riot full text search engine
+<img align="right" src="logo/512px.svg" width="15%"/>
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
@@ -18,6 +16,7 @@
 
 [简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
 
+<!-- ![ego Logo](logo/512px.svg) -->
 
 * [Efficient indexing and search](/docs/en/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for [logical search](https://github.com/go-ego/riot/blob/master/docs/en/logic.md)
