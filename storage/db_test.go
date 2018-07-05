@@ -30,7 +30,7 @@ func TestBadger(t *testing.T) {
 	DBTest(t, db)
 
 	tt.Expect(t, "<nil>", err)
-	db.Close()
+	defer db.Close()
 }
 
 func TestLdb(t *testing.T) {
@@ -39,7 +39,7 @@ func TestLdb(t *testing.T) {
 	DBTest(t, db)
 
 	tt.Expect(t, "<nil>", err)
-	db.Close()
+	defer db.Close()
 }
 
 func TestBolt(t *testing.T) {
@@ -48,7 +48,7 @@ func TestBolt(t *testing.T) {
 	DBTest(t, db)
 
 	tt.Expect(t, "<nil>", err)
-	db.Close()
+	defer db.Close()
 }
 
 func DBTest(t *testing.T, db Storage) {
