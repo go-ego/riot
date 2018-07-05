@@ -1,4 +1,4 @@
-# Riot search 
+# Riot search
 
 <img align="right" src="logo/512px.svg" width="15%"/>
 
@@ -14,10 +14,10 @@
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
 
-[简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
-
 <!-- ![ego Logo](logo/512px.svg) -->
 Go Open Source, Distributed, Simple and efficient full text search engine.
+
+[简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
 
 # Features
 

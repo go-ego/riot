@@ -11,7 +11,7 @@ mode = "dev"
 using = 3
 storage_shards = 10
 num_shards = 10
-# segmenter_dict = "./data/dict/dictionary.txt"
+# gse_dict = "./data/dict/dictionary.txt"
 # stop_token_file = "./data/dict/stop_tokens.txt"
 
 # [search]
