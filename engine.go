@@ -175,7 +175,7 @@ func (engine *Engine) CheckMem() {
 		if useMem == "99.99" {
 			engine.initOptions.UseStorage = true
 			engine.initOptions.StorageFolder = DefaultPath
-			os.MkdirAll(DefaultPath, 0777)
+			// os.MkdirAll(DefaultPath, 0777)
 		}
 	}
 }
@@ -185,7 +185,8 @@ func (engine *Engine) Storage() {
 	// if engine.initOptions.UseStorage {
 	err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
 	if err != nil {
-		log.Fatal("Can not create directory ", engine.initOptions.StorageFolder)
+		log.Fatalf("Can not create directory: %s ; %v",
+			engine.initOptions.StorageFolder, err)
 	}
 
 	// 打开或者创建数据库
@@ -269,8 +270,14 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	}
 
 	if options.GseDict == "" && !options.NotUsingGse && !engine.loaded {
-		log.Printf("Dictionary file is empty, load the default empty dictionary.")
+		log.Printf("Dictionary file path is empty, load the default dictionary file.")
 		options.GseDict = "zh"
+	}
+
+	if options.UseStorage == true && options.StorageFolder == "" {
+		log.Printf("Store file path is empty, use default folder path.")
+		options.StorageFolder = DefaultPath
+		// os.MkdirAll(DefaultPath, 0777)
 	}
 
 	options.Init()

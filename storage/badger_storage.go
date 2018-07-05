@@ -16,7 +16,6 @@ package storage
 
 import (
 	"log"
-	"os"
 
 	"github.com/dgraph-io/badger"
 )
@@ -28,12 +27,11 @@ type Badger struct {
 
 // OpenBadger open Badger storage
 func OpenBadger(dbPath string) (Storage, error) {
-
-	err := os.MkdirAll(dbPath, 0777)
-	if err != nil {
-		log.Fatal("os.MkdirAll: ", err)
-		os.Exit(1)
-	}
+	// err := os.MkdirAll(dbPath, 0777)
+	// if err != nil {
+	// 	log.Fatal("os.MkdirAll: ", err)
+	// 	os.Exit(1)
+	// }
 	// os.MkdirAll(path.Dir(dbPath), os.ModePerm)
 
 	opt := badger.DefaultOptions
