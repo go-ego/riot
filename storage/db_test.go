@@ -22,36 +22,48 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-var TestDBName = "db_test"
+var TestDBName = "./db_test"
 
 func TestBadger(t *testing.T) {
 	db, err := OpenBadger(TestDBName)
+	tt.Expect(t, "<nil>", err)
+	if err != nil {
+		log.Panic(err)
+	}
+
 	log.Println("TestBadger...")
 	DBTest(t, db)
-
-	tt.Expect(t, "<nil>", err)
-	defer db.Close()
+	// defer db.Close()
 }
 
 func TestLdb(t *testing.T) {
 	db, err := OpenLeveldb(TestDBName)
+	tt.Expect(t, "<nil>", err)
+	if err != nil {
+		log.Panic(err)
+	}
+
 	log.Println("TestLdb...")
 	DBTest(t, db)
-
-	tt.Expect(t, "<nil>", err)
-	defer db.Close()
+	// defer db.Close()
 }
 
 func TestBolt(t *testing.T) {
-	db, err := OpenBolt("db_test")
+	db, err := OpenBolt(TestDBName)
+	tt.Expect(t, "<nil>", err)
+	if err != nil {
+		log.Panic(err)
+	}
+
 	log.Println("TestBolt...")
 	DBTest(t, db)
-
-	tt.Expect(t, "<nil>", err)
-	defer db.Close()
+	// defer db.Close()
 }
 
 func DBTest(t *testing.T, db Storage) {
+	log.Println("db test...")
+	os.MkdirAll(TestDBName, 0777)
+
 	err := db.Set([]byte("key1"), []byte("value1"))
 	tt.Expect(t, "<nil>", err)
 
@@ -67,7 +79,7 @@ func DBTest(t *testing.T, db Storage) {
 	tt.Expect(t, "value1", string(buf))
 
 	walFile := db.WALName()
-	// db.Close()
+	db.Close()
 	os.Remove(walFile)
 	os.RemoveAll(TestDBName)
 }
