@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
@@ -29,22 +28,21 @@ var (
 )
 
 func initEngine() {
-	var path = "./riot-index"
-
+	// var path = "./riot-index"
 	searcher.Init(types.EngineOpts{
 		Using: 1,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: path,
+		UseStorage: true,
+		// StorageFolder: path,
 		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		// GseDict: "../../data/dict/dictionary.txt",
 		GseDict:       "../../testdata/test_dict.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()
-	os.MkdirAll(path, 0777)
+	// os.MkdirAll(path, 0777)
 
 	text := "Google Is Experimenting With Virtual Reality Advertising"
 	text1 := `Google accidentally pushed Bluetooth update for Home
@@ -68,21 +66,20 @@ func initEngine() {
 }
 
 func restoreIndex() {
-	var path = "./riot-index"
-
+	// var path = "./riot-index"
 	searcher.Init(types.EngineOpts{
 		Using: 1,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: path,
+		UseStorage: true,
+		// StorageFolder: path,
 		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		GseDict:       "../../data/dict/dictionary.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()
-	os.MkdirAll(path, 0777)
+	// os.MkdirAll(path, 0777)
 
 	// Wait for the index to refresh
 	searcher.Flush()
