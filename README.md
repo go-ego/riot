@@ -19,6 +19,8 @@
 <!-- ![ego Logo](logo/512px.svg) -->
 Go Open Source, Distributed, Simple and efficient full text search engine.
 
+# Features
+
 * [Efficient indexing and search](/docs/en/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for [logical search](https://github.com/go-ego/riot/blob/master/docs/en/logic.md)
 * Support Chinese word segmentation (use [gse word segmentation package](https://github.com/go-ego/gse) concurrent word, speed 27MB / s）

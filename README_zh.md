@@ -15,6 +15,8 @@
 
 Go Open Source, Distributed, Simple and efficient full text search engine.
 
+# Features
+
 * [高效索引和搜索](/docs/zh/benchmarking.md)（1M 条微博 500M 数据28秒索引完，1.65毫秒搜索响应时间，19K 搜索 QPS）
 * 支持中文分词（使用 [gse 分词包](https://github.com/go-ego/gse)并发分词，速度 27MB/秒）
 * 支持[逻辑搜索](https://github.com/go-ego/riot/blob/master/docs/zh/logic.md)
