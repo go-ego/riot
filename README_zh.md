@@ -1,4 +1,4 @@
-# [Riot 全文搜索引擎](https://github.com/go-ego/riot)
+# [Riot 搜索引擎](https://github.com/go-ego/riot)
 
 <!--<img align="right" src="https://raw.githubusercontent.com/go-ego/ego/master/logo.jpg">-->
 <!--<a href="https://circleci.com/gh/go-ego/ego/tree/dev"><img src="https://img.shields.io/circleci/project/go-ego/ego/dev.svg" alt="Build Status"></a>-->
@@ -11,6 +11,9 @@
 [![Release](https://github-release-version.herokuapp.com/github/go-ego/riot/release.svg?style=flat)](https://github.com/go-ego/riot/releases/latest)
 [![Join the chat at https://gitter.im/go-ego/ego](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-ego/ego?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!--<a href="https://github.com/go-ego/ego/releases"><img src="https://img.shields.io/badge/%20version%20-%206.0.0%20-blue.svg?style=flat-square" alt="Releases"></a>-->
+
+
+Go Open Source, Distributed, Simple and efficient full text search engine.
 
 * [高效索引和搜索](/docs/zh/benchmarking.md)（1M 条微博 500M 数据28秒索引完，1.65毫秒搜索响应时间，19K 搜索 QPS）
 * 支持中文分词（使用 [gse 分词包](https://github.com/go-ego/gse)并发分词，速度 27MB/秒）

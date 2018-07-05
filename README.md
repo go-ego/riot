@@ -1,4 +1,4 @@
-# Riot full text search engine  
+# Riot search 
 
 <img align="right" src="logo/512px.svg" width="15%"/>
 
@@ -17,6 +17,7 @@
 [简体中文](https://github.com/go-ego/riot/blob/master/README_zh.md)
 
 <!-- ![ego Logo](logo/512px.svg) -->
+Go Open Source, Distributed, Simple and efficient full text search engine.
 
 * [Efficient indexing and search](/docs/en/benchmarking.md) (1M blog 500M data 28 seconds index finished, 1.65 ms search response time, 19K search QPS）
 * Support for [logical search](https://github.com/go-ego/riot/blob/master/docs/en/logic.md)
