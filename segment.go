@@ -17,26 +17,25 @@ package riot
 
 import (
 	// "fmt"
-
 	"strings"
 
 	"github.com/go-ego/gpy"
 	"github.com/go-ego/riot/types"
 )
 
+// TMap defines the tokens map type map[string][]int
+type TMap map[string][]int
+
 type segmenterReq struct {
 	docId uint64
 	hash  uint32
-	data  types.DocIndexData
+	data  types.DocData
 	// data        types.DocumentIndexData
 	forceUpdate bool
 }
 
-// Map defines the type map[string][]int
-type Map map[string][]int
-
-// ForSplitData for split seg data, segspl
-func (engine *Engine) ForSplitData(splData []string, num int) (Map, int) {
+// ForSplitData for split segment's data, segspl
+func (engine *Engine) ForSplitData(splData []string, num int) (TMap, int) {
 	var (
 		numTokens int
 		splitStr  string
@@ -75,7 +74,7 @@ func (engine *Engine) ForSplitData(splData []string, num int) (Map, int) {
 	return tokensMap, numTokens
 }
 
-func (engine *Engine) splitData(request segmenterReq) (Map, int) {
+func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 	var (
 		num       int
 		numTokens int
@@ -129,7 +128,7 @@ func (engine *Engine) splitData(request segmenterReq) (Map, int) {
 	return tokensMap, numTokens
 }
 
-func (engine *Engine) segmenterData(request segmenterReq) (Map, int) {
+func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 	tokensMap := make(map[string][]int)
 	numTokens := 0
 
