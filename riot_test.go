@@ -14,7 +14,7 @@ import (
 func TestEngineIndexWithNewStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine = New("./testdata/test_dict.txt", "./riot.new", 8)
-	log.Println("engine start...")
+	log.Println("new engine start...")
 	// engine = engine.New()
 	AddDocs(engine)
 
@@ -22,13 +22,13 @@ func TestEngineIndexWithNewStorage(t *testing.T) {
 	engine.Flush()
 
 	engine.Close()
-	os.RemoveAll("riot.new")
+	// os.RemoveAll("riot.new")
 
-	var engine1 = New("./testdata/test_dict.txt")
+	var engine1 = New("./testdata/test_dict.txt", "./riot.new")
 	// engine1 = engine1.New()
 	log.Println("test...")
 	engine1.Flush()
-	log.Println("engine1 start...")
+	log.Println("new engine1 start...")
 
 	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
 	tt.Expect(t, "2", len(outputs.Tokens))
@@ -47,7 +47,8 @@ func TestEngineIndexWithNewStorage(t *testing.T) {
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
-	os.RemoveAll("riot-index")
+	os.RemoveAll("riot.new")
+	// os.RemoveAll("riot-index")
 }
 
 func TestDocRank(t *testing.T) {
