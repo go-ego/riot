@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"encoding/binary"
 	"encoding/gob"
@@ -26,40 +27,64 @@ import (
 	"github.com/go-ego/murmur"
 	"github.com/go-ego/riot/core"
 	"github.com/go-ego/riot/types"
+	toml "github.com/go-vgo/gt/conf"
 )
 
-// New create a new engine
-func New(dict ...interface{}) *Engine {
+// New create a new engine with mode
+func New(conf ...interface{}) *Engine {
 	// func (engine *Engine) New(conf com.Config) *Engine{
+	var (
+		config   types.EngineOpts
+		searcher = &Engine{}
+	)
+
+	if len(conf) > 0 && strings.HasSuffix(conf[0].(string), ".toml") {
+		fs := conf[0].(string)
+		toml.Init(fs, &config)
+		go toml.Watch(fs, &config)
+
+		searcher.Init(config)
+		return searcher
+	}
+
+	return NewEngine(conf...)
+}
+
+// NewEngine create a new engine
+func NewEngine(conf ...interface{}) *Engine {
 	var (
 		searcher = &Engine{}
 
-		path          = DefaultPath
-		storageShards = 10
-		numShards     = 10
+		path        = DefaultPath
+		storeShards = 10
+		numShards   = 10
 
 		segmentDict string
 	)
 
-	if len(dict) > 0 {
-		segmentDict = dict[0].(string)
+	if len(conf) > 0 {
+		segmentDict = conf[0].(string)
 	}
 
-	if len(dict) > 1 {
-		numShards = dict[1].(int)
-		storageShards = dict[1].(int)
+	if len(conf) > 1 {
+		path = conf[1].(string)
+	}
+
+	if len(conf) > 2 {
+		numShards = conf[2].(int)
+		storeShards = conf[2].(int)
 	}
 
 	searcher.Init(types.EngineOpts{
 		// Using:         using,
-		StorageShards: storageShards,
+		StorageShards: storeShards,
 		NumShards:     numShards,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStorage:    true,
 		StorageFolder: path,
-		// StorageEngine: storageEngine,
+		// StorageEngine: storeEngine,
 		GseDict: segmentDict,
 		// StopTokenFile: stopTokenFile,
 	})
@@ -129,7 +154,7 @@ func (engine *Engine) GetDBAllIds() []uint64 {
 
 // GetDBAllDocs get the db all docs
 func (engine *Engine) GetDBAllDocs() (
-	docsId []uint64, docsData []types.DocIndexData) {
+	docsId []uint64, docsData []types.DocData) {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(key, val []byte) error {
 			// fmt.Println(k, v)
@@ -138,7 +163,8 @@ func (engine *Engine) GetDBAllDocs() (
 
 			buf := bytes.NewReader(val)
 			dec := gob.NewDecoder(buf)
-			var data types.DocIndexData
+
+			var data types.DocData
 			err := dec.Decode(&data)
 			if err != nil {
 				log.Println("dec.decode: ", err)

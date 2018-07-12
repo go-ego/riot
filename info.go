@@ -22,6 +22,7 @@ import (
 
 var (
 	lck sync.RWMutex
+
 	// InitMemUsed init mem used
 	InitMemUsed uint64
 	// InitDiskUsed init disk used
