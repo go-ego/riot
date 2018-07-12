@@ -13,7 +13,7 @@ import (
 
 func TestEngineIndexWithNewStorage(t *testing.T) {
 	gob.Register(ScoringFields{})
-	var engine = New("./testdata/test_dict.txt", 8)
+	var engine = New("./testdata/test_dict.txt", "./riot.new", 8)
 	log.Println("engine start...")
 	// engine = engine.New()
 	AddDocs(engine)
@@ -22,6 +22,7 @@ func TestEngineIndexWithNewStorage(t *testing.T) {
 	engine.Flush()
 
 	engine.Close()
+	os.RemoveAll("riot.new")
 
 	var engine1 = New("./testdata/test_dict.txt")
 	// engine1 = engine1.New()
