@@ -33,12 +33,12 @@ import (
 // New create a new engine with mode
 func New(conf ...interface{}) *Engine {
 	// func (engine *Engine) New(conf com.Config) *Engine{
-	var (
-		config   types.EngineOpts
-		searcher = &Engine{}
-	)
-
 	if len(conf) > 0 && strings.HasSuffix(conf[0].(string), ".toml") {
+		var (
+			config   types.EngineOpts
+			searcher = &Engine{}
+		)
+
 		fs := conf[0].(string)
 		toml.Init(fs, &config)
 		go toml.Watch(fs, &config)
