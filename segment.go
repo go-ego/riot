@@ -85,7 +85,9 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 		request.data.Content = strings.ToLower(request.data.Content)
 		if engine.initOptions.Using == 3 {
 			// use segmenter
-			segments := engine.segmenter.Segment([]byte(request.data.Content))
+			segments := engine.segmenter.ModeSegment([]byte(request.data.Content),
+				engine.initOptions.GseMode)
+
 			for _, segment := range segments {
 				token := segment.Token().Text()
 				if !engine.stopTokens.IsStopToken(token) {
@@ -99,10 +101,17 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 			// use segmenter
 			splSpaData := strings.Split(request.data.Content, " ")
 			num := len(splSpaData)
-			tokenMap, numToken := engine.ForSplitData(splSpaData, num)
-			numTokens += numToken
-			for key, val := range tokenMap {
-				tokensMap[key] = val
+			if num == 1 {
+				tokensMap[request.data.Content] = []int{1}
+			}
+
+			if num > 1 {
+				tokenMap, numToken := engine.ForSplitData(splSpaData, num)
+				numTokens += numToken
+
+				for key, val := range tokenMap {
+					tokensMap[key] = val
+				}
 			}
 		}
 
@@ -134,7 +143,9 @@ func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 
 	if engine.initOptions.Using == 0 && request.data.Content != "" {
 		// Content 分词, 当文档正文不为空时，优先从内容分词中得到关键词
-		segments := engine.segmenter.Segment([]byte(request.data.Content))
+		segments := engine.segmenter.ModeSegment([]byte(request.data.Content),
+			engine.initOptions.GseMode)
+
 		for _, segment := range segments {
 			token := segment.Token().Text()
 			if !engine.stopTokens.IsStopToken(token) {
@@ -155,7 +166,9 @@ func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 
 	if engine.initOptions.Using == 1 && request.data.Content != "" {
 		// Content 分词, 当文档正文不为空时，优先从内容分词中得到关键词
-		segments := engine.segmenter.Segment([]byte(request.data.Content))
+		segments := engine.segmenter.ModeSegment([]byte(request.data.Content),
+			engine.initOptions.GseMode)
+
 		for _, segment := range segments {
 			token := segment.Token().Text()
 			if !engine.stopTokens.IsStopToken(token) {
@@ -200,7 +213,36 @@ func (engine *Engine) segmenterWorker() {
 		}
 
 		shard := engine.getShard(request.hash)
-		tokensMap, numTokens := engine.segmenterData(request)
+		tokensMap := make(map[string][]int)
+		numTokens := 0
+		if !engine.initOptions.NotUsingGse && engine.initOptions.Using != 0 {
+			tokensMap, numTokens = engine.segmenterData(request)
+		} else {
+			if request.data.Content != "" {
+				splSpaData := strings.Split(request.data.Content, " ")
+				num := len(splSpaData)
+				if num == 1 {
+					tokensMap[request.data.Content] = []int{1}
+				}
+
+				if num > 1 {
+					tokenMap, numToken := engine.ForSplitData(splSpaData, num)
+					numTokens += numToken
+
+					for key, val := range tokenMap {
+						tokensMap[key] = val
+					}
+				}
+			}
+
+			for _, t := range request.data.Tokens {
+				if !engine.stopTokens.IsStopToken(t.Text) {
+					tokensMap[t.Text] = t.Locations
+				}
+			}
+
+			numTokens = len(request.data.Tokens)
+		}
 
 		// 加入非分词的文档标签
 		for _, label := range request.data.Labels {
