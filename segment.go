@@ -101,11 +101,11 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 			// use segmenter
 			splSpaData := strings.Split(request.data.Content, " ")
 			num := len(splSpaData)
-			if num == 1 {
-				tokensMap[request.data.Content] = []int{1}
-			}
+			// if num == 1 {
+			// 	tokensMap[request.data.Content] = []int{1}
+			// }
 
-			if num > 1 {
+			if num > 0 {
 				tokenMap, numToken := engine.ForSplitData(splSpaData, num)
 				numTokens += numToken
 
@@ -215,7 +215,7 @@ func (engine *Engine) segmenterWorker() {
 		shard := engine.getShard(request.hash)
 		tokensMap := make(map[string][]int)
 		numTokens := 0
-		if !engine.initOptions.NotUsingGse && engine.initOptions.Using != 0 {
+		if !(engine.initOptions.NotUsingGse && engine.initOptions.Using == 0) {
 			tokensMap, numTokens = engine.segmenterData(request)
 		} else {
 			if request.data.Content != "" {
