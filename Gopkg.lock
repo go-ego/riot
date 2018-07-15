@@ -48,8 +48,8 @@
     "table",
     "y"
   ]
-  revision = "a6f0866f06a0ef6ac612e427ffe5d081db4e6fab"
-  version = "v1.5.2"
+  revision = "391b6d3b93e6014fe8c2971fcc0c1266e47dbbd9"
+  version = "v1.5.3"
 
 [[projects]]
   branch = "master"
@@ -79,13 +79,13 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "a66e12f097dcc6c0a60822c0d4066ddf97f192d6"
+  revision = "98ab954171b60d1f182d06f39e5bf7573f17a69d"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/murmur"
   packages = ["."]
-  revision = "72a2d74ef0d1ad89fea403a954b189e6296a0a36"
+  revision = "0e80721bb094033c73e7b6159d3c1cbd116e9b38"
 
 [[projects]]
   name = "github.com/go-ole/go-ole"
@@ -110,7 +110,7 @@
     "info",
     "zlog"
   ]
-  revision = "b6eb99996c7112521faa1dbdc7dc74a056f5a6df"
+  revision = "8d2c4575ccdacd5c4936a1fb3831165abfdbccc5"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -161,10 +161,17 @@
     "host",
     "internal/common",
     "mem",
+    "net",
     "process"
   ]
   revision = "4a180b209f5f494e5923cfce81ea30ba23915877"
   version = "v2.18.06"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/shirou/w32"
+  packages = ["."]
+  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
   branch = "master"
@@ -183,7 +190,7 @@
     "leveldb/table",
     "leveldb/util"
   ]
-  revision = "0d5a0ceb10cf9ab89fdd744cc8c50a83134f6697"
+  revision = "c4c61651e9e37fa117f53c5a906d3b63090d8445"
 
 [[projects]]
   branch = "master"
@@ -228,7 +235,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9"
+  revision = "d0887baf81f4598189d4e12a37c6da86f0bba4d0"
 
 [[projects]]
   branch = "master"
@@ -237,7 +244,7 @@
     "unix",
     "windows"
   ]
-  revision = "7138fd3d9dc8335c567ca206f4333fb75eb05d56"
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -264,7 +271,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "ff3583edef7de132f219f0efc00e097cabcc0ec0"
+  revision = "e92b116572682a5b432ddd840aeaba2a559eeff1"
 
 [[projects]]
   name = "google.golang.org/grpc"
