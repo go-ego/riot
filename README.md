@@ -93,8 +93,9 @@ var (
 func main() {
 	// Init
 	searcher.Init(types.EngineOpts{
-		Using:             4,
-		NotUsingGse: true})
+		// Using:             4,
+		NotUseGse: true,
+		})
 	defer searcher.Close()
 
 	text := "Google Is Experimenting With Virtual Reality Advertising"
