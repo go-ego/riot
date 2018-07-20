@@ -840,9 +840,17 @@ func TestSearchNotUseGse(t *testing.T) {
 	engine.Index(6, types.DocData{
 		Content: "Google Is Experimenting With Virtual Reality Advertising",
 		Fields:  ScoringFields{1, 2, 3},
+		Tokens:  []types.TokenData{{Text: "test"}},
+	})
+
+	engine1.Index(6, types.DocData{
+		Content: "Google Is Experimenting With Virtual Reality Advertising",
+		Fields:  ScoringFields{1, 2, 3},
+		Tokens:  []types.TokenData{{Text: "test"}},
 	})
 
 	engine.Flush()
+	engine1.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -863,7 +871,7 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "1", len(outDocs))
 
 	tt.Expect(t, "6", outDocs[0].DocId)
-	tt.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "3170", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	outputs1 := engine1.Search(types.SearchReq{
