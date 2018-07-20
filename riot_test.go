@@ -11,7 +11,7 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-func TestEngineIndexWithNewStorage(t *testing.T) {
+func TestEngineIndexWithNewStore(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine = New("./testdata/test_dict.txt", "./riot.new", 8)
 	log.Println("new engine start...")
@@ -24,7 +24,8 @@ func TestEngineIndexWithNewStorage(t *testing.T) {
 	engine.Close()
 	// os.RemoveAll("riot.new")
 
-	var engine1 = New("./testdata/test_dict.txt", "./riot.new")
+	// var engine1 = New("./testdata/test_dict.txt", "./riot.new")
+	var engine1 = riot.New("./testdata/conf.toml")
 	// engine1 = engine1.New()
 	log.Println("test...")
 	engine1.Flush()
@@ -199,13 +200,13 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:      1,
-		NumShards:  5,
-		UseStorage: true,
-		// StorageEngine: "bg",
-		StorageFolder: "riot.id",
-		IDOnly:        true,
-		GseDict:       "./testdata/test_dict.txt",
+		Using:     1,
+		NumShards: 5,
+		UseStore:  true,
+		// StoreEngine: "bg",
+		StoreFolder: "riot.id",
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
 			OutputOffset:    0,
@@ -284,10 +285,10 @@ func TestDocPinYin(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
 		// Using:         1,
-		UseStorage:    true,
-		StorageFolder: "riot.py",
-		IDOnly:        true,
-		GseDict:       "./testdata/test_dict.txt",
+		UseStore:    true,
+		StoreFolder: "riot.py",
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
 	})
 
 	// AddDocs(&engine)
@@ -341,11 +342,11 @@ func TestDocPinYin(t *testing.T) {
 func TestForSplitData(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         4,
-		UseStorage:    true,
-		StorageFolder: "riot.data",
-		IDOnly:        true,
-		GseDict:       "./testdata/test_dict.txt",
+		Using:       4,
+		UseStore:    true,
+		StoreFolder: "riot.data",
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine)
@@ -382,11 +383,11 @@ func TestForSplitData(t *testing.T) {
 func TestDocCounters(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:         1,
-		UseStorage:    true,
-		StorageFolder: "riot.doc",
-		IDOnly:        true,
-		GseDict:       "./testdata/test_dict.txt",
+		Using:       1,
+		UseStore:    true,
+		StoreFolder: "riot.doc",
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
 	})
 
 	AddDocs(&engine)
