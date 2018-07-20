@@ -25,7 +25,7 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	// os.RemoveAll("riot.new")
 
 	// var engine1 = New("./testdata/test_dict.txt", "./riot.new")
-	var engine1 = riot.New("./testdata/conf.toml")
+	var engine1 = New("./testdata/conf.toml")
 	// engine1 = engine1.New()
 	log.Println("test...")
 	engine1.Flush()

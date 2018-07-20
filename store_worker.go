@@ -25,15 +25,15 @@ import (
 	"github.com/go-ego/riot/types"
 )
 
-type storageIndexDocReq struct {
+type storeIndexDocReq struct {
 	docId uint64
-	data  types.DocIndexData
+	data  types.DocData
 	// data        types.DocumentIndexData
 }
 
-func (engine *Engine) storageIndexDocWorker(shard int) {
+func (engine *Engine) storeIndexDocWorker(shard int) {
 	for {
-		request := <-engine.storageIndexDocChans[shard]
+		request := <-engine.storeIndexDocChans[shard]
 
 		// 得到 key
 		b := make([]byte, 10)
@@ -66,7 +66,7 @@ func (engine *Engine) storageIndexDocWorker(shard int) {
 	}
 }
 
-func (engine *Engine) storageRemoveDocWorker(docId uint64, shard uint32) {
+func (engine *Engine) storeRemoveDocWorker(docId uint64, shard uint32) {
 	// 得到 key
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
@@ -75,8 +75,8 @@ func (engine *Engine) storageRemoveDocWorker(docId uint64, shard uint32) {
 	engine.dbs[shard].Delete(b[0:length])
 }
 
-// storageInitWorker persistent Storage init worker
-func (engine *Engine) storageInitWorker(shard int) {
+// storageInitWorker persistent storage init worker
+func (engine *Engine) storeInitWorker(shard int) {
 	engine.dbs[shard].ForEach(func(k, v []byte) error {
 		key, value := k, v
 		// 得到 docID
@@ -85,7 +85,7 @@ func (engine *Engine) storageInitWorker(shard int) {
 		// 得到 data
 		buf := bytes.NewReader(value)
 		dec := gob.NewDecoder(buf)
-		var data types.DocIndexData
+		var data types.DocData
 		err := dec.Decode(&data)
 		if err == nil {
 			// 添加索引
@@ -93,5 +93,5 @@ func (engine *Engine) storageInitWorker(shard int) {
 		}
 		return nil
 	})
-	engine.storageInitChan <- true
+	engine.storeInitChan <- true
 }
