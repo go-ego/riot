@@ -9,7 +9,7 @@ url = ["http://localhost:8080", "http://localhost:8081"]
 [engine]
 mode = "dev"
 using = 3
-storage_shards = 10
+store_shards = 10
 num_shards = 10
 # gse_dict = "./data/dict/dictionary.txt"
 # stop_token_file = "./data/dict/stop_tokens.txt"

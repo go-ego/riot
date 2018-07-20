@@ -33,14 +33,17 @@ type Engine struct {
 	StorageEngine string `toml:"storage_engine"`
 	StorageFolder string `toml:"storage_folder"`
 
-	NumShards     int    `toml:"num_shards"`
-	OutputOffset  int    `toml:"output_offset"`
-	MaxOutputs    int    `toml:"max_outputs"`
-	GseDict       string `toml:"segmenter_dict"`
+	NumShards    int `toml:"num_shards"`
+	OutputOffset int `toml:"output_offset"`
+	MaxOutputs   int `toml:"max_outputs"`
+
+	GseDict       string `toml:"gse_dict"`
+	GseMode       string `toml:"gse_mode"`
 	StopTokenFile string `toml:"stop_token_file"`
-	Relation      string
-	Time          string
-	Ts            int64
+
+	Relation string
+	Time     string
+	Ts       int64
 }
 
 // Rpc search rpc options

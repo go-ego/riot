@@ -112,7 +112,7 @@ func Search(sea SearchArgs) types.SearchResp {
 	var docs types.SearchResp
 
 	docs = Searcher.Search(types.SearchReq{Text: sea.Query,
-		// NotUsingGse: true,
+		// NotUseGse: true,
 		DocIds: sea.DocIds,
 		Logic:  sea.Logic,
 		RankOpts: &types.RankOpts{
