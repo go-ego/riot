@@ -25,12 +25,10 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
-var (
-	gIDOnly bool
-)
-
 // Ranker ranker
 type Ranker struct {
+	idOnly bool
+
 	lock struct {
 		sync.RWMutex
 		fields map[uint64]interface{}
@@ -54,10 +52,10 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 	ranker.lock.docs = make(map[uint64]bool)
 
 	if len(onlyID) > 0 {
-		gIDOnly = onlyID[0]
+		ranker.idOnly = onlyID[0]
 	}
 
-	if !gIDOnly {
+	if !ranker.idOnly {
 		// new
 		ranker.lock.content = make(map[uint64]string)
 		ranker.lock.attri = make(map[uint64]interface{})
@@ -77,7 +75,7 @@ func (ranker *Ranker) AddDoc(
 	ranker.lock.fields[docId] = fields
 	ranker.lock.docs[docId] = true
 
-	if !gIDOnly {
+	if !ranker.idOnly {
 		// new
 		if len(content) > 0 {
 			ranker.lock.content[docId] = content[0].(string)
@@ -102,7 +100,7 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	delete(ranker.lock.fields, docId)
 	delete(ranker.lock.docs, docId)
 
-	if !gIDOnly {
+	if !ranker.idOnly {
 		// new
 		delete(ranker.lock.content, docId)
 		delete(ranker.lock.attri, docId)
@@ -111,8 +109,8 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	ranker.lock.Unlock()
 }
 
-// RankDoc rank docs by types.ScoredIDs
-func (ranker *Ranker) RankDoc(docs []types.IndexedDoc,
+// RankDocId rank docs by types.ScoredIDs
+func (ranker *Ranker) RankDocId(docs []types.IndexedDoc,
 	options types.RankOpts, countDocsOnly bool) (types.ScoredIDs, int) {
 	var outputDocs types.ScoredIDs
 	numDocs := 0
@@ -235,8 +233,8 @@ func (ranker *Ranker) Rank(docs []types.IndexedDoc,
 	}
 
 	// 对每个文档评分
-	if gIDOnly {
-		outputDocs, numDocs := ranker.RankDoc(docs, options, countDocsOnly)
+	if ranker.idOnly {
+		outputDocs, numDocs := ranker.RankDocId(docs, options, countDocsOnly)
 		return outputDocs, numDocs
 	}
 
