@@ -823,13 +823,19 @@ func TestSearchGse(t *testing.T) {
 }
 
 func TestSearchNotUseGse(t *testing.T) {
-	var engine Engine
+	var engine, engine1 Engine
 	engine.Init(types.EngineOpts{
-		Using:  4,
+		Using:     4,
+		NotUseGse: true,
+	})
+
+	engine1.Init(types.EngineOpts{
+		IDOnly:    true,
 		NotUseGse: true,
 	})
 
 	AddDocs(&engine)
+	AddDocs(&engine1)
 
 	engine.Index(6, types.DocData{
 		Content: "Google Is Experimenting With Virtual Reality Advertising",
@@ -860,7 +866,14 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
+	outputs1 := engine1.Search(types.SearchReq{
+		Text:   "google",
+		DocIds: docIds})
+	tt.Expect(t, "1", len(outputs1.Tokens))
+	tt.Expect(t, "0", outputs1.NumDocs)
+
 	engine.Close()
+	engine1.Close()
 }
 
 func TestSearchWithGse(t *testing.T) {
