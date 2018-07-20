@@ -52,7 +52,7 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	// os.RemoveAll("riot-index")
 }
 
-func TestDocRank(t *testing.T) {
+func TestDocRankId(t *testing.T) {
 	var engine Engine
 
 	rankOpts := types.RankOpts{
@@ -106,7 +106,7 @@ func TestDocRank(t *testing.T) {
 		engine.indexerLookupChans[shard] <- lookupRequest
 	}
 
-	outputs := engine.Rank(request, rankOpts, tokens, rankerReturnChan)
+	outputs := engine.RankId(request, rankOpts, tokens, rankerReturnChan)
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)

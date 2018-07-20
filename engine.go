@@ -513,8 +513,8 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	return
 }
 
-// Rank rank docs by types.ScoredIDs
-func (engine *Engine) Rank(request types.SearchReq, RankOpts types.RankOpts,
+// RankId rank docs by types.ScoredIDs
+func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
 	tokens []string, rankerReturnChan chan rankerReturnReq) (
 	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
@@ -720,7 +720,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	}
 
 	if engine.initOptions.IDOnly {
-		output = engine.Rank(request, RankOpts, tokens, rankerReturnChan)
+		output = engine.RankId(request, RankOpts, tokens, rankerReturnChan)
 		return
 	}
 
