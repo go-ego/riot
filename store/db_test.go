@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package storage
+package store
 
 import (
 	"log"
@@ -60,7 +60,7 @@ func TestBolt(t *testing.T) {
 	// defer db.Close()
 }
 
-func DBTest(t *testing.T, db Storage) {
+func DBTest(t *testing.T, db Store) {
 	log.Println("db test...")
 	os.MkdirAll(TestDBName, 0777)
 

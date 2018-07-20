@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package storage
+package store
 
 import (
 	"time"
@@ -23,13 +23,13 @@ import (
 
 var gdocs = []byte("gdocs")
 
-// Bolt bolt storage
+// Bolt bolt store struct
 type Bolt struct {
 	db *bolt.DB
 }
 
-// OpenBolt open Bolt storage
-func OpenBolt(dbPath string) (Storage, error) {
+// OpenBolt open Bolt store
+func OpenBolt(dbPath string) (Store, error) {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 3600 * time.Second})
 	// db, err := bolt.Open(dbPath, 0600, &bolt.Options{})
 	if err != nil {
