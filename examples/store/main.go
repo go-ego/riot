@@ -34,9 +34,9 @@ func initEngine() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage: true,
-		// StorageFolder: path,
-		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
+		UseStore: true,
+		// StoreFolder: path,
+		StoreEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		// GseDict: "../../data/dict/dictionary.txt",
 		GseDict:       "../../testdata/test_dict.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
@@ -72,9 +72,9 @@ func restoreIndex() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage: true,
-		// StorageFolder: path,
-		StorageEngine: "bg", // bg: badger, lbd: leveldb, bolt: bolt
+		UseStore: true,
+		// StoreFolder: path,
+		StoreEngine:   "bg", // bg: badger, lbd: leveldb, bolt: bolt
 		GseDict:       "../../data/dict/dictionary.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
 	})
