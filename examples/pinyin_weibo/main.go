@@ -153,10 +153,10 @@ func main() {
 		},
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用leveldb持久化，如果你希望修改数据库类型
-		// 请用 StorageEngine:"" 或者修改 RIOT_STORAGE_ENGINE 环境变量
-		// UseStorage: true,
-		// StorageFolder: "weibo_search",
-		// StorageEngine: "bg",
+		// 请用 StoreEngine:"" 或者修改 RIOT_STORAGE_ENGINE 环境变量
+		// UseStore: true,
+		// StoreFolder: "weibo_search",
+		// StoreEngine: "bg",
 	})
 	log.Print("searcher init end")
 	wbs = make(map[uint64]Weibo)

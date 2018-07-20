@@ -8,18 +8,18 @@ type EngineOpts struct {
   // Skip other options
 
   // Whether to use persistent databases, and the number of directories and splits that database files hold
-  UseStorage bool
-  StorageFolder string
-  StorageShards int
-  StorageEngine string // bg: badger, lbd: leveldb, bolt: bolt
+  UseStore bool
+  StoreFolder string
+  StoreShards int
+  StoreEngine string // bg: badger, lbd: leveldb, bolt: bolt
 }
 ```
 
-Use persistent storage when UseStorage is true:
+Use persistent storage when UseStore is true:
 
-1. At engine startup (engine.Init function), the engine reads the document index data from the directory specified by StorageFolder, recalculates the index table, and injects the sort data into the sequencer. If the tokenizer code or dictionary changes, these changes will be reflected in the engine index table after the start.
-2. When the engine.Index is called, the engine writes the index data to the directory specified by StorageFolder.
-3. StorageShards defines the number of database splits, the default is 8. For best performance, adjust this parameter so that each split file is less than 100M.
+1. At engine startup (engine.Init function), the engine reads the document index data from the directory specified by StoreFolder, recalculates the index table, and injects the sort data into the sequencer. If the tokenizer code or dictionary changes, these changes will be reflected in the engine index table after the start.
+2. When the engine.Index is called, the engine writes the index data to the directory specified by StoreFolder.
+3. StoreShards defines the number of database splits, the default is 8. For best performance, adjust this parameter so that each split file is less than 100M.
 4. After calling engine.RemoveDoc to delete a document, the document is removed from persistent storage and will not be loaded the next time the engine is started.
 
 
@@ -31,7 +31,7 @@ gob.Register(MyScoringFields{})
 ```
 Otherwise the program will crash.
 
-2. Please use engine.Close () to shut down the database when the engine exits. If the database is not closed, the database files will be locked, which will cause the engine to restart failed. To unlock it, go to the directory specified by StorageFolder and delete any files that begin with ".".
+2. Please use engine.Close () to shut down the database when the engine exits. If the database is not closed, the database files will be locked, which will cause the engine to restart failed. To unlock it, go to the directory specified by StoreFolder and delete any files that begin with ".".
 
 ### Benchmark
 

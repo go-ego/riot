@@ -39,15 +39,15 @@ var (
 		"stop_token_file",
 		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
-	cpuprofile              = flag.String("cpuprofile", "", "处理器profile文件")
-	memprofile              = flag.String("memprofile", "", "内存profile文件")
-	numRepeatText           = flag.Int("numRepeatText", 10, "文本重复加入多少次")
-	numDeleteDocs           = flag.Int("numDeleteDocs", 1000, "测试删除文档的个数")
-	indexType               = flag.Int("indexType", types.DocIdsIndex, "索引类型")
-	usePersistent           = flag.Bool("usePersistent", false, "是否使用持久存储")
-	persistentStorageFolder = flag.String("persistentStorageFolder", "benchmark.persistent", "持久存储数据库保存的目录")
-	storageEngine           = flag.String("storageEngine", "lbd", "use StorageEngine")
-	persistentStorageShards = flag.Int("persistentStorageShards", 0, "持久数据库存储裂分数目")
+	cpuprofile            = flag.String("cpuprofile", "", "处理器profile文件")
+	memprofile            = flag.String("memprofile", "", "内存profile文件")
+	numRepeatText         = flag.Int("numRepeatText", 10, "文本重复加入多少次")
+	numDeleteDocs         = flag.Int("numDeleteDocs", 1000, "测试删除文档的个数")
+	indexType             = flag.Int("indexType", types.DocIdsIndex, "索引类型")
+	usePersistent         = flag.Bool("usePersistent", false, "是否使用持久存储")
+	persistentStoreFolder = flag.String("persistentStoreFolder", "benchmark.persistent", "持久存储数据库保存的目录")
+	storageEngine         = flag.String("storeEngine", "lbd", "use StoreEngine")
+	persistentStoreShards = flag.Int("persistentStoreShards", 0, "持久数据库存储裂分数目")
 
 	searcher = riot.Engine{}
 	options  = types.RankOpts{
@@ -71,9 +71,9 @@ func initEngine() {
 		},
 		NumShards:       NumShards,
 		DefaultRankOpts: &options,
-		UseStorage:      *usePersistent,
-		StorageFolder:   *persistentStorageFolder,
-		StorageShards:   *persistentStorageShards,
+		UseStore:        *usePersistent,
+		StoreFolder:     *persistentStoreFolder,
+		StoreShards:     *persistentStoreShards,
 	})
 }
 
@@ -195,10 +195,10 @@ func useStore(tBeginInit, tEndInit time.Time) {
 		},
 		NumShards:       NumShards,
 		DefaultRankOpts: &options,
-		UseStorage:      *usePersistent,
-		StorageFolder:   *persistentStorageFolder,
-		StorageEngine:   *storageEngine,
-		StorageShards:   *persistentStorageShards,
+		UseStore:        *usePersistent,
+		StoreFolder:     *persistentStoreFolder,
+		StoreEngine:     *storageEngine,
+		StoreShards:     *persistentStoreShards,
 	})
 	defer searcher1.Close()
 	t7 := time.Now()
@@ -249,7 +249,7 @@ func main() {
 	if *usePersistent {
 		useStore(tBeginInit, tEndInit)
 	}
-	//os.RemoveAll(*persistentStorageFolder)
+	//os.RemoveAll(*persistentStoreFolder)
 
 	log.Println("end...")
 }

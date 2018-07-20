@@ -8,21 +8,21 @@ type EngineOpts struct {
   // 略过其他选项
 
   // 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
-  UseStorage bool
-  StorageFolder string
-  StorageShards int
-  StorageEngine string // bg: badger, lbd: leveldb, bolt: bolt
+  UseStore bool
+  StoreFolder string
+  StoreShards int
+  StoreEngine string // bg: badger, lbd: leveldb, bolt: bolt
 }
 ```
 
-当 UseStorage 为 true 时使用持久存储：
+当 UseStore 为 true 时使用持久存储：
 
-1. 在引擎启动时（engine.Init 函数），引擎从 StorageFolder 指定的目录中读取
+1. 在引擎启动时（engine.Init 函数），引擎从 StoreFolder 指定的目录中读取
 文档索引数据，重新计算索引表并给排序器注入排序数据。如果分词器的代码
 或者词典有变化，这些变化会体现在启动后的引擎索引表中。
-2. 在调用 engine.Index 时，引擎将索引数据写入到 StorageFolder 指定
+2. 在调用 engine.Index 时，引擎将索引数据写入到 StoreFolder 指定
 的目录中。
-3. StorageShards 定义了数据库裂分数目，默认为 8。为了得到最好的性能，请调整这个参数使得每个裂分文件小于 100M。
+3. StoreShards 定义了数据库裂分数目，默认为 8。为了得到最好的性能，请调整这个参数使得每个裂分文件小于 100M。
 4. 在调用 engine.RemoveDoc 删除一个文档后，该文档会从持久存储中剔除，下次启动
 引擎时不会载入该文档。
 
@@ -36,7 +36,7 @@ gob.Register(MyScoringFields{})
 否则程序会崩溃。
 
 二、在引擎退出时请使用 engine.Close() 来关闭数据库，如果数据库未关闭，数据库文件会被锁定，
-这会导致引擎重启失败。解锁的方法是，进入 StorageFolder 指定的目录，删除所有以"."开头的文件即可。
+这会导致引擎重启失败。解锁的方法是，进入 StoreFolder 指定的目录，删除所有以"."开头的文件即可。
 
 ### 性能测试
 
