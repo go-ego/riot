@@ -98,21 +98,7 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 		}
 
 		if engine.initOptions.Using == 4 {
-			// use segmenter
-			splSpaData := strings.Split(request.data.Content, " ")
-			num := len(splSpaData)
-			// if num == 1 {
-			// 	tokensMap[request.data.Content] = []int{1}
-			// }
-
-			if num > 0 {
-				tokenMap, numToken := engine.ForSplitData(splSpaData, num)
-				numTokens += numToken
-
-				for key, val := range tokenMap {
-					tokensMap[key] = val
-				}
-			}
+			tokensMap, numTokens = engine.defaultTokens(request.data.Content)
 		}
 
 		if engine.initOptions.Using != 4 {
@@ -199,6 +185,27 @@ func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 	return tokenMap, lenSplitData
 }
 
+func (engine *Engine) defaultTokens(content string) (tokensMap TMap, numTokens int) {
+	// use segmenter
+	tokensMap = make(map[string][]int)
+	splSpaData := strings.Split(content, " ")
+	num := len(splSpaData)
+	// if num == 1 {
+	// 	tokensMap[request.data.Content] = []int{1}
+	// }
+
+	if num > 0 {
+		tokenMap, numToken := engine.ForSplitData(splSpaData, num)
+		numTokens += numToken
+
+		for key, val := range tokenMap {
+			tokensMap[key] = val
+		}
+	}
+
+	return
+}
+
 func (engine *Engine) segmenterWorker() {
 	for {
 		request := <-engine.segmenterChan
@@ -219,20 +226,7 @@ func (engine *Engine) segmenterWorker() {
 			tokensMap, numTokens = engine.segmenterData(request)
 		} else {
 			if request.data.Content != "" {
-				splSpaData := strings.Split(request.data.Content, " ")
-				num := len(splSpaData)
-				if num == 1 {
-					tokensMap[request.data.Content] = []int{1}
-				}
-
-				if num > 1 {
-					tokenMap, numToken := engine.ForSplitData(splSpaData, num)
-					numTokens += numToken
-
-					for key, val := range tokenMap {
-						tokensMap[key] = val
-					}
-				}
+				tokensMap, numTokens = engine.defaultTokens(request.data.Content)
 			}
 
 			for _, t := range request.data.Tokens {
