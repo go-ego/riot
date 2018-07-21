@@ -98,7 +98,7 @@ type EngineOpts struct {
 	UseStore  bool `toml:"use_store"`
 
 	StoreFolder string `toml:"store_folder"`
-	StoreShards int
+	StoreShards int    `toml:"store_shards"`
 	StoreEngine string `toml:"store_engine"`
 
 	IDOnly bool `toml:"id_only"`

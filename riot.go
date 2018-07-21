@@ -56,9 +56,9 @@ func NewEngine(conf ...interface{}) *Engine {
 	var (
 		searcher = &Engine{}
 
-		path        = DefaultPath
-		storeShards = 10
-		numShards   = 10
+		path          = DefaultPath
+		storageShards = 10
+		numShards     = 10
 
 		segmentDict string
 	)
@@ -73,19 +73,19 @@ func NewEngine(conf ...interface{}) *Engine {
 
 	if len(conf) > 2 {
 		numShards = conf[2].(int)
-		storeShards = conf[2].(int)
+		storageShards = conf[2].(int)
 	}
 
 	searcher.Init(types.EngineOpts{
 		// Using:         using,
-		StoreShards: storeShards,
+		StoreShards: storageShards,
 		NumShards:   numShards,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStore:    true,
 		StoreFolder: path,
-		// StoreEngine: storeEngine,
+		// StoreEngine: storageEngine,
 		GseDict: segmentDict,
 		// StopTokenFile: stopTokenFile,
 	})
