@@ -29,9 +29,10 @@ var (
 func logic1() {
 	// Init engine
 	searcher.Init(types.EngineOpts{
-		Using:       4,
-		IDOnly:      true,
-		NotUseGse: true})
+		// Using:     4,
+		IDOnly:    true,
+		NotUseGse: true,
+	})
 	defer searcher.Close()
 
 	text := "Google Is Experimenting With Virtual Reality Advertising"
