@@ -34,7 +34,7 @@ import (
 	"sync/atomic"
 
 	"github.com/go-ego/riot/core"
-	"github.com/go-ego/riot/storage"
+	"github.com/go-ego/riot/store"
 	"github.com/go-ego/riot/types"
 	"github.com/go-ego/riot/utils"
 
@@ -48,8 +48,8 @@ const (
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
-	// StorageFilePrefix persistent storage file prefix
-	StorageFilePrefix = "riot"
+	// StoreFilePrefix persistent store file prefix
+	StoreFilePrefix = "riot"
 
 	// DefaultPath default db path
 	DefaultPath = "./riot-index"
@@ -83,7 +83,7 @@ type Engine struct {
 	segmenter  gse.Segmenter
 	loaded     bool
 	stopTokens StopTokens
-	dbs        []storage.Storage
+	dbs        []store.Store
 
 	// 建立索引器使用的通信通道
 	segmenterChan         chan segmenterReq
@@ -97,8 +97,8 @@ type Engine struct {
 	rankerRemoveDocChans []chan rankerRemoveDocReq
 
 	// 建立持久存储使用的通信通道
-	storageIndexDocChans []chan storageIndexDocReq
-	storageInitChan      chan bool
+	storeIndexDocChans []chan storeIndexDocReq
+	storeInitChan      chan bool
 }
 
 // Indexer initialize the indexer channel
@@ -147,24 +147,24 @@ func (engine *Engine) Ranker(options types.EngineOpts) {
 	}
 }
 
-// InitStorage initialize the persistent storage channel
-func (engine *Engine) InitStorage() {
-	engine.storageIndexDocChans = make(
-		[]chan storageIndexDocReq, engine.initOptions.StorageShards)
+// InitStore initialize the persistent store channel
+func (engine *Engine) InitStore() {
+	engine.storeIndexDocChans = make(
+		[]chan storeIndexDocReq, engine.initOptions.StoreShards)
 
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-		engine.storageIndexDocChans[shard] = make(
-			chan storageIndexDocReq)
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
+		engine.storeIndexDocChans[shard] = make(
+			chan storeIndexDocReq)
 	}
-	engine.storageInitChan = make(
-		chan bool, engine.initOptions.StorageShards)
+	engine.storeInitChan = make(
+		chan bool, engine.initOptions.StoreShards)
 }
 
 // CheckMem check the memory when the memory is larger
-// than 99.99% using the storage
+// than 99.99% using the store
 func (engine *Engine) CheckMem() {
 	// Todo test
-	if !engine.initOptions.UseStorage {
+	if !engine.initOptions.UseStore {
 		log.Println("Check virtualMemory...")
 
 		vmem, _ := mem.VirtualMemory()
@@ -173,29 +173,29 @@ func (engine *Engine) CheckMem() {
 
 		useMem := fmt.Sprintf("%.2f", vmem.UsedPercent)
 		if useMem == "99.99" {
-			engine.initOptions.UseStorage = true
-			engine.initOptions.StorageFolder = DefaultPath
+			engine.initOptions.UseStore = true
+			engine.initOptions.StoreFolder = DefaultPath
 			// os.MkdirAll(DefaultPath, 0777)
 		}
 	}
 }
 
-// Storage start the persistent storage work connection
-func (engine *Engine) Storage() {
-	// if engine.initOptions.UseStorage {
-	err := os.MkdirAll(engine.initOptions.StorageFolder, 0700)
+// Store start the persistent store work connection
+func (engine *Engine) Store() {
+	// if engine.initOptions.UseStore {
+	err := os.MkdirAll(engine.initOptions.StoreFolder, 0700)
 	if err != nil {
 		log.Fatalf("Can not create directory: %s ; %v",
-			engine.initOptions.StorageFolder, err)
+			engine.initOptions.StoreFolder, err)
 	}
 
 	// 打开或者创建数据库
-	engine.dbs = make([]storage.Storage, engine.initOptions.StorageShards)
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-		dbPath := engine.initOptions.StorageFolder + "/" +
-			StorageFilePrefix + "." + strconv.Itoa(shard)
+	engine.dbs = make([]store.Store, engine.initOptions.StoreShards)
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
+		dbPath := engine.initOptions.StoreFolder + "/" +
+			StoreFilePrefix + "." + strconv.Itoa(shard)
 
-		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
+		db, err := store.OpenStore(dbPath, engine.initOptions.StoreEngine)
 		if db == nil || err != nil {
 			log.Fatal("Unable to open database ", dbPath, ": ", err)
 		}
@@ -203,13 +203,13 @@ func (engine *Engine) Storage() {
 	}
 
 	// 从数据库中恢复
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-		go engine.storageInitWorker(shard)
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
+		go engine.storeInitWorker(shard)
 	}
 
 	// 等待恢复完成
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-		<-engine.storageInitChan
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
+		<-engine.storeInitChan
 	}
 
 	for {
@@ -226,20 +226,20 @@ func (engine *Engine) Storage() {
 	}
 
 	// 关闭并重新打开数据库
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
 		engine.dbs[shard].Close()
-		dbPath := engine.initOptions.StorageFolder + "/" +
-			StorageFilePrefix + "." + strconv.Itoa(shard)
+		dbPath := engine.initOptions.StoreFolder + "/" +
+			StoreFilePrefix + "." + strconv.Itoa(shard)
 
-		db, err := storage.OpenStorage(dbPath, engine.initOptions.StorageEngine)
+		db, err := store.OpenStore(dbPath, engine.initOptions.StoreEngine)
 		if db == nil || err != nil {
 			log.Fatal("Unable to open database ", dbPath, ": ", err)
 		}
 		engine.dbs[shard] = db
 	}
 
-	for shard := 0; shard < engine.initOptions.StorageShards; shard++ {
-		go engine.storageIndexDocWorker(shard)
+	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
+		go engine.storeIndexDocWorker(shard)
 	}
 	// }
 }
@@ -269,14 +269,14 @@ func (engine *Engine) Init(options types.EngineOpts) {
 		log.Fatal("Do not re-initialize the engine.")
 	}
 
-	if options.GseDict == "" && !options.NotUsingGse && !engine.loaded {
+	if options.GseDict == "" && !options.NotUseGse && !engine.loaded {
 		log.Printf("Dictionary file path is empty, load the default dictionary file.")
 		options.GseDict = "zh"
 	}
 
-	if options.UseStorage == true && options.StorageFolder == "" {
+	if options.UseStore == true && options.StoreFolder == "" {
 		log.Printf("Store file path is empty, use default folder path.")
-		options.StorageFolder = DefaultPath
+		options.StoreFolder = DefaultPath
 		// os.MkdirAll(DefaultPath, 0777)
 	}
 
@@ -284,7 +284,7 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	engine.initOptions = options
 	engine.initialized = true
 
-	if !options.NotUsingGse {
+	if !options.NotUseGse {
 		if !engine.loaded {
 			// 载入分词器词典
 			engine.segmenter.LoadDict(options.GseDict)
@@ -314,12 +314,12 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	// 初始化排序器通道
 	engine.Ranker(options)
 
-	// engine.CheckMem(engine.initOptions.UseStorage)
+	// engine.CheckMem(engine.initOptions.UseStore)
 	engine.CheckMem()
 
 	// 初始化持久化存储通道
-	if engine.initOptions.UseStorage {
-		engine.InitStorage()
+	if engine.initOptions.UseStore {
+		engine.InitStore()
 	}
 
 	// 启动分词器
@@ -343,8 +343,8 @@ func (engine *Engine) Init(options types.EngineOpts) {
 	}
 
 	// 启动持久化存储工作协程
-	if engine.initOptions.UseStorage {
-		engine.Storage()
+	if engine.initOptions.UseStore {
+		engine.Store()
 	}
 
 	atomic.AddUint64(&engine.numDocsStored, engine.numIndexingReqs)
@@ -362,13 +362,13 @@ func (engine *Engine) Init(options types.EngineOpts) {
 //      1. 这个函数是线程安全的，请尽可能并发调用以提高索引速度
 //      2. 这个函数调用是非同步的，也就是说在函数返回时有可能文档还没有加入索引中，因此
 //         如果立刻调用Search可能无法查询到这个文档。强制刷新索引请调用FlushIndex函数。
-func (engine *Engine) IndexDoc(docId uint64, data types.DocIndexData,
+func (engine *Engine) IndexDoc(docId uint64, data types.DocData,
 	forceUpdate ...bool) {
 	engine.Index(docId, data, forceUpdate...)
 }
 
 // Index add the document to the index
-func (engine *Engine) Index(docId uint64, data types.DocIndexData,
+func (engine *Engine) Index(docId uint64, data types.DocData,
 	forceUpdate ...bool) {
 
 	var force bool
@@ -384,15 +384,15 @@ func (engine *Engine) Index(docId uint64, data types.DocIndexData,
 	engine.internalIndexDoc(docId, data, force)
 
 	hash := murmur.Sum32(fmt.Sprintf("%d", docId)) %
-		uint32(engine.initOptions.StorageShards)
+		uint32(engine.initOptions.StoreShards)
 
-	if engine.initOptions.UseStorage && docId != 0 {
-		engine.storageIndexDocChans[hash] <- storageIndexDocReq{
+	if engine.initOptions.UseStore && docId != 0 {
+		engine.storeIndexDocChans[hash] <- storeIndexDocReq{
 			docId: docId, data: data}
 	}
 }
 
-func (engine *Engine) internalIndexDoc(docId uint64, data types.DocIndexData,
+func (engine *Engine) internalIndexDoc(docId uint64, data types.DocData,
 	forceUpdate bool) {
 
 	if !engine.initialized {
@@ -448,12 +448,12 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 		engine.rankerRemoveDocChans[shard] <- rankerRemoveDocReq{docId: docId}
 	}
 
-	if engine.initOptions.UseStorage && docId != 0 {
+	if engine.initOptions.UseStore && docId != 0 {
 		// 从数据库中删除
 		hash := murmur.Sum32(fmt.Sprintf("%d", docId)) %
-			uint32(engine.initOptions.StorageShards)
+			uint32(engine.initOptions.StoreShards)
 
-		go engine.storageRemoveDocWorker(docId, hash)
+		go engine.storeRemoveDocWorker(docId, hash)
 	}
 }
 
@@ -491,7 +491,7 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	// tokens := []string{}
 	if request.Text != "" {
 		request.Text = strings.ToLower(request.Text)
-		if engine.initOptions.NotUsingGse {
+		if engine.initOptions.NotUseGse {
 			tokens = strings.Split(request.Text, " ")
 		} else {
 			// querySegments := engine.segmenter.Segment([]byte(request.Text))
@@ -513,8 +513,8 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	return
 }
 
-// Rank rank docs by types.ScoredIDs
-func (engine *Engine) Rank(request types.SearchReq, RankOpts types.RankOpts,
+// RankId rank docs by types.ScoredIDs
+func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
 	tokens []string, rankerReturnChan chan rankerReturnReq) (
 	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
@@ -720,7 +720,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	}
 
 	if engine.initOptions.IDOnly {
-		output = engine.Rank(request, RankOpts, tokens, rankerReturnChan)
+		output = engine.RankId(request, RankOpts, tokens, rankerReturnChan)
 		return
 	}
 
@@ -738,7 +738,7 @@ func (engine *Engine) Flush() {
 		inxd := engine.numIndexingReqs == engine.numDocsIndexed
 		rmd := engine.numRemovingReqs*uint64(engine.initOptions.NumShards) ==
 			engine.numDocsRemoved
-		stored := !engine.initOptions.UseStorage || engine.numIndexingReqs ==
+		stored := !engine.initOptions.UseStore || engine.numIndexingReqs ==
 			engine.numDocsStored
 		engine.loc.RUnlock()
 
@@ -749,7 +749,7 @@ func (engine *Engine) Flush() {
 	}
 
 	// 强制更新，保证其为最后的请求
-	engine.IndexDoc(0, types.DocIndexData{}, true)
+	engine.IndexDoc(0, types.DocData{}, true)
 	for {
 		runtime.Gosched()
 
@@ -775,7 +775,7 @@ func (engine *Engine) FlushIndex() {
 // 关闭引擎
 func (engine *Engine) Close() {
 	engine.Flush()
-	if engine.initOptions.UseStorage {
+	if engine.initOptions.UseStore {
 		for _, db := range engine.dbs {
 			db.Close()
 		}

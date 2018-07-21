@@ -12,22 +12,22 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package storage
+package store
 
 import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
-// Leveldb leveldb storage
+// Leveldb leveldb store
 type Leveldb struct {
 	db *leveldb.DB
 }
 
-// OpenLeveldb opens or creates a DB for the given storage. The DB
+// OpenLeveldb opens or creates a DB for the given store. The DB
 // will be created if not exist, unless ErrorIfMissing is true.
 // Also, if ErrorIfExist is true and the DB exist Open will
 // returns os.ErrExist error.
-func OpenLeveldb(dbPath string) (Storage, error) {
+func OpenLeveldb(dbPath string) (Store, error) {
 	db, err := leveldb.OpenFile(dbPath, nil)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (s *Leveldb) Has(k []byte) (bool, error) {
 
 // Len calculates approximate sizes of the given key ranges.
 // The length of the returned sizes are equal with the length of
-// the given ranges. The returned sizes measure storage space usage,
+// the given ranges. The returned sizes measure store space usage,
 // so if the user data compresses by a factor of ten, the returned
 // sizes will be one-tenth the size of the corresponding user data size.
 // The results may not include the sizes of recently written data.

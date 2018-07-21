@@ -38,17 +38,17 @@ func InitEngine(conf Config) {
 	log.Println("conf.config.Etcd: ", Conf.Etcd)
 
 	var path = "./riot-index"
-	if conf.Engine.StorageFolder != "" {
-		path = conf.Engine.StorageFolder
+	if conf.Engine.StoreFolder != "" {
+		path = conf.Engine.StoreFolder
 	}
 
-	if conf.Engine.StorageFolder != "" {
-		path = conf.Engine.StorageFolder
+	if conf.Engine.StoreFolder != "" {
+		path = conf.Engine.StoreFolder
 	}
 
 	storageShards := 10
-	if conf.Engine.StorageShards != 0 {
-		storageShards = conf.Engine.StorageShards
+	if conf.Engine.StoreShards != 0 {
+		storageShards = conf.Engine.StoreShards
 	}
 
 	numShards := 10
@@ -63,19 +63,19 @@ func InitEngine(conf Config) {
 	}
 	using := conf.Engine.Using
 
-	storageEngine := conf.Engine.StorageEngine
+	storageEngine := conf.Engine.StoreEngine
 	stopTokenFile := conf.Engine.StopTokenFile
 
 	Searcher.Init(types.EngineOpts{
-		Using:         using,
-		StorageShards: storageShards,
-		NumShards:     numShards,
+		Using:       using,
+		StoreShards: storageShards,
+		NumShards:   numShards,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: path,
-		StorageEngine: storageEngine,
+		UseStore:      true,
+		StoreFolder:   path,
+		StoreEngine:   storageEngine,
 		GseDict:       segmentDict,
 		StopTokenFile: stopTokenFile,
 	})
@@ -112,7 +112,7 @@ func Search(sea SearchArgs) types.SearchResp {
 	var docs types.SearchResp
 
 	docs = Searcher.Search(types.SearchReq{Text: sea.Query,
-		// NotUsingGse: true,
+		// NotUseGse: true,
 		DocIds: sea.DocIds,
 		Logic:  sea.Logic,
 		RankOpts: &types.RankOpts{

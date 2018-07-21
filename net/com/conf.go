@@ -29,18 +29,21 @@ type Engine struct {
 	Mode  string
 	Using int
 
-	StorageShards int    `toml:"storage_shards"`
-	StorageEngine string `toml:"storage_engine"`
-	StorageFolder string `toml:"storage_folder"`
+	StoreShards int    `toml:"store_shards"`
+	StoreEngine string `toml:"store_engine"`
+	StoreFolder string `toml:"store_folder"`
 
-	NumShards     int    `toml:"num_shards"`
-	OutputOffset  int    `toml:"output_offset"`
-	MaxOutputs    int    `toml:"max_outputs"`
-	GseDict       string `toml:"segmenter_dict"`
+	NumShards    int `toml:"num_shards"`
+	OutputOffset int `toml:"output_offset"`
+	MaxOutputs   int `toml:"max_outputs"`
+
+	GseDict       string `toml:"gse_dict"`
+	GseMode       string `toml:"gse_mode"`
 	StopTokenFile string `toml:"stop_token_file"`
-	Relation      string
-	Time          string
-	Ts            int64
+
+	Relation string
+	Time     string
+	Ts       int64
 }
 
 // Rpc search rpc options

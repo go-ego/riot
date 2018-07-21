@@ -61,6 +61,8 @@ func addDocsWithLabels(engine *Engine) {
 		Content: "此次百度收购将成中国互联网最大并购",
 		Labels:  []string{"百度", "中国"},
 	})
+	log.Println("engine.Segment(): ", engine.Segment("此次百度收购将成中国互联网最大并购"))
+
 	docId++
 	engine.Index(docId, types.DocData{
 		Content: "百度宣布拟全资收购91无线业务",
@@ -470,7 +472,7 @@ func TestIndexWithLabelsStopTokenFile(t *testing.T) {
 	tt.Expect(t, "0", len(outDocs))
 }
 
-func TestEngineIndexWithPersistentStorage(t *testing.T) {
+func TestEngineIndexWithStore(t *testing.T) {
 	gob.Register(ScoringFields{})
 
 	var engine Engine
@@ -485,9 +487,9 @@ func TestEngineIndexWithPersistentStorage(t *testing.T) {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: "riot.persistent",
-		StorageShards: 2,
+		UseStore:    true,
+		StoreFolder: "riot.persistent",
+		StoreShards: 2,
 	})
 
 	AddDocs(&engine)
@@ -509,9 +511,9 @@ func TestEngineIndexWithPersistentStorage(t *testing.T) {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: "riot.persistent",
-		StorageShards: 2,
+		UseStore:    true,
+		StoreFolder: "riot.persistent",
+		StoreShards: 2,
 	})
 	engine1.Flush()
 
@@ -758,9 +760,10 @@ func TestSearchJp(t *testing.T) {
 }
 
 func TestSearchGse(t *testing.T) {
+	log.Println("Test search gse ...")
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		// Using:         1,
+		// Using:   1,
 		GseDict: "./testdata/test_dict_jp.txt",
 		DefaultRankOpts: &types.RankOpts{
 			ReverseOrder:    true,
@@ -820,20 +823,34 @@ func TestSearchGse(t *testing.T) {
 }
 
 func TestSearchNotUseGse(t *testing.T) {
-	var engine Engine
+	var engine, engine1 Engine
 	engine.Init(types.EngineOpts{
-		Using:       4,
-		NotUsingGse: true,
+		Using:     4,
+		NotUseGse: true,
+	})
+
+	engine1.Init(types.EngineOpts{
+		IDOnly:    true,
+		NotUseGse: true,
 	})
 
 	AddDocs(&engine)
+	AddDocs(&engine1)
 
 	engine.Index(6, types.DocData{
 		Content: "Google Is Experimenting With Virtual Reality Advertising",
 		Fields:  ScoringFields{1, 2, 3},
+		Tokens:  []types.TokenData{{Text: "test"}},
+	})
+
+	engine1.Index(6, types.DocData{
+		Content: "Google Is Experimenting With Virtual Reality Advertising",
+		Fields:  ScoringFields{1, 2, 3},
+		Tokens:  []types.TokenData{{Text: "test"}},
 	})
 
 	engine.Flush()
+	engine1.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -854,10 +871,17 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "1", len(outDocs))
 
 	tt.Expect(t, "6", outDocs[0].DocId)
-	tt.Expect(t, "3200", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "3170", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
+	outputs1 := engine1.Search(types.SearchReq{
+		Text:   "google",
+		DocIds: docIds})
+	tt.Expect(t, "1", len(outputs1.Tokens))
+	tt.Expect(t, "0", outputs1.NumDocs)
+
 	engine.Close()
+	engine1.Close()
 }
 
 func TestSearchWithGse(t *testing.T) {
@@ -899,6 +923,29 @@ func TestSearchWithGse(t *testing.T) {
 
 	engine1.Close()
 	engine2.Close()
+}
+
+func TestRiotGse(t *testing.T) {
+	var engine, engine1 Engine
+	engine.Init(types.EngineOpts{
+		Using: 1,
+	})
+
+	AddDocs(&engine)
+
+	engine1.Init(types.EngineOpts{
+		Using:   1,
+		GseMode: true,
+	})
+
+	AddDocs(&engine1)
+	tt.Equal(t, "[此次 百度 收购 将 成 中国 互联网 最大 并购]",
+		engine.Segment("此次百度收购将成中国互联网最大并购"))
+	tt.Equal(t, "[此次 百度 收购 将 成 中国 互联网 最大 并购]",
+		engine1.Segment("此次百度收购将成中国互联网最大并购"))
+
+	engine.Close()
+	engine1.Close()
 }
 
 func TestSearchLogic(t *testing.T) {

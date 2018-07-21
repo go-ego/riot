@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package storage
+package store
 
 import (
 	"log"
@@ -20,13 +20,13 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
-// Badger badger.KV db storage
+// Badger badger.KV db store
 type Badger struct {
 	db *badger.DB
 }
 
-// OpenBadger open Badger storage
-func OpenBadger(dbPath string) (Storage, error) {
+// OpenBadger open Badger store
+func OpenBadger(dbPath string) (Store, error) {
 	// err := os.MkdirAll(dbPath, 0777)
 	// if err != nil {
 	// 	log.Fatal("os.MkdirAll: ", err)

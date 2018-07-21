@@ -1,0 +1,4 @@
+# [engine_opts]
+use_store = true
+store_folder = "./riot.new"
+gse_dict = "./testdata/test_dict.txt"

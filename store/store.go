@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-package storage
+package store
 
 import (
 	"fmt"
@@ -20,13 +20,13 @@ import (
 )
 
 const (
-	// DefaultStorage default storage engine
-	DefaultStorage = "ldb"
-	// DefaultStorage = "bad"
-	// DefaultStorage = "bolt"
+	// DefaultStore default store engine
+	DefaultStore = "ldb"
+	// DefaultStore = "bad"
+	// DefaultStore = "bolt"
 )
 
-var supportedStorage = map[string]func(path string) (Storage, error){
+var supportedStore = map[string]func(path string) (Store, error){
 	"ldb":  OpenLeveldb,
 	"bg":   OpenBadger, // bad to bg
 	"bolt": OpenBolt,
@@ -34,13 +34,14 @@ var supportedStorage = map[string]func(path string) (Storage, error){
 	// "ledisdb": Open,
 }
 
-// RegisterStorage register Storage engine
-func RegisterStorage(name string, fn func(path string) (Storage, error)) {
-	supportedStorage[name] = fn
+// RegisterStore register store engine
+func RegisterStore(name string, fn func(path string) (Store, error)) {
+	supportedStore[name] = fn
 }
 
-// Storage is storage interface
-type Storage interface {
+// Store is store interface
+type Store interface {
+	// type KVBatch interface {
 	Set(k, v []byte) error
 	Get(k []byte) ([]byte, error)
 	Delete(k []byte) error
@@ -50,22 +51,22 @@ type Storage interface {
 	WALName() string
 }
 
-// OpenStorage open Storage engine
-func OpenStorage(path string, args ...string) (Storage, error) {
-	storeName := DefaultStorage
+// OpenStore open store engine
+func OpenStore(path string, args ...string) (Store, error) {
+	storeName := DefaultStore
 
 	if len(args) > 0 && args[0] != "" {
 		storeName = args[0]
 	} else {
-		storeEnv := os.Getenv("RIOT_STORAGE_ENGINE")
+		storeEnv := os.Getenv("Riot_Store_Engine")
 		if storeEnv != "" {
 			storeName = storeEnv
 		}
 	}
 
-	if fn, has := supportedStorage[storeName]; has {
+	if fn, has := supportedStore[storeName]; has {
 		return fn(path)
 	}
 
-	return nil, fmt.Errorf("unsupported storage engine: %v", storeName)
+	return nil, fmt.Errorf("unsupported Store engine: %v", storeName)
 }

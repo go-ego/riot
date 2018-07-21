@@ -35,9 +35,9 @@ func initEngine() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: path,
-		GseDict:       "../../data/dict/dictionary.txt",
+		UseStore:    true,
+		StoreFolder: path,
+		GseDict:     "../../data/dict/dictionary.txt",
 		// StopTokenFile:           "../../riot/data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()

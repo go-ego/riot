@@ -40,6 +40,7 @@ func New(conf ...interface{}) *Engine {
 		)
 
 		fs := conf[0].(string)
+		log.Println("conf path is: ", fs)
 		toml.Init(fs, &config)
 		go toml.Watch(fs, &config)
 
@@ -55,9 +56,9 @@ func NewEngine(conf ...interface{}) *Engine {
 	var (
 		searcher = &Engine{}
 
-		path        = DefaultPath
-		storeShards = 10
-		numShards   = 10
+		path          = DefaultPath
+		storageShards = 10
+		numShards     = 10
 
 		segmentDict string
 	)
@@ -72,19 +73,19 @@ func NewEngine(conf ...interface{}) *Engine {
 
 	if len(conf) > 2 {
 		numShards = conf[2].(int)
-		storeShards = conf[2].(int)
+		storageShards = conf[2].(int)
 	}
 
 	searcher.Init(types.EngineOpts{
 		// Using:         using,
-		StorageShards: storeShards,
-		NumShards:     numShards,
+		StoreShards: storageShards,
+		NumShards:   numShards,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
-		UseStorage:    true,
-		StorageFolder: path,
-		// StorageEngine: storeEngine,
+		UseStore:    true,
+		StoreFolder: path,
+		// StoreEngine: storageEngine,
 		GseDict: segmentDict,
 		// StopTokenFile: stopTokenFile,
 	})
@@ -125,7 +126,7 @@ func (engine *Engine) HasDocDB(docId uint64) bool {
 	length := binary.PutUvarint(b, docId)
 
 	shard := murmur.Sum32(fmt.Sprintf("%d", docId)) %
-		uint32(engine.initOptions.StorageShards)
+		uint32(engine.initOptions.StoreShards)
 
 	has, err := engine.dbs[shard].Has(b[0:length])
 	if err != nil {
