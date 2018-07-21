@@ -17,6 +17,7 @@ package riot
 
 import (
 	// "fmt"
+
 	"strings"
 
 	"github.com/go-ego/gpy"
@@ -35,7 +36,7 @@ type segmenterReq struct {
 }
 
 // ForSplitData for split segment's data, segspl
-func (engine *Engine) ForSplitData(splData []string, num int) (TMap, int) {
+func (engine *Engine) ForSplitData(strData []string, num int) (TMap, int) {
 	var (
 		numTokens int
 		splitStr  string
@@ -43,13 +44,13 @@ func (engine *Engine) ForSplitData(splData []string, num int) (TMap, int) {
 	tokensMap := make(map[string][]int)
 
 	for i := 0; i < num; i++ {
-		if splData[i] != "" {
-			if !engine.stopTokens.IsStopToken(splData[i]) {
+		if strData[i] != "" {
+			if !engine.stopTokens.IsStopToken(strData[i]) {
 				numTokens++
-				tokensMap[splData[i]] = append(tokensMap[splData[i]], numTokens)
+				tokensMap[strData[i]] = append(tokensMap[strData[i]], numTokens)
 			}
 
-			splitStr += splData[i]
+			splitStr += strData[i]
 			if !engine.stopTokens.IsStopToken(splitStr) {
 				numTokens++
 				tokensMap[splitStr] = append(tokensMap[splitStr], numTokens)
@@ -58,8 +59,8 @@ func (engine *Engine) ForSplitData(splData []string, num int) (TMap, int) {
 			if engine.initOptions.Using == 6 {
 				// more combination
 				var splitsStr string
-				for s := i + 1; s < len(splData); s++ {
-					splitsStr += splData[s]
+				for s := i + 1; s < len(strData); s++ {
+					splitsStr += strData[s]
 
 					if !engine.stopTokens.IsStopToken(splitsStr) {
 						numTokens++
@@ -102,9 +103,9 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 		}
 
 		if engine.initOptions.Using != 4 {
-			splData := strings.Split(request.data.Content, "")
-			num = len(splData)
-			tokenMap, numToken := engine.ForSplitData(splData, num)
+			strData := strings.Split(request.data.Content, "")
+			num = len(strData)
+			tokenMap, numToken := engine.ForSplitData(strData, num)
 			numTokens += numToken
 			for key, val := range tokenMap {
 				tokensMap[key] = val
@@ -188,14 +189,14 @@ func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 func (engine *Engine) defaultTokens(content string) (tokensMap TMap, numTokens int) {
 	// use segmenter
 	tokensMap = make(map[string][]int)
-	splSpaData := strings.Split(content, " ")
-	num := len(splSpaData)
+	strData := strings.Split(content, " ")
+	num := len(strData)
 	// if num == 1 {
 	// 	tokensMap[request.data.Content] = []int{1}
 	// }
 
 	if num > 0 {
-		tokenMap, numToken := engine.ForSplitData(splSpaData, num)
+		tokenMap, numToken := engine.ForSplitData(strData, num)
 		numTokens += numToken
 
 		for key, val := range tokenMap {
