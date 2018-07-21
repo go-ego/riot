@@ -44,7 +44,8 @@ import (
 )
 
 const (
-	version string = "v0.10.0.378, Danube River!"
+	// Version get the riot version
+	Version string = "v0.10.0.425, Danube River!"
 
 	// NumNanosecondsInAMillisecond nano-seconds in a milli-second num
 	NumNanosecondsInAMillisecond = 1000000
@@ -57,7 +58,7 @@ const (
 
 // GetVersion get the riot version
 func GetVersion() string {
-	return version
+	return Version
 }
 
 // Engine initialize the engine

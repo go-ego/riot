@@ -68,5 +68,5 @@ func OpenStore(path string, args ...string) (Store, error) {
 		return fn(path)
 	}
 
-	return nil, fmt.Errorf("unsupported Store engine: %v", storeName)
+	return nil, fmt.Errorf("unsupported store engine: %v", storeName)
 }
