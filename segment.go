@@ -227,6 +227,7 @@ func (engine *Engine) segmenterWorker() {
 			tokensMap, numTokens = engine.segmenterData(request)
 		} else {
 			if request.data.Content != "" {
+				request.data.Content = strings.ToLower(request.data.Content)
 				tokensMap, numTokens = engine.defaultTokens(request.data.Content)
 			}
 
@@ -236,7 +237,7 @@ func (engine *Engine) segmenterWorker() {
 				}
 			}
 
-			numTokens = len(request.data.Tokens)
+			numTokens += len(request.data.Tokens)
 		}
 
 		// 加入非分词的文档标签
