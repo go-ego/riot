@@ -83,10 +83,10 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 	tokensMap := make(map[string][]int)
 
 	if request.data.Content != "" {
-		request.data.Content = strings.ToLower(request.data.Content)
+		content := strings.ToLower(request.data.Content)
 		if engine.initOptions.Using == 3 {
 			// use segmenter
-			segments := engine.segmenter.ModeSegment([]byte(request.data.Content),
+			segments := engine.segmenter.ModeSegment([]byte(content),
 				engine.initOptions.GseMode)
 
 			for _, segment := range segments {
@@ -99,11 +99,11 @@ func (engine *Engine) splitData(request segmenterReq) (TMap, int) {
 		}
 
 		if engine.initOptions.Using == 4 {
-			tokensMap, numTokens = engine.defaultTokens(request.data.Content)
+			tokensMap, numTokens = engine.defaultTokens(content)
 		}
 
 		if engine.initOptions.Using != 4 {
-			strData := strings.Split(request.data.Content, "")
+			strData := strings.Split(content, "")
 			num = len(strData)
 			tokenMap, numToken := engine.ForSplitData(strData, num)
 			numTokens += numToken
@@ -227,8 +227,8 @@ func (engine *Engine) segmenterWorker() {
 			tokensMap, numTokens = engine.segmenterData(request)
 		} else {
 			if request.data.Content != "" {
-				request.data.Content = strings.ToLower(request.data.Content)
-				tokensMap, numTokens = engine.defaultTokens(request.data.Content)
+				content := strings.ToLower(request.data.Content)
+				tokensMap, numTokens = engine.defaultTokens(content)
 			}
 
 			for _, t := range request.data.Tokens {
