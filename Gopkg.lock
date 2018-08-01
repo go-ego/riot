@@ -35,8 +35,8 @@
     "mvcc/mvccpb",
     "pkg/types"
   ]
-  revision = "33245c6b5b49130ca99280408fadfab01aac0e48"
-  version = "v3.3.8"
+  revision = "fca8add78a9d926166eb739b8e4a124434025ba3"
+  version = "v3.3.9"
 
 [[projects]]
   name = "github.com/dgraph-io/badger"
@@ -67,7 +67,7 @@
   branch = "master"
   name = "github.com/go-ego/cedar"
   packages = ["."]
-  revision = "5c9b4f52f68433d3ff66bfbed192e20fdc6d315c"
+  revision = "39a3301a49c052d18c55ade2bd080cda1ccc0446"
 
 [[projects]]
   branch = "master"
@@ -79,7 +79,7 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "98ab954171b60d1f182d06f39e5bf7573f17a69d"
+  revision = "78fb4a3717d7d60731b5b95e651e86325419c064"
 
 [[projects]]
   branch = "master"
@@ -110,7 +110,7 @@
     "info",
     "zlog"
   ]
-  revision = "8d2c4575ccdacd5c4936a1fb3831165abfdbccc5"
+  revision = "765190081bade7de90c53a7117f1c6a3dee5b0de"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -119,8 +119,8 @@
     "proto",
     "protoc-gen-gogo/descriptor"
   ]
-  revision = "1adfc126b41513cc696b209667c8656ea7aac67c"
-  version = "v1.0.0"
+  revision = "636bf0302bc95575d69441b25a2603156ffdddf1"
+  version = "v1.1.1"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -164,8 +164,8 @@
     "net",
     "process"
   ]
-  revision = "4a180b209f5f494e5923cfce81ea30ba23915877"
-  version = "v2.18.06"
+  revision = "8048a2e9c5773235122027dd585cf821b2af1249"
+  version = "v2.18.07"
 
 [[projects]]
   branch = "master"
@@ -196,7 +196,7 @@
   branch = "master"
   name = "github.com/vcaesar/tt"
   packages = ["."]
-  revision = "54af4381b253a2380245310c25e1ff66dfc46f62"
+  revision = "bafafb004f106551bfbcb6cac4ec3f9932365a57"
 
 [[projects]]
   name = "go.uber.org/atomic"
@@ -220,8 +220,8 @@
     "internal/exit",
     "zapcore"
   ]
-  revision = "eeedf312bc6c57391d84767a4cd413f02a917974"
-  version = "v1.8.0"
+  revision = "4d45f9617f7d90f7a663ff21c7a4321dbe78098b"
+  version = "v1.9.0"
 
 [[projects]]
   branch = "master"
@@ -235,7 +235,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "d0887baf81f4598189d4e12a37c6da86f0bba4d0"
+  revision = "32f9bdbd7df18e8641d215e7ea68be88b971feb0"
 
 [[projects]]
   branch = "master"
@@ -244,7 +244,7 @@
     "unix",
     "windows"
   ]
-  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
+  revision = "bd9dbc187b6e1dacfdd2722a87e83093c2d7bd6e"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -271,7 +271,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "e92b116572682a5b432ddd840aeaba2a559eeff1"
+  revision = "daca94659cb50e9f37c1b834680f2e46358f10b0"
 
 [[projects]]
   name = "google.golang.org/grpc"
@@ -290,7 +290,9 @@
     "internal",
     "internal/backoff",
     "internal/channelz",
+    "internal/envconfig",
     "internal/grpcrand",
+    "internal/transport",
     "keepalive",
     "metadata",
     "naming",
@@ -302,11 +304,10 @@
     "resolver/passthrough",
     "stats",
     "status",
-    "tap",
-    "transport"
+    "tap"
   ]
-  revision = "168a6198bcb0ef175f7dacec0b8691fc141dc9b8"
-  version = "v1.13.0"
+  revision = "32fb0ac620c32ba40a4626ddf94d90d12cce3455"
+  version = "v1.14.0"
 
 [[projects]]
   name = "gopkg.in/natefinch/lumberjack.v2"
