@@ -97,7 +97,7 @@ message Logic {
     // 非查询, 不包含
     bool notIn = 3;
     
-    LogicExpr LogicExpr = 4;
+    LogicExpr logicExpr = 4;
 }
     
 // LogicExpr logic expression options
