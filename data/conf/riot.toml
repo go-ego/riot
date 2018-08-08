@@ -3,7 +3,7 @@ url = ["http://localhost:8080", "http://localhost:8081"]
 # port = ""
 
 # [db]
-# storage_folder= "./riot-index"
+# store_folder= "./riot-index"
 # relation = "./relations"
 
 [engine]
