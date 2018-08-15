@@ -464,12 +464,15 @@ func TestIndexWithLabelsStopTokenFile(t *testing.T) {
 
 	addDocsWithLabels(&engine1)
 
-	outputs1 := engine1.Search(types.SearchReq{Text: "百度"})
+	req := types.SearchReq{Text: "百度"}
+	outputs1 := engine1.Search(req)
+	outputsDoc := engine1.SearchDoc(req)
 	tt.Expect(t, "0", len(outputs1.Tokens))
 	// tt.Expect(t, "百度", outputs1.Tokens[0])
 
 	outDocs := outputs1.Docs.(types.ScoredDocs)
 	tt.Expect(t, "0", len(outDocs))
+	tt.Expect(t, "0", len(outputsDoc.Docs))
 }
 
 func TestEngineIndexWithStore(t *testing.T) {
@@ -640,9 +643,12 @@ func TestDocOnlyID(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 
-	outputs := engine.Search(types.SearchReq{
+	req := types.SearchReq{
 		Text:   "中国人口",
-		DocIds: docIds})
+		DocIds: docIds}
+	outputs := engine.Search(req)
+	outputsId := engine.SearchID(req)
+	tt.Expect(t, "1", len(outputsId.Docs))
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)

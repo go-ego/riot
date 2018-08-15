@@ -19,8 +19,8 @@ import (
 	"github.com/go-ego/riot/utils"
 )
 
-// SearchResp search response options
-type SearchResp struct {
+// BaseResp search response options
+type BaseResp struct {
 	// 搜索用到的关键词
 	Tokens []string
 
@@ -29,13 +29,34 @@ type SearchResp struct {
 
 	// 搜索到的文档，已排序
 	// Docs []ScoredDoc
-	Docs interface{}
+	// Docs interface{}
 
 	// 搜索是否超时。超时的情况下也可能会返回部分结果
 	Timeout bool
 
 	// 搜索到的文档个数。注意这是全部文档中满足条件的个数，可能比返回的文档数要大
 	NumDocs int
+}
+
+// SearchResp search response options
+type SearchResp struct {
+	BaseResp
+	// 搜索到的文档，已排序
+	Docs interface{}
+}
+
+// SearchDoc search response options
+type SearchDoc struct {
+	BaseResp
+	// 搜索到的文档，已排序
+	Docs []ScoredDoc
+}
+
+// SearchID search response options
+type SearchID struct {
+	BaseResp
+	// 搜索到的文档，已排序
+	Docs []ScoredID
 }
 
 // Content search content

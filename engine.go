@@ -679,6 +679,27 @@ func (engine *Engine) Ranks(request types.SearchReq, RankOpts types.RankOpts,
 	return
 }
 
+// SearchDoc find the document that satisfies the search criteria.
+// This function is thread safe, return not IDonly
+func (engine *Engine) SearchDoc(request types.SearchReq) (output types.SearchDoc) {
+	resp := engine.Search(request)
+	return types.SearchDoc{
+		BaseResp: resp.BaseResp,
+		Docs:     resp.Docs.(types.ScoredDocs),
+	}
+}
+
+// SearchID find the document that satisfies the search criteria.
+// This function is thread safe, return IDonly
+func (engine *Engine) SearchID(request types.SearchReq) (output types.SearchID) {
+	// return types.SearchID(engine.Search(request))
+	resp := engine.Search(request)
+	return types.SearchID{
+		BaseResp: resp.BaseResp,
+		Docs:     resp.Docs.(types.ScoredIDs),
+	}
+}
+
 // Search find the document that satisfies the search criteria.
 // This function is thread safe
 // 查找满足搜索条件的文档，此函数线程安全
