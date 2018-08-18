@@ -57,7 +57,7 @@ func logic1() {
 	query := "google testing"
 
 	// The search output format is found in the types.SearchResp structure
-	docs := searcher.Search(types.SearchReq{
+	docs := searcher.SearchID(types.SearchReq{
 		Text: query,
 		// Search "google testing" segmentation `or relation`
 		// and not the result of "accidentally"
@@ -72,7 +72,7 @@ func logic1() {
 			MaxOutputs:   100,
 		}})
 
-	log.Println("search response: ", len(docs.Docs.(types.ScoredIDs)), docs)
+	log.Println("search response: ", len(docs.Docs), docs)
 }
 
 func logic2() {

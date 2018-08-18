@@ -155,11 +155,11 @@ func main() {
 
 	// 搜索
 	log.Printf("开始查询")
-	output := searcher.Search(types.SearchReq{Text: *query})
+	output := searcher.SearchDoc(types.SearchReq{Text: *query})
 
 	// 显示
 	fmt.Println("output...")
-	for _, doc := range output.Docs.(types.ScoredDocs) {
+	for _, doc := range output.Docs {
 		fmt.Printf("%v %s\n\n", doc.Scores, lines[doc.DocId])
 	}
 	log.Printf("查询完毕")

@@ -262,12 +262,12 @@ type recordResponseLock struct {
 func search(ch chan bool, record *recordResponseLock) {
 	for i := 0; i < numRepeatQuery; i++ {
 		for _, query := range searchQueries {
-			output := searcher.Search(types.SearchReq{Text: query})
+			output := searcher.SearchDoc(types.SearchReq{Text: query})
 			record.RLock()
 			if _, found := record.count[query]; !found {
 				record.RUnlock()
 				record.Lock()
-				record.count[query] = len(output.Docs.(types.ScoredDocs))
+				record.count[query] = len(output.Docs)
 				record.Unlock()
 			} else {
 				record.RUnlock()

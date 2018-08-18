@@ -128,7 +128,7 @@ type JsonResponse struct {
 // JsonRpcServer json rpc server
 func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query().Get("query")
-	output := searcher.Search(types.SearchReq{
+	output := searcher.SearchDoc(types.SearchReq{
 		Text: query,
 		RankOpts: &types.RankOpts{
 			ScoringCriteria: &WeiboScoringCriteria{},
@@ -139,7 +139,7 @@ func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 
 	// 整理为输出格式
 	docs := []*Weibo{}
-	for _, doc := range output.Docs.(types.ScoredDocs) {
+	for _, doc := range output.Docs) {
 		wb := wbs[doc.DocId]
 		wb.Text = doc.Content
 		// for _, t := range output.Tokens {
