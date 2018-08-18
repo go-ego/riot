@@ -158,7 +158,7 @@ func main() {
 		// StoreFolder: "weibo_search",
 		// StoreEngine: "bg",
 	})
-	log.Print("searcher init end")
+	log.Println("searcher init end")
 	wbs = make(map[uint64]Weibo)
 
 	// 索引
@@ -169,7 +169,7 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for range c {
-			log.Print("捕获Ctrl-c，退出服务器")
+			log.Println("捕获Ctrl-c，退出服务器")
 			searcher.Close()
 			os.Exit(0)
 		}
@@ -177,6 +177,6 @@ func main() {
 
 	http.HandleFunc("/json", JsonRpcServer)
 	http.Handle("/", http.FileServer(http.Dir(*staticFolder)))
-	log.Print("服务器启动")
+	log.Println("服务器启动")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

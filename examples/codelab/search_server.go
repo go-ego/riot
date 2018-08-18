@@ -139,7 +139,7 @@ func JsonRpcServer(w http.ResponseWriter, req *http.Request) {
 
 	// 整理为输出格式
 	docs := []*Weibo{}
-	for _, doc := range output.Docs) {
+	for _, doc := range output.Docs {
 		wb := wbs[doc.DocId]
 		wb.Text = doc.Content
 		// for _, t := range output.Tokens {
@@ -179,20 +179,20 @@ func main() {
 		// StoreFolder: "weibo_search",
 		// StoreEngine: "bg",
 	})
-	log.Print("引擎初始化完毕")
+	log.Println("引擎初始化完毕")
 	wbs = make(map[uint64]Weibo)
 
 	// 索引
-	log.Print("建索引开始")
+	log.Println("建索引开始")
 	go indexWeibo()
-	log.Print("建索引完毕")
+	log.Println("建索引完毕")
 
 	// 捕获 ctrl-c
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for range c {
-			log.Print("捕获Ctrl-c，退出服务器")
+			log.Println("捕获Ctrl-c，退出服务器")
 			searcher.Close()
 			os.Exit(0)
 		}
@@ -200,6 +200,6 @@ func main() {
 
 	http.HandleFunc("/json", JsonRpcServer)
 	http.Handle("/", http.FileServer(http.Dir(*staticFolder)))
-	log.Print("服务器启动")
+	log.Println("服务器启动")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
