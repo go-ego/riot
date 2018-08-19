@@ -28,7 +28,7 @@ var (
 		"微博数据")
 	queries = flag.String(
 		"queries",
-		"女人母亲, 你好中国, 网络草根, 热门微博, 红十字会,"+
+		"女人, 你好世界, 网络草根, 热门微博, 红十字会,"+
 			"鳄鱼表演, 星座歧视, chinajoy, 高帅富, 假期计划",
 		"待搜索的关键词")
 	dictionaries = flag.String(

@@ -24,6 +24,13 @@ import (
 var (
 	// searcher is coroutine safe
 	searcher = riot.Engine{}
+
+	text  = "Google Is Experimenting With Virtual Reality Advertising"
+	text1 = `Google accidentally pushed Bluetooth update for Home
+	speaker early`
+	text2 = `Google is testing another Search results layout with 
+	rounded cards, new colors, and the 4 mysterious colored dots again`
+	text3 = "Google testing text search"
 )
 
 func logic1() {
@@ -34,13 +41,6 @@ func logic1() {
 		NotUseGse: true,
 	})
 	defer searcher.Close()
-
-	text := "Google Is Experimenting With Virtual Reality Advertising"
-	text1 := `Google accidentally pushed Bluetooth update for Home
-	speaker early`
-	text2 := `Google is testing another Search results layout with 
-	rounded cards, new colors, and the 4 mysterious colored dots again`
-	text3 := "Google testing text search"
 
 	// Add the document to the index, docId starts at 1
 	searcher.Index(1, types.DocData{Content: text})
@@ -79,12 +79,6 @@ func logic2() {
 	// Init engine
 	var searcher1 = riot.New()
 
-	text := "Google Is Experimenting With Virtual Reality Advertising"
-	text1 := `Google accidentally pushed Bluetooth update for Home
-	speaker early`
-	text2 := `Google is testing another Search results layout with 
-	rounded cards, new colors, and the 4 mysterious colored dots again`
-	text3 := "Google testing text search"
 	text4 := "Google testing search"
 
 	// Add the document to the index, docId starts at 1

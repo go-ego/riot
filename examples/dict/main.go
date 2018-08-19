@@ -10,6 +10,10 @@ import (
 var (
 	// searcher 是协程安全的
 	searcher = riot.Engine{}
+
+	text  = "《复仇者联盟3：无限战争》是全片使用IMAX摄影机拍摄"
+	text1 = "在IMAX影院放映时"
+	text2 = "全片以上下扩展至IMAX 1.9：1的宽高比来呈现"
 )
 
 func dictZh() {
@@ -21,10 +25,6 @@ func dictZh() {
 	})
 	defer searcher.Close()
 
-	text := "此次百度收购将成中国互联网最大并购"
-	text1 := "百度宣布拟全资收购91无线业务"
-	text2 := "百度是中国最大的搜索引擎"
-
 	// 将文档加入索引，docId 从1开始
 	searcher.Index(1, types.DocData{Content: text})
 	searcher.Index(2, types.DocData{Content: text1})
@@ -34,7 +34,7 @@ func dictZh() {
 	searcher.Flush()
 
 	// 搜索输出格式见types.SearchResp结构体
-	log.Print(searcher.Search(types.SearchReq{Text: "百度中国"}))
+	log.Print(searcher.Search(types.SearchReq{Text: "复仇者"}))
 }
 
 // TODO
@@ -48,14 +48,12 @@ func dictJp() {
 	})
 	defer searcher2.Close()
 
-	text := "此次百度收购将成中国互联网最大并购"
-	text1 := "百度宣布拟全资收购91无线业务"
-	text2 := "こんにちは世界"
+	text3 := "こんにちは世界"
 
 	// 将文档加入索引，docId 从1开始
 	searcher2.Index(1, types.DocData{Content: text})
 	searcher2.Index(2, types.DocData{Content: text1})
-	searcher2.Index(3, types.DocData{Content: text2})
+	searcher2.Index(3, types.DocData{Content: text3})
 
 	// 等待索引刷新完毕
 	searcher2.Flush()
