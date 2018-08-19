@@ -67,7 +67,7 @@
   branch = "master"
   name = "github.com/go-ego/cedar"
   packages = ["."]
-  revision = "39a3301a49c052d18c55ade2bd080cda1ccc0446"
+  revision = "4fc66f191550e645bf2285eb0468bc59c249e90d"
 
 [[projects]]
   branch = "master"
@@ -79,7 +79,7 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "e4fffcdf586354c45b066ff9f988ca641cd9375d"
+  revision = "7df3c69d68f9d288c9780fcfe7c6a7e529ba8322"
 
 [[projects]]
   branch = "master"
@@ -161,17 +161,10 @@
     "host",
     "internal/common",
     "mem",
-    "net",
     "process"
   ]
   revision = "8048a2e9c5773235122027dd585cf821b2af1249"
   version = "v2.18.07"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/shirou/w32"
-  packages = ["."]
-  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
   branch = "master"
@@ -235,7 +228,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
+  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
 
 [[projects]]
   branch = "master"
@@ -244,7 +237,7 @@
     "unix",
     "windows"
   ]
-  revision = "14742f9018cd6651ec7364dc6ee08af0baaa1031"
+  revision = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -271,7 +264,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "383e8b2c3b9e36c4076b235b32537292176bae20"
+  revision = "c66870c02cf823ceb633bcd05be3c7cda29976f4"
 
 [[projects]]
   name = "google.golang.org/grpc"
