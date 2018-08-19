@@ -98,9 +98,9 @@ func main() {
 	})
 	defer searcher.Close()
 
-	text := "此次百度收购将成中国互联网最大并购"
-	text1 := "百度宣布拟全资收购91无线业务"
-	text2 := "百度是中国最大的搜索引擎"
+	text := "《复仇者联盟3：无限战争》是全片使用IMAX摄影机拍摄"
+	text1 := "在IMAX影院放映时"
+	text2 := "全片以上下扩展至IMAX 1.9：1的宽高比来呈现"
 	
 	// 将文档加入索引，docId 从1开始
 	searcher.Index(1, types.DocData{Content: text})
@@ -112,7 +112,7 @@ func main() {
 	// engine.FlushIndex()
 
 	// 搜索输出格式见 types.SearchResp 结构体
-	log.Print(searcher.Search(types.SearchReq{Text:"百度中国"}))
+	log.Print(searcher.Search(types.SearchReq{Text:"复仇者"}))
 }
 ```
 
