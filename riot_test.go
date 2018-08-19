@@ -31,20 +31,20 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	engine1.Flush()
 	log.Println("new engine1 start...")
 
-	outputs := engine1.Search(types.SearchReq{Text: "中国人口"})
+	outputs := engine1.Search(types.SearchReq{Text: "世界人口"})
 	tt.Expect(t, "2", len(outputs.Tokens))
-	tt.Expect(t, "中国", outputs.Tokens[0])
+	tt.Expect(t, "世界", outputs.Tokens[0])
 	tt.Expect(t, "人口", outputs.Tokens[1])
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
 
 	// tt.Expect(t, "2", outDocs[0].DocId)
-	tt.Expect(t, "2500", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "2545", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	// tt.Expect(t, "1", outDocs[1].DocId)
-	tt.Expect(t, "2000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "2115", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
@@ -81,7 +81,7 @@ func TestDocRankId(t *testing.T) {
 	docIds[1] = true
 
 	request := types.SearchReq{
-		Text:   "中国人口",
+		Text:   "世界人口",
 		DocIds: docIds}
 
 	tokens := engine.Tokens(request)
@@ -146,7 +146,7 @@ func TestDocRanks(t *testing.T) {
 	docIds[1] = true
 
 	request := types.SearchReq{
-		Text:   "中国人口",
+		Text:   "世界人口",
 		DocIds: docIds}
 
 	tokens := engine.Tokens(request)
@@ -181,7 +181,7 @@ func TestDocRanks(t *testing.T) {
 	tt.Expect(t, "1", outputs.NumDocs)
 
 	outputs1 := engine.Search(types.SearchReq{
-		Text:    "中国人口",
+		Text:    "世界人口",
 		Timeout: 10,
 		DocIds:  docIds})
 
@@ -238,7 +238,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	tt.Expect(t, "4", len(ids))
 	tt.Expect(t, "4", len(docs))
 	tt.Expect(t, "[3 4 1 2]", ids)
-	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有十三亿人口 <nil> [] [] {2 3 3}} {中国有十三亿人口人口 <nil> [] [] {1 2 3}} {中国人口 <nil> [] [] <nil>}]`
+	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有七十亿人口 <nil> [] [] {2 3 3}} {世界有七十亿人口人口 <nil> [] [] {1 2 3}} {世界人口 <nil> [] [] <nil>}]`
 	tt.Expect(t, allDoc, docs)
 
 	has := engine.HasDoc(5)
@@ -266,7 +266,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	docIds[1] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
+		Text:   "世界人口",
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
@@ -366,7 +366,7 @@ func TestForSplitData(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
+		Text:   "世界人口",
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
@@ -406,7 +406,7 @@ func TestDocCounters(t *testing.T) {
 	docIds[1] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "中国人口",
+		Text:   "世界人口",
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
