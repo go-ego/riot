@@ -25,11 +25,14 @@ import (
 var (
 	// searcher is coroutine safe
 	searcher = riot.Engine{}
-)
 
-func initEngine() {
-	// var path = "./riot-index"
-	searcher.Init(types.EngineOpts{
+	text  = "Google Is Experimenting With Virtual Reality Advertising"
+	text1 = `Google accidentally pushed Bluetooth update for Home
+	speaker early`
+	text2 = `Google is testing another Search results layout with 
+	rounded cards, new colors, and the 4 mysterious colored dots again`
+
+	opts = types.EngineOpts{
 		Using: 1,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
@@ -40,15 +43,14 @@ func initEngine() {
 		// GseDict: "../../data/dict/dictionary.txt",
 		GseDict:       "../../testdata/test_dict.txt",
 		StopTokenFile: "../../data/dict/stop_tokens.txt",
-	})
+	}
+)
+
+func initEngine() {
+	// var path = "./riot-index"
+	searcher.Init(opts)
 	defer searcher.Close()
 	// os.MkdirAll(path, 0777)
-
-	text := "Google Is Experimenting With Virtual Reality Advertising"
-	text1 := `Google accidentally pushed Bluetooth update for Home
-	speaker early`
-	text2 := `Google is testing another Search results layout with 
-	rounded cards, new colors, and the 4 mysterious colored dots again`
 
 	// Add the document to the index, docId starts at 1
 	searcher.Index(1, types.DocData{Content: text})
@@ -56,28 +58,17 @@ func initEngine() {
 	searcher.Index(3, types.DocData{Content: text2})
 	searcher.Index(5, types.DocData{Content: text2})
 
-	// Wait for the index to refresh
-	// searcher.Flush()
-
 	searcher.RemoveDoc(5)
+
+	// Wait for the index to refresh
 	searcher.Flush()
 
-	log.Println("recover index number: ", searcher.NumDocsIndexed())
+	log.Println("Created index number: ", searcher.NumDocsIndexed())
 }
 
 func restoreIndex() {
 	// var path = "./riot-index"
-	searcher.Init(types.EngineOpts{
-		Using: 1,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.DocIdsIndex,
-		},
-		UseStore: true,
-		// StoreFolder: path,
-		StoreEngine:   "bg", // bg: badger, lbd: leveldb, bolt: bolt
-		GseDict:       "../../data/dict/dictionary.txt",
-		StopTokenFile: "../../data/dict/stop_tokens.txt",
-	})
+	searcher.Init(opts)
 	defer searcher.Close()
 	// os.MkdirAll(path, 0777)
 

@@ -647,8 +647,8 @@ func TestDocOnlyID(t *testing.T) {
 		Text:   "世界人口",
 		DocIds: docIds}
 	outputs := engine.Search(req)
-	outputsId := engine.SearchID(req)
-	tt.Expect(t, "1", len(outputsId.Docs))
+	outputsID := engine.SearchID(req)
+	tt.Expect(t, "1", len(outputsID.Docs))
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
