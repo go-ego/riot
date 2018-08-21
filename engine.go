@@ -491,13 +491,13 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	// 收集关键词
 	// tokens := []string{}
 	if request.Text != "" {
-		request.Text = strings.ToLower(request.Text)
+		reqText := strings.ToLower(request.Text)
 		if engine.initOptions.NotUseGse {
-			tokens = strings.Split(request.Text, " ")
+			tokens = strings.Split(reqText, " ")
 		} else {
-			// querySegments := engine.segmenter.Segment([]byte(request.Text))
-			// tokens = engine.Tokens([]byte(request.Text))
-			tokens = engine.Segment(request.Text)
+			// querySegments := engine.segmenter.Segment([]byte(reqText))
+			// tokens = engine.Tokens([]byte(reqText))
+			tokens = engine.Segment(reqText)
 		}
 
 		// 叠加 tokens
