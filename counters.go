@@ -15,17 +15,32 @@
 
 package riot
 
-// NumTokenIndexAdded added token index number
+// NumTokenAdded added token index number
+func (engine *Engine) NumTokenAdded() uint64 {
+	return engine.numTokenIndexAdded
+}
+
+// NumIndexed documents indexed number
+func (engine *Engine) NumIndexed() uint64 {
+	return engine.numDocsIndexed
+}
+
+// NumRemoved documents removed number
+func (engine *Engine) NumRemoved() uint64 {
+	return engine.numDocsRemoved
+}
+
+// NumTokenIndexAdded added token index number, deprecated
 func (engine *Engine) NumTokenIndexAdded() uint64 {
 	return engine.numTokenIndexAdded
 }
 
-// NumDocsIndexed documents indexed number
+// NumDocsIndexed documents indexed number, deprecated
 func (engine *Engine) NumDocsIndexed() uint64 {
 	return engine.numDocsIndexed
 }
 
-// NumDocsRemoved documents removed number
+// NumDocsRemoved documents removed number, deprecated
 func (engine *Engine) NumDocsRemoved() uint64 {
 	return engine.numDocsRemoved
 }
