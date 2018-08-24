@@ -335,10 +335,10 @@ func (engine *Engine) Init(options types.EngineOpts) {
 		go engine.rankerAddDocWorker(shard)
 		go engine.rankerRemoveDocWorker(shard)
 
-		for i := 0; i < options.NumIndexerThreadsPerShard; i++ {
+		for i := 0; i < options.NumIndexerThreads; i++ {
 			go engine.indexerLookupWorker(shard)
 		}
-		for i := 0; i < options.NumRankerThreadsPerShard; i++ {
+		for i := 0; i < options.NumRankerThreads; i++ {
 			go engine.rankerRankWorker(shard)
 		}
 	}
@@ -514,13 +514,26 @@ func (engine *Engine) Tokens(request types.SearchReq) (tokens []string) {
 	return
 }
 
-// RankId rank docs by types.ScoredIDs
-func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
+func maxRankOutput(rankOpts types.RankOpts, rankLen int) (int, int) {
+	var start, end int
+	if rankOpts.MaxOutputs == 0 {
+		start = utils.MinInt(rankOpts.OutputOffset, rankLen)
+		end = rankLen
+	} else {
+		start = utils.MinInt(rankOpts.OutputOffset, rankLen)
+		end = utils.MinInt(start+rankOpts.MaxOutputs, rankLen)
+	}
+	return start, end
+}
+
+// RankID rank docs by types.ScoredIDs
+func (engine *Engine) RankID(request types.SearchReq, rankOpts types.RankOpts,
 	tokens []string, rankerReturnChan chan rankerReturnReq) (
 	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
-	var rankOutput types.ScoredIDs
+	rankOutput := types.ScoredIDs{}
+	// var rankOutput types.ScoredIDs
 	// var rankOutput interface{}
 
 	//**********/ begin
@@ -564,7 +577,7 @@ func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
 
 	// 再排序
 	if !request.CountDocsOnly && !request.Orderless {
-		if RankOpts.ReverseOrder {
+		if rankOpts.ReverseOrder {
 			sort.Sort(sort.Reverse(rankOutput))
 		} else {
 			sort.Sort(rankOutput)
@@ -579,14 +592,9 @@ func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
 			// 无序状态无需对 Offset 截断
 			output.Docs = rankOutput
 		} else {
-			var start, end int
-			if RankOpts.MaxOutputs == 0 {
-				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
-				end = len(rankOutput)
-			} else {
-				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
-				end = utils.MinInt(start+RankOpts.MaxOutputs, len(rankOutput))
-			}
+			rankOutLen := len(rankOutput)
+			start, end := maxRankOutput(rankOpts, rankOutLen)
+
 			output.Docs = rankOutput[start:end]
 		}
 	}
@@ -598,7 +606,7 @@ func (engine *Engine) RankId(request types.SearchReq, RankOpts types.RankOpts,
 }
 
 // Ranks rank docs by types.ScoredDocs
-func (engine *Engine) Ranks(request types.SearchReq, RankOpts types.RankOpts,
+func (engine *Engine) Ranks(request types.SearchReq, rankOpts types.RankOpts,
 	tokens []string, rankerReturnChan chan rankerReturnReq) (
 	output types.SearchResp) {
 	// 从通信通道读取排序器的输出
@@ -646,7 +654,7 @@ func (engine *Engine) Ranks(request types.SearchReq, RankOpts types.RankOpts,
 
 	// 再排序
 	if !request.CountDocsOnly && !request.Orderless {
-		if RankOpts.ReverseOrder {
+		if rankOpts.ReverseOrder {
 			sort.Sort(sort.Reverse(rankOutput))
 		} else {
 			sort.Sort(rankOutput)
@@ -661,14 +669,9 @@ func (engine *Engine) Ranks(request types.SearchReq, RankOpts types.RankOpts,
 			// 无序状态无需对 Offset 截断
 			output.Docs = rankOutput
 		} else {
-			var start, end int
-			if RankOpts.MaxOutputs == 0 {
-				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
-				end = len(rankOutput)
-			} else {
-				start = utils.MinInt(RankOpts.OutputOffset, len(rankOutput))
-				end = utils.MinInt(start+RankOpts.MaxOutputs, len(rankOutput))
-			}
+			rankOutLen := len(rankOutput)
+			start, end := maxRankOutput(rankOpts, rankOutLen)
+
 			output.Docs = rankOutput[start:end]
 		}
 	}
@@ -710,14 +713,14 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 
 	tokens := engine.Tokens(request)
 
-	var RankOpts types.RankOpts
+	var rankOpts types.RankOpts
 	if request.RankOpts == nil {
-		RankOpts = *engine.initOptions.DefaultRankOpts
+		rankOpts = *engine.initOptions.DefRankOpts
 	} else {
-		RankOpts = *request.RankOpts
+		rankOpts = *request.RankOpts
 	}
-	if RankOpts.ScoringCriteria == nil {
-		RankOpts.ScoringCriteria = engine.initOptions.DefaultRankOpts.ScoringCriteria
+	if rankOpts.ScoringCriteria == nil {
+		rankOpts.ScoringCriteria = engine.initOptions.DefRankOpts.ScoringCriteria
 	}
 
 	// 建立排序器返回的通信通道
@@ -730,7 +733,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 		tokens:           tokens,
 		labels:           request.Labels,
 		docIds:           request.DocIds,
-		options:          RankOpts,
+		options:          rankOpts,
 		rankerReturnChan: rankerReturnChan,
 		orderless:        request.Orderless,
 		logic:            request.Logic,
@@ -742,11 +745,11 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	}
 
 	if engine.initOptions.IDOnly {
-		output = engine.RankId(request, RankOpts, tokens, rankerReturnChan)
+		output = engine.RankID(request, rankOpts, tokens, rankerReturnChan)
 		return
 	}
 
-	output = engine.Ranks(request, RankOpts, tokens, rankerReturnChan)
+	output = engine.Ranks(request, rankOpts, tokens, rankerReturnChan)
 	return
 }
 

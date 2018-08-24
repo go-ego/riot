@@ -24,12 +24,12 @@ var (
 	// defaultNumGseThreads default Segmenter threads num
 	defaultNumGseThreads = runtime.NumCPU()
 	// defaultNumShards                 = 2
-	defaultNumShards                 = 8
-	defaultIndexerBufLen             = runtime.NumCPU()
-	defaultNumIndexerThreadsPerShard = runtime.NumCPU()
-	defaultRankerBufLen              = runtime.NumCPU()
-	defaultNumRankerThreadsPerShard  = runtime.NumCPU()
-	defaultDefaultRankOpts           = RankOpts{
+	defaultNumShards         = 8
+	defaultIndexerBufLen     = runtime.NumCPU()
+	defaultNumIndexerThreads = runtime.NumCPU()
+	defaultRankerBufLen      = runtime.NumCPU()
+	defaultNumRankerThreads  = runtime.NumCPU()
+	defaultRankOpts          = RankOpts{
 		ScoringCriteria: RankByBM25{},
 	}
 	defaultIndexerOpts = IndexerOpts{
@@ -79,19 +79,19 @@ type EngineOpts struct {
 	IndexerBufLen int
 
 	// 索引器每个shard分配的线程数
-	NumIndexerThreadsPerShard int
+	NumIndexerThreads int
 
 	// 排序器的信道缓冲长度
 	RankerBufLen int
 
 	// 排序器每个 shard 分配的线程数
-	NumRankerThreadsPerShard int
+	NumRankerThreads int
 
 	// 索引器初始化选项
 	IndexerOpts *IndexerOpts
 
 	// 默认的搜索选项
-	DefaultRankOpts *RankOpts
+	DefRankOpts *RankOpts
 
 	// 是否使用持久数据库，以及数据库文件保存的目录和裂分数目
 	StoreOnly bool `toml:"store_only"`
@@ -124,16 +124,16 @@ func (options *EngineOpts) Init() {
 		options.IndexerBufLen = defaultIndexerBufLen
 	}
 
-	if options.NumIndexerThreadsPerShard == 0 {
-		options.NumIndexerThreadsPerShard = defaultNumIndexerThreadsPerShard
+	if options.NumIndexerThreads == 0 {
+		options.NumIndexerThreads = defaultNumIndexerThreads
 	}
 
 	if options.RankerBufLen == 0 {
 		options.RankerBufLen = defaultRankerBufLen
 	}
 
-	if options.NumRankerThreadsPerShard == 0 {
-		options.NumRankerThreadsPerShard = defaultNumRankerThreadsPerShard
+	if options.NumRankerThreads == 0 {
+		options.NumRankerThreads = defaultNumRankerThreads
 	}
 
 	if options.IndexerOpts == nil {
@@ -144,12 +144,12 @@ func (options *EngineOpts) Init() {
 		options.IndexerOpts.BM25Parameters = &defaultBM25Parameters
 	}
 
-	if options.DefaultRankOpts == nil {
-		options.DefaultRankOpts = &defaultDefaultRankOpts
+	if options.DefRankOpts == nil {
+		options.DefRankOpts = &defaultRankOpts
 	}
 
-	if options.DefaultRankOpts.ScoringCriteria == nil {
-		options.DefaultRankOpts.ScoringCriteria = defaultDefaultRankOpts.ScoringCriteria
+	if options.DefRankOpts.ScoringCriteria == nil {
+		options.DefRankOpts.ScoringCriteria = defaultRankOpts.ScoringCriteria
 	}
 
 	if options.StoreShards == 0 {

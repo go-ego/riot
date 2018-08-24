@@ -67,17 +67,17 @@ var (
 
 func testRankOpt(idOnly bool) types.EngineOpts {
 	return types.EngineOpts{
-		Using:           1,
-		IDOnly:          idOnly,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankTestOpts,
+		Using:       1,
+		IDOnly:      idOnly,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankTestOpts,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
 	}
 }
 
-func TestDocRankId(t *testing.T) {
+func TestDocRankID(t *testing.T) {
 	var engine Engine
 
 	engine.Init(testRankOpt(true))
@@ -112,7 +112,7 @@ func TestDocRankId(t *testing.T) {
 		engine.indexerLookupChans[shard] <- lookupRequest
 	}
 
-	outputs := engine.RankId(request, rankTestOpts, tokens, rankerReturnChan)
+	outputs := engine.RankID(request, rankTestOpts, tokens, rankerReturnChan)
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
@@ -193,10 +193,10 @@ func TestDocGetAllDocAndID(t *testing.T) {
 		NumShards: 5,
 		UseStore:  true,
 		// StoreEngine: "bg",
-		StoreFolder:     "riot.id",
-		IDOnly:          true,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankTestOpts,
+		StoreFolder: "riot.id",
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankTestOpts,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},

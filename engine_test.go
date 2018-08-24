@@ -144,9 +144,9 @@ var (
 
 func rankEngineOpts(rankOpts types.RankOpts) types.EngineOpts {
 	return types.EngineOpts{
-		Using:           1,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOpts,
+		Using:       1,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankOpts,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
@@ -209,9 +209,9 @@ func TestReverseOrder(t *testing.T) {
 func TestOffsetAndMaxOutputs(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:           1,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOptsMax3,
+		Using:       1,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankOptsMax3,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
@@ -246,7 +246,7 @@ var (
 	engOpts = types.EngineOpts{
 		Using:   1,
 		GseDict: "./testdata/test_dict.txt",
-		DefaultRankOpts: &types.RankOpts{
+		DefRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
 		IndexerOpts: &types.IndexerOpts{
@@ -287,7 +287,7 @@ func TestCompactIndex(t *testing.T) {
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
 
-	tt.Expect(t, "5", outDocs[0].DocId)
+	tt.Expect(t, "6", outDocs[0].DocId)
 	tt.Expect(t, "9000", int(outDocs[0].Scores[0]*1000))
 
 	tt.Expect(t, "1", outDocs[1].DocId)
@@ -312,7 +312,7 @@ func TestFrequenciesIndex(t *testing.T) {
 	engine.Init(types.EngineOpts{
 		Using:   1,
 		GseDict: "./testdata/test_dict.txt",
-		DefaultRankOpts: &types.RankOpts{
+		DefRankOpts: &types.RankOpts{
 			ScoringCriteria: BM25ScoringCriteria{},
 		},
 		IndexerOpts: &types.IndexerOpts{
@@ -330,7 +330,7 @@ func TestFrequenciesIndex(t *testing.T) {
 	tt.Expect(t, "1", outDocs[0].DocId)
 	tt.Expect(t, "2374", int(outDocs[0].Scores[0]*1000))
 
-	tt.Expect(t, "5", outDocs[1].DocId)
+	tt.Expect(t, "6", outDocs[1].DocId)
 	tt.Expect(t, "2133", int(outDocs[1].Scores[0]*1000))
 
 	engine.Close()
@@ -340,7 +340,7 @@ var (
 	useOpts = types.EngineOpts{
 		Using:   1,
 		GseDict: "./testdata/test_dict.txt",
-		DefaultRankOpts: &types.RankOpts{
+		DefRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
 	}
@@ -489,9 +489,9 @@ func TestEngineIndexWithStore(t *testing.T) {
 	gob.Register(ScoringFields{})
 
 	var opts = types.EngineOpts{
-		Using:           1,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOptsMax10,
+		Using:       1,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankOptsMax10,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
@@ -537,9 +537,9 @@ func TestEngineIndexWithStore(t *testing.T) {
 func TestCountDocsOnly(t *testing.T) {
 	var engine Engine
 	engine.Init(types.EngineOpts{
-		Using:           1,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOptsMax1,
+		Using:       1,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankOptsMax1,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
@@ -608,10 +608,10 @@ func TestDocOrderless(t *testing.T) {
 
 var (
 	testIDInlyOpts = types.EngineOpts{
-		Using:           1,
-		IDOnly:          true,
-		GseDict:         "./testdata/test_dict.txt",
-		DefaultRankOpts: &rankOptsMax1,
+		Using:       1,
+		IDOnly:      true,
+		GseDict:     "./testdata/test_dict.txt",
+		DefRankOpts: &rankOptsMax1,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
@@ -690,9 +690,9 @@ func TestSearchWithin(t *testing.T) {
 func testJPOpts(use int) types.EngineOpts {
 	return types.EngineOpts{
 		// Using:           1,
-		Using:           use,
-		GseDict:         "./testdata/test_dict_jp.txt",
-		DefaultRankOpts: &rankOptsMax10Order,
+		Using:       use,
+		GseDict:     "./testdata/test_dict_jp.txt",
+		DefRankOpts: &rankOptsMax10Order,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},

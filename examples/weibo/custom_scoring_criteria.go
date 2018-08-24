@@ -109,7 +109,7 @@ func main() {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
-		DefaultRankOpts: &options,
+		DefRankOpts: &options,
 	})
 	defer searcher.Close()
 
