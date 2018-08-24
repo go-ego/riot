@@ -519,10 +519,11 @@ func maxRankOutput(rankOpts types.RankOpts, rankLen int) (int, int) {
 	if rankOpts.MaxOutputs == 0 {
 		start = utils.MinInt(rankOpts.OutputOffset, rankLen)
 		end = rankLen
-	} else {
-		start = utils.MinInt(rankOpts.OutputOffset, rankLen)
-		end = utils.MinInt(start+rankOpts.MaxOutputs, rankLen)
+		return start, end
 	}
+
+	start = utils.MinInt(rankOpts.OutputOffset, rankLen)
+	end = utils.MinInt(start+rankOpts.MaxOutputs, rankLen)
 	return start, end
 }
 

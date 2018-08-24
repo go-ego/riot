@@ -16,7 +16,6 @@
 package core
 
 import (
-	// "fmt"
 	"log"
 	"sort"
 	"sync"
@@ -27,8 +26,6 @@ import (
 
 // Ranker ranker
 type Ranker struct {
-	idOnly bool
-
 	lock struct {
 		sync.RWMutex
 		fields map[uint64]interface{}
@@ -38,6 +35,7 @@ type Ranker struct {
 		attri   map[uint64]interface{}
 	}
 
+	idOnly      bool
 	initialized bool
 }
 
@@ -114,10 +112,11 @@ func maxOutput(options types.RankOpts, docsLen int) (int, int) {
 	if options.MaxOutputs != 0 {
 		start = utils.MinInt(options.OutputOffset, docsLen)
 		end = utils.MinInt(options.OutputOffset+options.MaxOutputs, docsLen)
-	} else {
-		start = utils.MinInt(options.OutputOffset, docsLen)
-		end = docsLen
+		return start, end
 	}
+
+	start = utils.MinInt(options.OutputOffset, docsLen)
+	end = docsLen
 	return start, end
 }
 
