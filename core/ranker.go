@@ -109,9 +109,22 @@ func (ranker *Ranker) RemoveDoc(docId uint64) {
 	ranker.lock.Unlock()
 }
 
-// RankDocId rank docs by types.ScoredIDs
-func (ranker *Ranker) RankDocId(docs []types.IndexedDoc,
+func maxOutput(options types.RankOpts, docsLen int) (int, int) {
+	var start, end int
+	if options.MaxOutputs != 0 {
+		start = utils.MinInt(options.OutputOffset, docsLen)
+		end = utils.MinInt(options.OutputOffset+options.MaxOutputs, docsLen)
+	} else {
+		start = utils.MinInt(options.OutputOffset, docsLen)
+		end = docsLen
+	}
+	return start, end
+}
+
+// RankDocID rank docs by types.ScoredIDs
+func (ranker *Ranker) RankDocID(docs []types.IndexedDoc,
 	options types.RankOpts, countDocsOnly bool) (types.ScoredIDs, int) {
+
 	var outputDocs types.ScoredIDs
 	numDocs := 0
 
@@ -148,14 +161,9 @@ func (ranker *Ranker) RankDocId(docs []types.IndexedDoc,
 			sort.Sort(outputDocs)
 		}
 		// 当用户要求只返回部分结果时返回部分结果
-		var start, end int
-		if options.MaxOutputs != 0 {
-			start = utils.MinInt(options.OutputOffset, len(outputDocs))
-			end = utils.MinInt(options.OutputOffset+options.MaxOutputs, len(outputDocs))
-		} else {
-			start = utils.MinInt(options.OutputOffset, len(outputDocs))
-			end = len(outputDocs)
-		}
+		docsLen := len(outputDocs)
+		start, end := maxOutput(options, docsLen)
+
 		return outputDocs[start:end], numDocs
 	}
 
@@ -165,6 +173,7 @@ func (ranker *Ranker) RankDocId(docs []types.IndexedDoc,
 // RankDocs rank docs by types.ScoredDocs
 func (ranker *Ranker) RankDocs(docs []types.IndexedDoc,
 	options types.RankOpts, countDocsOnly bool) (types.ScoredDocs, int) {
+
 	var outputDocs types.ScoredDocs
 	numDocs := 0
 
@@ -208,14 +217,9 @@ func (ranker *Ranker) RankDocs(docs []types.IndexedDoc,
 			sort.Sort(outputDocs)
 		}
 		// 当用户要求只返回部分结果时返回部分结果
-		var start, end int
-		if options.MaxOutputs != 0 {
-			start = utils.MinInt(options.OutputOffset, len(outputDocs))
-			end = utils.MinInt(options.OutputOffset+options.MaxOutputs, len(outputDocs))
-		} else {
-			start = utils.MinInt(options.OutputOffset, len(outputDocs))
-			end = len(outputDocs)
-		}
+		docsLen := len(outputDocs)
+		start, end := maxOutput(options, docsLen)
+
 		return outputDocs[start:end], numDocs
 	}
 
@@ -225,8 +229,7 @@ func (ranker *Ranker) RankDocs(docs []types.IndexedDoc,
 // Rank rank docs
 // 给文档评分并排序
 func (ranker *Ranker) Rank(docs []types.IndexedDoc,
-	options types.RankOpts, countDocsOnly bool) (
-	interface{}, int) {
+	options types.RankOpts, countDocsOnly bool) (interface{}, int) {
 
 	if ranker.initialized == false {
 		log.Fatal("The Ranker has not been initialized.")
@@ -234,7 +237,7 @@ func (ranker *Ranker) Rank(docs []types.IndexedDoc,
 
 	// 对每个文档评分
 	if ranker.idOnly {
-		outputDocs, numDocs := ranker.RankDocId(docs, options, countDocsOnly)
+		outputDocs, numDocs := ranker.RankDocID(docs, options, countDocsOnly)
 		return outputDocs, numDocs
 	}
 
