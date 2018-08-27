@@ -167,9 +167,11 @@ func (engine *Engine) segmenterData(request segmenterReq) (TMap, int) {
 		return tokensMap, numTokens
 	}
 
-	if engine.initOptions.Using == 2 ||
-		((engine.initOptions.Using == 1 || engine.initOptions.Using == 3) &&
-			request.data.Content == "") {
+	useOpts := engine.initOptions.Using == 1 || engine.initOptions.Using == 3
+	contentNil := request.data.Content == ""
+	opts := useOpts && contentNil
+
+	if engine.initOptions.Using == 2 || opts {
 		for _, t := range request.data.Tokens {
 			if !engine.stopTokens.IsStopToken(t.Text) {
 				tokensMap[t.Text] = t.Locations
