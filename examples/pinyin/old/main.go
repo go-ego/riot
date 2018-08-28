@@ -37,21 +37,27 @@ func initEngine() {
 		},
 		UseStore:    true,
 		StoreFolder: path,
-		PinYin:      true,
 		GseDict:     "../../data/dict/dictionary.txt",
 		// StopTokenFile:           "../../riot/data/dict/stop_tokens.txt",
 	})
 	defer searcher.Close()
 	os.MkdirAll(path, 0777)
 
-	text := "在路上, in the way"
-	index1 := types.DocData{Content: text, Fields: "在路上"}
-	index2 := types.DocData{Content: text}
-	index3 := types.DocData{Content: "In the way."}
+	tokens := searcher.PinYin("在路上, in the way")
+
+	fmt.Println("tokens...", tokens)
+	var tokenDatas []types.TokenData
+	// tokens := []string{"z", "zl"}
+	for i := 0; i < len(tokens); i++ {
+		tokenData := types.TokenData{Text: tokens[i]}
+		tokenDatas = append(tokenDatas, tokenData)
+	}
+
+	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
+	index2 := types.DocData{Content: "在路上, in the way", Tokens: tokenDatas}
 
 	searcher.Index(10, index1)
 	searcher.Index(11, index2)
-	searcher.Index(12, index3)
 
 	// 等待索引刷新完毕
 	searcher.Flush()
