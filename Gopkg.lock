@@ -20,16 +20,9 @@
   version = "1.0.0"
 
 [[projects]]
-  name = "github.com/coreos/bbolt"
-  packages = ["."]
-  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
-  version = "v1.3.0"
-
-[[projects]]
   name = "github.com/coreos/etcd"
   packages = [
     "auth/authpb",
-    "clientv3",
     "etcdserver/api/v3rpc/rpctypes",
     "etcdserver/etcdserverpb",
     "mvcc/mvccpb",
@@ -100,7 +93,7 @@
   branch = "master"
   name = "github.com/go-vgo/grpclb"
   packages = ["."]
-  revision = "434b4da1cea2111c03df2a91cc96cbff17110e43"
+  revision = "14d019224e31ec58d276b5ef1c18638c110b7c46"
 
 [[projects]]
   branch = "master"
@@ -132,8 +125,8 @@
     "ptypes/duration",
     "ptypes/timestamp"
   ]
-  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
-  version = "v1.1.0"
+  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
@@ -161,10 +154,17 @@
     "host",
     "internal/common",
     "mem",
+    "net",
     "process"
   ]
   revision = "8048a2e9c5773235122027dd585cf821b2af1249"
   version = "v2.18.07"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/shirou/w32"
+  packages = ["."]
+  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
   branch = "master"
@@ -190,6 +190,21 @@
   name = "github.com/vcaesar/tt"
   packages = ["."]
   revision = "7089d2bb06d77214951b387bded252993f105022"
+
+[[projects]]
+  name = "go.etcd.io/bbolt"
+  packages = ["."]
+  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
+  version = "v1.3.0"
+
+[[projects]]
+  name = "go.etcd.io/etcd"
+  packages = [
+    "clientv3",
+    "etcdserver/api/v3rpc/rpctypes"
+  ]
+  revision = "fca8add78a9d926166eb739b8e4a124434025ba3"
+  version = "v3.3.9"
 
 [[projects]]
   name = "go.uber.org/atomic"
@@ -228,7 +243,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
+  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
 
 [[projects]]
   branch = "master"
@@ -237,7 +252,7 @@
     "unix",
     "windows"
   ]
-  revision = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded"
+  revision = "49385e6e15226593f68b26af201feec29d5bba22"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -311,6 +326,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bbf0b187aabef1ad7a86a7870838007190e413053fa4f3063da4f2faa34b671e"
+  inputs-digest = "d60cebcad6c6db946897f4544511d5353a5ef4f8c7173f2f5e739c2ba837e303"
   solver-name = "gps-cdcl"
   solver-version = 1
