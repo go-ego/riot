@@ -43,7 +43,7 @@ Go version >= 1.8
 
 ### Dependencies
 
-Riot uses go module or dep to dependencies. 
+Riot uses go module or dep to manage dependencies. 
 
 ## Installation/Update
 
