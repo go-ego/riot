@@ -84,34 +84,34 @@ func (engine *Engine) orderLess(
 	request indexerLookupReq, docs []types.IndexedDoc) {
 
 	if engine.initOptions.IDOnly {
-		var outputDocs []types.ScoredID
-		// var outputDocs types.ScoredIDs
+		var outputDocs types.ScoredIDs
 		for _, d := range docs {
 			outputDocs = append(outputDocs, types.ScoredID{
 				DocId:            d.DocId,
 				TokenSnippetLocs: d.TokenSnippetLocs,
-				TokenLocs:        d.TokenLocs})
+				TokenLocs:        d.TokenLocs,
+			})
 		}
 
 		request.rankerReturnChan <- rankerReturnReq{
-			docs:    types.ScoredIDs(outputDocs),
+			docs:    outputDocs,
 			numDocs: len(outputDocs),
 		}
 
 		return
 	}
 
-	var outputDocs []types.ScoredDoc
-	// var outputDocs types.ScoredDocs
+	var outputDocs types.ScoredDocs
 	for _, d := range docs {
 		outputDocs = append(outputDocs, types.ScoredDoc{
 			DocId:            d.DocId,
 			TokenSnippetLocs: d.TokenSnippetLocs,
-			TokenLocs:        d.TokenLocs})
+			TokenLocs:        d.TokenLocs,
+		})
 	}
 
 	request.rankerReturnChan <- rankerReturnReq{
-		docs:    types.ScoredDocs(outputDocs),
+		docs:    outputDocs,
 		numDocs: len(outputDocs),
 	}
 }
