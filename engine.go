@@ -762,10 +762,11 @@ func (engine *Engine) Flush() {
 
 		engine.loc.RLock()
 		inxd := engine.numIndexingReqs == engine.numDocsIndexed
-		rmd := engine.numRemovingReqs*uint64(engine.initOptions.NumShards) ==
-			engine.numDocsRemoved
-		stored := !engine.initOptions.UseStore || engine.numIndexingReqs ==
-			engine.numDocsStored
+		numRm := engine.numRemovingReqs * uint64(engine.initOptions.NumShards)
+		rmd := numRm == engine.numDocsRemoved
+
+		nums := engine.numIndexingReqs == engine.numDocsStored
+		stored := !engine.initOptions.UseStore || nums
 		engine.loc.RUnlock()
 
 		if inxd && rmd && stored {
@@ -780,8 +781,8 @@ func (engine *Engine) Flush() {
 		runtime.Gosched()
 
 		engine.loc.RLock()
-		forced := engine.numForceUpdatingReqs*uint64(engine.initOptions.NumShards) ==
-			engine.numDocsForceUpdated
+		numf := engine.numForceUpdatingReqs * uint64(engine.initOptions.NumShards)
+		forced := numf == engine.numDocsForceUpdated
 		engine.loc.RUnlock()
 
 		if forced {
