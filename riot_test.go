@@ -77,18 +77,11 @@ func testRankOpt(idOnly bool) types.EngineOpts {
 	}
 }
 
-func TestDocRankID(t *testing.T) {
-	var engine Engine
-
-	engine.Init(testRankOpt(true))
-	AddDocs(&engine)
-
-	engine.RemoveDoc(5)
-	engine.Flush()
-
+func lookupReq(engine *Engine) (types.SearchReq, []string, chan rankerReturnReq) {
 	request := types.SearchReq{
 		Text:   "World人口",
-		DocIds: makeDocIds()}
+		DocIds: makeDocIds(),
+	}
 
 	tokens := engine.Tokens(request)
 	// 建立排序器返回的通信通道
@@ -112,6 +105,19 @@ func TestDocRankID(t *testing.T) {
 		engine.indexerLookupChans[shard] <- lookupRequest
 	}
 
+	return request, tokens, rankerReturnChan
+}
+
+func TestDocRankID(t *testing.T) {
+	var engine Engine
+
+	engine.Init(testRankOpt(true))
+	AddDocs(&engine)
+
+	engine.RemoveDoc(5)
+	engine.Flush()
+
+	request, tokens, rankerReturnChan := lookupReq(&engine)
 	outputs := engine.RankID(request, rankTestOpts, tokens, rankerReturnChan)
 
 	if outputs.Docs != nil {
@@ -133,32 +139,7 @@ func TestDocRanks(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	request := types.SearchReq{
-		Text:   "World人口",
-		DocIds: makeDocIds()}
-
-	tokens := engine.Tokens(request)
-	// 建立排序器返回的通信通道
-	rankerReturnChan := make(
-		chan rankerReturnReq, engine.initOptions.NumShards)
-
-	// 生成查找请求
-	lookupRequest := indexerLookupReq{
-		countDocsOnly:    request.CountDocsOnly,
-		tokens:           tokens,
-		labels:           request.Labels,
-		docIds:           request.DocIds,
-		options:          rankTestOpts,
-		rankerReturnChan: rankerReturnChan,
-		orderless:        request.Orderless,
-		logic:            request.Logic,
-	}
-
-	// 向索引器发送查找请求
-	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-		engine.indexerLookupChans[shard] <- lookupRequest
-	}
-
+	request, tokens, rankerReturnChan := lookupReq(&engine)
 	outputs := engine.Ranks(request, rankTestOpts, tokens, rankerReturnChan)
 
 	if outputs.Docs != nil {
