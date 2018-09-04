@@ -50,12 +50,10 @@ func (engine *Engine) rankerAddDocWorker(shard int) {
 		request := <-engine.rankerAddDocChans[shard]
 		if engine.initOptions.IDOnly {
 			engine.rankers[shard].AddDoc(request.docId, request.fields)
-			return
+		} else {
+			engine.rankers[shard].AddDoc(request.docId, request.fields,
+				request.content, request.attri)
 		}
-		// } else {
-		engine.rankers[shard].AddDoc(request.docId, request.fields,
-			request.content, request.attri)
-		// }
 	}
 }
 
