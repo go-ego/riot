@@ -125,10 +125,10 @@ func rankOptsOrder(order bool) types.RankOpts {
 	}
 }
 
-func rankOptsMax(ouput, max int) types.RankOpts {
+func rankOptsMax(output, max int) types.RankOpts {
 	return types.RankOpts{
 		ReverseOrder:    true,
-		OutputOffset:    ouput,
+		OutputOffset:    output,
 		MaxOutputs:      max,
 		ScoringCriteria: &RankByTokenProximity{},
 	}
