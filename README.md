@@ -163,6 +163,11 @@ func main() {
 
 #### [Riot search engine templates, client and dictionaries](https://github.com/go-ego/riot/tree/master/data)
 
+## Authors
+* [The author is vz](https://github.com/vcaesar)
+* [Maintainers](https://github.com/orgs/go-ego/people)
+* [Contributors](https://github.com/go-ego/riot/graphs/contributors)
+
 ## Donate
 
 Supporting riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
