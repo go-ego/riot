@@ -16,6 +16,7 @@ func makeDocIds() map[uint64]bool {
 	docIds[5] = true
 	docIds[3] = true
 	docIds[1] = true
+	docIds[2] = true
 
 	return docIds
 }
@@ -53,7 +54,7 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	// tt.Expect(t, "1", outDocs[1].DocId)
-	tt.Expect(t, "2000", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "2215", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
@@ -122,7 +123,7 @@ func TestDocRankID(t *testing.T) {
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredIDs)
-		tt.Expect(t, "2", len(outDocs))
+		tt.Expect(t, "1", len(outDocs))
 	}
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "2", outputs.NumDocs)
@@ -144,7 +145,7 @@ func TestDocRanks(t *testing.T) {
 
 	if outputs.Docs != nil {
 		outDocs := outputs.Docs.(types.ScoredDocs)
-		tt.Expect(t, "2", len(outDocs))
+		tt.Expect(t, "1", len(outDocs))
 	}
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "2", outputs.NumDocs)
@@ -157,7 +158,7 @@ func TestDocRanks(t *testing.T) {
 
 	if outputs1.Docs != nil {
 		outDocs1 := outputs.Docs.(types.ScoredDocs)
-		tt.Expect(t, "2", len(outDocs1))
+		tt.Expect(t, "1", len(outDocs1))
 	}
 	tt.Expect(t, "2", len(outputs1.Tokens))
 	tt.Expect(t, "2", outputs1.NumDocs)
@@ -190,20 +191,20 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	allIds := engine.GetDBAllIds()
 	fmt.Println("all id", allIds)
-	tt.Expect(t, "4", len(allIds))
-	tt.Expect(t, "[3 4 1 2]", allIds)
+	tt.Expect(t, "5", len(allIds))
+	tt.Expect(t, "[3 4 1 6 2]", allIds)
 
 	allIds = engine.GetAllDocIds()
 	fmt.Println("all doc id", allIds)
-	tt.Expect(t, "4", len(allIds))
-	tt.Expect(t, "[3 4 1 2]", allIds)
+	tt.Expect(t, "5", len(allIds))
+	tt.Expect(t, "[3 4 1 6 2]", allIds)
 
 	ids, docs := engine.GetDBAllDocs()
 	fmt.Println("all id and doc", allIds, docs)
-	tt.Expect(t, "4", len(ids))
-	tt.Expect(t, "4", len(docs))
-	tt.Expect(t, "[3 4 1 2]", ids)
-	allDoc := `[{有人口 <nil> [] [] {2 3 1}} {有七十亿人口 <nil> [] [] {2 3 3}} {The world, 有七十亿人口人口 <nil> [] [] {1 2 3}} {The world, 人口 <nil> [] [] <nil>}]`
+	tt.Expect(t, "5", len(ids))
+	tt.Expect(t, "5", len(docs))
+	tt.Expect(t, "[3 4 1 6 2]", ids)
+	allDoc := `[{The world <nil> [] [] <nil>} {有人口 <nil> [] [] {2 3 1}} {The world, 有七十亿人口人口 <nil> [] [] {1 2 3}} {有七十亿人口 <nil> [] [] {2 3 3}} {The world, 人口 <nil> [] [] <nil>}]`
 	tt.Expect(t, allDoc, docs)
 
 	has := engine.HasDoc(5)
@@ -344,6 +345,11 @@ func TestForSplitData(t *testing.T) {
 	os.RemoveAll("riot.data")
 }
 
+func testNum(t *testing.T, numAdd, numInx, numRm uint64) {
+	tt.Expect(t, "26", numAdd)
+	tt.Expect(t, "6", numInx)
+	tt.Expect(t, "8", numRm)
+}
 func TestDocCounters(t *testing.T) {
 	var engine Engine
 	engine.Init(testOpts(1, "riot.doc"))
@@ -353,18 +359,14 @@ func TestDocCounters(t *testing.T) {
 	engine.Flush()
 
 	numAdd := engine.NumTokenAdded()
-	tt.Expect(t, "23", numAdd)
 	numInx := engine.NumIndexed()
-	tt.Expect(t, "5", numInx)
 	numRm := engine.NumRemoved()
-	tt.Expect(t, "8", numRm)
+	testNum(t, numAdd, numInx, numRm)
 
 	numAdd = engine.NumTokenIndexAdded()
-	tt.Expect(t, "23", numAdd)
 	numInx = engine.NumDocsIndexed()
-	tt.Expect(t, "5", numInx)
 	numRm = engine.NumDocsRemoved()
-	tt.Expect(t, "8", numRm)
+	testNum(t, numAdd, numInx, numRm)
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
