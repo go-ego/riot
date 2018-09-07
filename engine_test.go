@@ -18,6 +18,11 @@ type ScoringFields struct {
 	A, B, C float32
 }
 
+var (
+	text1  = "你好世界, hello world!"
+	score1 = ScoringFields{1, 2, 3}
+)
+
 func TestGetVer(t *testing.T) {
 	fmt.Println("go version: ", runtime.Version())
 	ver := GetVersion()
@@ -29,7 +34,7 @@ func AddDocs(engine *Engine) {
 	// docId := uint64(1)
 	engine.Index(1, types.DocData{
 		Content: "The world, 有七十亿人口人口",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 
 	// docId++
@@ -380,24 +385,28 @@ func TestEngineIndexWithTokens(t *testing.T) {
 	var engine Engine
 	engine.Init(testIndexOpts)
 
+	data1 := types.TokenData{
+		Text:      "world",
+		Locations: []int{0},
+	}
 	// docId := uint64(1)
 	engine.Index(1, types.DocData{
 		Content: "",
 		Tokens: []types.TokenData{
-			{"world", []int{0}},
+			data1,
 			{"人口", []int{18, 24}},
 		},
-		Fields: ScoringFields{1, 2, 3},
+		Fields: score1,
 	})
 
 	// docId++
 	engine.Index(2, types.DocData{
 		Content: "",
 		Tokens: []types.TokenData{
-			{"world", []int{0}},
+			data1,
 			{"人口", []int{6}},
 		},
-		Fields: ScoringFields{1, 2, 3},
+		Fields: score1,
 	})
 
 	engine.Index(3, types.DocData{
@@ -710,7 +719,7 @@ func TestSearchJp(t *testing.T) {
 
 	engine.Index(7, types.DocData{
 		Content: "こんにちは世界, こんにちは",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 	engine.Flush()
 
@@ -750,6 +759,15 @@ func makeGseDocIds() map[uint64]bool {
 	return docIds
 }
 
+func tokenData() []types.TokenData {
+	tokenData := types.TokenData{
+		Text:      "こんにちは",
+		Locations: []int{10, 20},
+	}
+
+	return []types.TokenData{tokenData}
+}
+
 func TestSearchGse(t *testing.T) {
 	log.Println("Test search gse ...")
 	var engine Engine
@@ -759,15 +777,14 @@ func TestSearchGse(t *testing.T) {
 
 	engine.Index(7, types.DocData{
 		Content: "こんにちは世界, こんにちは",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 
-	tokenData := types.TokenData{Text: "こんにちは"}
-	tokenDatas := []types.TokenData{tokenData}
+	tokenDatas := tokenData()
 	engine.Index(8, types.DocData{
-		Content: "你好世界, hello world!",
+		Content: text1,
 		Tokens:  tokenDatas,
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  ScoringFields{4, 5, 6},
 	})
 	engine.Flush()
 
@@ -786,8 +803,8 @@ func TestSearchGse(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	tt.Expect(t, "8", outDocs[0].DocId)
-	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
-	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "50", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[10 6]", outDocs[0].TokenSnippetLocs)
 
 	tt.Expect(t, "7", outDocs[1].DocId)
 	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
@@ -813,12 +830,13 @@ func TestSearchNotUseGse(t *testing.T) {
 
 	data := types.DocData{
 		Content: "Google Is Experimenting With Virtual Reality Advertising",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 		Tokens:  []types.TokenData{{Text: "test"}},
 	}
 
 	engine.Index(7, data)
 	engine.Index(8, data)
+
 	engine1.Index(7, data)
 	engine1.Index(8, data)
 
@@ -926,25 +944,24 @@ func TestSearchLogic(t *testing.T) {
 
 	engine.Index(7, types.DocData{
 		Content: "こんにちは世界, こんにちは",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 
-	tokenData := types.TokenData{Text: "こんにちは"}
-	tokenDatas := []types.TokenData{tokenData}
+	tokenDatas := tokenData()
 	engine.Index(8, types.DocData{
-		Content: "你好世界, hello world!",
+		Content: text1,
 		Tokens:  tokenDatas,
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 
 	engine.Index(8, types.DocData{
-		Content: "你好世界, hello world!",
-		Fields:  ScoringFields{1, 2, 3},
+		Content: text1,
+		Fields:  score1,
 	})
 
 	engine.Index(9, types.DocData{
 		Content: "你好世界, hello!",
-		Fields:  ScoringFields{1, 2, 3},
+		Fields:  score1,
 	})
 
 	engine.Flush()
@@ -955,15 +972,17 @@ func TestSearchLogic(t *testing.T) {
 	}
 
 	strArr := []string{"こんにちは"}
+	logic := types.Logic{
+		Should: true,
+		LogicExpr: types.LogicExpr{
+			NotInLabels: strArr,
+		},
+	}
+
 	outputs := engine.Search(types.SearchReq{
 		Text:   "こんにちは世界",
 		DocIds: docIds,
-		Logic: types.Logic{
-			Should: true,
-			LogicExpr: types.LogicExpr{
-				NotInLabels: strArr,
-			},
-		},
+		Logic:  logic,
 	})
 
 	tt.Expect(t, "2", len(outputs.Tokens))
