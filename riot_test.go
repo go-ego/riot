@@ -170,7 +170,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	gob.Register(ScoringFields{})
 
 	var engine Engine
-	engine.Init(types.EngineOpts{
+	opts := types.EngineOpts{
 		Using:     1,
 		NumShards: 5,
 		UseStore:  true,
@@ -182,7 +182,8 @@ func TestDocGetAllDocAndID(t *testing.T) {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.LocsIndex,
 		},
-	})
+	}
+	engine.Init(opts)
 
 	AddDocs(&engine)
 
@@ -247,26 +248,34 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	os.RemoveAll("riot.id")
 }
 
-func testOpts(use int, store string) types.EngineOpts {
+func testOpts(use int, store string, args ...bool) types.EngineOpts {
+	var pinyin bool
+	if len(args) > 0 {
+		pinyin = args[0]
+	}
+
 	return types.EngineOpts{
 		// Using:      1,
 		Using:       use,
 		UseStore:    true,
 		StoreFolder: store,
+		PinYin:      pinyin,
 		IDOnly:      true,
 		GseDict:     "./testdata/test_dict.txt",
 	}
 }
 
 func TestDocPinYin(t *testing.T) {
-	var engine Engine
+	var engine, pinyinOpt Engine
 	engine.Init(testOpts(0, "riot.py"))
+	pinyinOpt.Init(testOpts(0, "riot.py.opt", true))
 
 	// AddDocs(&engine)
 	// engine.RemoveDoc(5)
 
-	tokens := engine.PinYin("在路上, in the way")
+	text := "在路上, in the way"
 
+	tokens := engine.PinYin(text)
 	fmt.Println("tokens...", tokens)
 	tt.Expect(t, "52", len(tokens))
 
@@ -278,18 +287,30 @@ func TestDocPinYin(t *testing.T) {
 	}
 
 	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocData{Content: "在路上, in the way",
-		Tokens: tokenDatas}
+	index2 := types.DocData{Content: text, Tokens: tokenDatas}
 
 	engine.Index(10, index1)
 	engine.Index(11, index2)
-
 	engine.Flush()
+
+	data := types.DocData{Content: text}
+	pinyinOpt.Index(10, data)
+	pinyinOpt.Index(11, data)
+	pinyinOpt.Flush()
 
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
 	docIds[10] = true
 	docIds[11] = true
+
+	pyOutputs := pinyinOpt.SearchID(types.SearchReq{
+		Text:   "zl",
+		DocIds: docIds,
+	})
+
+	tt.Expect(t, "2", len(pyOutputs.Docs))
+	tt.Expect(t, "1", len(pyOutputs.Tokens))
+	tt.Expect(t, "2", pyOutputs.NumDocs)
 
 	outputs := engine.Search(types.SearchReq{
 		Text:   "zl",
@@ -307,7 +328,9 @@ func TestDocPinYin(t *testing.T) {
 	tt.Expect(t, "2", outputs.NumDocs)
 
 	engine.Close()
+	pinyinOpt.Close()
 	os.RemoveAll("riot.py")
+	os.RemoveAll("riot.py.opt")
 }
 
 func TestForSplitData(t *testing.T) {
