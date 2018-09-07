@@ -46,12 +46,12 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 	}
 	ranker.initialized = true
 
-	ranker.lock.fields = make(map[uint64]interface{})
-	ranker.lock.docs = make(map[uint64]bool)
-
 	if len(onlyID) > 0 {
 		ranker.idOnly = onlyID[0]
 	}
+
+	ranker.lock.fields = make(map[uint64]interface{})
+	ranker.lock.docs = make(map[uint64]bool)
 
 	if !ranker.idOnly {
 		// new
@@ -190,16 +190,21 @@ func (ranker *Ranker) RankDocs(docs []types.IndexedDoc,
 			scores := options.ScoringCriteria.Score(d, fs)
 			if len(scores) > 0 {
 				if !countDocsOnly {
-					outputDocs = append(outputDocs, types.ScoredDoc{
-						DocId: d.DocId,
-						// new
-						Fields:  fs,
-						Content: content,
-						Attri:   attri,
-						//
+					scoredID := types.ScoredID{
+						DocId:            d.DocId,
 						Scores:           scores,
 						TokenSnippetLocs: d.TokenSnippetLocs,
-						TokenLocs:        d.TokenLocs})
+						TokenLocs:        d.TokenLocs,
+					}
+
+					outputDocs = append(outputDocs,
+						types.ScoredDoc{
+							ScoredID: scoredID,
+							// new
+							Fields:  fs,
+							Content: content,
+							Attri:   attri,
+						})
 				}
 				numDocs++
 			}

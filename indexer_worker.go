@@ -103,10 +103,14 @@ func (engine *Engine) orderLess(
 
 	var outputDocs types.ScoredDocs
 	for _, d := range docs {
-		outputDocs = append(outputDocs, types.ScoredDoc{
+		ids := types.ScoredID{
 			DocId:            d.DocId,
 			TokenSnippetLocs: d.TokenSnippetLocs,
 			TokenLocs:        d.TokenLocs,
+		}
+
+		outputDocs = append(outputDocs, types.ScoredDoc{
+			ScoredID: ids,
 		})
 	}
 

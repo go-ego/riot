@@ -73,7 +73,7 @@ type Content struct {
 
 // ScoredDoc scored the document
 type ScoredDoc struct {
-	DocId uint64
+	ScoredID
 
 	// new 返回文档 Content
 	Content string
@@ -81,20 +81,6 @@ type ScoredDoc struct {
 	Attri interface{}
 	// new 返回评分字段
 	Fields interface{}
-
-	// 文档的打分值
-	// 搜索结果按照 Scores 的值排序，先按照第一个数排，
-	// 如果相同则按照第二个数排序，依次类推。
-	Scores []float32
-
-	// 用于生成摘要的关键词在文本中的字节位置，
-	// 该切片长度和 SearchResp.Tokens 的长度一样
-	// 只有当 IndexType == LocsIndex 时不为空
-	TokenSnippetLocs []int
-
-	// 关键词出现的位置
-	// 只有当 IndexType == LocsIndex 时不为空
-	TokenLocs [][]int
 }
 
 // ScoredDocs 为了方便排序
