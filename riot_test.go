@@ -11,6 +11,8 @@ import (
 	"github.com/vcaesar/tt"
 )
 
+var text2 = "在路上, in the way"
+
 func makeDocIds() map[uint64]bool {
 	docIds := make(map[uint64]bool)
 	docIds[5] = true
@@ -273,9 +275,7 @@ func TestDocPinYin(t *testing.T) {
 	// AddDocs(&engine)
 	// engine.RemoveDoc(5)
 
-	text := "在路上, in the way"
-
-	tokens := engine.PinYin(text)
+	tokens := engine.PinYin(text2)
 	fmt.Println("tokens...", tokens)
 	tt.Expect(t, "52", len(tokens))
 
@@ -287,13 +287,13 @@ func TestDocPinYin(t *testing.T) {
 	}
 
 	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
-	index2 := types.DocData{Content: text, Tokens: tokenDatas}
+	index2 := types.DocData{Content: text2, Tokens: tokenDatas}
 
 	engine.Index(10, index1)
 	engine.Index(11, index2)
 	engine.Flush()
 
-	data := types.DocData{Content: text}
+	data := types.DocData{Content: text2}
 	pinyinOpt.Index(10, data)
 	pinyinOpt.Index(11, data)
 	pinyinOpt.Flush()
@@ -342,7 +342,7 @@ func TestForSplitData(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	tokenDatas := engine.PinYin("在路上, in the way")
+	tokenDatas := engine.PinYin(text2)
 	tokens, num := engine.ForSplitData(tokenDatas, 52)
 	tt.Expect(t, "93", len(tokens))
 	tt.Expect(t, "104", num)
