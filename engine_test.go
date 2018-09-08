@@ -19,8 +19,11 @@ type ScoringFields struct {
 }
 
 var (
-	text1  = "你好世界, hello world!"
-	score1 = ScoringFields{1, 2, 3}
+	text1    = "你好世界, hello world!"
+	textJP   = "こんにちは世界"
+	textJP1  = "こんにちは世界, こんにちは"
+	score1   = ScoringFields{1, 2, 3}
+	score091 = ScoringFields{0, 9, 1}
 )
 
 func TestGetVer(t *testing.T) {
@@ -55,7 +58,7 @@ func AddDocs(engine *Engine) {
 
 	engine.Index(5, types.DocData{
 		Content: "The world, 七十亿人口",
-		Fields:  ScoringFields{0, 9, 1},
+		Fields:  score091,
 	})
 
 	engine.Index(6, types.DocData{
@@ -364,7 +367,7 @@ func TestRemoveDoc(t *testing.T) {
 
 	engine.Index(6, types.DocData{
 		Content: "World, 人口有七十亿",
-		Fields:  ScoringFields{0, 9, 1},
+		Fields:  score091,
 	})
 	engine.Flush()
 
@@ -411,7 +414,7 @@ func TestEngineIndexWithTokens(t *testing.T) {
 
 	engine.Index(3, types.DocData{
 		Content: "The world, 七十亿人口",
-		Fields:  ScoringFields{0, 9, 1},
+		Fields:  score091,
 	})
 	engine.FlushIndex()
 
@@ -718,7 +721,7 @@ func TestSearchJp(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.Index(7, types.DocData{
-		Content: "こんにちは世界, こんにちは",
+		Content: textJP1,
 		Fields:  score1,
 	})
 	engine.Flush()
@@ -729,7 +732,7 @@ func TestSearchJp(t *testing.T) {
 	docIds[7] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "こんにちは世界",
+		Text:   textJP,
 		DocIds: docIds,
 	})
 
@@ -776,7 +779,7 @@ func TestSearchGse(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.Index(7, types.DocData{
-		Content: "こんにちは世界, こんにちは",
+		Content: textJP1,
 		Fields:  score1,
 	})
 
@@ -790,7 +793,7 @@ func TestSearchGse(t *testing.T) {
 
 	docIds := makeGseDocIds()
 	outputs := engine.Search(types.SearchReq{
-		Text:   "こんにちは世界",
+		Text:   textJP,
 		DocIds: docIds,
 	})
 
@@ -943,7 +946,7 @@ func TestSearchLogic(t *testing.T) {
 	AddDocs(&engine)
 
 	engine.Index(7, types.DocData{
-		Content: "こんにちは世界, こんにちは",
+		Content: textJP1,
 		Fields:  score1,
 	})
 
@@ -954,14 +957,18 @@ func TestSearchLogic(t *testing.T) {
 		Fields:  score1,
 	})
 
-	engine.Index(8, types.DocData{
+	engine.Index(9, types.DocData{
 		Content: text1,
 		Fields:  score1,
 	})
 
-	engine.Index(9, types.DocData{
+	engine.Index(10, types.DocData{
 		Content: "你好世界, hello!",
-		Fields:  score1,
+		Tokens: []types.TokenData{{
+			"世界",
+			[]int{9, 10},
+		}},
+		Fields: score091,
 	})
 
 	engine.Flush()
@@ -980,7 +987,7 @@ func TestSearchLogic(t *testing.T) {
 	}
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "こんにちは世界",
+		Text:   textJP,
 		DocIds: docIds,
 		Logic:  logic,
 	})
@@ -997,7 +1004,7 @@ func TestSearchLogic(t *testing.T) {
 	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
-	tt.Expect(t, "8", outDocs[1].DocId)
+	tt.Expect(t, "10", outDocs[1].DocId)
 	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
