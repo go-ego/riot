@@ -372,19 +372,20 @@ func (indexer *Indexer) Lookup(
 	copy(keywords[len(tokens):], labels)
 
 	if len(logic) > 0 {
-		if logic != nil && len(keywords) > 0 && logic[0].Must == true ||
-			logic[0].Should == true || logic[0].NotIn == true {
-
+		loc := logic[0].Must == true ||
+			logic[0].Should == true || logic[0].NotIn == true
+		if logic != nil && len(keywords) > 0 && loc {
 			docs, numDocs = indexer.LogicLookup(
 				docIds, countDocsOnly, keywords, logic[0])
 
 			return
 		}
 
-		if logic != nil && (len(logic[0].LogicExpr.MustLabels) > 0 ||
-			len(logic[0].LogicExpr.ShouldLabels) > 0) &&
-			len(logic[0].LogicExpr.NotInLabels) >= 0 {
+		expr := len(logic[0].LogicExpr.MustLabels) > 0 ||
+			len(logic[0].LogicExpr.ShouldLabels) > 0
+		not := len(logic[0].LogicExpr.NotInLabels) >= 0
 
+		if logic != nil && expr && not {
 			docs, numDocs = indexer.LogicLookup(
 				docIds, countDocsOnly, keywords, logic[0])
 

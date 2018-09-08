@@ -966,7 +966,7 @@ func TestSearchLogic(t *testing.T) {
 		Content: "你好世界, hello!",
 		Tokens: []types.TokenData{{
 			"世界",
-			[]int{9, 10},
+			[]int{2, 3},
 		}},
 		Fields: score091,
 	})
