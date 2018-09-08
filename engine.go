@@ -29,7 +29,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	// "reflect"
 
 	"sync/atomic"
 
@@ -527,53 +526,119 @@ func maxRankOutput(rankOpts types.RankOpts, rankLen int) (int, int) {
 	return start, end
 }
 
+func (engine *Engine) rankOutID(rankerOutput rankerReturnReq,
+	rankOutArr types.ScoredIDs) types.ScoredIDs {
+	for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
+		rankOutArr = append(rankOutArr, doc)
+	}
+	return rankOutArr
+}
+
+func (engine *Engine) rankOutDocs(rankerOutput rankerReturnReq,
+	rankOutArr types.ScoredDocs) types.ScoredDocs {
+	for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
+		rankOutArr = append(rankOutArr, doc)
+	}
+	return rankOutArr
+}
+
+// NotTimeOut not set engine timeout
+func (engine *Engine) NotTimeOut(request types.SearchReq,
+	rankerReturnChan chan rankerReturnReq) (
+	rankOutArr interface{}, numDocs int) {
+
+	var (
+		rankOutID  types.ScoredIDs
+		rankOutDoc types.ScoredDocs
+		idOnly     = engine.initOptions.IDOnly
+	)
+
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		rankerOutput := <-rankerReturnChan
+		if !request.CountDocsOnly {
+			if rankerOutput.docs != nil {
+				if idOnly {
+					rankOutID = engine.rankOutID(rankerOutput, rankOutID)
+				} else {
+					rankOutDoc = engine.rankOutDocs(rankerOutput, rankOutDoc)
+				}
+			}
+		}
+		numDocs += rankerOutput.numDocs
+	}
+
+	if idOnly {
+		rankOutArr = rankOutID
+		return
+	}
+
+	rankOutArr = rankOutDoc
+	return
+}
+
+// TimeOut set engine timeout
+func (engine *Engine) TimeOut(request types.SearchReq,
+	rankerReturnChan chan rankerReturnReq) (
+	rankOutArr interface{}, numDocs int, isTimeout bool) {
+
+	deadline := time.Now().Add(time.Nanosecond *
+		time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
+
+	var (
+		rankOutID  types.ScoredIDs
+		rankOutDoc types.ScoredDocs
+		idOnly     = engine.initOptions.IDOnly
+	)
+
+	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
+		select {
+		case rankerOutput := <-rankerReturnChan:
+			if !request.CountDocsOnly {
+				if rankerOutput.docs != nil {
+					if idOnly {
+						rankOutID = engine.rankOutID(rankerOutput, rankOutID)
+					} else {
+						rankOutDoc = engine.rankOutDocs(rankerOutput, rankOutDoc)
+					}
+				}
+			}
+			numDocs += rankerOutput.numDocs
+		case <-time.After(deadline.Sub(time.Now())):
+			isTimeout = true
+			break
+		}
+	}
+
+	if idOnly {
+		rankOutArr = rankOutID
+		return
+	}
+
+	rankOutArr = rankOutDoc
+	return
+}
+
 // RankID rank docs by types.ScoredIDs
 func (engine *Engine) RankID(request types.SearchReq, rankOpts types.RankOpts,
-	tokens []string, rankerReturnChan chan rankerReturnReq) (
-	output types.SearchResp) {
+	tokens []string, rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredIDs{}
-	// var rankOutput types.ScoredIDs
-	// var rankOutput interface{}
 
 	//**********/ begin
 	timeout := request.Timeout
 	isTimeout := false
 	if timeout <= 0 {
 		// 不设置超时
-		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			rankerOutput := <-rankerReturnChan
-			if !request.CountDocsOnly {
-				if rankerOutput.docs != nil {
-					for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
-						rankOutput = append(rankOutput, doc)
-					}
-				}
-			}
-			numDocs += rankerOutput.numDocs
-		}
+		rankOutArr, num := engine.NotTimeOut(request, rankerReturnChan)
+		rankOutput = rankOutArr.(types.ScoredIDs)
+		numDocs += num
 	} else {
 		// 设置超时
-		deadline := time.Now().Add(time.Nanosecond *
-			time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
-
-		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			select {
-			case rankerOutput := <-rankerReturnChan:
-				if !request.CountDocsOnly {
-					if rankerOutput.docs != nil {
-						for _, doc := range rankerOutput.docs.(types.ScoredIDs) {
-							rankOutput = append(rankOutput, doc)
-						}
-					}
-				}
-				numDocs += rankerOutput.numDocs
-			case <-time.After(deadline.Sub(time.Now())):
-				isTimeout = true
-				break
-			}
-		}
+		rankOutArr, num, timeout := engine.TimeOut(request, rankerReturnChan)
+		rankOutput = rankOutArr.(types.ScoredIDs)
+		numDocs += num
+		isTimeout = timeout
 	}
 
 	// 再排序
@@ -608,8 +673,7 @@ func (engine *Engine) RankID(request types.SearchReq, rankOpts types.RankOpts,
 
 // Ranks rank docs by types.ScoredDocs
 func (engine *Engine) Ranks(request types.SearchReq, rankOpts types.RankOpts,
-	tokens []string, rankerReturnChan chan rankerReturnReq) (
-	output types.SearchResp) {
+	tokens []string, rankerReturnChan chan rankerReturnReq) (output types.SearchResp) {
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredDocs{}
@@ -619,38 +683,15 @@ func (engine *Engine) Ranks(request types.SearchReq, rankOpts types.RankOpts,
 	isTimeout := false
 	if timeout <= 0 {
 		// 不设置超时
-		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			rankerOutput := <-rankerReturnChan
-			if !request.CountDocsOnly {
-				if rankerOutput.docs != nil {
-					for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
-						rankOutput = append(rankOutput, doc)
-					}
-				}
-			}
-			numDocs += rankerOutput.numDocs
-		}
+		rankOutArr, num := engine.NotTimeOut(request, rankerReturnChan)
+		rankOutput = rankOutArr.(types.ScoredDocs)
+		numDocs += num
 	} else {
 		// 设置超时
-		deadline := time.Now().Add(time.Nanosecond *
-			time.Duration(NumNanosecondsInAMillisecond*request.Timeout))
-
-		for shard := 0; shard < engine.initOptions.NumShards; shard++ {
-			select {
-			case rankerOutput := <-rankerReturnChan:
-				if !request.CountDocsOnly {
-					if rankerOutput.docs != nil {
-						for _, doc := range rankerOutput.docs.(types.ScoredDocs) {
-							rankOutput = append(rankOutput, doc)
-						}
-					}
-				}
-				numDocs += rankerOutput.numDocs
-			case <-time.After(deadline.Sub(time.Now())):
-				isTimeout = true
-				break
-			}
-		}
+		rankOutArr, num, timeout := engine.TimeOut(request, rankerReturnChan)
+		rankOutput = rankOutArr.(types.ScoredDocs)
+		numDocs += num
+		isTimeout = timeout
 	}
 
 	// 再排序
@@ -720,6 +761,7 @@ func (engine *Engine) Search(request types.SearchReq) (output types.SearchResp) 
 	} else {
 		rankOpts = *request.RankOpts
 	}
+
 	if rankOpts.ScoringCriteria == nil {
 		rankOpts.ScoringCriteria = engine.initOptions.DefRankOpts.ScoringCriteria
 	}
