@@ -155,7 +155,7 @@ func TestDocRanks(t *testing.T) {
 	// test search
 	outputs1 := engine.Search(types.SearchReq{
 		Text:    "World人口",
-		Timeout: 10,
+		Timeout: 1000,
 		DocIds:  makeDocIds()})
 
 	if outputs1.Docs != nil {
