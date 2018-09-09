@@ -96,7 +96,8 @@ func (docs ScoredDocs) Swap(i, j int) {
 
 func (docs ScoredDocs) Less(i, j int) bool {
 	// 为了从大到小排序，这实际上实现的是 More 的功能
-	for iScore := 0; iScore < utils.MinInt(len(docs[i].Scores), len(docs[j].Scores)); iScore++ {
+	min := utils.MinInt(len(docs[i].Scores), len(docs[j].Scores))
+	for iScore := 0; iScore < min; iScore++ {
 		if docs[i].Scores[iScore] > docs[j].Scores[iScore] {
 			return true
 		} else if docs[i].Scores[iScore] < docs[j].Scores[iScore] {
@@ -148,7 +149,8 @@ func (docs ScoredIDs) Swap(i, j int) {
 
 func (docs ScoredIDs) Less(i, j int) bool {
 	// 为了从大到小排序，这实际上实现的是 More 的功能
-	for iScore := 0; iScore < utils.MinInt(len(docs[i].Scores), len(docs[j].Scores)); iScore++ {
+	min := utils.MinInt(len(docs[i].Scores), len(docs[j].Scores))
+	for iScore := 0; iScore < min; iScore++ {
 		if docs[i].Scores[iScore] > docs[j].Scores[iScore] {
 			return true
 		} else if docs[i].Scores[iScore] < docs[j].Scores[iScore] {
