@@ -43,7 +43,7 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	engine1.Flush()
 	log.Println("new engine1 start...")
 
-	outputs := engine1.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine1.Search(types.SearchReq{Text: reqText})
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "world", outputs.Tokens[0])
 	tt.Expect(t, "人口", outputs.Tokens[1])
@@ -74,15 +74,13 @@ func testRankOpt(idOnly bool) types.EngineOpts {
 		IDOnly:      idOnly,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankTestOpts,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 }
 
 func lookupReq(engine *Engine) (types.SearchReq, []string, chan rankerReturnReq) {
 	request := types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: makeDocIds(),
 	}
 
@@ -154,7 +152,7 @@ func TestDocRanks(t *testing.T) {
 
 	// test search
 	outputs1 := engine.Search(types.SearchReq{
-		Text:    "World人口",
+		Text:    reqText,
 		Timeout: 1000,
 		DocIds:  makeDocIds()})
 
@@ -181,9 +179,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 		IDOnly:      true,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankTestOpts,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 	engine.Init(opts)
 
@@ -235,7 +231,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	docIds[1] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
@@ -354,7 +350,7 @@ func TestForSplitData(t *testing.T) {
 	docIds[5] = true
 	docIds[1] = true
 	outputs := engine.Search(types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: docIds})
 
 	if outputs.Docs != nil {
@@ -396,7 +392,7 @@ func TestDocCounters(t *testing.T) {
 	docIds[1] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: docIds})
 
 	if outputs.Docs != nil {

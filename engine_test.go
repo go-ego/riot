@@ -19,11 +19,18 @@ type ScoringFields struct {
 }
 
 var (
-	text1    = "你好世界, hello world!"
-	textJP   = "こんにちは世界"
-	textJP1  = "こんにちは世界, こんにちは"
+	text1   = "Hello world, 你好世界!"
+	textJP  = "こんにちは世界"
+	textJP1 = "こんにちは世界, こんにちは"
+	reqText = "World人口"
+	reqG    = types.SearchReq{Text: "Google"}
+	req1    = types.SearchReq{Text: reqText}
+
 	score1   = ScoringFields{1, 2, 3}
 	score091 = ScoringFields{0, 9, 1}
+	inxOpts  = &types.IndexerOpts{
+		IndexType: types.LocsIndex,
+	}
 )
 
 func TestGetVer(t *testing.T) {
@@ -156,9 +163,7 @@ func rankEngineOpts(rankOpts types.RankOpts) types.EngineOpts {
 		Using:       1,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankOpts,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 }
 
@@ -174,7 +179,7 @@ func TestEngineIndexDoc(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "world", outputs.Tokens[0])
 	tt.Expect(t, "人口", outputs.Tokens[1])
@@ -203,7 +208,7 @@ func TestReverseOrder(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "3", len(outDocs))
@@ -221,14 +226,12 @@ func TestOffsetAndMaxOutputs(t *testing.T) {
 		Using:       1,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankOptsMax3,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	})
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
@@ -258,9 +261,7 @@ var (
 		DefRankOpts: &types.RankOpts{
 			ScoringCriteria: TestScoringCriteria{},
 		},
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 )
 
@@ -270,7 +271,7 @@ func TestSearchWithCriteria(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
@@ -291,7 +292,7 @@ func TestCompactIndex(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
@@ -331,7 +332,7 @@ func TestFrequenciesIndex(t *testing.T) {
 
 	AddDocs(&engine)
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
@@ -371,7 +372,7 @@ func TestRemoveDoc(t *testing.T) {
 	})
 	engine.Flush()
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine.Search(req1)
 
 	outDocs := outputs.Docs.(types.ScoredDocs)
 	tt.Expect(t, "2", len(outDocs))
@@ -418,7 +419,7 @@ func TestEngineIndexWithTokens(t *testing.T) {
 	})
 	engine.FlushIndex()
 
-	outputs := engine.Search(types.SearchReq{Text: "world人口"})
+	outputs := engine.Search(req1)
 	log.Println("TestEngineIndexWithTokens: ", outputs)
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "world", outputs.Tokens[0])
@@ -459,8 +460,8 @@ func TestEngineIndexWithContentAndLabels(t *testing.T) {
 	addDocsWithLabels(&engine1)
 	addDocsWithLabels(&engine2)
 
-	outputs1 := engine1.Search(types.SearchReq{Text: "Google"})
-	outputs2 := engine2.Search(types.SearchReq{Text: "Google"})
+	outputs1 := engine1.Search(reqG)
+	outputs2 := engine2.Search(reqG)
 	tt.Expect(t, "1", len(outputs1.Tokens))
 	tt.Expect(t, "1", len(outputs2.Tokens))
 	tt.Expect(t, "google", outputs1.Tokens[0])
@@ -480,16 +481,13 @@ func TestIndexWithLabelsStopTokenFile(t *testing.T) {
 	engine1.Init(types.EngineOpts{
 		GseDict:       "./data/dict/dictionary.txt",
 		StopTokenFile: "./testdata/test_stop_dict.txt",
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts:   inxOpts,
 	})
 
 	addDocsWithLabels(&engine1)
 
-	req := types.SearchReq{Text: "Google"}
-	outputs1 := engine1.Search(req)
-	outputsDoc := engine1.SearchDoc(req)
+	outputs1 := engine1.Search(reqG)
+	outputsDoc := engine1.SearchDoc(reqG)
 	tt.Expect(t, "1", len(outputs1.Tokens))
 	// tt.Expect(t, "Google", outputs1.Tokens[0])
 
@@ -505,9 +503,7 @@ func TestEngineIndexWithStore(t *testing.T) {
 		Using:       1,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankOptsMax10,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 		UseStore:    true,
 		StoreFolder: "riot.persistent",
 		StoreShards: 2,
@@ -527,7 +523,7 @@ func TestEngineIndexWithStore(t *testing.T) {
 	engine1.Init(opts)
 	engine1.Flush()
 
-	outputs := engine1.Search(types.SearchReq{Text: "World人口"})
+	outputs := engine1.Search(req1)
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "world", outputs.Tokens[0])
 	tt.Expect(t, "人口", outputs.Tokens[1])
@@ -553,9 +549,7 @@ func TestCountDocsOnly(t *testing.T) {
 		Using:       1,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankOptsMax1,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	})
 
 	AddDocs(&engine)
@@ -563,7 +557,7 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口",
+	outputs := engine.Search(types.SearchReq{Text: reqText,
 		CountDocsOnly: true})
 	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
@@ -587,7 +581,7 @@ func TestDocOrderless(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	outputs := engine.Search(types.SearchReq{Text: "World人口",
+	outputs := engine.Search(types.SearchReq{Text: reqText,
 		Orderless: true})
 	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
@@ -607,7 +601,7 @@ func TestDocOrderless(t *testing.T) {
 	engine1.RemoveDoc(5)
 	engine1.Flush()
 
-	outputs1 := engine1.Search(types.SearchReq{Text: "World人口",
+	outputs1 := engine1.Search(types.SearchReq{Text: reqText,
 		Orderless: true})
 	if outputs1.Docs == nil {
 		tt.Expect(t, "0", 0)
@@ -625,9 +619,7 @@ var (
 		IDOnly:      true,
 		GseDict:     "./testdata/test_dict.txt",
 		DefRankOpts: &rankOptsMax1,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 )
 
@@ -640,7 +632,7 @@ func TestDocOnlyID(t *testing.T) {
 	engine.Flush()
 
 	req := types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: makeDocIds(),
 	}
 	outputs := engine.Search(req)
@@ -655,7 +647,7 @@ func TestDocOnlyID(t *testing.T) {
 	tt.Expect(t, "2", outputs.NumDocs)
 
 	outputs1 := engine.Search(types.SearchReq{
-		Text:    "World人口",
+		Text:    reqText,
 		Timeout: 10,
 		DocIds:  makeDocIds(),
 	})
@@ -681,7 +673,7 @@ func TestSearchWithin(t *testing.T) {
 	docIds[1] = true
 
 	outputs := engine.Search(types.SearchReq{
-		Text:   "World人口",
+		Text:   reqText,
 		DocIds: docIds,
 	})
 	tt.Expect(t, "2", len(outputs.Tokens))
@@ -708,9 +700,7 @@ func testJPOpts(use int) types.EngineOpts {
 		Using:       use,
 		GseDict:     "./testdata/test_dict_jp.txt",
 		DefRankOpts: &rankOptsMax10Order,
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	}
 }
 
@@ -806,8 +796,8 @@ func TestSearchGse(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	tt.Expect(t, "8", outDocs[0].DocId)
-	tt.Expect(t, "50", int(outDocs[0].Scores[0]*1000))
-	tt.Expect(t, "[10 6]", outDocs[0].TokenSnippetLocs)
+	tt.Expect(t, "142", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "[10 19]", outDocs[0].TokenSnippetLocs)
 
 	tt.Expect(t, "7", outDocs[1].DocId)
 	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
@@ -886,9 +876,7 @@ func TestSearchWithGse(t *testing.T) {
 	defer searcher2.Close()
 
 	engine1.WithGse(gseSegmenter).Init(types.EngineOpts{
-		IndexerOpts: &types.IndexerOpts{
-			IndexType: types.LocsIndex,
-		},
+		IndexerOpts: inxOpts,
 	})
 
 	engine2.WithGse(gseSegmenter).Init(types.EngineOpts{
@@ -901,8 +889,8 @@ func TestSearchWithGse(t *testing.T) {
 	addDocsWithLabels(&engine1)
 	addDocsWithLabels(&engine2)
 
-	outputs1 := engine1.Search(types.SearchReq{Text: "Google"})
-	outputs2 := engine2.Search(types.SearchReq{Text: "Google"})
+	outputs1 := engine1.Search(reqG)
+	outputs2 := engine2.Search(reqG)
 	tt.Expect(t, "1", len(outputs1.Tokens))
 	tt.Expect(t, "1", len(outputs2.Tokens))
 	tt.Expect(t, "google", outputs1.Tokens[0])
@@ -963,7 +951,7 @@ func TestSearchLogic(t *testing.T) {
 	})
 
 	engine.Index(10, types.DocData{
-		Content: "你好世界, hello!",
+		Content: "Hello, 你好世界!",
 		Tokens: []types.TokenData{{
 			"世界",
 			[]int{2, 3},
@@ -1000,11 +988,11 @@ func TestSearchLogic(t *testing.T) {
 	log.Println("outputs docs...", outDocs)
 	tt.Expect(t, "2", len(outDocs))
 
-	tt.Expect(t, "9", outDocs[0].DocId)
+	tt.Expect(t, "10", outDocs[0].DocId)
 	tt.Expect(t, "1000", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
-	tt.Expect(t, "10", outDocs[1].DocId)
+	tt.Expect(t, "9", outDocs[1].DocId)
 	tt.Expect(t, "1000", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
