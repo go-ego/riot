@@ -569,20 +569,25 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.Close()
 }
 
+func orderlessOpts(idOnly bool) types.EngineOpts {
+	return types.EngineOpts{
+		Using:   1,
+		IDOnly:  idOnly,
+		GseDict: "./testdata/test_dict.txt",
+	}
+}
+
 func TestDocOrderless(t *testing.T) {
 	var engine, engine1 Engine
-	engine.Init(types.EngineOpts{
-		Using:   1,
-		GseDict: "./testdata/test_dict.txt",
-	})
+	engine.Init(orderlessOpts(false))
 
 	AddDocs(&engine)
 
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	outputs := engine.Search(types.SearchReq{Text: reqText,
-		Orderless: true})
+	orderReq := types.SearchReq{Text: reqText, Orderless: true}
+	outputs := engine.Search(orderReq)
 	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
 		tt.Expect(t, "0", 0)
@@ -590,19 +595,14 @@ func TestDocOrderless(t *testing.T) {
 	tt.Expect(t, "2", len(outputs.Tokens))
 	tt.Expect(t, "2", outputs.NumDocs)
 
-	engine1.Init(types.EngineOpts{
-		Using:   1,
-		IDOnly:  true,
-		GseDict: "./testdata/test_dict.txt",
-	})
+	engine1.Init(orderlessOpts(true))
 
 	AddDocs(&engine1)
 
 	engine1.RemoveDoc(5)
 	engine1.Flush()
 
-	outputs1 := engine1.Search(types.SearchReq{Text: reqText,
-		Orderless: true})
+	outputs1 := engine1.Search(orderReq)
 	if outputs1.Docs == nil {
 		tt.Expect(t, "0", 0)
 	}
