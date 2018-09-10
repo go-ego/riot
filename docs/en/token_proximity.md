@@ -1,7 +1,7 @@
 Key words close distance（Token Proximity）
 ===
 
-The closeness of keywords is used to measure whether multiple keywords are in the same document or not. For example, if the user searches for the phrase "Chinese football," including the keywords "China" and "Soccer", the two adjacent keywords appear in a document immediately before and after the same order, Two words in the middle of a lot of words are close to the larger distance. Close proximity is a way of measuring the relevance of a document and multiple keywords. Close proximity should not be the only indicator of document ordering, but in some cases a fair amount of extraneous results can be filtered out by setting thresholds.
+The closeness of keywords is used to measure whether multiple keywords are in the same document or not. For example, if the user searches for the phrase "International football," including the keywords "international" and "football", the two adjacent keywords appear in a document immediately before and after the same order, Two words in the middle of a lot of words are close to the larger distance. Close proximity is a way of measuring the relevance of a document and multiple keywords. Close proximity should not be the only indicator of document ordering, but in some cases a fair amount of extraneous results can be filtered out by setting thresholds.
 
 The nearest neighbor distance of N keyword is calculated as follows:
 
