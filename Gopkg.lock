@@ -60,19 +60,19 @@
   branch = "master"
   name = "github.com/go-ego/cedar"
   packages = ["."]
-  revision = "4fc66f191550e645bf2285eb0468bc59c249e90d"
+  revision = "393be26fe3b8614d07dff4df428cb9ab8fc56c1f"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/gpy"
   packages = ["."]
-  revision = "5e7198f4b498342cd0e29af3b199470cbbcb7c08"
+  revision = "c381ef5b982f688dfc9c4206c8685d303b9ba9a3"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "7df3c69d68f9d288c9780fcfe7c6a7e529ba8322"
+  revision = "b75fba7beb56af12951abcaee7ffe5812f3f68ed"
 
 [[projects]]
   branch = "master"
@@ -154,17 +154,10 @@
     "host",
     "internal/common",
     "mem",
-    "net",
     "process"
   ]
   revision = "8048a2e9c5773235122027dd585cf821b2af1249"
   version = "v2.18.07"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/shirou/w32"
-  packages = ["."]
-  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
   branch = "master"
@@ -189,7 +182,7 @@
   branch = "master"
   name = "github.com/vcaesar/tt"
   packages = ["."]
-  revision = "7089d2bb06d77214951b387bded252993f105022"
+  revision = "59ab8a500c5e013fef75c4cbefd336e7dd2a9fcc"
 
 [[projects]]
   name = "go.etcd.io/bbolt"
@@ -243,7 +236,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
+  revision = "26e67e76b6c3f6ce91f7c52def5af501b4e0f3a2"
 
 [[projects]]
   branch = "master"
@@ -252,7 +245,7 @@
     "unix",
     "windows"
   ]
-  revision = "49385e6e15226593f68b26af201feec29d5bba22"
+  revision = "d0be0721c37eeb5299f245a996a483160fc36940"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -279,7 +272,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "c66870c02cf823ceb633bcd05be3c7cda29976f4"
+  revision = "36d5787dc5356b711fe8f3040271aaf51c35955b"
 
 [[projects]]
   name = "google.golang.org/grpc"
@@ -314,8 +307,8 @@
     "status",
     "tap"
   ]
-  revision = "32fb0ac620c32ba40a4626ddf94d90d12cce3455"
-  version = "v1.14.0"
+  revision = "8dea3dc473e90c8179e519d91302d0597c0ca1d1"
+  version = "v1.15.0"
 
 [[projects]]
   name = "gopkg.in/natefinch/lumberjack.v2"
