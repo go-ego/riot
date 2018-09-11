@@ -258,17 +258,7 @@ func (engine *Engine) WithGse(segmenter gse.Segmenter) *Engine {
 	return engine
 }
 
-// Init initialize the engine
-func (engine *Engine) Init(options types.EngineOpts) {
-	// 将线程数设置为CPU数
-	// runtime.GOMAXPROCS(runtime.NumCPU())
-	// runtime.GOMAXPROCS(128)
-
-	// 初始化初始参数
-	if engine.initialized {
-		log.Fatal("Do not re-initialize the engine.")
-	}
-
+func (engine *Engine) initDef(options types.EngineOpts) types.EngineOpts {
 	if options.GseDict == "" && !options.NotUseGse && !engine.loaded {
 		log.Printf("Dictionary file path is empty, load the default dictionary file.")
 		options.GseDict = "zh"
@@ -279,6 +269,21 @@ func (engine *Engine) Init(options types.EngineOpts) {
 		options.StoreFolder = DefaultPath
 		// os.MkdirAll(DefaultPath, 0777)
 	}
+
+	return options
+}
+
+// Init initialize the engine
+func (engine *Engine) Init(options types.EngineOpts) {
+	// 将线程数设置为CPU数
+	// runtime.GOMAXPROCS(runtime.NumCPU())
+	// runtime.GOMAXPROCS(128)
+
+	// 初始化初始参数
+	if engine.initialized {
+		log.Fatal("Do not re-initialize the engine.")
+	}
+	options = engine.initDef(options)
 
 	options.Init()
 	engine.initOptions = options
