@@ -354,7 +354,7 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 // 查找包含全部搜索键(AND操作)的文档
 // 当 docIds 不为 nil 时仅从 docIds 指定的文档中查找
 func (indexer *Indexer) Lookup(
-	tokens []string, labels []string, docIds map[uint64]bool, countDocsOnly bool,
+	tokens, labels []string, docIds map[uint64]bool, countDocsOnly bool,
 	logic ...types.Logic) (docs []types.IndexedDoc, numDocs int) {
 
 	if indexer.initialized == false {
@@ -393,6 +393,13 @@ func (indexer *Indexer) Lookup(
 		}
 	}
 
+	return indexer.internalLookup(keywords, tokens, docIds, countDocsOnly)
+
+}
+
+func (indexer *Indexer) internalLookup(
+	keywords, tokens []string, docIds map[uint64]bool, countDocsOnly bool) (
+	docs []types.IndexedDoc, numDocs int) {
 	indexer.tableLock.RLock()
 	defer indexer.tableLock.RUnlock()
 
@@ -534,134 +541,6 @@ func (indexer *Indexer) Lookup(
 	return
 }
 
-// searchIndex 二分法查找 indices 中某文档的索引项
-// 第一个返回参数为找到的位置或需要插入的位置
-// 第二个返回参数标明是否找到
-func (indexer *Indexer) searchIndex(indices *KeywordIndices,
-	start int, end int, docId uint64) (int, bool) {
-	// 特殊情况
-	if indexer.getIndexLen(indices) == start {
-		return start, false
-	}
-	if docId < indexer.getDocId(indices, start) {
-		return start, false
-	} else if docId == indexer.getDocId(indices, start) {
-		return start, true
-	}
-	if docId > indexer.getDocId(indices, end) {
-		return end + 1, false
-	} else if docId == indexer.getDocId(indices, end) {
-		return end, true
-	}
-
-	// 二分
-	var middle int
-	for end-start > 1 {
-		middle = (start + end) / 2
-		if docId == indexer.getDocId(indices, middle) {
-			return middle, true
-		} else if docId > indexer.getDocId(indices, middle) {
-			start = middle
-		} else {
-			end = middle
-		}
-	}
-
-	return end, false
-}
-
-// computeTokenProximity 计算搜索键在文本中的紧邻距离
-//
-// 假定第 i 个搜索键首字节出现在文本中的位置为 P_i，长度 L_i
-// 紧邻距离计算公式为
-//
-// 	ArgMin(Sum(Abs(P_(i+1) - P_i - L_i)))
-//
-// 具体由动态规划实现，依次计算前 i 个 token 在每个出现位置的最优值。
-// 选定的 P_i 通过 TokenLocs 参数传回。
-func computeTokenProximity(table []*KeywordIndices,
-	indexPointers []int, tokens []string) (
-	minTokenProximity int, TokenLocs []int) {
-	minTokenProximity = -1
-	TokenLocs = make([]int, len(tokens))
-
-	var (
-		currentLocations, nextLocations []int
-		currentMinValues, nextMinValues []int
-		path                            [][]int
-	)
-
-	// 初始化路径数组
-	path = make([][]int, len(tokens))
-	for i := 1; i < len(path); i++ {
-		path[i] = make([]int, len(table[i].locations[indexPointers[i]]))
-	}
-
-	// 动态规划
-	currentLocations = table[0].locations[indexPointers[0]]
-	currentMinValues = make([]int, len(currentLocations))
-	for i := 1; i < len(tokens); i++ {
-		nextLocations = table[i].locations[indexPointers[i]]
-		nextMinValues = make([]int, len(nextLocations))
-		for j := range nextMinValues {
-			nextMinValues[j] = -1
-		}
-
-		var iNext int
-		for iCurrent, currentLocation := range currentLocations {
-			if currentMinValues[iCurrent] == -1 {
-				continue
-			}
-			for iNext+1 < len(nextLocations) &&
-				nextLocations[iNext+1] < currentLocation {
-				iNext++
-			}
-
-			update := func(from int, to int) {
-				if to >= len(nextLocations) {
-					return
-				}
-				value := currentMinValues[from] +
-					utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
-
-				if nextMinValues[to] == -1 || value < nextMinValues[to] {
-					nextMinValues[to] = value
-					path[i][to] = from
-				}
-			}
-
-			// 最优解的状态转移只发生在左右最接近的位置
-			update(iCurrent, iNext)
-			update(iCurrent, iNext+1)
-		}
-
-		currentLocations = nextLocations
-		currentMinValues = nextMinValues
-	}
-
-	// 找出最优解
-	var cursor int
-	for i, value := range currentMinValues {
-		if value == -1 {
-			continue
-		}
-		if minTokenProximity == -1 || value < minTokenProximity {
-			minTokenProximity = value
-			cursor = i
-		}
-	}
-
-	// 从路径倒推出最优解的位置
-	for i := len(tokens) - 1; i >= 0; i-- {
-		if i != len(tokens)-1 {
-			cursor = path[i+1][cursor]
-		}
-		TokenLocs[i] = table[i].locations[indexPointers[i]][cursor]
-	}
-
-	return
-}
-
 // LogicLookup logic Lookup
 func (indexer *Indexer) LogicLookup(
 	docIds map[uint64]bool, countDocsOnly bool, logicExpr []string,
@@ -787,6 +666,134 @@ func (indexer *Indexer) LogicLookup(
 		}
 
 		// fmt.Println(docs, numDocs)
+	}
+
+	return
+}
+
+// searchIndex 二分法查找 indices 中某文档的索引项
+// 第一个返回参数为找到的位置或需要插入的位置
+// 第二个返回参数标明是否找到
+func (indexer *Indexer) searchIndex(indices *KeywordIndices,
+	start int, end int, docId uint64) (int, bool) {
+	// 特殊情况
+	if indexer.getIndexLen(indices) == start {
+		return start, false
+	}
+	if docId < indexer.getDocId(indices, start) {
+		return start, false
+	} else if docId == indexer.getDocId(indices, start) {
+		return start, true
+	}
+	if docId > indexer.getDocId(indices, end) {
+		return end + 1, false
+	} else if docId == indexer.getDocId(indices, end) {
+		return end, true
+	}
+
+	// 二分
+	var middle int
+	for end-start > 1 {
+		middle = (start + end) / 2
+		if docId == indexer.getDocId(indices, middle) {
+			return middle, true
+		} else if docId > indexer.getDocId(indices, middle) {
+			start = middle
+		} else {
+			end = middle
+		}
+	}
+
+	return end, false
+}
+
+// computeTokenProximity 计算搜索键在文本中的紧邻距离
+//
+// 假定第 i 个搜索键首字节出现在文本中的位置为 P_i，长度 L_i
+// 紧邻距离计算公式为
+//
+// 	ArgMin(Sum(Abs(P_(i+1) - P_i - L_i)))
+//
+// 具体由动态规划实现，依次计算前 i 个 token 在每个出现位置的最优值。
+// 选定的 P_i 通过 TokenLocs 参数传回。
+func computeTokenProximity(table []*KeywordIndices,
+	indexPointers []int, tokens []string) (
+	minTokenProximity int, TokenLocs []int) {
+	minTokenProximity = -1
+	TokenLocs = make([]int, len(tokens))
+
+	var (
+		currentLocations, nextLocations []int
+		currentMinValues, nextMinValues []int
+		path                            [][]int
+	)
+
+	// 初始化路径数组
+	path = make([][]int, len(tokens))
+	for i := 1; i < len(path); i++ {
+		path[i] = make([]int, len(table[i].locations[indexPointers[i]]))
+	}
+
+	// 动态规划
+	currentLocations = table[0].locations[indexPointers[0]]
+	currentMinValues = make([]int, len(currentLocations))
+	for i := 1; i < len(tokens); i++ {
+		nextLocations = table[i].locations[indexPointers[i]]
+		nextMinValues = make([]int, len(nextLocations))
+		for j := range nextMinValues {
+			nextMinValues[j] = -1
+		}
+
+		var iNext int
+		for iCurrent, currentLocation := range currentLocations {
+			if currentMinValues[iCurrent] == -1 {
+				continue
+			}
+			for iNext+1 < len(nextLocations) &&
+				nextLocations[iNext+1] < currentLocation {
+				iNext++
+			}
+
+			update := func(from int, to int) {
+				if to >= len(nextLocations) {
+					return
+				}
+				value := currentMinValues[from] +
+					utils.AbsInt(nextLocations[to]-currentLocations[from]-len(tokens[i-1]))
+
+				if nextMinValues[to] == -1 || value < nextMinValues[to] {
+					nextMinValues[to] = value
+					path[i][to] = from
+				}
+			}
+
+			// 最优解的状态转移只发生在左右最接近的位置
+			update(iCurrent, iNext)
+			update(iCurrent, iNext+1)
+		}
+
+		currentLocations = nextLocations
+		currentMinValues = nextMinValues
+	}
+
+	// 找出最优解
+	var cursor int
+	for i, value := range currentMinValues {
+		if value == -1 {
+			continue
+		}
+		if minTokenProximity == -1 || value < minTokenProximity {
+			minTokenProximity = value
+			cursor = i
+		}
+	}
+
+	// 从路径倒推出最优解的位置
+	for i := len(tokens) - 1; i >= 0; i-- {
+		if i != len(tokens)-1 {
+			cursor = path[i+1][cursor]
+		}
+		TokenLocs[i] = table[i].locations[indexPointers[i]][cursor]
 	}
 
 	return
