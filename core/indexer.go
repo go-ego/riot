@@ -361,10 +361,12 @@ func (indexer *Indexer) Lookup(
 		log.Fatal("The Indexer has not been initialized.")
 	}
 
+	indexer.tableLock.RLock()
+	defer indexer.tableLock.RUnlock()
+
 	if indexer.numDocs == 0 {
 		return
 	}
-	numDocs = 0
 
 	// 合并关键词和标签为搜索键
 	keywords := make([]string, len(tokens)+len(labels))
@@ -400,8 +402,6 @@ func (indexer *Indexer) Lookup(
 func (indexer *Indexer) internalLookup(
 	keywords, tokens []string, docIds map[uint64]bool, countDocsOnly bool) (
 	docs []types.IndexedDoc, numDocs int) {
-	indexer.tableLock.RLock()
-	defer indexer.tableLock.RUnlock()
 
 	table := make([]*KeywordIndices, len(keywords))
 	for i, keyword := range keywords {
@@ -545,9 +545,6 @@ func (indexer *Indexer) internalLookup(
 func (indexer *Indexer) LogicLookup(
 	docIds map[uint64]bool, countDocsOnly bool, logicExpr []string,
 	logic types.Logic) (docs []types.IndexedDoc, numDocs int) {
-
-	indexer.tableLock.RLock()
-	defer indexer.tableLock.RUnlock()
 
 	// // 有效性检查, 不允许只出现逻辑非检索, 也不允许与或非都不存在
 	// if Logic.Must == true && Logic.Should == true && Logic.NotIn == true {
