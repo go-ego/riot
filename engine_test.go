@@ -557,8 +557,9 @@ func TestCountDocsOnly(t *testing.T) {
 	engine.RemoveDoc(5)
 	engine.Flush()
 
-	outputs := engine.Search(types.SearchReq{Text: reqText,
-		CountDocsOnly: true})
+	outputs := engine.Search(
+		types.SearchReq{Text: reqText, CountDocsOnly: true},
+	)
 	// tt.Expect(t, "0", len(outputs.Docs))
 	if outputs.Docs == nil {
 		tt.Expect(t, "0", 0)
@@ -830,8 +831,8 @@ func TestSearchNotUseGse(t *testing.T) {
 	engine.Index(7, data)
 	engine.Index(8, data)
 
-	engine1.Index(7, data)
-	engine1.Index(8, data)
+	engine1.Index(7, data, true)
+	engine1.Index(8, data, true)
 
 	engine.Flush()
 	engine1.Flush()
