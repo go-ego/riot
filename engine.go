@@ -215,9 +215,8 @@ func (engine *Engine) Store() {
 	for {
 		runtime.Gosched()
 
-		engine.loc.RLock()
-		numDoced := engine.numIndexingReqs == engine.numDocsIndexed
-		engine.loc.RUnlock()
+		inx := atomic.LoadUint64(&engine.numDocsIndexed)
+		numDoced := engine.numIndexingReqs == inx
 
 		if numDoced {
 			break
@@ -629,7 +628,7 @@ func (engine *Engine) RankID(request types.SearchReq, rankOpts types.RankOpts,
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredIDs{}
-
+	
 	//**********/ begin
 	timeout := request.Timeout
 	isTimeout := false
@@ -807,14 +806,12 @@ func (engine *Engine) Flush() {
 	for {
 		runtime.Gosched()
 
-		engine.loc.RLock()
-		inxd := engine.numIndexingReqs == engine.numDocsIndexed
+		inxd := engine.numIndexingReqs == atomic.LoadUint64(&engine.numDocsIndexed)
 		numRm := engine.numRemovingReqs * uint64(engine.initOptions.NumShards)
-		rmd := numRm == engine.numDocsRemoved
+		rmd := numRm == atomic.LoadUint64(&engine.numDocsRemoved)
 
-		nums := engine.numIndexingReqs == engine.numDocsStored
+		nums := engine.numIndexingReqs == atomic.LoadUint64(&engine.numDocsStored)
 		stored := !engine.initOptions.UseStore || nums
-		engine.loc.RUnlock()
 
 		if inxd && rmd && stored {
 			// 保证 CHANNEL 中 REQUESTS 全部被执行完
@@ -827,10 +824,8 @@ func (engine *Engine) Flush() {
 	for {
 		runtime.Gosched()
 
-		engine.loc.RLock()
 		numf := engine.numForceUpdatingReqs * uint64(engine.initOptions.NumShards)
-		forced := numf == engine.numDocsForceUpdated
-		engine.loc.RUnlock()
+		forced := numf == atomic.LoadUint64(&engine.numDocsForceUpdated)
 
 		if forced {
 			return

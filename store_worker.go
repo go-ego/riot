@@ -60,9 +60,7 @@ func (engine *Engine) storeIndexDocWorker(shard int) {
 		// 将 key-value 写入数据库
 		engine.dbs[shard].Set(b[0:length], buf.Bytes())
 
-		engine.loc.Lock()
 		atomic.AddUint64(&engine.numDocsStored, 1)
-		engine.loc.Unlock()
 	}
 }
 
