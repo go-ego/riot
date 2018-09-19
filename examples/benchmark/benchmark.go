@@ -64,6 +64,7 @@ var (
 
 func initEngine() {
 	searcher.Init(types.EngineOpts{
+		IDOnly:        true,
 		GseDict:       *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
@@ -155,7 +156,7 @@ func deleteDoc() {
 	log.Printf("删除 %d 条索引花费时间 %v", *numDeleteDocs, t3.Sub(t2))
 }
 
-func searchQu() {
+func searchQ() {
 	t4 := time.Now()
 	done := make(chan bool)
 	recordResponse := recordResponseLock{}
@@ -188,6 +189,7 @@ func useStore(tBeginInit, tEndInit time.Time) {
 	t6 := time.Now()
 	searcher1 := riot.Engine{}
 	searcher1.Init(types.EngineOpts{
+		IDOnly:        true,
 		GseDict:       *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
@@ -209,7 +211,8 @@ func useStore(tBeginInit, tEndInit time.Time) {
 		float64(searcher1.NumTokenIndexAdded())/t/(1000000))
 }
 
-func main() {
+// TestBM BM test
+func TestBM() {
 	// 解析命令行参数
 	flag.Parse()
 	searchQueries = strings.Split(*queries, ",")
@@ -244,7 +247,7 @@ func main() {
 		defer f.Close()
 	}
 
-	searchQu()
+	searchQ()
 
 	if *usePersistent {
 		useStore(tBeginInit, tEndInit)
@@ -252,6 +255,10 @@ func main() {
 	//os.RemoveAll(*persistentStoreFolder)
 
 	log.Println("end...")
+}
+
+func main() {
+	TestBM()
 }
 
 type recordResponseLock struct {
@@ -262,7 +269,7 @@ type recordResponseLock struct {
 func search(ch chan bool, record *recordResponseLock) {
 	for i := 0; i < numRepeatQuery; i++ {
 		for _, query := range searchQueries {
-			output := searcher.SearchDoc(types.SearchReq{Text: query})
+			output := searcher.SearchID(types.SearchReq{Text: query})
 			record.RLock()
 			if _, found := record.count[query]; !found {
 				record.RUnlock()

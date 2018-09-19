@@ -628,7 +628,7 @@ func (engine *Engine) RankID(request types.SearchReq, rankOpts types.RankOpts,
 	// 从通信通道读取排序器的输出
 	numDocs := 0
 	rankOutput := types.ScoredIDs{}
-	
+
 	//**********/ begin
 	timeout := request.Timeout
 	isTimeout := false
