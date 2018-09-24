@@ -56,6 +56,7 @@ type Indexer struct {
 
 	// 这实际上是总文档数的一个近似
 	numDocs uint64
+	// docIDs *hset.Hset
 
 	// 所有被索引文本的总关键词数
 	totalTokenLen float32
@@ -123,8 +124,8 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 		indexer.addCacheLock.addCachePointer++
 	}
 
-	if indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize ||
-		forceUpdate {
+	docSize := indexer.addCacheLock.addCachePointer >= indexer.initOptions.DocCacheSize
+	if docSize || forceUpdate {
 		indexer.tableLock.Lock()
 
 		position := 0
@@ -139,7 +140,9 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 					indexer.addCacheLock.addCache[position], indexer.addCacheLock.addCache[i] =
 						indexer.addCacheLock.addCache[i], indexer.addCacheLock.addCache[position]
 				}
+
 				if docState == 0 {
+					// delete docs
 					indexer.removeCacheLock.Lock()
 					indexer.removeCacheLock.removeCache[indexer.removeCacheLock.removeCachePointer] =
 						docIndex.DocId
@@ -258,7 +261,8 @@ func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 	indexer.removeCacheLock.Lock()
 	if docId != 0 {
 		indexer.tableLock.Lock()
-		if docState, ok := indexer.tableLock.docsState[docId]; ok && docState == 0 {
+		docState, ok := indexer.tableLock.docsState[docId]
+		if ok && docState == 0 {
 			indexer.removeCacheLock.removeCache[indexer.removeCacheLock.removeCachePointer] = docId
 			indexer.removeCacheLock.removeCachePointer++
 			indexer.tableLock.docsState[docId] = 1
@@ -272,9 +276,9 @@ func (indexer *Indexer) RemoveDocToCache(docId uint64, forceUpdate bool) bool {
 		indexer.tableLock.Unlock()
 	}
 
-	if indexer.removeCacheLock.removeCachePointer > 0 &&
-		(indexer.removeCacheLock.removeCachePointer >= indexer.initOptions.DocCacheSize ||
-			forceUpdate) {
+	docSizeFU := indexer.removeCacheLock.removeCachePointer >= indexer.initOptions.DocCacheSize ||
+		forceUpdate
+	if indexer.removeCacheLock.removeCachePointer > 0 && docSizeFU {
 		removeCacheddocs := indexer.removeCacheLock.removeCache[:indexer.removeCacheLock.removeCachePointer]
 		indexer.removeCacheLock.removeCachePointer = 0
 		indexer.removeCacheLock.Unlock()
@@ -305,10 +309,13 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 
 	for keyword, indices := range indexer.tableLock.table {
 		indicesTop, indicesPointer := 0, 0
-		docsPointer := sort.Search(
-			len(*docs), func(i int) bool { return (*docs)[i] >= indices.docIds[0] })
+		docsPointer := sort.Search(len(*docs),
+			func(i int) bool {
+				return (*docs)[i] >= indices.docIds[0]
+			})
 		// 双指针扫描，进行批量删除操作
-		for docsPointer < len(*docs) && indicesPointer < indexer.getIndexLen(indices) {
+		for docsPointer < len(*docs) &&
+			indicesPointer < indexer.getIndexLen(indices) {
 			if indices.docIds[indicesPointer] < (*docs)[docsPointer] {
 				if indicesTop != indicesPointer {
 					switch indexer.initOptions.IndexType {
@@ -464,7 +471,8 @@ func (indexer *Indexer) internalLookup(
 		}
 
 		if found {
-			if docState, ok := indexer.tableLock.docsState[baseDocId]; !ok || docState != 0 {
+			docState, ok := indexer.tableLock.docsState[baseDocId]
+			if !ok || docState != 0 {
 				continue
 			}
 			indexedDoc := types.IndexedDoc{}
@@ -633,36 +641,35 @@ func (indexer *Indexer) LogicLookup(
 				numDocs++
 			}
 		}
+
+		return
+	}
+	// 不存在逻辑与检索, 则必须存在逻辑或检索
+	// 这时进行求并集操作
+	if logic.Should == true || len(logic.LogicExpr.ShouldLabels) > 0 {
+		docs, numDocs = indexer.unionTable(shouldTable, notInTable, countDocsOnly)
 	} else {
-		// 不存在逻辑与检索, 则必须存在逻辑或检索
-		// 这时进行求并集操作
-		if logic.Should == true || len(logic.LogicExpr.ShouldLabels) > 0 {
-			docs, numDocs = indexer.unionTable(shouldTable, notInTable, countDocsOnly)
-		} else {
-			uintDocIds := make([]uint64, 0)
-			// 当前直接返回 Not 逻辑数据
-			for i := 0; i < len(notInTable); i++ {
-				for _, docid := range notInTable[i].docIds {
-					if indexer.findInNotInTable(notInTable, docid) {
-						uintDocIds = append(uintDocIds, docid)
-					}
+		uintDocIds := make([]uint64, 0)
+		// 当前直接返回 Not 逻辑数据
+		for i := 0; i < len(notInTable); i++ {
+			for _, docid := range notInTable[i].docIds {
+				if indexer.findInNotInTable(notInTable, docid) {
+					uintDocIds = append(uintDocIds, docid)
 				}
-			}
-
-			StableDesc(uintDocIds)
-
-			numDocs = 0
-			for _, doc := range uintDocIds {
-				indexedDoc := types.IndexedDoc{}
-				indexedDoc.DocId = doc
-				if !countDocsOnly {
-					docs = append(docs, indexedDoc)
-				}
-				numDocs++
 			}
 		}
 
-		// fmt.Println(docs, numDocs)
+		StableDesc(uintDocIds)
+
+		numDocs = 0
+		for _, doc := range uintDocIds {
+			indexedDoc := types.IndexedDoc{}
+			indexedDoc.DocId = doc
+			if !countDocsOnly {
+				docs = append(docs, indexedDoc)
+			}
+			numDocs++
+		}
 	}
 
 	return
