@@ -73,7 +73,7 @@ func (s *Badger) Get(k []byte) ([]byte, error) {
 			return err
 		}
 
-		ival, err = item.Value()
+		ival, err = item.ValueCopy(nil)
 		return err
 	})
 
@@ -118,7 +118,7 @@ func (s *Badger) ForEach(fn func(k, v []byte) error) error {
 		for it.Rewind(); it.Valid(); it.Next() {
 			item := it.Item()
 			key := item.Key()
-			val, err := item.Value()
+			val, err := item.ValueCopy(nil)
 			if err != nil {
 				return err
 			}
