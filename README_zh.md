@@ -32,8 +32,8 @@ Go Open Source, Distributed, Simple and efficient full text search engine.
 * 采用对商业应用友好的[Apache License v2](/LICENSE)发布
 
 * [查看分词规则](https://github.com/go-ego/riot/blob/master/docs/zh/segmenter.md)
-
-Riot v0.10.0 was released in Nov 2017, check the [Changelog](https://github.com/go-ego/riot/blob/master/docs/CHANGELOG.md) for the full details.
+<!-- 
+Riot v0.10.0 was released in Nov 2017, check the [Changelog](https://github.com/go-ego/riot/blob/master/docs/CHANGELOG.md) for the full details. -->
 
 QQ 群: 120563750
 

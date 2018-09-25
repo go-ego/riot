@@ -2,20 +2,20 @@ module github.com/go-ego/riot
 
 require (
 	github.com/AndreasBriese/bbloom v0.0.0-20170702084017-28f7e881ca57
-	github.com/BurntSushi/toml v0.3.0
+	// github.com/BurntSushi/toml v0.3.0
 	github.com/StackExchange/wmi v0.0.0-20180725035823-b12b22c5341f
-	github.com/coreos/bbolt v1.3.0
-	github.com/coreos/etcd v3.3.9+incompatible
-	github.com/dgraph-io/badger v1.5.3
+	// github.com/coreos/bbolt v1.3.0
+	// github.com/coreos/etcd v3.3.9+incompatible
+	github.com/dgraph-io/badger v1.5.4
 	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/go-ego/cedar v0.0.0-20180819135357-4fc66f191550
-	github.com/go-ego/gpy v0.0.0-20180613130004-5e7198f4b498
-	github.com/go-ego/gse v0.0.0-20180819140213-7df3c69d68f9
-	github.com/go-ego/murmur v0.0.0-20180711150520-0e80721bb094
+	github.com/go-ego/cedar v0.0.0-20180905173823-393be26fe3b8 // indirect
+	github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f
+	github.com/go-ego/gse v0.0.0-20180922133553-ca7f25c1bfab
+	github.com/go-ego/murmur v0.0.0-20180916164947-f005b68c42f0
 	github.com/go-ole/go-ole v1.2.1
 	github.com/go-vgo/grpclb v0.0.0-20180520124126-434b4da1cea2
-	github.com/go-vgo/gt v0.0.0-20180727145221-765190081bad
+	github.com/go-vgo/gt v0.0.0-20180924174828-283b79133891
 	github.com/gogo/protobuf v1.1.1
 	github.com/golang/protobuf v1.2.0
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db
