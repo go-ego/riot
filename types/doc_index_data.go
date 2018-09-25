@@ -15,10 +15,6 @@
 
 package types
 
-// DocIndexData type document Index Data struct
-// type DocIndexData DocData
-type DocIndexData = DocData
-
 // DocData type document Index Data struct
 type DocData struct {
 	// 文档全文（必须是 UTF-8 格式），用于生成待索引的关键词
@@ -30,8 +26,9 @@ type DocData struct {
 	Attri interface{}
 
 	// 文档的关键词
-	// 当 Content 不为空的时候，优先从 Content 中分词得到关键词。
-	// Tokens 存在的意义在于绕过 riot 内置的分词器，在引擎外部
+	// 当 Content 不为空的时候，优先从 Content 中分词得到关键词
+	// 并叠加 Tokens。
+	// Tokens 存在的意义在于可以绕过 riot 内置的分词器，在引擎外部
 	// 进行分词和预处理。
 	// Tokens []*TokenData
 	Tokens []TokenData
