@@ -1,4 +1,5 @@
 // riot 性能测试
+//
 package main
 
 import (
@@ -39,15 +40,18 @@ var (
 		"stop_token_file",
 		"../../data/dict/stop_tokens.txt",
 		"停用词文件")
-	cpuprofile            = flag.String("cpuprofile", "", "处理器profile文件")
-	memprofile            = flag.String("memprofile", "", "内存profile文件")
-	numRepeatText         = flag.Int("numRepeatText", 10, "文本重复加入多少次")
-	numDeleteDocs         = flag.Int("numDeleteDocs", 1000, "测试删除文档的个数")
-	indexType             = flag.Int("indexType", types.DocIdsIndex, "索引类型")
-	usePersistent         = flag.Bool("usePersistent", false, "是否使用持久存储")
-	persistentStoreFolder = flag.String("persistentStoreFolder", "benchmark.persistent", "持久存储数据库保存的目录")
-	storageEngine         = flag.String("storeEngine", "lbd", "use StoreEngine")
-	persistentStoreShards = flag.Int("persistentStoreShards", 0, "持久数据库存储裂分数目")
+
+	idOnly        = flag.Bool("idonly", true, "search return id only")
+	cpuprofile    = flag.String("cpuprofile", "", "处理器profile文件")
+	memprofile    = flag.String("memprofile", "", "内存profile文件")
+	numRepeatText = flag.Int("numRepeatText", 10, "文本重复加入多少次")
+	numDeleteDocs = flag.Int("numDeleteDocs", 1000, "测试删除文档的个数")
+	indexType     = flag.Int("indexType", types.DocIdsIndex, "索引类型")
+	usePersistent = flag.Bool("useStore", false, "是否使用持久存储")
+	storeFolder   = flag.String("storeFolder",
+		"benchmark.persistent", "持久存储数据库保存的目录")
+	storageEngine = flag.String("storeEngine", "lbd", "use store engine")
+	storeShards   = flag.Int("storeShards", 0, "持久数据库存储裂分数目")
 
 	searcher = riot.Engine{}
 	options  = types.RankOpts{
@@ -56,25 +60,25 @@ var (
 	}
 	searchQueries = []string{}
 
-	// NumShards shards number
-	NumShards       = 2
-	numQueryThreads = runtime.NumCPU() / NumShards
+	// numShards shards number
+	numShards       = 2
+	numQueryThreads = runtime.NumCPU() / numShards
 	t0              time.Time
 )
 
 func initEngine() {
 	searcher.Init(types.EngineOpts{
-		IDOnly:        true,
+		IDOnly:        *idOnly,
 		GseDict:       *dictionaries,
 		StopTokenFile: *stopTokenFile,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
-		NumShards:   NumShards,
+		NumShards:   numShards,
 		DefRankOpts: &options,
 		UseStore:    *usePersistent,
-		StoreFolder: *persistentStoreFolder,
-		StoreShards: *persistentStoreShards,
+		StoreFolder: *storeFolder,
+		StoreShards: *storeShards,
 	})
 }
 
@@ -104,7 +108,7 @@ func openFile() {
 		}
 	}
 	log.Println("size ...", size)
-	log.Print("文件行数", len(lines))
+	log.Print("文件行数: ", len(lines))
 
 	// 记录时间
 	t0 = time.Now()
@@ -127,8 +131,9 @@ func openFile() {
 	for i := 0; i < *numRepeatText; i++ {
 		for _, line := range lines {
 			searcher.Index(
-				uint64(docIds[docIdx]+1), types.DocData{
-					Content: line})
+				uint64(docIds[docIdx]+1),
+				types.DocData{Content: line})
+
 			docIdx++
 			if docIdx-docIdx/1000000*1000000 == 0 {
 				log.Printf("已索引%d百万文档", docIdx/1000000)
@@ -161,9 +166,11 @@ func searchQ() {
 	done := make(chan bool)
 	recordResponse := recordResponseLock{}
 	recordResponse.count = make(map[string]int)
+
 	for iThread := 0; iThread < numQueryThreads; iThread++ {
 		go search(done, &recordResponse)
 	}
+
 	for iThread := 0; iThread < numQueryThreads; iThread++ {
 		<-done
 	}
@@ -195,14 +202,15 @@ func useStore(tBeginInit, tEndInit time.Time) {
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: *indexType,
 		},
-		NumShards:   NumShards,
+		NumShards:   numShards,
 		DefRankOpts: &options,
 		UseStore:    *usePersistent,
-		StoreFolder: *persistentStoreFolder,
+		StoreFolder: *storeFolder,
 		StoreEngine: *storageEngine,
-		StoreShards: *persistentStoreShards,
+		StoreShards: *storeShards,
 	})
 	defer searcher1.Close()
+
 	t7 := time.Now()
 	t := t7.Sub(t6).Seconds() - tEndInit.Sub(tBeginInit).Seconds()
 	log.Print("从持久存储加入的索引总数", searcher1.NumTokenIndexAdded())
@@ -227,9 +235,8 @@ func TestBM() {
 	defer searcher.Close()
 
 	openFile()
-
 	searcher.Flush()
-	log.Print("加入的索引总数", searcher.NumTokenIndexAdded())
+	log.Print("加入的索引总数: ", searcher.NumTokenAdded())
 
 	deleteDoc()
 
@@ -251,8 +258,8 @@ func TestBM() {
 
 	if *usePersistent {
 		useStore(tBeginInit, tEndInit)
+		//os.RemoveAll(*storeFolder)
 	}
-	//os.RemoveAll(*persistentStoreFolder)
 
 	log.Println("end...")
 }
@@ -270,6 +277,24 @@ func search(ch chan bool, record *recordResponseLock) {
 	for i := 0; i < numRepeatQuery; i++ {
 		for _, query := range searchQueries {
 			output := searcher.SearchID(types.SearchReq{Text: query})
+			record.RLock()
+			if _, found := record.count[query]; !found {
+				record.RUnlock()
+				record.Lock()
+				record.count[query] = len(output.Docs)
+				record.Unlock()
+			} else {
+				record.RUnlock()
+			}
+		}
+	}
+	ch <- true
+}
+
+func searchDoc(ch chan bool, record *recordResponseLock) {
+	for i := 0; i < numRepeatQuery; i++ {
+		for _, query := range searchQueries {
+			output := searcher.SearchDoc(types.SearchReq{Text: query})
 			record.RLock()
 			if _, found := record.count[query]; !found {
 				record.RUnlock()
