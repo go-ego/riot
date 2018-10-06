@@ -72,13 +72,13 @@
   branch = "master"
   name = "github.com/go-ego/gse"
   packages = ["."]
-  revision = "ca7f25c1bfab107685f0b613afbd3a44e4c5a45d"
+  revision = "34da30aea88ec735331f6bb2b757ea9ad3e7cd91"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/murmur"
   packages = ["."]
-  revision = "f005b68c42f0a064716a71a34194e2deb85ab800"
+  revision = "b677c4ebe46ad256a13cad0039f736a7a464d710"
 
 [[projects]]
   name = "github.com/go-ole/go-ole"
@@ -103,7 +103,7 @@
     "info",
     "zlog"
   ]
-  revision = "283b79133891e805ee8a4e80ad2d920cd4d967f9"
+  revision = "50813417a5aee4015a15383809f29f15736b65e0"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -243,7 +243,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "2f5d2388922f370f4355f327fcf4cfe9f5583908"
+  revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
 
 [[projects]]
   branch = "master"
@@ -252,7 +252,7 @@
     "unix",
     "windows"
   ]
-  revision = "90868a75fefd03942536221d7c0e2f84ec62a668"
+  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -279,7 +279,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "221a8d4f74948678f06caaa13c9d41d22e069ae8"
+  revision = "af9cb2a35e7f169ec875002c1829c9b315cddc04"
 
 [[projects]]
   name = "google.golang.org/grpc"

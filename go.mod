@@ -11,8 +11,8 @@ require (
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-ego/cedar v0.0.0-20180905173823-393be26fe3b8 // indirect
 	github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f
-	github.com/go-ego/gse v0.0.0-20180922133553-ca7f25c1bfab
-	github.com/go-ego/murmur v0.0.0-20180916164947-f005b68c42f0
+	github.com/go-ego/gse v0.0.0-20181003121412-34da30aea88e
+	github.com/go-ego/murmur v0.0.0-20181006142212-b677c4ebe46a
 	github.com/go-ole/go-ole v1.2.1
 	github.com/go-vgo/grpclb v0.0.0-20180520124126-434b4da1cea2
 	github.com/go-vgo/gt v0.0.0-20180924174828-283b79133891

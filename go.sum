@@ -27,10 +27,14 @@ github.com/go-ego/gse v0.0.0-20180819140213-7df3c69d68f9 h1:tO8MDfAdRdyDPGhgxwlQ
 github.com/go-ego/gse v0.0.0-20180819140213-7df3c69d68f9/go.mod h1:PfNZ9H8cHyiD4L7w/HPOCI6X53Ma8f/3hksFnFIUg9A=
 github.com/go-ego/gse v0.0.0-20180922133553-ca7f25c1bfab h1:X8ra/8IJsMsgxFYzosR0TOCW3bI9NLrQinjqyIaJ+7o=
 github.com/go-ego/gse v0.0.0-20180922133553-ca7f25c1bfab/go.mod h1:PfNZ9H8cHyiD4L7w/HPOCI6X53Ma8f/3hksFnFIUg9A=
+github.com/go-ego/gse v0.0.0-20181003121412-34da30aea88e h1:wxI4TF2V4R2crssu4QMOuxet9R8Ng1KtuOZeaRXANA0=
+github.com/go-ego/gse v0.0.0-20181003121412-34da30aea88e/go.mod h1:PfNZ9H8cHyiD4L7w/HPOCI6X53Ma8f/3hksFnFIUg9A=
 github.com/go-ego/murmur v0.0.0-20180711150520-0e80721bb094 h1:qc9MGhR9KEtenA4Kp1l/79GoLV8oKed6OOFSnkff0mI=
 github.com/go-ego/murmur v0.0.0-20180711150520-0e80721bb094/go.mod h1:WocLQI5wTl0GeQ+h144mrLx1vyFZkoOxGKlzD7xlqdc=
 github.com/go-ego/murmur v0.0.0-20180916164947-f005b68c42f0 h1:Ct7OJ3aqn+M8h9LWEANL3MIJytauT1oWRaKvb0+3Kgo=
 github.com/go-ego/murmur v0.0.0-20180916164947-f005b68c42f0/go.mod h1:WocLQI5wTl0GeQ+h144mrLx1vyFZkoOxGKlzD7xlqdc=
+github.com/go-ego/murmur v0.0.0-20181006142212-b677c4ebe46a h1:1SP0dcDX1Dn8eXLVkXwpz1pPe72HsiWardiHIjJNrBE=
+github.com/go-ego/murmur v0.0.0-20181006142212-b677c4ebe46a/go.mod h1:WocLQI5wTl0GeQ+h144mrLx1vyFZkoOxGKlzD7xlqdc=
 github.com/go-ole/go-ole v1.2.1/go.mod h1:7FAglXiTm7HKlQRDeOQ6ZNUHidzCWXuZWq/1dTyBNF8=
 github.com/go-vgo/grpclb v0.0.0-20180520124126-434b4da1cea2 h1:xwn4PU3jIrV8TlxAj78tYEn9dTLrtmuDviTHcDTqGOc=
 github.com/go-vgo/grpclb v0.0.0-20180520124126-434b4da1cea2/go.mod h1:sLelYUl1D8P3psJVdnxzjw2wH0CFxJllfczwnOLx9K4=
