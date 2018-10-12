@@ -13,8 +13,8 @@ import (
 
 	"encoding/gob"
 	"encoding/json"
-	"os/signal"
 	"net/http"
+	"os/signal"
 
 	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
