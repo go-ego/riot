@@ -3,17 +3,18 @@ package main
 
 import (
 	"bufio"
-	"encoding/gob"
-	"encoding/json"
 	"flag"
 	"io"
 	"log"
-	"net/http"
 	"os"
-	"os/signal"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"encoding/gob"
+	"encoding/json"
+	"os/signal"
+	"net/http"
 
 	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
@@ -27,12 +28,17 @@ const (
 )
 
 var (
-	searcher      = riot.Engine{}
-	wbs           = map[uint64]Weibo{}
-	weiboData     = flag.String("weibo_data", "../../testdata/weibo_data.txt", "微博数据文件")
-	dictFile      = flag.String("dict_file", "../../data/dict/dictionary.txt", "词典文件")
-	stopTokenFile = flag.String("stop_token_file", "../../data/dict/stop_tokens.txt", "停用词文件")
-	staticFolder  = flag.String("static_folder", "static", "静态文件目录")
+	searcher = riot.Engine{}
+	wbs      = map[uint64]Weibo{}
+
+	weiboData = flag.String("weibo_data",
+		"../../testdata/weibo_data.txt", "微博数据文件")
+	dictFile = flag.String("dict_file",
+		"../../data/dict/dictionary.txt", "词典文件")
+	stopTokenFile = flag.String("stop_token_file",
+		"../../data/dict/stop_tokens.txt", "停用词文件")
+
+	staticFolder = flag.String("static_folder", "static", "静态文件目录")
 )
 
 // Weibo weibo json struct
@@ -174,7 +180,7 @@ func main() {
 		},
 		// 如果你希望使用持久存储，启用下面的选项
 		// 默认使用leveldb持久化，如果你希望修改数据库类型
-		// 请用 StoreEngine:"" 或者修改 Riot_Store_Engine 环境变量
+		// 请用 StoreEngine: " " 或者修改 Riot_Store_Engine 环境变量
 		// UseStore: true,
 		// StoreFolder: "weibo_search",
 		// StoreEngine: "bg",

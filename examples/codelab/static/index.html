@@ -38,16 +38,19 @@
 <script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript">
     function timeConverter(UNIX_timestamp) {
-        var a = new Date(UNIX_timestamp * 1000);
-        var year = a.getFullYear();
-        var month = a.getMonth() + 1;
-        var date = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        var sec = a.getSeconds();
+        var d = new Date(UNIX_timestamp * 1000);
+
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var date = d.getDate();
+        var hour = d.getHours();
+        var min = d.getMinutes();
+        var sec = d.getSeconds();
         var time = year + '/' + month + '/' + date + ' ' + hour + ':' + min + ':' + sec;
+
         return time;
     }
+
     search = function() {
         var query = $('input#query').val();
         $.ajax({
@@ -60,9 +63,11 @@
             success: function(result) {
                 var out = "<table border=0>"
                 var weibos = new Array();
+
                 for (var i = 0; i < result.docs.length; i++) {
                     weibos.push(result.docs[i]);
                 }
+
                 for (var i = 0; i < weibos.length; i++) {
                     out += "<tr>"
                     out += "<td width=150px>";
