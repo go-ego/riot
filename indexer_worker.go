@@ -42,7 +42,7 @@ type indexerRemoveDocReq struct {
 	forceUpdate bool
 }
 
-func (engine *Engine) indexerAddDocWorker(shard int) {
+func (engine *Engine) indexerAddDoc(shard int) {
 	for {
 		request := <-engine.indexerAddDocChans[shard]
 		engine.indexers[shard].AddDocToCache(request.doc, request.forceUpdate)
@@ -58,7 +58,7 @@ func (engine *Engine) indexerAddDocWorker(shard int) {
 	}
 }
 
-func (engine *Engine) indexerRemoveDocWorker(shard int) {
+func (engine *Engine) indexerRemoveDoc(shard int) {
 	for {
 		request := <-engine.indexerRemoveDocChans[shard]
 		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
@@ -111,7 +111,7 @@ func (engine *Engine) orderLess(
 	}
 }
 
-func (engine *Engine) indexerLookupWorker(shard int) {
+func (engine *Engine) indexerLookup(shard int) {
 	for {
 		request := <-engine.indexerLookupChans[shard]
 

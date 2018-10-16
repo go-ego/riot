@@ -204,7 +204,7 @@ func (engine *Engine) Store() {
 
 	// 从数据库中恢复
 	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
-		go engine.storeInitWorker(shard)
+		go engine.storeInit(shard)
 	}
 
 	// 等待恢复完成
@@ -238,7 +238,7 @@ func (engine *Engine) Store() {
 	}
 
 	for shard := 0; shard < engine.initOptions.StoreShards; shard++ {
-		go engine.storeIndexDocWorker(shard)
+		go engine.storeIndexDoc(shard)
 	}
 	// }
 }
@@ -333,16 +333,16 @@ func (engine *Engine) Init(options types.EngineOpts) {
 
 	// 启动索引器和排序器
 	for shard := 0; shard < options.NumShards; shard++ {
-		go engine.indexerAddDocWorker(shard)
-		go engine.indexerRemoveDocWorker(shard)
-		go engine.rankerAddDocWorker(shard)
-		go engine.rankerRemoveDocWorker(shard)
+		go engine.indexerAddDoc(shard)
+		go engine.indexerRemoveDoc(shard)
+		go engine.rankerAddDoc(shard)
+		go engine.rankerRemoveDoc(shard)
 
 		for i := 0; i < options.NumIndexerThreads; i++ {
-			go engine.indexerLookupWorker(shard)
+			go engine.indexerLookup(shard)
 		}
 		for i := 0; i < options.NumRankerThreads; i++ {
-			go engine.rankerRankWorker(shard)
+			go engine.rankerRank(shard)
 		}
 	}
 
@@ -457,7 +457,7 @@ func (engine *Engine) RemoveDoc(docId uint64, forceUpdate ...bool) {
 		hash := murmur.Sum32(fmt.Sprintf("%d", docId)) %
 			uint32(engine.initOptions.StoreShards)
 
-		go engine.storeRemoveDocWorker(docId, hash)
+		go engine.storeRemoveDoc(docId, hash)
 	}
 }
 

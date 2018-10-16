@@ -45,7 +45,7 @@ type rankerRemoveDocReq struct {
 	docId uint64
 }
 
-func (engine *Engine) rankerAddDocWorker(shard int) {
+func (engine *Engine) rankerAddDoc(shard int) {
 	for {
 		request := <-engine.rankerAddDocChans[shard]
 		if engine.initOptions.IDOnly {
@@ -57,7 +57,7 @@ func (engine *Engine) rankerAddDocWorker(shard int) {
 	}
 }
 
-func (engine *Engine) rankerRankWorker(shard int) {
+func (engine *Engine) rankerRank(shard int) {
 	for {
 		request := <-engine.rankerRankChans[shard]
 		if request.options.MaxOutputs != 0 {
@@ -72,7 +72,7 @@ func (engine *Engine) rankerRankWorker(shard int) {
 	}
 }
 
-func (engine *Engine) rankerRemoveDocWorker(shard int) {
+func (engine *Engine) rankerRemoveDoc(shard int) {
 	for {
 		request := <-engine.rankerRemoveDocChans[shard]
 		engine.rankers[shard].RemoveDoc(request.docId)

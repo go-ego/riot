@@ -31,7 +31,7 @@ type storeIndexDocReq struct {
 	// data        types.DocumentIndexData
 }
 
-func (engine *Engine) storeIndexDocWorker(shard int) {
+func (engine *Engine) storeIndexDoc(shard int) {
 	for {
 		request := <-engine.storeIndexDocChans[shard]
 
@@ -64,7 +64,7 @@ func (engine *Engine) storeIndexDocWorker(shard int) {
 	}
 }
 
-func (engine *Engine) storeRemoveDocWorker(docId uint64, shard uint32) {
+func (engine *Engine) storeRemoveDoc(docId uint64, shard uint32) {
 	// 得到 key
 	b := make([]byte, 10)
 	length := binary.PutUvarint(b, docId)
@@ -73,8 +73,8 @@ func (engine *Engine) storeRemoveDocWorker(docId uint64, shard uint32) {
 	engine.dbs[shard].Delete(b[0:length])
 }
 
-// storageInitWorker persistent storage init worker
-func (engine *Engine) storeInitWorker(shard int) {
+// storeInit persistent storage init worker
+func (engine *Engine) storeInit(shard int) {
 	engine.dbs[shard].ForEach(func(k, v []byte) error {
 		key, value := k, v
 		// 得到 docID
