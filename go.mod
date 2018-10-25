@@ -9,10 +9,9 @@ require (
 	github.com/dgraph-io/badger v1.5.4
 	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/go-ego/cedar v0.0.0-20180905173823-393be26fe3b8 // indirect
 	github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f
-	github.com/go-ego/gse v0.0.0-20181003121412-34da30aea88e
-	github.com/go-ego/murmur v0.0.0-20181006142212-b677c4ebe46a
+	github.com/go-ego/gse v0.0.0-20181025134840-c539b6c2f5ae
+	github.com/go-ego/murmur v0.0.0-20181019172721-24868d0e6e66
 	github.com/go-ole/go-ole v1.2.1
 	github.com/go-vgo/grpclb v0.0.0-20180520124126-434b4da1cea2
 	github.com/go-vgo/gt v0.0.0-20180924174828-283b79133891
@@ -23,7 +22,7 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/shirou/gopsutil v0.0.0-20180801053943-8048a2e9c577
 	github.com/syndtr/goleveldb v0.0.0-20180815032940-ae2bd5eed72d
-	github.com/vcaesar/tt v0.0.0-20180811115317-7089d2bb06d7
+	github.com/vcaesar/tt v0.0.0-20181014173808-65366af8a7be
 	// not github
 	go.etcd.io/bbolt v1.3.1-etcd.7
 	go.etcd.io/etcd v3.3.9+incompatible
