@@ -11,9 +11,9 @@ var (
 	// searcher 是协程安全的
 	searcher = riot.Engine{}
 
-	text  = "《复仇者联盟3：无限战争》是全片使用IMAX摄影机拍摄"
-	text1 = "在IMAX影院放映时"
-	text2 = "全片以上下扩展至IMAX 1.9：1的宽高比来呈现"
+	text  = types.DocData{Content: "《复仇者联盟3：无限战争》是全片使用IMAX摄影机拍摄"}
+	text1 = types.DocData{Content: "在IMAX影院放映时"}
+	text2 = types.DocData{Content: "全片以上下扩展至IMAX 1.9：1的宽高比来呈现"}
 )
 
 func dictZh() {
@@ -26,9 +26,9 @@ func dictZh() {
 	defer searcher.Close()
 
 	// 将文档加入索引，docId 从1开始
-	searcher.Index(1, types.DocData{Content: text})
-	searcher.Index(2, types.DocData{Content: text1})
-	searcher.Index(3, types.DocData{Content: text2})
+	searcher.Index(1, text)
+	searcher.Index(2, text1)
+	searcher.Index(3, text2)
 
 	// 等待索引刷新完毕
 	searcher.Flush()
@@ -51,8 +51,8 @@ func dictJp() {
 	text3 := "こんにちは世界"
 
 	// 将文档加入索引，docId 从1开始
-	searcher2.Index(1, types.DocData{Content: text})
-	searcher2.Index(2, types.DocData{Content: text1})
+	searcher2.Index(1, text)
+	searcher2.Index(2, text1)
 	searcher2.Index(3, types.DocData{Content: text3})
 
 	// 等待索引刷新完毕
