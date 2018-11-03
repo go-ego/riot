@@ -28,8 +28,8 @@
     "mvcc/mvccpb",
     "pkg/types"
   ]
-  revision = "fca8add78a9d926166eb739b8e4a124434025ba3"
-  version = "v3.3.9"
+  revision = "27fc7e2296f506182f58ce846e48f36b34fe6842"
+  version = "v3.3.10"
 
 [[projects]]
   name = "github.com/dgraph-io/badger"
@@ -71,14 +71,17 @@
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/gse"
-  packages = ["."]
-  revision = "34da30aea88ec735331f6bb2b757ea9ad3e7cd91"
+  packages = [
+    ".",
+    "hmm"
+  ]
+  revision = "2ef0af426d567c580cd035438075a2e34685e4ef"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-ego/murmur"
   packages = ["."]
-  revision = "b677c4ebe46ad256a13cad0039f736a7a464d710"
+  revision = "24868d0e6e6603b3a4cdf82542ed3ee954e3de48"
 
 [[projects]]
   name = "github.com/go-ole/go-ole"
@@ -103,7 +106,7 @@
     "info",
     "zlog"
   ]
-  revision = "50813417a5aee4015a15383809f29f15736b65e0"
+  revision = "e420bb0b377464b3981ebd51f97ef77982e74756"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -154,17 +157,10 @@
     "host",
     "internal/common",
     "mem",
-    "net",
     "process"
   ]
-  revision = "8048a2e9c5773235122027dd585cf821b2af1249"
-  version = "v2.18.07"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/shirou/w32"
-  packages = ["."]
-  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
+  revision = "3ec50d2876a36047b2ca39f955ba88fb7a455e92"
+  version = "v2.18.10"
 
 [[projects]]
   branch = "master"
@@ -183,13 +179,13 @@
     "leveldb/table",
     "leveldb/util"
   ]
-  revision = "ae2bd5eed72d46b28834ec3f60db3a3ebedd8dbd"
+  revision = "a4119e27a65dc634683dd798846ce8ee09620ae9"
 
 [[projects]]
   branch = "master"
   name = "github.com/vcaesar/tt"
   packages = ["."]
-  revision = "59ab8a500c5e013fef75c4cbefd336e7dd2a9fcc"
+  revision = "65366af8a7be606cc274bbb3449259c294ac6b83"
 
 [[projects]]
   name = "go.etcd.io/bbolt"
@@ -203,8 +199,8 @@
     "clientv3",
     "etcdserver/api/v3rpc/rpctypes"
   ]
-  revision = "fca8add78a9d926166eb739b8e4a124434025ba3"
-  version = "v3.3.9"
+  revision = "27fc7e2296f506182f58ce846e48f36b34fe6842"
+  version = "v3.3.10"
 
 [[projects]]
   name = "go.uber.org/atomic"
@@ -243,7 +239,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
+  revision = "c10e9556a7bc0e7c942242b606f0acf024ad5d6a"
 
 [[projects]]
   branch = "master"
@@ -252,7 +248,7 @@
     "unix",
     "windows"
   ]
-  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+  revision = "9b800f95dbbc54abff0acf7ee32d88ba4e328c89"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -279,7 +275,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "af9cb2a35e7f169ec875002c1829c9b315cddc04"
+  revision = "c830210a61dfaa790e1920f8d0470fc27bc2efbe"
 
 [[projects]]
   name = "google.golang.org/grpc"
@@ -314,8 +310,8 @@
     "status",
     "tap"
   ]
-  revision = "8dea3dc473e90c8179e519d91302d0597c0ca1d1"
-  version = "v1.15.0"
+  revision = "2e463a05d100327ca47ac218281906921038fd95"
+  version = "v1.16.0"
 
 [[projects]]
   name = "gopkg.in/natefinch/lumberjack.v2"
