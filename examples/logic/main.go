@@ -49,6 +49,17 @@ var (
 	}
 )
 
+func addDocs(search *riot.Engine) {
+	// Add the document to the index, docId starts at 1
+	search.Index(1, data)
+	search.Index(2, data1)
+	search.Index(3, data2)
+	search.Index(4, data3)
+
+	// Wait for the index to refresh
+	search.Flush()
+}
+
 func logic1() {
 	// Init engine
 	searcher.Init(types.EngineOpts{
@@ -58,14 +69,7 @@ func logic1() {
 	})
 	defer searcher.Close()
 
-	// Add the document to the index, docId starts at 1
-	searcher.Index(1, data)
-	searcher.Index(2, data1)
-	searcher.Index(3, data2)
-	searcher.Index(4, data3)
-
-	// Wait for the index to refresh
-	searcher.Flush()
+	addDocs(&searcher)
 
 	// var strArr []string
 	strArr := []string{"accidentally"}
@@ -98,10 +102,7 @@ func logic2() {
 	data4 := types.DocData{Content: "Google testing search"}
 
 	// Add the document to the index, docId starts at 1
-	searcher1.Index(1, data)
-	searcher1.Index(2, data1)
-	searcher1.Index(3, data2)
-	searcher1.Index(4, data3)
+	addDocs(searcher1)
 	searcher1.Index(5, data4)
 
 	// Wait for the index to refresh
