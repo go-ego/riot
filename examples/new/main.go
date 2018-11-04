@@ -18,6 +18,7 @@ func main() {
 		, I wonder where they are`}
 	data1 := types.DocData{Content: "所以, 你好, 再见"}
 	data2 := types.DocData{Content: "没有理由"}
+
 	searcher.Index(1, data)
 	searcher.Index(2, data1)
 	searcher.Index(3, data2)

@@ -60,6 +60,7 @@ func indexWeibo() {
 		log.Fatal(err)
 	}
 	defer file.Close()
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		data := strings.Split(scanner.Text(), "||||")

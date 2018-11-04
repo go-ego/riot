@@ -32,12 +32,12 @@ func initEngine() {
 
 	searcher.Init(types.EngineOpts{
 		// Using: 1,
+		PinYin: true,
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
 		},
 		UseStore:    true,
 		StoreFolder: path,
-		PinYin:      true,
 		GseDict:     "../../data/dict/dictionary.txt",
 		// StopTokenFile:           "../../riot/data/dict/stop_tokens.txt",
 	})
@@ -55,7 +55,6 @@ func initEngine() {
 
 	// 等待索引刷新完毕
 	searcher.Flush()
-
 }
 
 func main() {

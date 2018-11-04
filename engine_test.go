@@ -867,8 +867,8 @@ func TestSearchNotUseGse(t *testing.T) {
 }
 
 func TestSearchWithGse(t *testing.T) {
-	gseSegmenter := gse.Segmenter{}
-	gseSegmenter.LoadDict("zh") // ./data/dict/dictionary.txt
+	seg := gse.Segmenter{}
+	seg.LoadDict("zh") // ./data/dict/dictionary.txt
 
 	var engine1, engine2, searcher2 Engine
 	searcher2.Init(types.EngineOpts{
@@ -876,11 +876,11 @@ func TestSearchWithGse(t *testing.T) {
 	})
 	defer searcher2.Close()
 
-	engine1.WithGse(gseSegmenter).Init(types.EngineOpts{
+	engine1.WithGse(seg).Init(types.EngineOpts{
 		IndexerOpts: inxOpts,
 	})
 
-	engine2.WithGse(gseSegmenter).Init(types.EngineOpts{
+	engine2.WithGse(seg).Init(types.EngineOpts{
 		// GseDict: "./data/dict/dictionary.txt",
 		IndexerOpts: &types.IndexerOpts{
 			IndexType: types.DocIdsIndex,
