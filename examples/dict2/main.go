@@ -21,7 +21,7 @@ var (
 	req = types.SearchReq{Text: "你好"}
 )
 
-func searchFn1(seg gse.Segmenter) {
+func searchWithGseFn1(seg gse.Segmenter) {
 	searcher.WithGse(seg).Init(
 		types.EngineOpts{
 			Using: 1,
@@ -39,7 +39,7 @@ func searchFn1(seg gse.Segmenter) {
 	log.Println("search...", search)
 }
 
-func searchFn2(seg gse.Segmenter) {
+func searchWithGse2(seg gse.Segmenter) {
 	searcher1.WithGse(seg).Init(
 		types.EngineOpts{
 			Using: 1,
@@ -65,7 +65,7 @@ func main() {
 	seg := gse.Segmenter{}
 	seg.LoadDict("zh")
 
-	searchFn1(seg)
+	searchWithGseFn1(seg)
 
-	searchFn2(seg)
+	searchWithGse2(seg)
 }
