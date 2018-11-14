@@ -217,6 +217,7 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 				case types.FrequenciesIndex:
 					ti.frequencies = []float32{keyword.Frequency}
 				}
+
 				ti.docIds = []uint64{doc.DocId}
 				indexer.tableLock.table[keyword.Text] = &ti
 				continue
@@ -229,10 +230,13 @@ func (indexer *Indexer) AddDocs(docs *types.DocsIndex) {
 
 			switch indexer.initOptions.IndexType {
 			case types.LocsIndex:
+
 				indices.locations = append(indices.locations, []int{})
 				copy(indices.locations[position+1:], indices.locations[position:])
 				indices.locations[position] = keyword.Starts
+
 			case types.FrequenciesIndex:
+
 				indices.frequencies = append(indices.frequencies, float32(0))
 				copy(indices.frequencies[position+1:], indices.frequencies[position:])
 				indices.frequencies[position] = keyword.Frequency
@@ -309,10 +313,13 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 
 	for keyword, indices := range indexer.tableLock.table {
 		indicesTop, indicesPointer := 0, 0
-		docsPointer := sort.Search(len(*docs),
+		docsPointer := sort.Search(
+			len(*docs),
 			func(i int) bool {
 				return (*docs)[i] >= indices.docIds[0]
-			})
+			},
+		)
+
 		// 双指针扫描，进行批量删除操作
 		for docsPointer < len(*docs) &&
 			indicesPointer < indexer.getIndexLen(indices) {
@@ -337,6 +344,7 @@ func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 				docsPointer++
 			}
 		}
+
 		if indicesTop != indicesPointer {
 			switch indexer.initOptions.IndexType {
 			case types.LocsIndex:
@@ -383,6 +391,7 @@ func (indexer *Indexer) Lookup(
 	if len(logic) > 0 {
 		loc := logic[0].Must == true ||
 			logic[0].Should == true || logic[0].NotIn == true
+
 		if logic != nil && len(keywords) > 0 && loc {
 			docs, numDocs = indexer.LogicLookup(
 				docIds, countDocsOnly, keywords, logic[0])
@@ -403,7 +412,6 @@ func (indexer *Indexer) Lookup(
 	}
 
 	return indexer.internalLookup(keywords, tokens, docIds, countDocsOnly)
-
 }
 
 func (indexer *Indexer) internalLookup(
@@ -566,6 +574,7 @@ func (indexer *Indexer) LogicLookup(
 	if len(logic.LogicExpr.MustLabels) > 0 {
 		logicExpr = logic.LogicExpr.MustLabels
 	}
+
 	if logic.Must == true || len(logic.LogicExpr.MustLabels) > 0 {
 		for _, keyword := range logicExpr {
 			indices, found := indexer.tableLock.table[keyword]
@@ -644,6 +653,7 @@ func (indexer *Indexer) LogicLookup(
 
 		return
 	}
+
 	// 不存在逻辑与检索, 则必须存在逻辑或检索
 	// 这时进行求并集操作
 	if logic.Should == true || len(logic.LogicExpr.ShouldLabels) > 0 {
