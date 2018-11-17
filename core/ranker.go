@@ -28,11 +28,12 @@ import (
 type Ranker struct {
 	lock struct {
 		sync.RWMutex
-		fields map[uint64]interface{}
-		docs   map[uint64]bool
+
+		fields map[string]interface{}
+		docs   map[string]bool
 		// new
-		content map[uint64]string
-		attri   map[uint64]interface{}
+		content map[string]string
+		attri   map[string]interface{}
 	}
 
 	idOnly      bool
@@ -50,13 +51,13 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 		ranker.idOnly = onlyID[0]
 	}
 
-	ranker.lock.fields = make(map[uint64]interface{})
-	ranker.lock.docs = make(map[uint64]bool)
+	ranker.lock.fields = make(map[string]interface{})
+	ranker.lock.docs = make(map[string]bool)
 
 	if !ranker.idOnly {
 		// new
-		ranker.lock.content = make(map[uint64]string)
-		ranker.lock.attri = make(map[uint64]interface{})
+		ranker.lock.content = make(map[string]string)
+		ranker.lock.attri = make(map[string]interface{})
 	}
 }
 
@@ -64,7 +65,7 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 // 给某个文档添加评分字段
 func (ranker *Ranker) AddDoc(
 	// docId uint64, fields interface{}, content string, attri interface{}) {
-	docId uint64, fields interface{}, content ...interface{}) {
+	docId string, fields interface{}, content ...interface{}) {
 	if ranker.initialized == false {
 		log.Fatal("The Ranker has not been initialized.")
 	}
@@ -89,7 +90,7 @@ func (ranker *Ranker) AddDoc(
 }
 
 // RemoveDoc 删除某个文档的评分字段
-func (ranker *Ranker) RemoveDoc(docId uint64) {
+func (ranker *Ranker) RemoveDoc(docId string) {
 	if ranker.initialized == false {
 		log.Fatal("The Ranker has not been initialized.")
 	}
