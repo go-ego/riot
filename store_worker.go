@@ -18,7 +18,6 @@ package riot
 import (
 	"bytes"
 
-	"encoding/binary"
 	"encoding/gob"
 	"sync/atomic"
 
@@ -26,7 +25,7 @@ import (
 )
 
 type storeIndexDocReq struct {
-	docId uint64
+	docId string
 	data  types.DocData
 	// data        types.DocumentIndexData
 }
@@ -36,8 +35,7 @@ func (engine *Engine) storeIndexDoc(shard int) {
 		request := <-engine.storeIndexDocChans[shard]
 
 		// 得到 key
-		b := make([]byte, 10)
-		length := binary.PutUvarint(b, request.docId)
+		b := []byte(request.docId)
 
 		// 得到 value
 		var buf bytes.Buffer
@@ -58,27 +56,25 @@ func (engine *Engine) storeIndexDoc(shard int) {
 		// }
 
 		// 将 key-value 写入数据库
-		engine.dbs[shard].Set(b[0:length], buf.Bytes())
+		engine.dbs[shard].Set(b, buf.Bytes())
 
 		atomic.AddUint64(&engine.numDocsStored, 1)
 	}
 }
 
-func (engine *Engine) storeRemoveDoc(docId uint64, shard uint32) {
+func (engine *Engine) storeRemoveDoc(docId string, shard uint32) {
 	// 得到 key
-	b := make([]byte, 10)
-	length := binary.PutUvarint(b, docId)
-
-	// 从数据库删除该 key
-	engine.dbs[shard].Delete(b[0:length])
+	b := []byte(docId)
+	// 从数据库删除该key
+	engine.dbs[shard].Delete(b)
 }
 
 // storeInit persistent storage init worker
 func (engine *Engine) storeInit(shard int) {
 	engine.dbs[shard].ForEach(func(k, v []byte) error {
 		key, value := k, v
-		// 得到 docID
-		docId, _ := binary.Uvarint(key)
+		// 得到docID
+		docId := string(key)
 
 		// 得到 data
 		buf := bytes.NewReader(value)
