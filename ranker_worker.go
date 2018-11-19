@@ -20,7 +20,7 @@ import (
 )
 
 type rankerAddDocReq struct {
-	docId  uint64
+	docId  string
 	fields interface{}
 	// new
 	content string
@@ -42,7 +42,7 @@ type rankerReturnReq struct {
 }
 
 type rankerRemoveDocReq struct {
-	docId uint64
+	docId string
 }
 
 func (engine *Engine) rankerAddDoc(shard int) {
