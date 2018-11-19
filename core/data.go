@@ -32,26 +32,27 @@ func AddDocInfosShard(shard int) {
 	defer docInfosGroupRWMutex.Unlock()
 	if _, found := DocInfoGroup[shard]; !found {
 		DocInfoGroup[shard] = &types.DocInfosShard{
-			DocInfos: make(map[uint64]*types.DocInfo),
+			DocInfos: make(map[string]*types.DocInfo),
 		}
 	}
 }
 
 // AddDocInfo add documents info
-func AddDocInfo(shard int, docId uint64, docinfo *types.DocInfo) {
+func AddDocInfo(shard int, docId string, docinfo *types.DocInfo) {
 	docInfosGroupRWMutex.Lock()
 	defer docInfosGroupRWMutex.Unlock()
 	if _, ok := DocInfoGroup[shard]; !ok {
 		DocInfoGroup[shard] = &types.DocInfosShard{
-			DocInfos: make(map[uint64]*types.DocInfo),
+			DocInfos: make(map[string]*types.DocInfo),
 		}
 	}
+
 	DocInfoGroup[shard].DocInfos[docId] = docinfo
 	DocInfoGroup[shard].NumDocs++
 }
 
 // IsDocExist doc is exist
-func IsDocExist(docId uint64) bool {
+func IsDocExist(docId string) bool {
 	docInfosGroupRWMutex.RLock()
 	defer docInfosGroupRWMutex.RUnlock()
 	for _, docInfosShard := range DocInfoGroup {
