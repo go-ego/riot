@@ -119,7 +119,7 @@ func (docs ScoredDocs) Less(i, j int) bool {
 
 // ScoredID scored doc only id
 type ScoredID struct {
-	DocId uint64
+	DocId string
 
 	// 文档的打分值
 	// 搜索结果按照 Scores 的值排序，先按照第一个数排，
