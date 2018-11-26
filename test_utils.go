@@ -11,16 +11,20 @@ type ScoringFields struct {
 }
 
 var (
-	text1   = "Hello world, 你好世界!"
+	text1 = "Hello world, 你好世界!"
+	text2 = "在路上, in the way"
+
 	textJP  = "こんにちは世界"
 	textJP1 = "こんにちは世界, こんにちは"
 	reqText = "World人口"
-	reqG    = types.SearchReq{Text: "Google"}
-	Req1    = types.SearchReq{Text: reqText}
+
+	reqG = types.SearchReq{Text: "Google"}
+	Req1 = types.SearchReq{Text: reqText}
 
 	score1   = ScoringFields{1, 2, 3}
 	score091 = ScoringFields{0, 9, 1}
-	inxOpts  = &types.IndexerOpts{
+
+	inxOpts = &types.IndexerOpts{
 		IndexType: types.LocsIndex,
 	}
 )
@@ -33,8 +37,6 @@ var (
 
 	rankOptsMax3 = rankOptsMax(1, 3)
 )
-
-var text2 = "在路上, in the way"
 
 func makeDocIds() map[string]bool {
 	docIds := make(map[string]bool)
