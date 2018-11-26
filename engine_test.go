@@ -7,6 +7,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"strconv"
 	"testing"
 
 	"github.com/go-ego/gse"
@@ -816,7 +817,7 @@ func TestSearchLogic(t *testing.T) {
 
 	docIds := make(map[string]bool)
 	for index := 0; index < 10; index++ {
-		docIds[string(index)] = true
+		docIds[strconv.Itoa(index)] = true
 	}
 
 	strArr := []string{"こんにちは"}
