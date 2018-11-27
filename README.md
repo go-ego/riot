@@ -104,9 +104,9 @@ func main() {
 	rounded cards, new colors, and the 4 mysterious colored dots again`
 	
 	// Add the document to the index, docId starts at 1
-	searcher.Index(1, types.DocData{Content: text})
-	searcher.Index(2, types.DocData{Content: text1}, false)
-	searcher.IndexDoc(3, types.DocData{Content: text2}, true)
+	searcher.Index("1", types.DocData{Content: text})
+	searcher.Index("2", types.DocData{Content: text1}, false)
+	searcher.IndexDoc("3", types.DocData{Content: text2}, true)
 
 	// Wait for the index to refresh
 	searcher.Flush()
@@ -140,9 +140,10 @@ func main() {
 		, I wonder where they are`}
 	data1 := types.DocData{Content: "所以, 你好, 再见"}
 	data2 := types.DocData{Content: "没有理由"}
-	searcher.Index(1, data)
-	searcher.Index(2, data1)
-	searcher.Index(3, data2)
+
+	searcher.Index("1", data)
+	searcher.Index("2", data1)
+	searcher.Index("3", data2)
 	searcher.Flush()
 
 	req := types.SearchReq{Text: "你好"}
