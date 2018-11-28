@@ -11,11 +11,11 @@ require (
 	github.com/dgraph-io/badger v1.5.4
 	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f
+	github.com/go-ego/gpy v0.0.0-20181128170341-b6d42325845c
 	github.com/go-ego/gse v0.0.0-20181123163408-e361db41b9da
 	github.com/go-ego/murmur v0.0.0-20181019172721-24868d0e6e66
 	github.com/go-ole/go-ole v1.2.1
-	github.com/go-vgo/grpclb v0.0.0-20180915173255-daa2f3260c2b
+	github.com/go-vgo/grpclb v0.0.0-20181128171039-89526b0a742e
 	github.com/go-vgo/gt v0.0.0-20181109162819-04b916917f5a
 	github.com/gogo/protobuf v1.1.1
 	// github.com/golang/lint v0.0.0-20181026193005-c67002cb31c3 // indirect
@@ -34,12 +34,13 @@ require (
 	go.uber.org/zap v1.9.1 // indirect
 	// golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3 // indirect
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a
-	golang.org/x/oauth2 v0.0.0-20181120190819-8f65e3013eba // indirect
+	// golang.org/x/oauth2 v0.0.0-20181120190819-8f65e3013eba // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
-	golang.org/x/sys v0.0.0-20181122145206-62eef0e2fa9b // indirect
-	golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1 // indirect
+	golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 // indirect
+	golang.org/x/tools v0.0.0-20181127232545-e782529d0ddd // indirect
 	google.golang.org/appengine v1.3.0 // indirect
-	google.golang.org/genproto v0.0.0-20181109154231-b5d43981345b // indirect
+	// google.golang.org/appengine v1.3.0 // indirect
+	google.golang.org/genproto v0.0.0-20181127195345-31ac5d88444a // indirect
 	google.golang.org/grpc v1.16.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	// honnef.co/go/tools v0.0.0-20180920025451-e3ad64cb4ed3 // indirect
