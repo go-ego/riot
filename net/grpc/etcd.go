@@ -100,17 +100,17 @@ func (s *eserver) Search(ctx context.Context, in *pb.SearchReq) (*pb.SearchReply
 
 	var logic types.Logic
 	if in.Logic != nil {
-		logicExp := types.LogicExpr{
-			MustLabels:   in.Logic.LogicExpr.MustLabels,
-			ShouldLabels: in.Logic.LogicExpr.ShouldLabels,
-			NotInLabels:  in.Logic.LogicExpr.NotInLabels,
+		logicExp := types.Expr{
+			Must:   in.Logic.Expr.Must,
+			Should: in.Logic.Expr.Should,
+			NotIn:  in.Logic.Expr.NotIn,
 		}
 
 		logic = types.Logic{
-			Must:      in.Logic.Must,
-			Should:    in.Logic.Should,
-			NotIn:     in.Logic.NotIn,
-			LogicExpr: logicExp,
+			Must:   in.Logic.Must,
+			Should: in.Logic.Should,
+			NotIn:  in.Logic.NotIn,
+			Expr:   logicExp,
 		}
 	}
 
