@@ -25,7 +25,7 @@ const (
 
 var (
 	searcher      = riot.Engine{}
-	wbs           = map[uint64]Weibo{}
+	wbs           = map[string]Weibo{}
 	weiboData     = flag.String("weibo_data", "weibo.txt", "微博数据文件")
 	dictFile      = flag.String("dict_file", "../../data/dict/dictionary.txt", "词典文件")
 	stopTokenFile = flag.String("stop_token_file", "../../data/dict/stop_tokens.txt", "停用词文件")
@@ -34,7 +34,8 @@ var (
 
 // Weibo weibo json struct
 type Weibo struct {
-	Id           uint64 `json:"id"`
+	// Id           uint64 `json:"id"`
+	Id           string `json"id"`
 	Timestamp    uint64 `json:"timestamp"`
 	UserName     string `json:"user_name"`
 	RepostsCount uint64 `json:"reposts_count"`
@@ -55,11 +56,11 @@ func indexWeibo() {
 
 	var (
 		tokenDatas []types.TokenData
-		index      uint64
-		tokens     []string
+		// index      uint64
+		tokens []string
 	)
 
-	index = 1
+	index := "1"
 
 	for {
 		buf, _, c := br.ReadLine()
@@ -159,7 +160,7 @@ func main() {
 		// StoreEngine: "bg",
 	})
 	log.Println("searcher init end")
-	wbs = make(map[uint64]Weibo)
+	wbs = make(map[string]Weibo)
 
 	// 索引
 	go indexWeibo()
