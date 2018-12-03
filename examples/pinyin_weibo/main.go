@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 
 	"github.com/go-ego/riot"
 	"github.com/go-ego/riot/types"
@@ -56,11 +57,11 @@ func indexWeibo() {
 
 	var (
 		tokenDatas []types.TokenData
-		// index      uint64
-		tokens []string
+		index      int
+		tokens     []string
 	)
 
-	index := "1"
+	index = 1
 
 	for {
 		buf, _, c := br.ReadLine()
@@ -82,9 +83,9 @@ func indexWeibo() {
 		index1 := types.DocData{Tokens: tokenDatas, Fields: string(buf)}
 		index2 := types.DocData{Content: string(buf), Tokens: tokenDatas}
 
-		searcher.Index(index, index1)
+		searcher.Index(strconv.Itoa(index), index1)
 		index++
-		searcher.Index(index, index2)
+		searcher.Index(strconv.Itoa(index), index2)
 		index++
 	}
 
