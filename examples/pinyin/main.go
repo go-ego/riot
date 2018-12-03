@@ -49,9 +49,9 @@ func initEngine() {
 	index2 := types.DocData{Content: text}
 	index3 := types.DocData{Content: "In the way."}
 
-	searcher.Index(10, index1)
-	searcher.Index(11, index2)
-	searcher.Index(12, index3)
+	searcher.Index("10", index1)
+	searcher.Index("11", index2)
+	searcher.Index("12", index3)
 
 	// 等待索引刷新完毕
 	searcher.Flush()
