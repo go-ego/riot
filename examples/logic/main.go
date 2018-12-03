@@ -35,7 +35,7 @@ var (
 	}
 
 	data2 = types.DocData{
-		Content: `Google is testing another Search results layout with 
+		Content: `Google is testing another Search results layout with
 	rounded cards, new colors, and the 4 mysterious colored dots again`,
 	}
 
@@ -51,10 +51,10 @@ var (
 
 func addDocs(search *riot.Engine) {
 	// Add the document to the index, docId starts at 1
-	search.Index(1, data)
-	search.Index(2, data1)
-	search.Index(3, data2)
-	search.Index(4, data3)
+	search.Index("1", data)
+	search.Index("2", data1)
+	search.Index("3", data2)
+	search.Index("4", data3)
 
 	// Wait for the index to refresh
 	search.Flush()
@@ -80,8 +80,8 @@ func logic1() {
 	// and not the result of "accidentally"
 	logic := types.Logic{
 		Should: true,
-		LogicExpr: types.LogicExpr{
-			NotInLabels: strArr,
+		Expr: types.Expr{
+			NotIn: strArr,
 		},
 	}
 
@@ -103,7 +103,7 @@ func logic2() {
 
 	// Add the document to the index, docId starts at 1
 	addDocs(searcher1)
-	searcher1.Index(5, data4)
+	searcher1.Index("5", data4)
 
 	// Wait for the index to refresh
 	searcher1.Flush()
@@ -117,10 +117,10 @@ func logic2() {
 	// and the result of "or accidentally"
 	logic := types.Logic{
 		Should: true,
-		LogicExpr: types.LogicExpr{
-			// ShouldLabels: strArr,
-			MustLabels:  strArr,
-			NotInLabels: notArr,
+		Expr: types.Expr{
+			// Should: strArr,
+			Must:  strArr,
+			NotIn: notArr,
 		},
 	}
 
