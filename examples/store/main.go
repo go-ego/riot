@@ -47,18 +47,20 @@ var (
 )
 
 func initEngine() {
+	// gob.Register(MyAttriStruct{})
+
 	// var path = "./riot-index"
 	searcher.Init(opts)
 	defer searcher.Close()
 	// os.MkdirAll(path, 0777)
 
 	// Add the document to the index, docId starts at 1
-	searcher.Index(1, types.DocData{Content: text})
-	searcher.Index(2, types.DocData{Content: text1})
-	searcher.Index(3, types.DocData{Content: text2})
-	searcher.Index(5, types.DocData{Content: text2})
+	searcher.Index("1", types.DocData{Content: text})
+	searcher.Index("2", types.DocData{Content: text1})
+	searcher.Index("3", types.DocData{Content: text2})
+	searcher.Index("5", types.DocData{Content: text2})
 
-	searcher.RemoveDoc(5)
+	searcher.RemoveDoc("5")
 
 	// Wait for the index to refresh
 	searcher.Flush()
@@ -80,6 +82,7 @@ func restoreIndex() {
 
 func main() {
 	initEngine()
+	// restoreIndex()
 
 	sea := searcher.Search(types.SearchReq{
 		Text: "google testing",
