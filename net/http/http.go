@@ -152,8 +152,8 @@ func AddIndex(w http.ResponseWriter, req *http.Request) {
 		Ts:   time.Now().UnixNano(),
 	}
 
-	inxid, _ := strconv.ParseUint(docid, 10, 64)
-	com.AddDocInx(inxid, types.DocData{Content: query, Attri: attri}, false)
+	// inxid, _ := strconv.ParseUint(docid, 10, 64)
+	com.AddDocInx(docid, types.DocData{Content: query, Attri: attri}, false)
 
 	timestamp := time.Now().Unix()
 	response, _ := json.Marshal(&JsonResponse{
@@ -169,6 +169,6 @@ func DelIndex(w http.ResponseWriter, req *http.Request) {
 	docid := req.URL.Query().Get("docid")
 
 	// docid := string(indexid)
-	inxId, _ := strconv.ParseUint(docid, 10, 64)
-	com.Delete(inxId, false)
+	// inxId, _ := strconv.ParseUint(docid, 10, 64)
+	com.Delete(docid, false)
 }

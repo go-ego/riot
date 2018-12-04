@@ -20,8 +20,8 @@ import (
 
 // Text search for documents
 type Text struct {
-	// Id      string      `json:"id"`
-	Id      uint64      `json:"id"`
+	Id string `json:"id"`
+	// Id      uint64      `json:"id"`
 	Content string      `json:"content"`
 	Score   []float32   `json:"score"`
 	Attri   types.Attri `json:"attri"`
