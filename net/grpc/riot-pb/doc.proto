@@ -78,8 +78,8 @@ message SearchReply {
 
 
 message Text {
-    // string id = 1;
-    uint64 id = 1;
+    string id = 1;
+    // uint64 id = 1;
 	string content = 2;
     Attri attri = 3;
     // bytes attri = 3;

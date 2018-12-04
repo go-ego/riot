@@ -112,7 +112,7 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 }
 
 // InitDelGrpcc init delete grpcc
-func InitDelGrpcc(address string, docid uint64) int32 {
+func InitDelGrpcc(address string, docid string) int32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
