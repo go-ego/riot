@@ -77,17 +77,17 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
 
-	logicExp := &pb.LogicExpr{
-		MustLabels:   sea.Logic.LogicExpr.MustLabels,
-		ShouldLabels: sea.Logic.LogicExpr.ShouldLabels,
-		NotInLabels:  sea.Logic.LogicExpr.NotInLabels,
+	logicExp := &pb.Expr{
+		Must:   sea.Logic.Expr.Must,
+		Should: sea.Logic.Expr.Should,
+		NotIn:  sea.Logic.Expr.NotIn,
 	}
 
 	logic := &pb.Logic{
-		Must:      sea.Logic.Must,
-		Should:    sea.Logic.Should,
-		NotIn:     sea.Logic.NotIn,
-		LogicExpr: logicExp,
+		Must:   sea.Logic.Must,
+		Should: sea.Logic.Should,
+		NotIn:  sea.Logic.NotIn,
+		Expr:   logicExp,
 	}
 
 	// Contact the server and print out its response.
@@ -112,7 +112,7 @@ func InitSearchRpc(address string, sea com.SearchArgs) (*pb.SearchReply, error) 
 }
 
 // InitDelGrpcc init delete grpcc
-func InitDelGrpcc(address string, docid uint64) int32 {
+func InitDelGrpcc(address string, docid string) int32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {

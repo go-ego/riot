@@ -29,7 +29,7 @@ const (
 
 var (
 	searcher = riot.Engine{}
-	wbs      = map[uint64]Weibo{}
+	wbs      = map[string]Weibo{}
 
 	weiboData = flag.String("weibo_data",
 		"../../testdata/weibo_data.txt", "微博数据文件")
@@ -43,7 +43,8 @@ var (
 
 // Weibo weibo json struct
 type Weibo struct {
-	Id           uint64 `json:"id"`
+	// Id           uint64 `json:"id"`
+	Id           string `json:"id"`
 	Timestamp    uint64 `json:"timestamp"`
 	UserName     string `json:"user_name"`
 	RepostsCount uint64 `json:"reposts_count"`
@@ -67,8 +68,10 @@ func indexWeibo() {
 		if len(data) != 10 {
 			continue
 		}
+
 		wb := Weibo{}
-		wb.Id, _ = strconv.ParseUint(data[0], 10, 64)
+		// wb.Id, _ = strconv.ParseUint(data[0], 10, 64)
+		wb.Id = data[0]
 		wb.Timestamp, _ = strconv.ParseUint(data[1], 10, 64)
 		wb.UserName = data[3]
 		wb.RepostsCount, _ = strconv.ParseUint(data[4], 10, 64)
@@ -187,7 +190,7 @@ func main() {
 		// StoreEngine: "bg",
 	})
 	log.Println("引擎初始化完毕")
-	wbs = make(map[uint64]Weibo)
+	wbs = make(map[string]Weibo)
 
 	// 索引
 	log.Println("建索引开始")

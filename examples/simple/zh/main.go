@@ -32,9 +32,9 @@ func main() {
 	text2 := "全片以上下扩展至IMAX 1.9：1的宽高比来呈现"
 
 	// 将文档加入索引，docId 从1开始
-	searcher.Index(1, types.DocData{Content: text})
-	searcher.Index(2, types.DocData{Content: text1})
-	searcher.Index(3, types.DocData{Content: text2})
+	searcher.Index("1", types.DocData{Content: text})
+	searcher.Index("2", types.DocData{Content: text1})
+	searcher.Index("3", types.DocData{Content: text2})
 
 	// 等待索引刷新完毕
 	searcher.Flush()

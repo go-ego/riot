@@ -16,12 +16,10 @@ package riot
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"os"
 	"strings"
 
-	"encoding/binary"
 	"encoding/gob"
 
 	"github.com/go-ego/murmur"
@@ -105,7 +103,7 @@ func NewEngine(conf ...interface{}) *Engine {
 // }
 
 // HasDoc if the document is exist return true
-func (engine *Engine) HasDoc(docId uint64) bool {
+func (engine *Engine) HasDoc(docId string) bool {
 	for shard := 0; shard < engine.initOptions.NumShards; shard++ {
 		engine.indexers = append(engine.indexers, core.Indexer{})
 
@@ -121,14 +119,10 @@ func (engine *Engine) HasDoc(docId uint64) bool {
 
 // HasDocDB if the document is exist in the database
 // return true
-func (engine *Engine) HasDocDB(docId uint64) bool {
-	b := make([]byte, 10)
-	length := binary.PutUvarint(b, docId)
+func (engine *Engine) HasDocDB(docId string) bool {
+	shard := murmur.Sum32(docId) % uint32(engine.initOptions.StoreShards)
 
-	shard := murmur.Sum32(fmt.Sprintf("%d", docId)) %
-		uint32(engine.initOptions.StoreShards)
-
-	has, err := engine.dbs[shard].Has(b[0:length])
+	has, err := engine.dbs[shard].Has([]byte(docId))
 	if err != nil {
 		log.Println("engine.dbs[shard].Has(b[0:length]): ", err)
 	}
@@ -139,13 +133,13 @@ func (engine *Engine) HasDocDB(docId uint64) bool {
 // GetDBAllIds get all the DocId from the storage database
 // and return
 // 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetDBAllIds() []uint64 {
-	docsId := make([]uint64, 0)
+func (engine *Engine) GetDBAllIds() []string {
+	docsId := make([]string, 0)
+
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(k, v []byte) error {
 			// fmt.Println(k, v)
-			docId, _ := binary.Uvarint(k)
-			docsId = append(docsId, docId)
+			docsId = append(docsId, string(k))
 			return nil
 		})
 	}
@@ -154,13 +148,11 @@ func (engine *Engine) GetDBAllIds() []uint64 {
 }
 
 // GetDBAllDocs get the db all docs
-func (engine *Engine) GetDBAllDocs() (
-	docsId []uint64, docsData []types.DocData) {
+func (engine *Engine) GetDBAllDocs() (docsId []string, docsData []types.DocData) {
 	for i := range engine.dbs {
 		engine.dbs[i].ForEach(func(key, val []byte) error {
 			// fmt.Println(k, v)
-			docId, _ := binary.Uvarint(key)
-			docsId = append(docsId, docId)
+			docsId = append(docsId, string(key))
 
 			buf := bytes.NewReader(val)
 			dec := gob.NewDecoder(buf)
@@ -183,7 +175,7 @@ func (engine *Engine) GetDBAllDocs() (
 // GetAllDocIds get all the DocId from the storage database
 // and return
 // 从数据库遍历所有的 DocId, 并返回
-func (engine *Engine) GetAllDocIds() []uint64 {
+func (engine *Engine) GetAllDocIds() []string {
 	return engine.GetDBAllIds()
 }
 

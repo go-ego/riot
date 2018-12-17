@@ -147,7 +147,8 @@ func main() {
 	log.Print("建立索引")
 	for i, text := range lines {
 		searcher.Index(
-			uint64(i),
+			// uint64(i),
+			strconv.Itoa(i),
 			types.DocData{Content: text, Fields: fieldsSlice[i]})
 	}
 	searcher.Flush()
@@ -160,7 +161,8 @@ func main() {
 	// 显示
 	fmt.Println("output...")
 	for _, doc := range output.Docs {
-		fmt.Printf("%v %s\n\n", doc.Scores, lines[doc.DocId])
+		i, _ := strconv.Atoi(doc.DocId)
+		fmt.Printf("%v %s\n\n", doc.Scores, lines[i])
 	}
 	log.Printf("查询完毕")
 }

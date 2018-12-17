@@ -57,7 +57,7 @@ func add(conn *grpc.ClientConn) {
 	client := pb.NewGreeterClient(conn)
 	for i := 0; i < 1000; i++ {
 		resp, err := client.DocInx(context.Background(), &pb.DocReq{
-			DocId:       20,
+			DocId:       "20",
 			Content:     msg,
 			ForceUpdate: false,
 		})
@@ -89,7 +89,7 @@ func search(conn *grpc.ClientConn) {
 func del(conn *grpc.ClientConn) {
 	client := pb.NewGreeterClient(conn)
 	resp, err := client.Delete(context.Background(), &pb.DeleteReq{
-		DocId: 20,
+		DocId: "20",
 	})
 
 	if err != nil {

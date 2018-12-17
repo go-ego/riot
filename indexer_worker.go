@@ -27,10 +27,11 @@ type indexerAddDocReq struct {
 }
 
 type indexerLookupReq struct {
-	countDocsOnly    bool
-	tokens           []string
-	labels           []string
-	docIds           map[uint64]bool
+	countDocsOnly bool
+	tokens        []string
+	labels        []string
+
+	docIds           map[string]bool
 	options          types.RankOpts
 	rankerReturnChan chan rankerReturnReq
 	orderless        bool
@@ -38,7 +39,7 @@ type indexerLookupReq struct {
 }
 
 type indexerRemoveDocReq struct {
-	docId       uint64
+	docId       string
 	forceUpdate bool
 }
 
@@ -62,7 +63,7 @@ func (engine *Engine) indexerRemoveDoc(shard int) {
 	for {
 		request := <-engine.indexerRemoveDocChans[shard]
 		engine.indexers[shard].RemoveDocToCache(request.docId, request.forceUpdate)
-		if request.docId != 0 {
+		if request.docId != "0" {
 			atomic.AddUint64(&engine.numDocsRemoved, 1)
 		}
 		if request.forceUpdate {

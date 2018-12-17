@@ -8,8 +8,11 @@ docs := searcher.Search(types.SearchReq{
         // 搜索 "google testing" 分词 `或关系` 并且不是 "accidentally" 的结果
 		Logic: types.Logic{
 			Should: true,
-			LogicExpr: types.LogicExpr{
-				NotInLabels: "accidentally",
+			// LogicExpr: types.LogicExpr{
+			// 	NotInLabels: "accidentally",
+			// },
+			Expr: types.Expr{
+				NotIn: "accidentally",
 			},
         },
         // 0 到 100 的结果

@@ -91,7 +91,7 @@ func InitEngine(conf Config) {
 }
 
 // AddDocInx add index document
-func AddDocInx(docId uint64, data types.DocData, forceUpdate bool) {
+func AddDocInx(docId string, data types.DocData, forceUpdate bool) {
 	Searcher.Index(docId, data, forceUpdate)
 
 	Searcher.Flush()
@@ -101,7 +101,7 @@ func AddDocInx(docId uint64, data types.DocData, forceUpdate bool) {
 type SearchArgs struct {
 	Id, Query, Time          string
 	OutputOffset, MaxOutputs int
-	DocIds                   map[uint64]bool
+	DocIds                   map[string]bool
 	Logic                    types.Logic
 	// fn                       func(*SearchArgs)
 }
@@ -111,7 +111,8 @@ func Search(sea SearchArgs) types.SearchResp {
 
 	var docs types.SearchResp
 
-	docs = Searcher.Search(types.SearchReq{Text: sea.Query,
+	docs = Searcher.Search(types.SearchReq{
+		Text: sea.Query,
 		// NotUseGse: true,
 		DocIds: sea.DocIds,
 		Logic:  sea.Logic,
@@ -124,6 +125,6 @@ func Search(sea SearchArgs) types.SearchResp {
 }
 
 // Delete delete document
-func Delete(docid uint64, forceUpdate bool) {
+func Delete(docid string, forceUpdate bool) {
 	Searcher.RemoveDoc(docid, forceUpdate)
 }

@@ -11,18 +11,6 @@ import (
 	"github.com/vcaesar/tt"
 )
 
-var text2 = "在路上, in the way"
-
-func makeDocIds() map[uint64]bool {
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[3] = true
-	docIds[1] = true
-	docIds[2] = true
-
-	return docIds
-}
-
 func TestEngineIndexWithNewStore(t *testing.T) {
 	gob.Register(ScoringFields{})
 	var engine = New("./testdata/test_dict.txt", "./riot.new", 8)
@@ -30,7 +18,7 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	// engine = engine.New()
 	AddDocs(engine)
 
-	engine.RemoveDoc(5, true)
+	engine.RemoveDoc("5", true)
 	engine.Flush()
 
 	engine.Close()
@@ -115,7 +103,7 @@ func TestDocRankID(t *testing.T) {
 	engine.Init(testRankOpt(true))
 	AddDocs(&engine)
 
-	engine.RemoveDoc(5)
+	engine.RemoveDoc("5")
 	engine.Flush()
 
 	request, tokens, rankerReturnChan := lookupReq(&engine)
@@ -137,7 +125,7 @@ func TestDocRanks(t *testing.T) {
 	engine.Init(testRankOpt(false))
 	AddDocs(&engine)
 
-	engine.RemoveDoc(5)
+	engine.RemoveDoc("5")
 	engine.Flush()
 
 	request, tokens, rankerReturnChan := lookupReq(&engine)
@@ -185,7 +173,7 @@ func TestDocGetAllDocAndID(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.RemoveDoc(5)
+	engine.RemoveDoc("5")
 	engine.Flush()
 
 	allIds := engine.GetDBAllIds()
@@ -206,29 +194,29 @@ func TestDocGetAllDocAndID(t *testing.T) {
 	allDoc := `[{The world <nil> [] [] <nil>} {有人口 <nil> [] [] {2 3 1}} {The world, 有七十亿人口人口 <nil> [] [] {1 2 3}} {有七十亿人口 <nil> [] [] {2 3 3}} {The world, 人口 <nil> [] [] <nil>}]`
 	tt.Expect(t, allDoc, docs)
 
-	has := engine.HasDoc(5)
+	has := engine.HasDoc("5")
 	tt.Expect(t, "false", has)
 
-	has = engine.HasDoc(2)
+	has = engine.HasDoc("2")
 	tt.Equal(t, true, has)
-	has = engine.HasDoc(3)
+	has = engine.HasDoc("3")
 	tt.Equal(t, true, has)
-	has = engine.HasDoc(4)
+	has = engine.HasDoc("4")
 	tt.Expect(t, "true", has)
 
-	dbhas := engine.HasDocDB(5)
+	dbhas := engine.HasDocDB("5")
 	tt.Expect(t, "false", dbhas)
 
-	dbhas = engine.HasDocDB(2)
+	dbhas = engine.HasDocDB("2")
 	tt.Equal(t, true, dbhas)
-	dbhas = engine.HasDocDB(3)
+	dbhas = engine.HasDocDB("3")
 	tt.Equal(t, true, dbhas)
-	dbhas = engine.HasDocDB(4)
+	dbhas = engine.HasDocDB("4")
 	tt.Expect(t, "true", dbhas)
 
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
+	docIds := make(map[string]bool)
+	docIds["5"] = true
+	docIds["1"] = true
 
 	outputs := engine.Search(types.SearchReq{
 		Text:   reqText,
@@ -285,19 +273,19 @@ func TestDocPinYin(t *testing.T) {
 	index1 := types.DocData{Tokens: tokenDatas, Fields: "在路上"}
 	index2 := types.DocData{Content: text2, Tokens: tokenDatas}
 
-	engine.Index(10, index1)
-	engine.Index(11, index2)
+	engine.Index("10", index1)
+	engine.Index("11", index2)
 	engine.Flush()
 
 	data := types.DocData{Content: text2}
-	pinyinOpt.Index(10, data)
-	pinyinOpt.Index(11, data)
+	pinyinOpt.Index("10", data)
+	pinyinOpt.Index("11", data)
 	pinyinOpt.Flush()
 
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[10] = true
-	docIds[11] = true
+	docIds := make(map[string]bool)
+	docIds["5"] = true
+	docIds["10"] = true
+	docIds["11"] = true
 
 	pyOutputs := pinyinOpt.SearchID(types.SearchReq{
 		Text:   "zl",
@@ -335,7 +323,7 @@ func TestForSplitData(t *testing.T) {
 
 	AddDocs(&engine)
 
-	engine.RemoveDoc(5)
+	engine.RemoveDoc("5")
 	engine.Flush()
 
 	tokenDatas := engine.PinYin(text2)
@@ -344,11 +332,11 @@ func TestForSplitData(t *testing.T) {
 	tt.Expect(t, "104", num)
 
 	index1 := types.DocData{Content: "在路上"}
-	engine.Index(10, index1, true)
+	engine.Index("10", index1, true)
 
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
+	docIds := make(map[string]bool)
+	docIds["5"] = true
+	docIds["1"] = true
 	outputs := engine.Search(types.SearchReq{
 		Text:   reqText,
 		DocIds: docIds})
@@ -374,7 +362,7 @@ func TestDocCounters(t *testing.T) {
 	engine.Init(testOpts(1, "riot.doc"))
 
 	AddDocs(&engine)
-	engine.RemoveDoc(5)
+	engine.RemoveDoc("5")
 	engine.Flush()
 
 	numAdd := engine.NumTokenAdded()
@@ -387,9 +375,9 @@ func TestDocCounters(t *testing.T) {
 	numRm = engine.NumDocsRemoved()
 	testNum(t, numAdd, numInx, numRm)
 
-	docIds := make(map[uint64]bool)
-	docIds[5] = true
-	docIds[1] = true
+	docIds := make(map[string]bool)
+	docIds["5"] = true
+	docIds["1"] = true
 
 	outputs := engine.Search(types.SearchReq{
 		Text:   reqText,

@@ -18,6 +18,8 @@ option objc_class_prefix = "HLW";
 
 package doc;
 
+// import "gogoproto/gogo.proto";
+
 // The greeting service definition.
 service Greeter {
     // Sends a greeting
@@ -33,7 +35,8 @@ message HeartReq {
 
 // The request message containing the user's name.
 message DocReq {
-    uint64 doc_id = 1;
+    // uint64 doc_id = 1;
+    string doc_id = 1;
     string content = 2;
     bytes attri = 3;
     repeated TokenData tokens = 4; // list
@@ -48,7 +51,7 @@ message TokenData {
 }
 
 message DeleteReq {
-    uint64 doc_id = 1;
+    string doc_id = 1;
 }
 
 // 0 succeed, 1 fail
@@ -62,7 +65,7 @@ message SearchReq {
 	int32 outputOffset = 3;
 	int32 maxOutputs = 4;
     string time = 5;
-    map<uint64, bool> docIds = 6; // string
+    map<string, bool> docIds = 6; // string
     Logic logic = 7;
 }
 
@@ -75,8 +78,8 @@ message SearchReply {
 
 
 message Text {
-    // string id = 1;
-    uint64 id = 1;
+    string id = 1;
+    // uint64 id = 1;
 	string content = 2;
     Attri attri = 3;
     // bytes attri = 3;
@@ -97,15 +100,15 @@ message Logic {
     // 非查询, 不包含
     bool notIn = 3;
     
-    LogicExpr logicExpr = 4;
+    Expr expr = 4;
 }
     
 // LogicExpr logic expression options
-message LogicExpr {
+message Expr {
     // mustLabels, with the query that must exist
-    repeated string  mustLabels = 1;
+    repeated string  must = 1;
     // shouldLabels, there is one can exist
-    repeated string shouldLabels = 2;
+    repeated string should = 2;
     // notInLabels, not included
-    repeated string notInLabels = 3;
+    repeated string notIn = 3;
 }

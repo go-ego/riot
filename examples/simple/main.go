@@ -42,9 +42,9 @@ func main() {
 	rounded cards, new colors, and the 4 mysterious colored dots again`
 
 	// Add the document to the index, docId starts at 1
-	searcher.Index(1, types.DocData{Content: text})
-	searcher.Index(2, types.DocData{Content: text1})
-	searcher.Index(3, types.DocData{Content: text2})
+	searcher.Index("1", types.DocData{Content: text})
+	searcher.Index("2", types.DocData{Content: text1})
+	searcher.Index("3", types.DocData{Content: text2})
 
 	// Wait for the index to refresh
 	searcher.Flush()

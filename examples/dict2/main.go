@@ -29,10 +29,10 @@ func searchWithGseFn1(seg gse.Segmenter) {
 
 	log.Println("searcher----------------...")
 
-	searcher.Index(1, data)
-	searcher.Index(2, data1)
-	searcher.Index(4, data1)
-	searcher.Index(3, data2)
+	searcher.Index("1", data)
+	searcher.Index("2", data1)
+	searcher.Index("4", data1)
+	searcher.Index("3", data2)
 	searcher.Flush()
 
 	search := searcher.Search(req)
@@ -45,10 +45,10 @@ func searchWithGse2(seg gse.Segmenter) {
 			Using: 1,
 		})
 
-	searcher1.Index(1, data)
-	searcher1.Index(2, data1)
-	searcher1.Index(4, data1)
-	searcher1.Index(3, data2)
+	searcher1.Index("1", data)
+	searcher1.Index("2", data1)
+	searcher1.Index("4", data1)
+	searcher1.Index("3", data2)
 	searcher1.Flush()
 
 	search1 := searcher1.Search(req)

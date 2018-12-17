@@ -32,11 +32,11 @@ type SearchReq struct {
 	// 类别
 	// Class string
 
-	// 逻辑检索表达式
+	// Logic 逻辑检索表达式
 	Logic Logic
 
 	// 当不为 nil 时，仅从这些 DocIds 包含的键中搜索（忽略值）
-	DocIds map[uint64]bool
+	DocIds map[string]bool
 
 	// 排序选项
 	RankOpts *RankOpts
@@ -82,18 +82,18 @@ type Logic struct {
 	// 非查询, 不包含
 	NotIn bool
 
-	LogicExpr LogicExpr
+	Expr
 }
 
-// LogicExpr logic expression options
-type LogicExpr struct {
+// Expr logic expression options
+type Expr struct {
 
 	// 与查询, 必须都存在
-	MustLabels []string
+	Must []string
 
 	// 或查询, 有一个存在即可
-	ShouldLabels []string
+	Should []string
 
 	// 非查询, 不包含
-	NotInLabels []string
+	NotIn []string
 }

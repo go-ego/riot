@@ -10,6 +10,7 @@ import (
 	"os"
 	"runtime"
 	"runtime/pprof"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -131,7 +132,7 @@ func openFile() {
 	for i := 0; i < *numRepeatText; i++ {
 		for _, line := range lines {
 			searcher.Index(
-				uint64(docIds[docIdx]+1),
+				strconv.Itoa(docIds[docIdx]+1),
 				types.DocData{Content: line})
 
 			docIdx++
@@ -153,7 +154,7 @@ func deleteDoc() {
 	// 记录时间并计算删除索引时间
 	t2 := time.Now()
 	for i := 1; i <= *numDeleteDocs; i++ {
-		searcher.RemoveDoc(uint64(i))
+		searcher.RemoveDoc(strconv.Itoa(i))
 	}
 	searcher.Flush()
 

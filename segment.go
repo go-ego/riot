@@ -28,7 +28,7 @@ import (
 type TMap map[string][]int
 
 type segmenterReq struct {
-	docId uint64
+	docId string
 	hash  uint32
 	data  types.DocData
 	// data        types.DocumentIndexData
@@ -247,7 +247,7 @@ func (engine *Engine) makeTokensMap(request segmenterReq) (map[string][]int, int
 func (engine *Engine) segmenterWorker() {
 	for {
 		request := <-engine.segmenterChan
-		if request.docId == 0 {
+		if request.docId == "0" {
 			if request.forceUpdate {
 				for i := 0; i < engine.initOptions.NumShards; i++ {
 					engine.indexerAddDocChans[i] <- indexerAddDocReq{
