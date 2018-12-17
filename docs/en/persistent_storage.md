@@ -25,7 +25,7 @@ Use persistent storage when UseStore is true:
 
 ### Must pay attention to matters
 
-1. If the sorter uses [custom score field] (/ docs / en / custom_scoring_criteria.md) then that type must be registered in the gob, as in the example on the left which needs to be added before calling engine.Init：
+1. If the sorter uses [custom score field](/docs/en/custom_scoring_criteria.md) then that type must be registered in the gob, as in the example on the left which needs to be added before calling engine.Init：
 ```
 gob.Register(MyScoringFields{})
 ```
