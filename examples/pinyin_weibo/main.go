@@ -36,7 +36,7 @@ var (
 // Weibo weibo json struct
 type Weibo struct {
 	// Id           uint64 `json:"id"`
-	Id           string `json"id"`
+	Id           string `json:"id"`
 	Timestamp    uint64 `json:"timestamp"`
 	UserName     string `json:"user_name"`
 	RepostsCount uint64 `json:"reposts_count"`

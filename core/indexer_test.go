@@ -54,7 +54,7 @@ func TestRemoveDocToCache(t *testing.T) {
 			{"token3", 0, []int{7}},
 		},
 	}, false)
-	
+
 	// doc2 = "token1 token2 token3"
 	indexer.AddDocToCache(&types.DocIndex{
 		DocId: "2",
