@@ -96,6 +96,11 @@ func AddDocInx(docId string, data types.DocData, forceUpdate bool) {
 	// Searcher.Flush()
 }
 
+// Flush flsuh the Searcher engine
+func Flush() {
+	Searcher.Flush()
+}
+
 // SearchArgs search args
 type SearchArgs struct {
 	Id, Query, Time          string
