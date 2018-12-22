@@ -93,8 +93,7 @@ func InitEngine(conf Config) {
 // AddDocInx add index document
 func AddDocInx(docId string, data types.DocData, forceUpdate bool) {
 	Searcher.Index(docId, data, forceUpdate)
-
-	Searcher.Flush()
+	// Searcher.Flush()
 }
 
 // SearchArgs search args
