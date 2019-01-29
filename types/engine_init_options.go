@@ -64,7 +64,9 @@ type EngineOpts struct {
 	// 停用词文件
 	StopTokenFile string `toml:"stop_file"`
 	// Gse search mode
-	GseMode bool `toml:"gse_mode"`
+	GseMode bool   `toml:"gse_mode"`
+	Hmm     bool   `toml:"hmm"`
+	Model   string `toml:"model"`
 
 	// 分词器线程数
 	// NumSegmenterThreads int
