@@ -65,9 +65,10 @@ type Engine struct {
 	loc sync.RWMutex
 
 	// 计数器，用来统计有多少文档被索引等信息
-	numDocsIndexed       uint64
-	numDocsRemoved       uint64
-	numDocsForceUpdated  uint64
+	numDocsIndexed      uint64
+	numDocsRemoved      uint64
+	numDocsForceUpdated uint64
+
 	numIndexingReqs      uint64
 	numRemovingReqs      uint64
 	numForceUpdatingReqs uint64
@@ -476,11 +477,17 @@ func (engine *Engine) RemoveDoc(docId string, forceUpdate ...bool) {
 // Segment get the word segmentation result of the text
 // 获取文本的分词结果, 只分词与过滤弃用词
 func (engine *Engine) Segment(content string) (keywords []string) {
-	segments := engine.segmenter.ModeSegment([]byte(content),
-		engine.initOptions.GseMode)
 
-	for _, segment := range segments {
-		token := segment.Token().Text()
+	var segments []string
+	hmm := engine.initOptions.Hmm
+
+	if engine.initOptions.GseMode {
+		segments = engine.segmenter.CutSearch(content, hmm)
+	} else {
+		segments = engine.segmenter.Cut(content, hmm)
+	}
+
+	for _, token := range segments {
 		if !engine.stopTokens.IsStopToken(token) {
 			keywords = append(keywords, token)
 		}
