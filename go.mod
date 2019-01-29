@@ -11,9 +11,8 @@ require (
 	github.com/dgraph-io/badger v1.5.4
 	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/go-ego/cedar v0.0.0-20181129160037-c920d07249de // indirect
 	github.com/go-ego/gpy v0.0.0-20181128170341-b6d42325845c
-	github.com/go-ego/gse v0.0.0-20181123163408-e361db41b9da
+	github.com/go-ego/gse v0.0.0-20190129002529-45bfc8a37d9a
 	github.com/go-ego/murmur v0.0.0-20181129155752-fac557227e04
 	github.com/go-ole/go-ole v1.2.1
 	github.com/go-vgo/grpclb v0.0.0-20181128171039-89526b0a742e
@@ -27,7 +26,7 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/shirou/gopsutil v2.18.11+incompatible
 	github.com/syndtr/goleveldb v0.0.0-20181128100959-b001fa50d6b2
-	github.com/vcaesar/tt v0.0.0-20181129151354-f274584dba08
+	github.com/vcaesar/tt v0.0.0-20190128173424-2874d9a357d3
 	// not github
 	go.etcd.io/bbolt v1.3.1-etcd.7
 	go.etcd.io/etcd v3.3.10+incompatible
@@ -44,7 +43,7 @@ require (
 	// google.golang.org/appengine v1.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20181202183823-bd91e49a0898 // indirect
 	google.golang.org/grpc v1.17.0
-	// honnef.co/go/tools v0.0.0-20180920025451-e3ad64cb4ed3 // indirect
+// honnef.co/go/tools v0.0.0-20180920025451-e3ad64cb4ed3 // indirect
 )
 
 replace (

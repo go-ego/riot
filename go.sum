@@ -30,6 +30,8 @@ github.com/go-ego/cedar v0.0.0-20181122171415-ea076a54857e h1:sFig0yNtjq3w+TPt+q
 github.com/go-ego/cedar v0.0.0-20181122171415-ea076a54857e/go.mod h1:TMuo5n9ZbmInm6IKEHqoCsW0EDYufNXKUQ/rqoZpPZE=
 github.com/go-ego/cedar v0.0.0-20181129160037-c920d07249de h1:asSw3rtSEYOzmkRl0aOPr8BaLkWf5opHAILvANCHAsU=
 github.com/go-ego/cedar v0.0.0-20181129160037-c920d07249de/go.mod h1:TMuo5n9ZbmInm6IKEHqoCsW0EDYufNXKUQ/rqoZpPZE=
+github.com/go-ego/cedar v0.0.0-20190115165203-632caacce2cd h1:91Y6dD3hIxQMsz4b0ioN0Nc4G8yMtzvtoUn8ZTEydUg=
+github.com/go-ego/cedar v0.0.0-20190115165203-632caacce2cd/go.mod h1:TMuo5n9ZbmInm6IKEHqoCsW0EDYufNXKUQ/rqoZpPZE=
 github.com/go-ego/gpy v0.0.0-20180613130004-5e7198f4b498/go.mod h1:IdBbkLL575G/iyTKfIQMP89ZTroZ6qcVIAQpnc0o/xk=
 github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f h1:9LuthG9mEsXqI6gXizAjzqTm0gC/zW+LeZ7EInNKNAI=
 github.com/go-ego/gpy v0.0.0-20180905182312-c381ef5b982f/go.mod h1:IdBbkLL575G/iyTKfIQMP89ZTroZ6qcVIAQpnc0o/xk=
@@ -39,6 +41,8 @@ github.com/go-ego/gse v0.0.0-20181025134840-c539b6c2f5ae h1:DaaX3gx0Qnrt1/NUvegV
 github.com/go-ego/gse v0.0.0-20181025134840-c539b6c2f5ae/go.mod h1:Qs9mZw6jna9uQ1LgvX6ag0li8et/tlwF6AbgdnVnIPo=
 github.com/go-ego/gse v0.0.0-20181123163408-e361db41b9da h1:7FU8ZhSzoX0AeenlYk5DorcOS+/z5N3EeE9m541J9Eo=
 github.com/go-ego/gse v0.0.0-20181123163408-e361db41b9da/go.mod h1:TMiDGo3M5vwXFVdOq1uD3zbXNdgqR1r69HO1eNAVw74=
+github.com/go-ego/gse v0.0.0-20190129002529-45bfc8a37d9a h1:yrCm9j3MohxyQ371Akb7wG/xVt+K539rJ70+tBBKpSg=
+github.com/go-ego/gse v0.0.0-20190129002529-45bfc8a37d9a/go.mod h1:r/HlqrUfC3sILWwWVpVPyBm2OElARmMSmUpmDZPOqfM=
 github.com/go-ego/murmur v0.0.0-20181019172721-24868d0e6e66 h1:1QyAiNbCfYM1TKNufH6qAnI5SeI8Ec8hKtunT9dCFB4=
 github.com/go-ego/murmur v0.0.0-20181019172721-24868d0e6e66/go.mod h1:WocLQI5wTl0GeQ+h144mrLx1vyFZkoOxGKlzD7xlqdc=
 github.com/go-ego/murmur v0.0.0-20181129155752-fac557227e04 h1:2dKx9zU7DGtGaLA1Ayg3GCYpthRrA6vfmHYqtx79Dvs=
@@ -84,6 +88,7 @@ github.com/grpc/grpc-go v1.14.0 h1:mdO9QxZPgbtuMPrWCiqhyGPGLg/8E/sZpJwOOqyl134=
 github.com/grpc/grpc-go v1.14.0/go.mod h1:OkrsaFQVyvU0P5XR5PQ2d19rg8dJ/sIJcthuZNcktKk=
 github.com/grpc/grpc-go v1.16.0 h1:NoIxpYcu0On8pGfXH92qMzpvh+CupLSmOXbqWdjugpk=
 github.com/grpc/grpc-go v1.16.0/go.mod h1:0JHn/cJsOMiMfNA9+DeHDlAU7KAAB5GDlYFpa9MZMio=
+github.com/grpc/grpc-go v1.17.0/go.mod h1:6QZJwpn2B+Zp71q/5VxRsJ6NXXVCE5NRUHRo+f3cWCs=
 github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3/go.mod h1:oHTiXerJ20+SfYcrdlBO7rzZRJWGwSTQ0iUY2jI6Gfc=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
@@ -110,6 +115,8 @@ github.com/vcaesar/tt v0.0.0-20181014173808-65366af8a7be/go.mod h1:xKkGp+ufbz/1D
 github.com/vcaesar/tt v0.0.0-20181105181427-53fc2b08e954 h1:ddpMf4YAKAzeagDBS4dpMVQEiDalEJarBDZFVh7jyqU=
 github.com/vcaesar/tt v0.0.0-20181105181427-53fc2b08e954/go.mod h1:xKkGp+ufbz/1DQmNxdbAMFqZJOVIJEX7dGvLZMhPIWg=
 github.com/vcaesar/tt v0.0.0-20181129151354-f274584dba08/go.mod h1:xKkGp+ufbz/1DQmNxdbAMFqZJOVIJEX7dGvLZMhPIWg=
+github.com/vcaesar/tt v0.0.0-20181224161634-976c3d851647/go.mod h1:xKkGp+ufbz/1DQmNxdbAMFqZJOVIJEX7dGvLZMhPIWg=
+github.com/vcaesar/tt v0.0.0-20190128173424-2874d9a357d3/go.mod h1:xKkGp+ufbz/1DQmNxdbAMFqZJOVIJEX7dGvLZMhPIWg=
 go.etcd.io/etcd v3.3.10+incompatible/go.mod h1:yaeTdrJi5lOmYerz05bd8+V7KubZs8YSFZfzsF9A6aI=
 go.uber.org/atomic v1.3.2 h1:2Oa65PReHzfn29GpvgsYwloV9AVFHPDk8tYxt2c2tr4=
 go.uber.org/atomic v1.3.2/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
