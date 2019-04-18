@@ -20,7 +20,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/go-ego/riot/net/grpc/riot-pb"
+	pb "github.com/oGre222/tea/net/grpc/riot-pb"
 	grpclb "github.com/go-vgo/grpclb"
 	"google.golang.org/grpc"
 )

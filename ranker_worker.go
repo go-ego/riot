@@ -16,7 +16,7 @@
 package riot
 
 import (
-	"github.com/go-ego/riot/types"
+	"github.com/oGre222/tea/types"
 )
 
 type rankerAddDocReq struct {
@@ -48,7 +48,9 @@ type rankerRemoveDocReq struct {
 func (engine *Engine) rankerAddDoc(shard int) {
 	for {
 		request := <-engine.rankerAddDocChans[shard]
-		if engine.initOptions.IDOnly {
+		if engine.initOptions.UseTiKv {
+			engine.rankers[shard].AddTiKvDoc(request.docId, request.fields)
+		} else if engine.initOptions.IDOnly {
 			engine.rankers[shard].AddDoc(request.docId, request.fields)
 		} else {
 			engine.rankers[shard].AddDoc(request.docId, request.fields,
@@ -75,6 +77,10 @@ func (engine *Engine) rankerRank(shard int) {
 func (engine *Engine) rankerRemoveDoc(shard int) {
 	for {
 		request := <-engine.rankerRemoveDocChans[shard]
-		engine.rankers[shard].RemoveDoc(request.docId)
+		if engine.initOptions.UseTiKv {
+			engine.rankers[shard].RemoveTiKvDoc(request.docId)
+		} else {
+			engine.rankers[shard].RemoveDoc(request.docId)
+		}
 	}
 }

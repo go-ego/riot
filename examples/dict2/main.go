@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/go-ego/gse"
-	"github.com/go-ego/riot"
-	"github.com/go-ego/riot/types"
+	"github.com/oGre222/tea"
+	"github.com/oGre222/tea/types"
 )
 
 var (

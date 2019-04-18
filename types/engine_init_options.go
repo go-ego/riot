@@ -103,6 +103,10 @@ type EngineOpts struct {
 	StoreEngine string `toml:"store_engine"`
 
 	IDOnly bool `toml:"id_only"`
+
+	//反向索引使用 tikv 存储
+	UseTiKv  bool `toml:"user_tikv"`
+	TiKvPdAddr string  `toml:"tikv_pd_addr"`
 }
 
 // Init init engine options

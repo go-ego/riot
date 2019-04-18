@@ -22,8 +22,8 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/go-ego/riot/net/com"
-	pb "github.com/go-ego/riot/net/grpc/riot-pb"
+	"github.com/oGre222/tea/net/com"
+	pb "github.com/oGre222/tea/net/grpc/riot-pb"
 	zlog "github.com/go-vgo/gt/zlog"
 )
 

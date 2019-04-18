@@ -21,6 +21,7 @@ package riot
 
 import (
 	"fmt"
+	ti "github.com/oGre222/tea/tikv"
 	"log"
 	"os"
 	"runtime"
@@ -32,10 +33,10 @@ import (
 
 	"sync/atomic"
 
-	"github.com/go-ego/riot/core"
-	"github.com/go-ego/riot/store"
-	"github.com/go-ego/riot/types"
-	"github.com/go-ego/riot/utils"
+	"github.com/oGre222/tea/core"
+	"github.com/oGre222/tea/store"
+	"github.com/oGre222/tea/types"
+	"github.com/oGre222/tea/utils"
 
 	"github.com/go-ego/gse"
 	"github.com/go-ego/murmur"
@@ -100,6 +101,8 @@ type Engine struct {
 	// 建立持久存储使用的通信通道
 	storeIndexDocChans []chan storeIndexDocReq
 	storeInitChan      chan bool
+
+	tikvClient *ti.Tikv
 }
 
 // Indexer initialize the indexer channel
@@ -159,6 +162,22 @@ func (engine *Engine) InitStore() {
 	}
 	engine.storeInitChan = make(
 		chan bool, engine.initOptions.StoreShards)
+}
+
+func (engine *Engine) InitTiKv() {
+	if engine.initOptions.IndexerOpts.IndexType == types.FrequenciesIndex {
+		engine.initOptions.IndexerOpts.IndexType = types.LocsIndex
+		log.Println("tikv not support FrequenciesIndex, has changed to LocsIndex")
+	}
+	if !engine.initOptions.IDOnly {
+		engine.initOptions.IDOnly = true
+		log.Println("tikv only support IDOnly, has changed to IDOnly true")
+	}
+	var err error
+	engine.tikvClient, err = ti.OpenTikv(engine.initOptions.TiKvPdAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // CheckMem check the memory when the memory is larger
@@ -270,6 +289,11 @@ func (engine *Engine) initDef(options types.EngineOpts) types.EngineOpts {
 		// os.MkdirAll(DefaultPath, 0777)
 	}
 
+	if options.UseTiKv {
+		//todo
+		options.IDOnly = true
+	}
+
 	return options
 }
 
@@ -300,12 +324,21 @@ func (engine *Engine) Init(options types.EngineOpts) {
 		engine.stopTokens.Init(options.StopTokenFile)
 	}
 
+	//https://github.com/pingcap/docs/blob/master/tikv/go-client-api.md#try-the-raw-key-value-api
+	//RawKVClient is a client of the TiKV server and only supports the GET/PUT/DELETE/SCAN commands.
+	//The RawKVClient can be safely and concurrently accessed by multiple goroutines, as long as it is not closed.
+	//Therefore, for one process, one client is enough generally.
+	if engine.initOptions.UseTiKv {
+		engine.InitTiKv()
+	}
+
 	// 初始化索引器和排序器
 	for shard := 0; shard < options.NumShards; shard++ {
 		engine.indexers = append(engine.indexers, core.Indexer{})
-		engine.indexers[shard].Init(*options.IndexerOpts)
+		engine.indexers[shard].Init(*options.IndexerOpts, engine.tikvClient)
 
 		engine.rankers = append(engine.rankers, core.Ranker{})
+		engine.rankers[shard].SetTikv(engine.tikvClient)
 		engine.rankers[shard].Init(options.IDOnly)
 	}
 

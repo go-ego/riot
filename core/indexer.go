@@ -20,14 +20,18 @@ Package core is riot core
 package core
 
 import (
+	"github.com/oGre222/tea/tikv"
 	"log"
 	"math"
 	"sort"
 	"sync"
 
-	"github.com/go-ego/riot/types"
-	"github.com/go-ego/riot/utils"
+	"github.com/oGre222/tea/types"
+	"github.com/oGre222/tea/utils"
 )
+
+const TiKvDocKeys = "doc:keys:"
+const TiKvDocIndex = "doc:index:"
 
 // Indexer 索引器
 type Indexer struct {
@@ -63,6 +67,15 @@ type Indexer struct {
 
 	// 每个文档的关键词长度
 	docTokenLens map[string]float32
+
+	useTikv		bool
+	tikv        *tikv.Tikv
+}
+
+//用于存储于K-V结构
+type KeywordIndexKv struct {
+	docId      string  // 全部类型都有
+	locations   []int   // IndexType == LocsIndex
 }
 
 // KeywordIndices 反向索引表的一行，收集了一个搜索键出现的所有文档，按照DocId从小到大排序。
@@ -74,7 +87,7 @@ type KeywordIndices struct {
 }
 
 // Init 初始化索引器
-func (indexer *Indexer) Init(options types.IndexerOpts) {
+func (indexer *Indexer) Init(options types.IndexerOpts, tikv ...*tikv.Tikv) {
 	if indexer.initialized == true {
 		log.Fatal("The Indexer can not be initialized twice.")
 	}
@@ -90,6 +103,12 @@ func (indexer *Indexer) Init(options types.IndexerOpts) {
 	indexer.removeCacheLock.removeCache = make(
 		[]string, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLens = make(map[string]float32)
+
+	if len(tikv) > 0 && tikv[0] != nil {
+		indexer.useTikv = true
+		indexer.tikv = tikv[0]
+		indexer.initOptions.DocCacheSize = 1000
+	}
 }
 
 // getDocId 从 KeywordIndices 中得到第i个文档的 DocId
@@ -169,10 +188,65 @@ func (indexer *Indexer) AddDocToCache(doc *types.DocIndex, forceUpdate bool) {
 
 		indexer.addCacheLock.Unlock()
 		sort.Sort(addCachedDocs)
-		indexer.AddDocs(&addCachedDocs)
+		if indexer.useTikv {
+			indexer.AddTiKvDocs(&addCachedDocs)
+		} else {
+			indexer.AddDocs(&addCachedDocs)
+		}
 	} else {
 		indexer.addCacheLock.Unlock()
 	}
+}
+
+func (indexer *Indexer) AddTiKvDocs(docs *types.DocsIndex) {
+	if indexer.initialized == false {
+		log.Fatal("The Indexer has not been initialized.")
+	}
+
+	var store = make(map[string][]byte)
+	// DocId 递增顺序遍历插入文档保证索引移动次数最少
+	for i, doc := range *docs {
+		if i < len(*docs)-1 && (*docs)[i].DocId == (*docs)[i+1].DocId {
+			// 如果有重复文档加入，因为稳定排序，只加入最后一个
+			continue
+		}
+
+		docState, ok := indexer.tableLock.docsState[doc.DocId]
+		if ok && docState == 1 {
+			// 如果此时 docState 仍为 1，说明该文档需被删除
+			// docState 合法状态为 nil & 2，保证一定不会插入已经在索引表中的文档
+			continue
+		}
+
+		// 更新文档关键词总长度
+		if doc.TokenLen != 0 {
+			indexer.docTokenLens[doc.DocId] = float32(doc.TokenLen)
+			indexer.totalTokenLen += doc.TokenLen
+		}
+
+		for _, keyword := range doc.Keywords {
+			ti := KeywordIndexKv{}
+			switch indexer.initOptions.IndexType {
+			case types.LocsIndex:
+				ti.locations = keyword.Starts
+			}
+
+			ti.docId = doc.DocId
+			store[TiKvDocIndex + keyword.Text + ":" +ti.docId] = utils.EncodeToBytes(ti)
+		}
+
+		//todo 优化
+		indexer.tableLock.docsState[doc.DocId] = 0
+		indexer.numDocs++
+		var keys []string
+		for _, k := range doc.Keywords  {
+			keys = append(keys, k.Text)
+		}
+		store[TiKvDocKeys + doc.DocId] = utils.EncodeToBytes(keys)
+		//indexer.setDocKeys(doc)
+		//indexer.setKeywordIndexKv(store)
+	}
+	indexer.tikv.BatchPut(store)
 }
 
 // AddDocs 向反向索引表中加入 ADDCACHE 中所有文档
@@ -266,6 +340,7 @@ func (indexer *Indexer) RemoveDocToCache(docId string, forceUpdate bool) bool {
 	if docId != "0" {
 		indexer.tableLock.Lock()
 		docState, ok := indexer.tableLock.docsState[docId]
+		//todo 优化
 		if ok && docState == 0 {
 			indexer.removeCacheLock.removeCache[indexer.removeCacheLock.removeCachePointer] = docId
 			indexer.removeCacheLock.removeCachePointer++
@@ -287,7 +362,11 @@ func (indexer *Indexer) RemoveDocToCache(docId string, forceUpdate bool) bool {
 		indexer.removeCacheLock.removeCachePointer = 0
 		indexer.removeCacheLock.Unlock()
 		sort.Sort(removeCacheddocs)
-		indexer.RemoveDocs(&removeCacheddocs)
+		if indexer.useTikv {
+			indexer.RemoveTiKvDocs(&removeCacheddocs)
+		} else {
+			indexer.RemoveDocs(&removeCacheddocs)
+		}
 		return true
 	}
 
@@ -295,6 +374,26 @@ func (indexer *Indexer) RemoveDocToCache(docId string, forceUpdate bool) bool {
 	return false
 }
 
+func (indexer *Indexer) RemoveTiKvDocs(docs *types.DocsId) {
+	if indexer.initialized == false {
+		log.Fatal("The Indexer has not been initialized.")
+	}
+
+	// 更新文档关键词总长度，删除文档状态
+	for _, docId := range *docs {
+		indexer.totalTokenLen -= indexer.docTokenLens[docId]
+		delete(indexer.docTokenLens, docId)
+		delete(indexer.tableLock.docsState, docId)
+
+		keys := indexer.getDocKeys(docId)
+		var tiKvKeys [][]byte
+		for _, v := range keys  {
+			tiKvKeys = append(tiKvKeys, []byte(TiKvDocIndex + v + ":" + docId))
+		}
+		tiKvKeys = append(tiKvKeys, []byte(TiKvDocKeys + docId))
+		indexer.tikv.BatchDelete(tiKvKeys)
+	}
+}
 // RemoveDocs 向反向索引表中删除 REMOVECACHE 中所有文档
 func (indexer *Indexer) RemoveDocs(docs *types.DocsId) {
 	if indexer.initialized == false {
@@ -420,7 +519,8 @@ func (indexer *Indexer) internalLookup(
 
 	table := make([]*KeywordIndices, len(keywords))
 	for i, keyword := range keywords {
-		indices, found := indexer.tableLock.table[keyword]
+		//indices, found := indexer.tableLock.table[keyword]
+		indices, found := indexer.getKeywordIndices(keyword)
 		if !found {
 			// 当反向索引表中无此搜索键时直接返回
 			return
@@ -902,4 +1002,60 @@ func (indexer *Indexer) unionTable(table []*KeywordIndices,
 	}
 
 	return
+}
+
+func (indexer *Indexer) getKeywordIndices(text string) (*KeywordIndices, bool) {
+	/*found, ok := indexer.tableLock.table[text]
+	if !ok && indexer.useTikv {
+		b, err := indexer.tiKv.Get([]byte(text))
+		if err != nil {
+			return nil, false
+		}
+		found = &KeywordIndices{}
+		err = utils.DecodeFromBytes(b, found)
+		if err == nil {
+			ok = true
+		}
+	}
+	return found, ok*/
+	keys, values, err := indexer.tikv.PreLike([]byte(TiKvDocIndex + text + ":"))
+	count := len(keys)
+	if err != nil || count == 0 {
+		return nil, false
+	}
+	var k KeywordIndices
+	for i := 0; i < count; i++  {
+		var kkv KeywordIndexKv
+		err := utils.DecodeFromBytes(values[i], &kkv)
+		if err != nil {
+			continue
+		}
+		k.docIds = append(k.docIds, kkv.docId)
+		k.locations = append(k.locations, kkv.locations)
+	}
+	return &k, true
+}
+
+//停用
+func (indexer *Indexer) setKeywordIndexKv(data map[string][]byte) {
+	indexer.tikv.BatchPut(data)
+}
+
+//停用
+func (indexer *Indexer) setDocKeys(doc *types.DocIndex) {
+	var keys []string
+	for _, k := range doc.Keywords  {
+		keys = append(keys, k.Text)
+	}
+	indexer.tikv.Set([]byte(TiKvDocKeys + doc.DocId), utils.EncodeToBytes(keys))
+}
+
+func (indexer *Indexer) getDocKeys(docId string) []string {
+	var keys []string
+	val, err := indexer.tikv.Get([]byte(TiKvDocKeys + docId))
+	if err != nil {
+		return keys
+	}
+	utils.DecodeFromBytes(val, keys)
+	return keys
 }

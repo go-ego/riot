@@ -17,7 +17,7 @@ package core
 import (
 	"sync"
 
-	"github.com/go-ego/riot/types"
+	"github.com/oGre222/tea/types"
 )
 
 var (

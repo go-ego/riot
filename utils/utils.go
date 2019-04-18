@@ -14,6 +14,17 @@
 
 package utils
 
+import (
+	"bytes"
+	"github.com/json-iterator/go"
+	"github.com/json-iterator/go/extra"
+	"log"
+)
+var Json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+func init() {
+	extra.SupportPrivateFields()
+}
 // AbsInt return to the opposite number
 func AbsInt(a int) int {
 	if a < 0 {
@@ -28,4 +39,19 @@ func MinInt(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func EncodeToBytes(input interface{}) []byte {
+	var buf bytes.Buffer
+	enc := Json.NewEncoder(&buf)
+	err := enc.Encode(input)
+	if err != nil {
+		log.Print(err)
+	}
+	return buf.Bytes()
+}
+
+func DecodeFromBytes(input []byte, output interface{}) error {
+	dec := Json.NewDecoder(bytes.NewBuffer(input))
+	return dec.Decode(output)
 }

@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/go-ego/riot"
-	"github.com/go-ego/riot/types"
+	"github.com/oGre222/tea"
+	"github.com/oGre222/tea/types"
 )
 
 var (
@@ -21,7 +21,7 @@ func dictZh() {
 	searcher.Init(types.EngineOpts{
 		// Using:         3,
 		GseDict: "zh",
-		// GseDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/dictionary.txt",
+		// GseDict: "your gopath"+"/src/github.com/oGre222/tea/data/dict/dictionary.txt",
 	})
 	defer searcher.Close()
 
@@ -44,7 +44,7 @@ func dictJp() {
 	searcher2.Init(types.EngineOpts{
 		// Using:         3,
 		GseDict: "jp",
-		// GseDict: "your gopath"+"/src/github.com/go-ego/riot/data/dict/jp/dict.txt",
+		// GseDict: "your gopath"+"/src/github.com/oGre222/tea/data/dict/jp/dict.txt",
 	})
 	defer searcher2.Close()
 

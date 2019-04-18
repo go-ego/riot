@@ -16,13 +16,16 @@
 package core
 
 import (
+	"github.com/oGre222/tea/tikv"
 	"log"
 	"sort"
 	"sync"
 
-	"github.com/go-ego/riot/types"
-	"github.com/go-ego/riot/utils"
+	"github.com/oGre222/tea/types"
+	"github.com/oGre222/tea/utils"
 )
+
+const RankerDocId = "ranker:doc_id:"
 
 // Ranker ranker
 type Ranker struct {
@@ -38,6 +41,10 @@ type Ranker struct {
 
 	idOnly      bool
 	initialized bool
+
+	useTiKv		bool
+	tikv		*tikv.Tikv
+	tikvCh		chan tikv.KvData
 }
 
 // Init init ranker
@@ -58,6 +65,25 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 		// new
 		ranker.lock.content = make(map[string]string)
 		ranker.lock.attri = make(map[string]interface{})
+	}
+}
+
+func (ranker *Ranker) SetTikv (t *tikv.Tikv) {
+	if ranker.initialized == true {
+		log.Fatal("The Ranker can not be initialized twice.")
+	}
+	if t == nil {
+		 return
+	}
+	ranker.useTiKv = true
+	ranker.tikv = t
+	ranker.tikvCh = make(chan tikv.KvData)
+	for i := 0; i < 8; i++  {
+		go func() {
+			for d := range ranker.tikvCh {
+				ranker.tikv.Set(d.Key, d.Val)
+			}
+		}()
 	}
 }
 
@@ -121,6 +147,31 @@ func maxOutput(options types.RankOpts, docsLen int) (int, int) {
 	return start, end
 }
 
+func (ranker *Ranker) rankTiKvOutIDs(docs []types.IndexedDoc, options types.RankOpts,
+	countDocsOnly bool) (outputDocs types.ScoredIDs, numDocs int) {
+	for _, d := range docs {
+		// 判断 doc 是否存在
+		if fs, ok := ranker.GetTiKvDoc(d.DocId); ok {
+			// 计算评分并剔除没有分值的文档
+			scores := options.ScoringCriteria.Score(d, fs)
+			if len(scores) > 0 {
+				if !countDocsOnly {
+					outputDocs = append(outputDocs,
+						types.ScoredID{
+							DocId:            d.DocId,
+							Scores:           scores,
+							TokenSnippetLocs: d.TokenSnippetLocs,
+							TokenLocs:        d.TokenLocs,
+						})
+				}
+				numDocs++
+			}
+		}
+	}
+
+	return
+}
+
 func (ranker *Ranker) rankOutIDs(docs []types.IndexedDoc, options types.RankOpts,
 	countDocsOnly bool) (outputDocs types.ScoredIDs, numDocs int) {
 	for _, d := range docs {
@@ -157,7 +208,13 @@ func (ranker *Ranker) rankOutIDs(docs []types.IndexedDoc, options types.RankOpts
 func (ranker *Ranker) RankDocID(docs []types.IndexedDoc,
 	options types.RankOpts, countDocsOnly bool) (types.ScoredIDs, int) {
 
-	outputDocs, numDocs := ranker.rankOutIDs(docs, options, countDocsOnly)
+	var outputDocs types.ScoredIDs
+	var numDocs int
+	if ranker.useTiKv {
+		outputDocs, numDocs = ranker.rankTiKvOutIDs(docs, options, countDocsOnly)
+	} else {
+		outputDocs, numDocs = ranker.rankOutIDs(docs, options, countDocsOnly)
+	}
 
 	// 排序
 	if !countDocsOnly {
@@ -258,4 +315,39 @@ func (ranker *Ranker) Rank(docs []types.IndexedDoc,
 
 	outputDocs, numDocs := ranker.RankDocs(docs, options, countDocsOnly)
 	return outputDocs, numDocs
+}
+
+func (ranker *Ranker) AddTiKvDoc(
+	docId string, fields interface{}) {
+	if ranker.initialized == false {
+		log.Fatal("The Ranker has not been initialized.")
+	}
+
+	//ranker.tikv.Set([]byte(RankerDocId + docId), utils.EncodeToBytes(fields))
+	ranker.tikvCh <- tikv.KvData{Key: []byte(RankerDocId + docId), Val:utils.EncodeToBytes(fields)}
+}
+
+// RemoveDoc 删除某个文档的评分字段
+func (ranker *Ranker) RemoveTiKvDoc(docId string) {
+	if ranker.initialized == false {
+		log.Fatal("The Ranker has not been initialized.")
+	}
+
+	ranker.tikv.Delete([]byte(RankerDocId + docId))
+}
+
+// RemoveDoc 删除某个文档的评分字段
+func (ranker *Ranker) GetTiKvDoc(docId string) (interface{}, bool) {
+	if ranker.initialized == false {
+		log.Fatal("The Ranker has not been initialized.")
+	}
+
+	fields, err := ranker.tikv.Get([]byte(RankerDocId + docId))
+	if err != nil {
+		log.Print(err)
+		return nil,false
+	}
+	var output interface{}
+	utils.DecodeFromBytes(fields, &output)
+	return output, true
 }

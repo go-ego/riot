@@ -18,7 +18,7 @@ import (
 	"log"
 	"net/http"
 
-	hb "github.com/go-ego/riot/net/heartb"
+	hb "github.com/oGre222/tea/net/heartb"
 )
 
 func main() {

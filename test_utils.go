@@ -3,7 +3,7 @@ package riot
 import (
 	"log"
 
-	"github.com/go-ego/riot/types"
+	"github.com/oGre222/tea/types"
 )
 
 type ScoringFields struct {
