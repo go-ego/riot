@@ -107,6 +107,8 @@ type EngineOpts struct {
 	//反向索引使用 tikv 存储
 	UseTiKv  bool `toml:"user_tikv"`
 	TiKvPdAddr string  `toml:"tikv_pd_addr"`
+	//存储 key 前缀
+	TiKvPrefix string  `toml:"tikv_prefix"`
 }
 
 // Init init engine options

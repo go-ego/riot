@@ -70,6 +70,8 @@ type Indexer struct {
 
 	useTikv		bool
 	tikv        *tikv.Tikv
+	tikvDocKeysPre  string
+	tikvDocIndexPre	string
 }
 
 //用于存储于K-V结构
@@ -87,7 +89,7 @@ type KeywordIndices struct {
 }
 
 // Init 初始化索引器
-func (indexer *Indexer) Init(options types.IndexerOpts, tikv ...*tikv.Tikv) {
+func (indexer *Indexer) Init(options types.IndexerOpts) {
 	if indexer.initialized == true {
 		log.Fatal("The Indexer can not be initialized twice.")
 	}
@@ -103,12 +105,20 @@ func (indexer *Indexer) Init(options types.IndexerOpts, tikv ...*tikv.Tikv) {
 	indexer.removeCacheLock.removeCache = make(
 		[]string, indexer.initOptions.DocCacheSize*2)
 	indexer.docTokenLens = make(map[string]float32)
+}
 
-	if len(tikv) > 0 && tikv[0] != nil {
-		indexer.useTikv = true
-		indexer.tikv = tikv[0]
-		indexer.initOptions.DocCacheSize = 1000
+func (indexer *Indexer) SetTikv (t *tikv.Tikv, prefix string) {
+	if indexer.initialized == true {
+		log.Fatal("The Ranker can not be initialized twice.")
 	}
+	if t == nil {
+		return
+	}
+	indexer.useTikv = true
+	indexer.tikv = t
+	indexer.initOptions.DocCacheSize = 1000
+	indexer.tikvDocIndexPre = TiKvDocIndex + prefix
+	indexer.tikvDocKeysPre = TiKvDocKeys + prefix
 }
 
 // getDocId 从 KeywordIndices 中得到第i个文档的 DocId
@@ -232,7 +242,7 @@ func (indexer *Indexer) AddTiKvDocs(docs *types.DocsIndex) {
 			}
 
 			ti.docId = doc.DocId
-			store[TiKvDocIndex + keyword.Text + ":" +ti.docId] = utils.EncodeToBytes(ti)
+			store[indexer.tikvDocIndexPre + keyword.Text + ":" +ti.docId] = utils.EncodeToBytes(ti)
 		}
 
 		//todo 优化
@@ -242,7 +252,7 @@ func (indexer *Indexer) AddTiKvDocs(docs *types.DocsIndex) {
 		for _, k := range doc.Keywords  {
 			keys = append(keys, k.Text)
 		}
-		store[TiKvDocKeys + doc.DocId] = utils.EncodeToBytes(keys)
+		store[indexer.tikvDocKeysPre + doc.DocId] = utils.EncodeToBytes(keys)
 		//indexer.setDocKeys(doc)
 		//indexer.setKeywordIndexKv(store)
 	}
@@ -388,9 +398,9 @@ func (indexer *Indexer) RemoveTiKvDocs(docs *types.DocsId) {
 		keys := indexer.getDocKeys(docId)
 		var tiKvKeys [][]byte
 		for _, v := range keys  {
-			tiKvKeys = append(tiKvKeys, []byte(TiKvDocIndex + v + ":" + docId))
+			tiKvKeys = append(tiKvKeys, []byte(indexer.tikvDocIndexPre + v + ":" + docId))
 		}
-		tiKvKeys = append(tiKvKeys, []byte(TiKvDocKeys + docId))
+		tiKvKeys = append(tiKvKeys, []byte(indexer.tikvDocKeysPre + docId))
 		indexer.tikv.BatchDelete(tiKvKeys)
 	}
 }
@@ -1018,7 +1028,7 @@ func (indexer *Indexer) getKeywordIndices(text string) (*KeywordIndices, bool) {
 		}
 	}
 	return found, ok*/
-	keys, values, err := indexer.tikv.PreLike([]byte(TiKvDocIndex + text + ":"))
+	keys, values, err := indexer.tikv.PreLike([]byte(indexer.tikvDocIndexPre + text + ":"))
 	count := len(keys)
 	if err != nil || count == 0 {
 		return nil, false
@@ -1047,12 +1057,12 @@ func (indexer *Indexer) setDocKeys(doc *types.DocIndex) {
 	for _, k := range doc.Keywords  {
 		keys = append(keys, k.Text)
 	}
-	indexer.tikv.Set([]byte(TiKvDocKeys + doc.DocId), utils.EncodeToBytes(keys))
+	indexer.tikv.Set([]byte(indexer.tikvDocKeysPre + doc.DocId), utils.EncodeToBytes(keys))
 }
 
 func (indexer *Indexer) getDocKeys(docId string) []string {
 	var keys []string
-	val, err := indexer.tikv.Get([]byte(TiKvDocKeys + docId))
+	val, err := indexer.tikv.Get([]byte(indexer.tikvDocKeysPre + docId))
 	if err != nil {
 		return keys
 	}

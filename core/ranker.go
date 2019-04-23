@@ -45,6 +45,7 @@ type Ranker struct {
 	useTiKv		bool
 	tikv		*tikv.Tikv
 	tikvCh		chan tikv.KvData
+	tikvPrefix  string
 }
 
 // Init init ranker
@@ -68,7 +69,7 @@ func (ranker *Ranker) Init(onlyID ...bool) {
 	}
 }
 
-func (ranker *Ranker) SetTikv (t *tikv.Tikv) {
+func (ranker *Ranker) SetTikv (t *tikv.Tikv, prefix string) {
 	if ranker.initialized == true {
 		log.Fatal("The Ranker can not be initialized twice.")
 	}
@@ -78,6 +79,7 @@ func (ranker *Ranker) SetTikv (t *tikv.Tikv) {
 	ranker.useTiKv = true
 	ranker.tikv = t
 	ranker.tikvCh = make(chan tikv.KvData)
+	ranker.tikvPrefix = ranker.tikvPrefix + prefix
 	for i := 0; i < 8; i++  {
 		go func() {
 			for d := range ranker.tikvCh {
@@ -324,7 +326,7 @@ func (ranker *Ranker) AddTiKvDoc(
 	}
 
 	//ranker.tikv.Set([]byte(RankerDocId + docId), utils.EncodeToBytes(fields))
-	ranker.tikvCh <- tikv.KvData{Key: []byte(RankerDocId + docId), Val:utils.EncodeToBytes(fields)}
+	ranker.tikvCh <- tikv.KvData{Key: []byte(ranker.tikvPrefix + docId), Val:utils.EncodeToBytes(fields)}
 }
 
 // RemoveDoc 删除某个文档的评分字段
@@ -333,7 +335,7 @@ func (ranker *Ranker) RemoveTiKvDoc(docId string) {
 		log.Fatal("The Ranker has not been initialized.")
 	}
 
-	ranker.tikv.Delete([]byte(RankerDocId + docId))
+	ranker.tikv.Delete([]byte(ranker.tikvPrefix + docId))
 }
 
 // RemoveDoc 删除某个文档的评分字段
@@ -342,7 +344,7 @@ func (ranker *Ranker) GetTiKvDoc(docId string) (interface{}, bool) {
 		log.Fatal("The Ranker has not been initialized.")
 	}
 
-	fields, err := ranker.tikv.Get([]byte(RankerDocId + docId))
+	fields, err := ranker.tikv.Get([]byte(ranker.tikvPrefix + docId))
 	if err != nil {
 		log.Print(err)
 		return nil,false
