@@ -40,7 +40,7 @@ QQ 群: 120563750
 ## 安装/更新
 
 ```
-go get -u github.com/go-ego/riot
+go get -u github.com/yanjingang/riot
 ```
 
 ## Requirements
