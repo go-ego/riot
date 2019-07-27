@@ -34,10 +34,10 @@ func OpenBadger(dbPath string) (Store, error) {
 	// }
 	// os.MkdirAll(path.Dir(dbPath), os.ModePerm)
 
-	opt := badger.DefaultOptions
-	opt.Dir = dbPath
-	opt.ValueDir = dbPath
-	opt.SyncWrites = true
+	opt := badger.DefaultOptions(dbPath)
+	// opt.Dir = dbPath
+	// opt.ValueDir = dbPath
+	// opt.SyncWrites = true
 	kv, err := badger.Open(opt)
 	if err != nil {
 		log.Fatal("badger NewKV: ", err)
