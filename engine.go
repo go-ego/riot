@@ -410,7 +410,7 @@ func (engine *Engine) internalIndexDoc(docId string, data types.DocData,
 		atomic.AddUint64(&engine.numForceUpdatingReqs, 1)
 	}
 
-	hash := murmur.Sum32(fmt.Sprintf("%s%s", docId, data.Content))
+	hash := murmur.Sum32(docId)
 	engine.segmenterChan <- segmenterReq{
 		docId: docId, hash: hash, data: data, forceUpdate: forceUpdate}
 }
