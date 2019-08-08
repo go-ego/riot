@@ -706,7 +706,7 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	tt.Expect(t, "8", outDocs[0].DocId)
-	tt.Expect(t, "3799", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "3999", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	outputs1 := engine1.Search(types.SearchReq{
