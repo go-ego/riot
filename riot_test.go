@@ -40,11 +40,11 @@ func TestEngineIndexWithNewStore(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	// tt.Expect(t, "2", outDocs[0].DocId)
-	tt.Expect(t, "2500", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "2531", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	// tt.Expect(t, "1", outDocs[1].DocId)
-	tt.Expect(t, "2215", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "2000", int(outDocs[1].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[1].TokenSnippetLocs)
 
 	engine1.Close()
