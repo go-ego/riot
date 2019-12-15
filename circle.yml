@@ -8,7 +8,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: govgo/go:1.10.3
+      - image: golang:1.13.5
     working_directory: /gopath/src/github.com/go-ego/riot
     steps:
       - checkout
