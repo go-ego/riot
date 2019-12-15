@@ -29,7 +29,7 @@ func TestTry(t *testing.T) {
 		fmt.Println(arr[2])
 	}, func(err interface{}) {
 		log.Println("err", err)
-		tt.Expect(t, "runtime error: index out of range", err)
+		tt.Expect(t, "runtime error: index out of range [2] with length 0", err)
 	})
 }
 

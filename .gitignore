@@ -2,7 +2,7 @@
 .DS_Store
 .vscode
 .idea
-vendor
+# vendor
 
 riot-index
 data/data
