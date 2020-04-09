@@ -6,7 +6,7 @@ require (
 	github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/coreos/bbolt v1.3.3 // indirect
-	github.com/coreos/go-systemd v0.0.0-00010101000000-000000000000 // indirect
+	github.com/coreos/go-systemd/v22 v22.0.0
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/dgraph-io/badger v1.6.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
@@ -48,5 +48,3 @@ require (
 	google.golang.org/grpc v1.24.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
-
-replace github.com/coreos/go-systemd => ./vendor/github.com/coreos/go-systemd
