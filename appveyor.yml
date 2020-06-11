@@ -1,5 +1,5 @@
 version: "{build}"
-image: 'Visual Studio 2017'
+image: "Visual Studio 2017"
 # platform: x64
 
 clone_folder: c:\gopath\src\github.com\go-ego\riot
@@ -12,7 +12,7 @@ environment:
   matrix:
     - GOARCH: amd64
     # - GOARCH: 386
-  GOVERSION: 1.13.5
+  GOVERSION: 1.14.4
   # GOPATH: c:\gopath
 
 install:
@@ -23,7 +23,7 @@ install:
   - 7z x go%GOVERSION%.windows-%GOARCH%.zip -y -oC:\ > NUL
   - go version
   - go env
-  # - gcc --version  
+  # - gcc --version
 
 # To run your custom scripts instead of automatic MSBuild
 build_script:
