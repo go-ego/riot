@@ -327,9 +327,9 @@ func TestForSplitData(t *testing.T) {
 	engine.Flush()
 
 	tokenDatas := engine.PinYin(text2)
-	tokens, num := engine.ForSplitData(tokenDatas, 52)
-	tt.Expect(t, "93", len(tokens))
-	tt.Expect(t, "104", num)
+	tokens, num := engine.ForSplitData(tokenDatas, len(tokenDatas))
+	tt.Expect(t, "81", len(tokens))
+	tt.Expect(t, "92", num)
 
 	index1 := types.DocData{Content: "在路上"}
 	engine.Index("10", index1, true)
