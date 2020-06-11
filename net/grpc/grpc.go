@@ -25,7 +25,7 @@ import (
 	"github.com/go-ego/riot/net/com"
 	pb "github.com/go-ego/riot/net/grpc/riot-pb"
 	"github.com/go-ego/riot/types"
-	zlog "github.com/go-vgo/gt/zlog"
+	zlog "github.com/go-vgo/zlog/zlog"
 	"github.com/gogo/protobuf/proto"
 )
 
