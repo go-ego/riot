@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/go-ego/gpy"
+	"github.com/go-ego/gpy/phrase"
 	"github.com/go-ego/riot/types"
 )
 
@@ -314,6 +315,14 @@ func (engine *Engine) segmenterWorker() {
 
 // PinYin get the Chinese alphabet and abbreviation
 func (engine *Engine) PinYin(hans string) []string {
+	if engine.initOptions.UsePhrase {
+		if !engine.initOptions.NotUseGse {
+			phrase.WithGse(engine.segmenter)
+		}
+
+		return phrase.Pinyin(hans)
+	}
+
 	var (
 		str      string
 		pyStr    string
