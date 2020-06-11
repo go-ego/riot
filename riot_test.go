@@ -261,7 +261,7 @@ func TestDocPinYin(t *testing.T) {
 
 	tokens := engine.PinYin(text2)
 	fmt.Println("tokens...", tokens)
-	tt.Expect(t, "52", len(tokens))
+	tt.Expect(t, "46", len(tokens))
 
 	var tokenDatas []types.TokenData
 	// tokens := []string{"z", "zl"}
