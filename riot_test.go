@@ -261,7 +261,7 @@ func TestDocPinYin(t *testing.T) {
 
 	tokens := engine.PinYin(text2)
 	fmt.Println("tokens...", tokens)
-	tt.Expect(t, "52", len(tokens))
+	tt.Expect(t, "46", len(tokens))
 
 	var tokenDatas []types.TokenData
 	// tokens := []string{"z", "zl"}
@@ -327,9 +327,9 @@ func TestForSplitData(t *testing.T) {
 	engine.Flush()
 
 	tokenDatas := engine.PinYin(text2)
-	tokens, num := engine.ForSplitData(tokenDatas, 52)
-	tt.Expect(t, "93", len(tokens))
-	tt.Expect(t, "104", num)
+	tokens, num := engine.ForSplitData(tokenDatas, len(tokenDatas))
+	tt.Expect(t, "81", len(tokens))
+	tt.Expect(t, "92", num)
 
 	index1 := types.DocData{Content: "在路上"}
 	engine.Index("10", index1, true)

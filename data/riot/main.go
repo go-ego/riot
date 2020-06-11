@@ -25,7 +25,7 @@ import (
 
 	"github.com/go-ego/riot"
 	"github.com/go-vgo/gt/conf"
-	"github.com/go-vgo/gt/zlog"
+	"github.com/go-vgo/zlog/zlog"
 )
 
 var (

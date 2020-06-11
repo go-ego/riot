@@ -58,8 +58,9 @@ type EngineOpts struct {
 
 	// 半角逗号 "," 分隔的字典文件，具体用法见
 	// gse.Segmenter.LoadDict 函数的注释
-	GseDict string `toml:"gse_dict"`
-	PinYin  bool   `toml:"pin_yin"`
+	GseDict   string `toml:"gse_dict"`
+	PinYin    bool   `toml:"pin_yin"`
+	UsePhrase bool   `toml:"use_phrase"`
 
 	// 停用词文件
 	StopTokenFile string `toml:"stop_file"`

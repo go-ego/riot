@@ -772,9 +772,9 @@ func TestRiotGse(t *testing.T) {
 	})
 
 	AddDocs(&engine1)
-	tt.Equal(t, "[《 复仇者 联盟 3 ： 无限 战争 》 是 全片 使用 imax 摄影机 拍摄]",
+	tt.Equal(t, "[《 复仇者 联盟 3 ： 无限 战争 》 是 全片 使用 IMAX 摄影机 拍摄]",
 		engine.Segment("《复仇者联盟3：无限战争》是全片使用IMAX摄影机拍摄"))
-	tt.Equal(t, "[此次 google 收购 将 成 世界 联网 互联网 最大 并购]",
+	tt.Equal(t, "[此次 Google 收购 将 成 世界 互联 联网 互联网 最大 并购]",
 		engine1.Segment("此次Google收购将成世界互联网最大并购"))
 
 	engine.Close()

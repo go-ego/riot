@@ -24,7 +24,7 @@ import (
 
 	"github.com/go-ego/riot/net/com"
 	pb "github.com/go-ego/riot/net/grpc/riot-pb"
-	zlog "github.com/go-vgo/gt/zlog"
+	zlog "github.com/go-vgo/zlog/zlog"
 )
 
 // Doc grpc response

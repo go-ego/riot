@@ -9,21 +9,22 @@ go:
   # - 1.10.x
   # - 1.11.x
   # - 1.12.x
-  - 1.13.x
+  # - 1.13.x
+  - 1.14.x
   # - tip
 
 install:
   - export PATH=$PATH:$HOME/gopath/bin
-  # - go get -u github.com/go-ego/gse  
-  # - go get -u github.com/go-ego/gpy 
-  # - go get -u github.com/go-ego/murmur 
+  # - go get -u github.com/go-ego/gse
+  # - go get -u github.com/go-ego/gpy
+  # - go get -u github.com/go-ego/murmur
   # - go get -u golang.org/x/sys/unix
   # - go get -u github.com/shirou/gopsutil
   - go get -v -t ./...
-
+  
 # after_success:
 #   - bash <(curl -s https://codecov.io/bash)
-  
+
 # notifications:
 #   email:
 #     - .com
