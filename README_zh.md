@@ -175,22 +175,9 @@ func main() {
 - 删除依赖 cgo 的存储引擎, 增加 badger和 leveldb 持久化引擎
 
 ## Authors
-* [The author is vz](https://github.com/vcaesar)
+
 * [Maintainers](https://github.com/orgs/go-ego/people)
 * [Contributors](https://github.com/go-ego/riot/graphs/contributors)
-
-## Donate
-
-支持 riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
-
-#### Paypal
-
-Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@gmail.com](vzvway@gmail.com)
-
-## 其它
-
-* [为什么要有 riot 引擎](/docs/zh/why_riot.md)
-* [联系方式](/docs/zh/feedback.md)
 
 ## License
 

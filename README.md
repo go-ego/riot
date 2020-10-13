@@ -166,17 +166,9 @@ func main() {
 #### [Riot search engine templates, client and dictionaries](https://github.com/go-ego/riot/tree/master/data)
 
 ## Authors
-* [The author is vz](https://github.com/vcaesar)
+
 * [Maintainers](https://github.com/orgs/go-ego/people)
 * [Contributors](https://github.com/go-ego/riot/graphs/contributors)
-
-## Donate
-
-Supporting riot, [buy me a coffee](https://github.com/go-vgo/buy-me-a-coffee).
-
-#### Paypal
-
-Donate money by [paypal](https://www.paypal.me/veni0/25) to my account [vzvway@gmail.com](vzvway@gmail.com)
 
 ## License
 
