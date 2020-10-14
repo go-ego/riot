@@ -199,10 +199,10 @@ func TestFrequenciesIndex(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	tt.Expect(t, "1", outDocs[0].DocId)
-	tt.Expect(t, "2374", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "2387", int(outDocs[0].Scores[0]*1000))
 
 	tt.Expect(t, "5", outDocs[1].DocId)
-	tt.Expect(t, "2133", int(outDocs[1].Scores[0]*1000))
+	tt.Expect(t, "2205", int(outDocs[1].Scores[0]*1000))
 
 	engine.Close()
 }
@@ -706,7 +706,7 @@ func TestSearchNotUseGse(t *testing.T) {
 	tt.Expect(t, "2", len(outDocs))
 
 	tt.Expect(t, "8", outDocs[0].DocId)
-	tt.Expect(t, "3736", int(outDocs[0].Scores[0]*1000))
+	tt.Expect(t, "3999", int(outDocs[0].Scores[0]*1000))
 	tt.Expect(t, "[]", outDocs[0].TokenSnippetLocs)
 
 	outputs1 := engine1.Search(types.SearchReq{
